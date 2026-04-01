@@ -1,0 +1,55 @@
+{
+  "enableAllProjectMcpServers": true,
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(jq -r '.tool_input.file_path // empty'); if echo \"$f\" | grep -q 'database/schema.sql'; then echo 'BLOCKED: database/schema.sql is READ ONLY. Use a new Flyway migration file in db/migration/ instead.' >&2; exit 1; fi",
+            "timeout": 10,
+            "statusMessage": "Checking schema.sql guard..."
+          },
+          {
+            "type": "command",
+            "command": "f=$(jq -r '.tool_input.file_path // empty'); if echo \"$f\" | grep -q '\\.env'; then echo 'WARNING: You are editing an environment file. Ensure no real secrets are committed. Proceed only if this is .env.example.' >&2; fi",
+            "timeout": 10,
+            "statusMessage": "Checking env file guard..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(jq -r '.tool_input.file_path // empty'); if echo \"$f\" | grep -q 'frontend/src/'; then cd /home/ssthakur/app/training/frontend && npx tsc --noEmit 2>&1 | tail -20; fi",
+            "timeout": 60,
+            "statusMessage": "TypeScript check..."
+          },
+          {
+            "type": "command",
+            "command": "f=$(jq -r '.tool_input.file_path // empty'); if echo \"$f\" | grep -q 'hrapp-service/src/main/java' && echo \"$f\" | grep -q '\\.java$'; then classname=$(basename \"$f\" .java); if ! echo \"$classname\" | grep -q '^Hr'; then echo \"NAMING VIOLATION: '$classname' must start with 'Hr' per project conventions.\" >&2; exit 1; fi; fi",
+            "timeout": 10,
+            "statusMessage": "Checking Hr naming convention..."
+          },
+          {
+            "type": "command",
+            "command": "f=$(jq -r '.tool_input.file_path // empty'); if echo \"$f\" | grep -q 'db/migration/' && echo \"$f\" | grep -q '\\.sql$'; then filename=$(basename \"$f\"); if ! echo \"$filename\" | grep -qP '^V[0-9]+__[a-z0-9_]+\\.sql$'; then echo \"MIGRATION NAMING VIOLATION: '$filename' must follow pattern V{n}__description.sql (lowercase, underscores only).\" >&2; exit 1; fi; fi",
+            "timeout": 10,
+            "statusMessage": "Checking Flyway migration naming..."
+          },
+          {
+            "type": "command",
+            "command": "f=$(jq -r '.tool_input.file_path // empty'); if echo \"$f\" | grep -q 'hrapp-service/src/main/java' && echo \"$f\" | grep -q 'Service\\.java$'; then matches=$(jq -r '.tool_input.new_string // .tool_input.content // empty' | grep -iE 'LOGGER\\.(info|debug|warn|error).*\\b(email|phone|salary|password|ssn)\\b' || true); if [ -n \"$matches\" ]; then echo \"PII LEAK DETECTED in logger statement. Use MASKED placeholder instead of logging sensitive fields.\" >&2; echo \"$matches\" >&2; exit 1; fi; fi",
+            "timeout": 10,
+            "statusMessage": "Scanning for PII in logs..."
+          }
+        ]
+      }
+    ]
+  }
+}
