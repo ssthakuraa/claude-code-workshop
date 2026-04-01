@@ -284,7 +284,7 @@ If MySQL MCP fails:
 mysql -h 127.0.0.1 -u hr_readonly -preadonly_pass hr_db -e "SELECT 1;"
 
 # Check read-only user has SELECT permissions
-mysql -h 127.0.0.1 -u root -proot123 -e "SHOW GRANTS FOR 'hr_readonly'@'%';"
+mysql -h 127.0.0.1 -u root -proot123 -e "SHOW GRANTS FOR 'hr_readonly'@'localhost';"
 
 # Restart Claude Code session after .mcp.json changes
 ```
