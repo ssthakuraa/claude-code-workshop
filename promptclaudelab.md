@@ -9,21 +9,47 @@
 We are building a 4-day Claude Code enterprise training workshop.
 The lab vehicle is a fully-built HR Enterprise Platform (Spring Boot + React).
 
-## Project Locations
+## IMPORTANT: Single Repo Model
 
-Training materials (this project):
+ALL work happens in ONE repo:
   /home/ssthakur/app/training/
 
-HR app (source of truth for all code, config, and lab scenarios):
-  /home/ssthakur/app/hr/
+This is the student-facing repo. It contains BOTH the training materials AND
+the HR app code (on checkpoint branches). Students clone this one repo and get everything.
 
-## What's Already Built (HR App — DO NOT MODIFY unless fixing a lab issue)
+/home/ssthakur/app/hr/ is the INSTRUCTOR REFERENCE ONLY.
+Only consult it if something is found missing from app/training.
+Never direct work, edits, or builds there.
+
+## Repo Structure
+
+/home/ssthakur/app/training/
+  main branch         — training materials only (labs, decks, instructor guides, reference files)
+  checkpoint branches — HR app code at each workshop stage (see below)
+
+Training materials on main:
+  labs/          — 12 lab exercise files (lab-01 through lab-12)
+  decks/         — 17 deck files (including v1-deck-06 and v1-deck-14 as updated versions)
+  instructor/    — flow-guide.md with pacing, blockers, recovery strategies
+  build-notes/   — 23 build notes documenting how the HR app was built (lab source material)
+  index.md       — workshop overview, 4-day structure, git checkpoint branches
+  lab-builder-prompt.md — meta-prompt recipe for regenerating materials
+  worklist.md    — training lab tasks only (open items)
+  promptclaudelab.md — this file
+  envsetup-instructor.md — pre-workshop environment setup for instructors
+  envsetup-student.md    — pre-workshop environment setup for students
+  lab-validation-report.md — automated build/file validation findings
+
+## HR App — on Checkpoint Branches
+
+The HR app (Spring Boot + React) lives on the checkpoint branches, not on main.
+Paths below are relative to the repo root when a checkpoint branch is checked out:
 
 Backend (Java 21, Spring Boot 3.2, Maven multi-module):
-  /home/ssthakur/app/hr/backend/hrapp-common/   — shared utilities (HrLogHelper, HrApiResponse, etc.)
-  /home/ssthakur/app/hr/backend/hrapp-service/  — main app (8 entities, services, controllers)
+  backend/hrapp-common/   — shared utilities (HrLogHelper, HrApiResponse, etc.)
+  backend/hrapp-service/  — main app (8 entities, services, controllers)
 
-Key backend files for lab reference:
+Key backend files:
   Entities:    backend/hrapp-service/src/main/java/com/company/hr/model/
   Services:    backend/hrapp-service/src/main/java/com/company/hr/service/
   Controllers: backend/hrapp-service/src/main/java/com/company/hr/controller/
@@ -31,7 +57,7 @@ Key backend files for lab reference:
   Tests:       backend/hrapp-service/src/test/java/com/company/hr/service/
 
 Frontend (React 19, TypeScript, Vite, Tailwind + Oracle Redwood tokens):
-  /home/ssthakur/app/hr/frontend/src/
+  frontend/src/
   Components:  frontend/src/components/hr/       — HR-specific (HrWizard, HrStatusBadge, etc.)
                frontend/src/components/ui/       — generic (Button, DataTable, Modal, etc.)
                frontend/src/components/templates/ — page layouts
@@ -40,44 +66,37 @@ Frontend (React 19, TypeScript, Vite, Tailwind + Oracle Redwood tokens):
   E2E tests:   frontend/src/test/e2e/
 
 Database:
-  /home/ssthakur/app/hr/database/schema.sql      — READ ONLY reference DDL
-  /home/ssthakur/app/hr/database/demo.sql        — seed data
-  /home/ssthakur/app/hr/database/create-readonly-user.sql  — for MySQL MCP lab
+  database/schema.sql               — READ ONLY reference DDL
+  database/demo.sql                 — seed data
+  database/create-readonly-user.sql — for MySQL MCP lab
 
-CI/CD:
-  /home/ssthakur/app/hr/Makefile                 — 8 targets (build, test, lint, verify, etc.)
-  /home/ssthakur/app/hr/Jenkinsfile              — 5-stage declarative pipeline
+Claude Code config (present from day2-start onward):
+  .claude/settings.json             — hooks (schema guard, Hr naming, Flyway naming, PII detector)
+  .claude/skills/scaffold-entity/SKILL.md
+  .claude/commands/run-tests.md
+  .claude/agents/component-builder.md
+  .claude/agents/component-reviewer.md
 
-Claude Code config:
-  /home/ssthakur/app/hr/.claude/settings.json   — 4 hooks (schema guard, Hr naming, Flyway naming, PII detector)
-  /home/ssthakur/app/hr/.claude/skills/scaffold-entity/SKILL.md
-  /home/ssthakur/app/hr/.claude/commands/run-tests.md
-  /home/ssthakur/app/hr/.claude/agents/component-builder.md
-  /home/ssthakur/app/hr/.claude/agents/component-reviewer.md
-
-MCP config:
-  /home/ssthakur/app/hr/.mcp.json               — Playwright + MySQL MCP configured
+MCP config (present from day3-start onward):
+  .mcp.json                         — Playwright + MySQL MCP configured on day4-start
 
 Project conventions:
-  /home/ssthakur/app/hr/CLAUDE.md               — all naming/logging/security rules
+  CLAUDE.md                         — all naming/logging/security rules
 
-## What's in the Training Repo (this project)
+Note: Makefile and Jenkinsfile do NOT pre-exist — students generate them in Lab 11.
 
-labs/          — 12 lab exercise files (lab-01 through lab-12)
-decks/         — 17 deck files (including v1-deck-06 and v1-deck-14 as updated versions)
-instructor/    — flow-guide.md with pacing, blockers, recovery strategies
-build-notes/   — 23 build notes documenting how the HR app was built (lab source material)
-index.md       — workshop overview, 4-day structure, git checkpoint branches
-lab-builder-prompt.md — meta-prompt recipe for regenerating materials
-worklist.md    — training lab tasks only (open items)
-promptclaudelab.md — this file
+## Git Checkpoint Branches (all in /home/ssthakur/app/training)
 
-## Git Checkpoint Branches (in /home/ssthakur/app/hr)
+checkpoint/day1-start  — backend only, CLAUDE.md intentionally incomplete, no .claude/ config
+checkpoint/day2-start  — full backend + complete CLAUDE.md + .claude/skills + .claude/commands, no hooks
+checkpoint/day3-start  — full backend + frontend + all 4 hooks in settings.json, .mcp.json stub (empty servers)
+checkpoint/day4-start  — full backend + frontend + .mcp.json fully configured (Playwright + MySQL MCP)
 
-checkpoint/day1-start  — bootstrap only, CLAUDE.md intentionally incomplete (73 lines)
-checkpoint/day2-start  — Region/Country/Location/Job entities + complete CLAUDE.md + skills/commands, no hooks
-checkpoint/day3-start  — full backend + frontend wired + all 4 hooks, .mcp.json stub (empty)
-checkpoint/day4-start  — current master, .mcp.json fully configured, everything working
+Build commands (run from the checkout root):
+  Backend:  cd backend && mvn clean compile -q
+  Frontend: cd frontend && npm ci --silent && npm run build  (day3-start and day4-start only)
+  DB:       mysql -u root -proot123 hr_db -e "SELECT 1;"
+  Read-only: mysql -u hr_readonly -preadonly_pass hr_db -e "SELECT 1;"
 
 ## Workshop Structure
 
@@ -111,7 +130,7 @@ Day 4 — Mastery (Labs 11–12):
 
 ## Current State of Training Materials
 
-Labs:      All 12 complete. Lab 9 and 10 escape hatches fixed (MCP package names + credentials).
+Labs:      All 12 complete. Build-validated across all checkpoint branches (see lab-validation-report.md).
 Decks:     16 original + v1-deck-06-hooks (PostCompact added) + v1-deck-14-cicd-governance (claude -p, /schedule, /loop, fan-out added).
 Hooks:     deck-12 has awkward merge with CI/CD content — noted, owner will handle.
 Deck 13:   Near-duplicate of Deck 11 — noted, owner will handle.
@@ -121,7 +140,7 @@ Deck 13:   Near-duplicate of Deck 11 — noted, owner will handle.
 - Boris Cherny 57 tips: howborisusesclaudecode.com
 - Official best practices: code.claude.com/docs/en/best-practices
 - CLAUDE.md guide: claude.com/blog/using-claude-md-files
-- Anthropic internal practices PDF: /home/ssthakur/app/hr/docs/claudetips/references.md (full list)
+- Anthropic internal practices PDF: /home/ssthakur/app/training/docs/claudetips/references.md (full list — on checkpoint branches)
 - Skills docs: code.claude.com/docs/en/skills
 - Hooks docs: code.claude.com/docs/en/hooks
 
