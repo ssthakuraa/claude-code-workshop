@@ -13,22 +13,21 @@
 | Maven | 3.9+ |
 | Node.js | 20+ |
 | npm | 10+ |
-| MySQL | 8.0 |
+| MySQL client | 8.0 |
 | Claude Code CLI | latest |
 | Git | any recent |
 | make | any |
+| jq | any |
 
 ---
 
 ## Step 1 — Verify Tools Already Installed
 
-Run this one-liner. Everything should print a version number with no errors:
-
 ```bash
-java -version && javac -version && mvn -version && node --version && npm --version && mysql --version && git --version && make --version
+java -version && mvn -version && node --version && npm --version && mysql --version && git --version && jq --version
 ```
 
-If anything is missing, see the installation section below.
+Everything should print a version. If anything is missing, install it in Step 2.
 
 ---
 
@@ -39,6 +38,7 @@ If anything is missing, see the installation section below.
 ```bash
 sudo apt-get update
 sudo apt-get install -y openjdk-21-jdk
+java -version   # confirm 21
 ```
 
 ### Maven 3.9+
@@ -56,13 +56,15 @@ sudo apt-get install -y nodejs
 node --version   # confirm v20+
 ```
 
-### Git and make
+### Git, make, jq
 
 ```bash
 sudo apt-get install -y git make jq
 ```
 
-### MySQL client tools
+> `jq` is required by Lab 5 hooks. Do not skip it.
+
+### MySQL client
 
 ```bash
 sudo apt-get install -y mysql-client
@@ -81,100 +83,105 @@ claude --version
 
 ```bash
 claude
+# Follow the browser login flow.
+# You need an Anthropic account with Claude Code access.
 ```
-
-Follow the browser login flow. You need an Anthropic account with Claude Code access.
 
 > **Important — do NOT run `claude init`.**
-> When you open Claude Code inside the `~/app/training/` project, it may offer to generate a `CLAUDE.md`
-> file. **Decline or skip this.** The project already has a `CLAUDE.md` that the labs depend on.
-> Generating a new one will break Lab 1 and interfere with subsequent exercises.
+> When you open Claude Code in `~/app/training/`, it may offer to generate a `CLAUDE.md`.
+> **Decline.** The project already has a `CLAUDE.md` that Lab 1 depends on.
+> If it already generated one: `git checkout CLAUDE.md`
 
 ---
 
-## Step 4 — Verify Database Access
-
-Your instructor has already created the database and users. Confirm you can connect:
-
-```bash
-# App user (read/write)
-mysql -u root -proot123 -e "SELECT COUNT(*) FROM hr_db.employees;"
-
-# Read-only user (used in Lab 10 — MySQL MCP)
-mysql -u hr_readonly -preadonly_pass -e "SELECT COUNT(*) FROM hr_db.employees;"
-```
-
-Both commands should return a number (the employee count from seed data). If either fails, contact your instructor before proceeding.
-
----
-
-## Step 5 — Environment File
+## Step 4 — Environment File
 
 ```bash
 cd ~/app/training
-ls .env
+git checkout checkpoint/day1-start
+cp .env.example .env
+
+# Fill in the JWT secret
+sed -i "s|HR_JWT_SECRET=.*|HR_JWT_SECRET=$(openssl rand -base64 32)|" .env
+cat .env   # verify it looks right
 ```
 
-The `.env` file should already exist. If it does not:
+Your `.env` should look like:
+
+```
+HR_DB_USER=hrapp
+HR_DB_PASS=hrapp_pass
+HR_JWT_SECRET=<a long base64 string>
+
+VITE_API_BASE_URL=http://localhost:8080/app/hr/api/v1
+VITE_USE_MOCK=true
+
+HR_DB_READONLY_USER=hr_readonly
+HR_DB_READONLY_PASS=readonly_pass
+```
+
+This file is how Claude Code knows your database credentials during labs.
+
+---
+
+## Step 5 — Verify Database Access
+
+Your instructor has already created the database users. Confirm you can connect:
 
 ```bash
-cp .env.example .env
+# App user
+mysql -u hrapp -phrapp_pass hr_db -e "SELECT COUNT(*) AS employees FROM employees;" 2>/dev/null
+
+# Read-only user
+mysql -u hr_readonly -preadonly_pass hr_db -e "SELECT COUNT(*) AS employees FROM employees;" 2>/dev/null
 ```
 
-Then ask your instructor for the `HR_JWT_SECRET` value and fill it in.
+Both should return a row count. If either fails, contact your instructor.
 
 ---
 
 ## Step 6 — Smoke Test
 
-Run each command and confirm the expected result. **Do not move to Day 1 until all pass.**
+Run each check. **Do not start Day 1 until all pass.**
 
 ### Backend compile
 
 ```bash
 cd ~/app/training
-cd backend && mvn clean compile -q
+git checkout checkpoint/day1-start -q
+cd backend && mvn clean compile -q && echo "Backend: OK"
 ```
 
-Expected: ends with `BUILD SUCCESS`
+Expected: `Backend: OK`
 
-### Frontend install and build
+### Frontend build
 
 ```bash
-cd frontend && npm ci --silent && npm run build
+cd ~/app/training
+git checkout checkpoint/day3-start -q
+cd frontend && npm ci --silent && npm run build 2>&1 | tail -2
 ```
 
-Expected: no errors; a `frontend/dist/` directory is created
-
-### Database row counts
-
-```bash
-mysql -u root -proot123 -e "
-  SELECT table_name, table_rows
-  FROM information_schema.tables
-  WHERE table_schema = 'hr_db'
-  ORDER BY table_name;"
-```
-
-Expected: 10+ tables listed with non-zero row counts
+Expected: `✓ built in ...`
 
 ### Claude Code project awareness
 
 ```bash
 cd ~/app/training
-claude --print "What file governs your behavior in this project? Answer in one sentence."
+git checkout checkpoint/day1-start -q
+claude --print "What file governs your behavior in this project? One sentence."
 ```
 
 Expected: Claude references `CLAUDE.md`
 
-### Git checkpoint branches
+### Checkpoint branches
 
 ```bash
-cd ~/app/training
+cd ~/app/training && git checkout main -q
 git branch | grep checkpoint
 ```
 
-Expected output (all four lines):
+Expected — all four lines:
 ```
   checkpoint/day1-start
   checkpoint/day2-start
@@ -186,41 +193,38 @@ Expected output (all four lines):
 
 ## All Checks Pass?
 
-You are ready. See you in the workshop.
+Return to main and you are ready:
+
+```bash
+cd ~/app/training && git checkout main -q
+```
 
 ---
 
 ## Troubleshooting
 
-**`make backend-build` fails with compiler error**
-Confirm `java -version` shows Java 21. If it shows a different version, your `JAVA_HOME` may point to the wrong JDK.
-
+**Backend compile fails — wrong Java version**
 ```bash
-sudo update-alternatives --config java   # pick Java 21
+sudo update-alternatives --config java   # select Java 21
 ```
 
-**`make frontend-install` fails**
-Confirm `node --version` is v20+. If it shows v18 or lower, re-run the NodeSource install from Step 2.
+**Frontend build fails — wrong Node version**
+Re-run the NodeSource install from Step 2.
 
-**MySQL `Access denied`**
-Your instructor needs to verify the database user was created. Do not attempt to create users yourself — you may not have the required permissions.
-
-**`checkpoint/*` branches missing**
-Do not create them yourself. Contact your instructor to restore from the reference clone.
-
-**Claude Code keeps asking to generate CLAUDE.md**
-Type `n` or press Escape to skip. If it already generated one, run:
-
-```bash
-cd ~/app/training
-git checkout CLAUDE.md
-```
+**MySQL access denied**
+Your instructor needs to verify the `hrapp` user was created. Do not attempt to create it yourself.
 
 **Claude Code login not persisting**
-Make sure you completed the full browser OAuth flow. Try:
-
 ```bash
-claude auth status
+claude auth logout && claude
 ```
 
-If it says not authenticated, run `claude` again and complete login.
+**`jq: command not found` during a lab hook**
+```bash
+sudo apt-get install -y jq
+```
+
+**Claude Code generated a CLAUDE.md**
+```bash
+git checkout CLAUDE.md
+```

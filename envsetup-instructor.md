@@ -10,11 +10,11 @@
 Each student workstation needs:
 - Ubuntu 22.04+ (or comparable Debian-based Linux)
 - Java 21, Maven 3.9+, Node 20+, npm 10+
-- MySQL 8.0 with `hr_db` database, app user, and read-only user
+- MySQL 8.0 with `hr_db` database, `hrapp` app user, and `hr_readonly` read-only user
 - Claude Code CLI (authenticated)
 - Git configured
 
-The student repo lives at `/home/<user>/app/training/` — this single directory contains both the HR app code and all training materials.
+The student repo lives at `/home/<user>/app/training/` — this single directory contains both the HR app code (on checkpoint branches) and all training materials (on main).
 
 ---
 
@@ -22,16 +22,19 @@ The student repo lives at `/home/<user>/app/training/` — this single directory
 
 ```bash
 sudo apt-get update
-sudo apt-get install -y jq \
+sudo apt-get install -y \
   git \
   curl \
   wget \
   unzip \
   build-essential \
   make \
+  jq \
   mysql-server \
   mysql-client
 ```
+
+> `jq` is required by the Lab 5 hooks — do not skip it.
 
 ---
 
@@ -40,12 +43,8 @@ sudo apt-get install -y jq \
 ```bash
 sudo apt-get install -y openjdk-21-jdk
 
-# Verify
-java -version
-# Expected: openjdk version "21.x.x"
-
-javac -version
-# Expected: javac 21.x.x
+java -version    # Expected: openjdk version "21.x.x"
+javac -version   # Expected: javac 21.x.x
 ```
 
 Set `JAVA_HOME` if not already set:
@@ -61,23 +60,19 @@ source ~/.bashrc
 ## 3. Maven 3.9+
 
 ```bash
-# Check if already installed
-mvn -version
-
-# If not installed:
 sudo apt-get install -y maven
+mvn -version   # Expected: Apache Maven 3.9.x
+```
 
-# If apt version is too old (< 3.9), install manually:
+If the apt version is older than 3.9:
+
+```bash
 wget https://downloads.apache.org/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.tar.gz
 tar -xzf apache-maven-3.9.9-bin.tar.gz -C /opt
 sudo ln -s /opt/apache-maven-3.9.9 /opt/maven
 echo 'export M2_HOME=/opt/maven' >> ~/.bashrc
 echo 'export PATH=$M2_HOME/bin:$PATH' >> ~/.bashrc
 source ~/.bashrc
-
-# Verify
-mvn -version
-# Expected: Apache Maven 3.9.x
 ```
 
 ---
@@ -85,11 +80,9 @@ mvn -version
 ## 4. Node.js 20+ and npm 10+
 
 ```bash
-# Using NodeSource (recommended over apt default which is often too old)
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
-# Verify
 node --version   # Expected: v20.x.x
 npm --version    # Expected: 10.x.x
 ```
@@ -100,8 +93,6 @@ npm --version    # Expected: 10.x.x
 
 ```bash
 npm install -g @anthropic-ai/claude-code
-
-# Verify
 claude --version
 ```
 
@@ -113,97 +104,89 @@ claude
 # Students need an Anthropic account with Claude Code access.
 ```
 
-> **IMPORTANT — Skip `claude init` (CLAUDE.md generation):**
-> When students start Claude Code in the `/home/<user>/app/training/` directory for the first time,
-> Claude Code may prompt to run `claude init` to generate a CLAUDE.md.
-> **Instruct students to skip or decline this.** The workshop's CLAUDE.md is already in place
-> at `/home/<user>/app/training/CLAUDE.md` and is the foundation for Lab 1. Letting Claude Code
-> auto-generate a new one will pollute the context and undermine the lab exercises.
+> **IMPORTANT — Skip `claude init`:**
+> When students first open Claude Code in `~/app/training/`, it may offer to generate a `CLAUDE.md`.
+> **Instruct students to decline.** The workshop's `CLAUDE.md` is already on the checkpoint branches
+> and is the foundation for Lab 1. An auto-generated one will break the lab.
 
 ---
 
 ## 6. MySQL 8.0 — Database Setup
 
-### 6a. Secure MySQL installation
+**One block. Run it once. Everything is created in the correct order.**
 
 ```bash
 sudo systemctl start mysql
 sudo systemctl enable mysql
 
-# Run the security wizard (set root password, remove anonymous users, etc.)
-sudo mysql_secure_installation
-```
-
-### 6b. Create the application database and user
-
-```bash
-sudo mysql -u root -p
-```
-
-Run the following SQL:
-
-```sql
--- Create database
+sudo mysql << 'SQL'
+-- Database
 CREATE DATABASE IF NOT EXISTS hr_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- Create app user (used by Spring Boot)
+-- App user (used by Spring Boot — credentials stored in .env)
 CREATE USER IF NOT EXISTS 'hrapp'@'localhost' IDENTIFIED BY 'hrapp_pass';
 GRANT ALL PRIVILEGES ON hr_db.* TO 'hrapp'@'localhost';
 
--- Create read-only user (used by MySQL MCP in Lab 10)
+-- Read-only user (used by MySQL MCP in Lab 10)
+-- Granted for both socket (@localhost) and TCP (@127.0.0.1) — MCP connects via TCP
 CREATE USER IF NOT EXISTS 'hr_readonly'@'localhost' IDENTIFIED BY 'readonly_pass';
 GRANT SELECT ON hr_db.* TO 'hr_readonly'@'localhost';
+CREATE USER IF NOT EXISTS 'hr_readonly'@'127.0.0.1' IDENTIFIED BY 'readonly_pass';
+GRANT SELECT ON hr_db.* TO 'hr_readonly'@'127.0.0.1';
 
 FLUSH PRIVILEGES;
 
--- Verify users
-SELECT user, host FROM mysql.user WHERE user = 'hr_readonly';
+-- Verify
+SELECT user, host FROM mysql.user WHERE user IN ('hrapp', 'hr_readonly') ORDER BY user, host;
+SQL
 ```
 
-### 6c. Load schema and seed data
+Expected output — 3 rows:
+
+```
++-----------+-----------+
+| user      | host      |
++-----------+-----------+
+| hr_readonly | 127.0.0.1 |
+| hr_readonly | localhost |
+| hrapp     | localhost |
++-----------+-----------+
+```
+
+### Load seed data
 
 ```bash
 cd /home/<user>/app/training
+git checkout checkpoint/day4-start
 
-# Apply schema
-mysql -u root -proot123 hr_db < database/schema.sql
-
-# Load seed data
-mysql -u root -proot123 hr_db < database/demo.sql
+# Seed via the app user (no password warning suppressed with -s flag pattern)
+mysql -u hrapp -phrapp_pass hr_db < database/demo.sql 2>/dev/null
+echo "Exit: $?"   # Expected: 0
 ```
 
-> Note: The HR app uses Flyway for migrations. `schema.sql` is a reference DDL snapshot.
-> The actual runtime migrations live in `backend/hrapp-service/src/main/resources/db/migration/`.
-> Flyway runs automatically on `spring-boot:run` — it will apply all `V*.sql` files to `hr_db`.
+> Note: `schema.sql` is a read-only DDL reference. The actual schema is applied automatically
+> by Flyway when the Spring Boot app first starts — do not manually run `schema.sql`.
 
 ---
 
-## 7. HR App Environment File
+## 7. Environment File
 
 ```bash
 cd /home/<user>/app/training
+git checkout checkpoint/day1-start
 cp .env.example .env
 ```
 
-Edit `.env`:
-
-```
-HR_DB_USER=root
-HR_DB_PASS=root123
-HR_JWT_SECRET=<generate with: openssl rand -base64 32>
-
-VITE_API_BASE_URL=http://localhost:8080/app/hr/api/v1
-VITE_USE_MOCK=true
-
-HR_DB_READONLY_USER=hr_readonly
-HR_DB_READONLY_PASS=readonly_pass
-```
-
-Generate the JWT secret per student:
+Fill in the JWT secret:
 
 ```bash
-openssl rand -base64 32
+# Generate a secret and write it into .env in one command
+sed -i "s|HR_JWT_SECRET=.*|HR_JWT_SECRET=$(openssl rand -base64 32)|" .env
+cat .env   # Verify all values look correct
 ```
+
+The `.env` file is how Claude Code knows your DB credentials — it reads this file
+when asked to run queries or verify data during labs.
 
 ---
 
@@ -212,23 +195,18 @@ openssl rand -base64 32
 ```bash
 git config --global user.name "Student Name"
 git config --global user.email "student@example.com"
-
-# Verify the HR app git history is intact
-cd /home/<user>/app/training
-git log --oneline -5
-git branch -a   # checkpoint branches should be listed
 ```
 
 ---
 
-## 9. Pre-flight: Verify Checkpoint Branches Exist
+## 9. Verify Checkpoint Branches Exist
 
 ```bash
 cd /home/<user>/app/training
 git branch | grep checkpoint
 ```
 
-Expected output:
+Expected:
 ```
   checkpoint/day1-start
   checkpoint/day2-start
@@ -236,43 +214,47 @@ Expected output:
   checkpoint/day4-start
 ```
 
-If missing, they need to be restored from the instructor's reference clone before the workshop.
-
 ---
 
 ## 10. Instructor Smoke Test
 
-Run this full sequence to confirm each workstation is ready.
-See `envsetup-student.md` for the abridged student version.
-
 ```bash
-# 1. Toolchain
-java -version && javac -version && mvn -version && node --version && npm --version && claude --version && mysql --version && git --version && make --version
-
-# 2. MySQL connectivity
-mysql -u root -proot123 -e "SELECT COUNT(*) AS table_count FROM information_schema.tables WHERE table_schema='hr_db';"
-# Expected: table_count >= 10
-
-mysql -u hr_readonly -preadonly_pass -e "SELECT COUNT(*) FROM hr_db.employees;"
-# Expected: returns a row count (confirms seed data loaded and read-only user works)
-
-# 3. Backend build (compile only, no tests — fast)
 cd /home/<user>/app/training
-cd backend && mvn clean compile -q
-# Expected: BUILD SUCCESS
 
-# 4. Frontend install + build
-cd frontend && npm ci --silent && npm run build
-# Expected: no errors, dist/ created
+# 1. Toolchain versions
+java -version 2>&1 | head -1
+mvn -version | head -1
+node --version && npm --version
+claude --version
+mysql --version | cut -d' ' -f1-5
 
-# 5. Claude Code sanity check
-cd /home/<user>/app/training
-claude --print "What file governs your behavior in this project? Answer in one sentence."
-# Expected: References CLAUDE.md
+# 2. DB connectivity — app user
+mysql -u hrapp -phrapp_pass hr_db -e "SELECT COUNT(*) AS employees FROM employees;" 2>/dev/null
+# Expected: a number (e.g. 20)
 
-# 6. Confirm no stray CLAUDE.md was generated anywhere unexpected
-find /home/<user>/app/training -name "CLAUDE.md" | sort
-# Expected: only /home/<user>/app/training/CLAUDE.md
+# 3. DB connectivity — read-only user (socket)
+mysql -u hr_readonly -preadonly_pass hr_db -e "SELECT COUNT(*) AS employees FROM employees;" 2>/dev/null
+# Expected: same number
+
+# 4. DB connectivity — read-only user (TCP — same path MCP uses)
+mysql -h 127.0.0.1 -u hr_readonly -preadonly_pass hr_db -e "SELECT COUNT(*) AS employees FROM employees;" 2>/dev/null
+# Expected: same number
+
+# 5. Backend compile
+git checkout checkpoint/day1-start -q
+cd backend && mvn clean compile -q && echo "Backend: OK" && cd ..
+
+# 6. Frontend build (day3-start has frontend)
+git checkout checkpoint/day3-start -q
+cd frontend && npm ci --silent && npm run build 2>&1 | tail -2 && cd ..
+
+# 7. Claude Code project awareness
+git checkout checkpoint/day1-start -q
+claude --print "What file governs your behavior in this project? One sentence." 2>/dev/null
+# Expected: references CLAUDE.md
+
+git checkout main -q
+echo "Smoke test complete."
 ```
 
 ---
@@ -281,11 +263,11 @@ find /home/<user>/app/training -name "CLAUDE.md" | sort
 
 | Symptom | Fix |
 |---|---|
-| `mvn: command not found` after install | `source ~/.bashrc` or open new terminal |
-| MySQL `Access denied for user 'root'` | Confirm `root123` password set during `mysql_secure_installation` |
-| `HR_DB_USER` not picked up by Spring Boot | Check `.env` is in `/home/<user>/app/training/`, not a sub-directory |
+| `mvn: command not found` after install | `source ~/.bashrc` or open a new terminal |
+| MySQL `Access denied for 'hrapp'` | Re-run the SQL block in step 6; confirm `FLUSH PRIVILEGES` ran |
+| `jq: command not found` during Lab 5 hooks | `sudo apt-get install -y jq` |
 | Frontend build fails with Node version error | Confirm `node --version` is v20+; re-run NodeSource install |
-| Claude Code auth loop | Student may need to clear `~/.claude` and re-authenticate |
+| Claude Code auth loop | `claude auth logout` then `claude` to re-authenticate |
 | `checkpoint/day*` branches missing | Restore from instructor reference clone |
-| Flyway errors on first boot | Confirm `hr_db` exists and root credentials match `application.yml` defaults |
-| Student ran `claude init` by mistake | Delete the auto-generated `CLAUDE.md`, restore from git: `git checkout CLAUDE.md` |
+| Flyway errors on first Spring Boot start | Confirm `hr_db` exists and `hrapp` user has ALL PRIVILEGES |
+| Student ran `claude init` by mistake | `git checkout CLAUDE.md` to restore the correct file |
