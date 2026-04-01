@@ -18,8 +18,10 @@ This is the student-facing repo. It contains BOTH the training materials AND
 the HR app code (on checkpoint branches). Students clone this one repo and get everything.
 
 /home/ssthakur/app/hr/ is the INSTRUCTOR REFERENCE ONLY.
-Only consult it if something is found missing from app/training.
+Only consult it if something is found to be MISSING from app/training — and only then.
+NEVER reference app/hr during a lab exercise, dry run, or review session.
 Never direct work, edits, or builds there.
+During a dry run (student simulation) or material review, treat app/training as the ONLY source of truth.
 
 ## Repo Structure
 
@@ -149,4 +151,16 @@ Deck 13:   Near-duplicate of Deck 11 — noted, owner will handle.
 1. HTML conversion of labs and decks
 2. Deck assembly for PPT (v1-deck-06 and v1-deck-14 are the updated versions to use)
 3. Review deck-12 (Thinking Modes) — awkward CI/CD merge, owner will handle
+
+## Session Modes — Tell Me Which One Applies
+
+**Review mode:** "Review [lab-XX / deck-XX]" — read the material, assess quality, flag gaps,
+unclear instructions, or missing context. Stay in reviewer role, do not execute the lab.
+
+**Dry run mode:** "Do a dry run of [lab-XX] as a student on [checkpoint/dayN-start]" —
+switch to the correct checkpoint branch, follow the lab instructions exactly as a student would,
+use ONLY what's available on that branch (no peeking at other branches or app/hr), report
+where students will get stuck or confused. This is the best way to find gaps before delivery.
+
+**Author mode (default):** Edit, extend, or create training materials. Work on main branch.
 ```
