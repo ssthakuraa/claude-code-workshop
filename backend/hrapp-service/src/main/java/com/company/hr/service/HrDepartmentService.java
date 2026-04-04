@@ -152,6 +152,7 @@ public class HrDepartmentService {
             dto.setParentDepartmentId(dept.getParentDepartment().getDepartmentId());
             dto.setParentDepartmentName(dept.getParentDepartment().getDepartmentName());
         }
+        dto.setEmployeeCount((int) repository.countActiveEmployees(dept.getDepartmentId()));
         return dto;
     }
 
