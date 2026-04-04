@@ -41,6 +41,36 @@ pipeline {
             }
         }
 
+        stage('Governance') {
+            steps {
+                sh '''
+                    VIOLATIONS=0
+
+                    # Check 1: Java class names must start with Hr
+                    for f in $(find backend/hrapp-service/src -name "*.java"); do
+                        classname=$(basename "$f" .java)
+                        if ! echo "$classname" | grep -q "^Hr"; then
+                            echo "NAMING VIOLATION: $f has class '$classname' — must start with 'Hr'"
+                            VIOLATIONS=1
+                        fi
+                    done
+
+                    # Check 2: Service.java files must not log PII
+                    for f in $(find backend/hrapp-service/src -name "*Service.java"); do
+                        if grep -iE "LOGGER.*\\b(email|phone|salary|password|ssn)\\b" "$f" > /dev/null 2>&1; then
+                            echo "PII VIOLATION: $f contains sensitive data in LOGGER statement"
+                            VIOLATIONS=1
+                        fi
+                    done
+
+                    if [ "$VIOLATIONS" -ne 0 ]; then
+                        echo "BUILD FAILED: Governance checks found violations"
+                        exit 1
+                    fi
+                '''
+            }
+        }
+
         stage('Frontend — Install & Lint') {
             steps {
                 dir('frontend') {
