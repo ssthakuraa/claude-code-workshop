@@ -188,6 +188,8 @@ Create a `/run-tests` command for daily use.
    /run-tests frontend
    ```
 
+   > **Note:** You will see `hireEmployee` test failures if you haven't implemented it yet in Lab 2. That's expected — the test suite covers the full service contract. If you completed Lab 2, those tests should pass. Either way, the command itself is working correctly if it runs and reports results.
+
 ---
 
 ## Exercise 5: The Self-Improvement Coda (5 min)

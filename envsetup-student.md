@@ -232,11 +232,11 @@ INSERT INTO hr_users (username, password_hash, employee_id, is_active) VALUES
 ('admin', '<ARGON2_HASH>', NULL, 1);
 
 INSERT INTO hr_user_roles (user_id, role_id) VALUES
-((SELECT id FROM hr_users WHERE username = 'steven.king'), 1),
-((SELECT id FROM hr_users WHERE username = 'admin'), 1);
+((SELECT user_id FROM hr_users WHERE username = 'steven.king'), 1),
+((SELECT user_id FROM hr_users WHERE username = 'admin'), 1);
 
 Verify with: SELECT u.username, r.role_name
-FROM hr_users u JOIN hr_user_roles ur ON u.id = ur.user_id JOIN hr_roles r ON ur.role_id = r.role_id;
+FROM hr_users u JOIN hr_user_roles ur ON u.user_id = ur.user_id JOIN hr_roles r ON ur.role_id = r.role_id;
 ```
 
 Claude Code will hash the password and run the SQL via the MySQL shell.
@@ -272,8 +272,8 @@ INSERT INTO hr_users (username, password_hash, employee_id, is_active) VALUES
 ('admin', '${HASH}', NULL, 1);
 
 INSERT INTO hr_user_roles (user_id, role_id) VALUES
-((SELECT id FROM hr_users WHERE username = 'steven.king'), 1),
-((SELECT id FROM hr_users WHERE username = 'admin'), 1);
+((SELECT user_id FROM hr_users WHERE username = 'steven.king'), 1),
+((SELECT user_id FROM hr_users WHERE username = 'admin'), 1);
 SQL
 ```
 
@@ -283,7 +283,7 @@ Verify users exist:
 mysql -u hrapp -phrapp_pass hr_db -e "
 SELECT u.username, u.employee_id, r.role_name
 FROM hr_users u
-JOIN hr_user_roles ur ON u.id = ur.user_id
+JOIN hr_user_roles ur ON u.user_id = ur.user_id
 JOIN hr_roles r ON ur.role_id = r.role_id;"
 ```
 
