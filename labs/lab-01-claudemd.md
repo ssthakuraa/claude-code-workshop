@@ -187,7 +187,74 @@ Claude should now produce convention-compliant code on the **first try** — no 
 
 ---
 
-## Exercise 4: The Self-Improvement Coda (10 min)
+## Exercise 4: Subdirectory CLAUDE.md Hierarchy (15 min)
+
+### Goal
+Split the root CLAUDE.md into three focused files using Claude Code's directory-level hierarchy. This is essential in monorepos where Java rules shouldn't clutter the frontend context and vice versa.
+
+### The Concept
+
+Claude Code automatically merges CLAUDE.md files from the project root down to the directory where Claude is running:
+
+```
+CLAUDE.md              ← always loaded (project-wide rules)
+backend/CLAUDE.md      ← loaded when working in backend/
+frontend/CLAUDE.md     ← loaded when working in frontend/
+```
+
+This means you can scope rules to where they apply — Java rules stay in `backend/CLAUDE.md`, React rules in `frontend/CLAUDE.md`, and only cross-cutting concerns (auth, idempotency, RBAC) live in the root.
+
+### Instructions
+
+1. Ask Claude to create `backend/CLAUDE.md` with Java/Spring-specific rules extracted from the root:
+   ```
+   Create backend/CLAUDE.md. Extract from the root CLAUDE.md:
+   - @SQLRestriction rule (not @Where)
+   - HrLogHelper entry/exit logging pattern
+   - @PreAuthorize security rule
+   - Hr naming prefix rule
+   - HrApiResponse / HrPagedResponse API response rules
+   Keep the root CLAUDE.md lean — leave only project overview, build commands,
+   and cross-cutting rules (employee lifecycle, idempotency, RBAC roles).
+   ```
+
+2. Ask Claude to create `frontend/CLAUDE.md` with React-specific rules:
+   ```
+   Create frontend/CLAUDE.md with:
+   - Use TanStack Query (useQuery/useMutation) for all API calls
+   - Use HrApiClient for HTTP requests — never raw fetch/axios
+   - Tailwind CSS with Oracle Redwood design tokens only
+   - React Hook Form + Zod for all forms
+   - Component naming: Hr prefix (e.g., HrEmployeeCard, HrDepartmentTree)
+   ```
+
+3. **Verify the hierarchy works.** Start Claude from the `backend/` directory:
+   ```bash
+   cd backend
+   claude
+   ```
+   Then ask:
+   ```
+   What CLAUDE.md rules are active right now?
+   ```
+   You should see it mention rules from **both** the root CLAUDE.md and `backend/CLAUDE.md`. The frontend rules should NOT appear.
+
+4. Start Claude from the `frontend/` directory and do the same check:
+   ```bash
+   cd frontend
+   claude
+   ```
+   You should see root + frontend rules — backend rules absent.
+
+### What You Should See
+
+Running from `backend/` gives Claude the complete Java context without React noise. Running from `frontend/` gives the React context without Spring specifics. The root file now contains only what both sides need — keeping every file under ~100 lines.
+
+> **Key insight:** Subdirectory CLAUDE.md files compound on top of the root — they don't replace it. Claude always sees the full chain from root to working directory.
+
+---
+
+## Exercise 5: The Self-Improvement Coda (10 min)
 
 ### Goal
 Practice the compounding loop that you'll use at the end of every lab.
@@ -219,7 +286,9 @@ Practice the compounding loop that you'll use at the end of every lab.
 - [ ] CLAUDE.md contains at least 5 project-specific rules
 - [ ] Exercise 1 produces 2+ convention violations
 - [ ] Exercise 3 produces 0 convention violations (same prompt, rules in place)
+- [ ] `backend/CLAUDE.md` and `frontend/CLAUDE.md` exist with scoped rules
 - [ ] You can explain the difference between CLAUDE.md (always loaded) and Skills (on-demand)
+- [ ] You can describe the merge order: root → subdirectory
 
 ---
 
@@ -227,8 +296,9 @@ Practice the compounding loop that you'll use at the end of every lab.
 
 1. **CLAUDE.md is production infrastructure** — iterate on it like prompts, not like documentation
 2. **Every correction should become a rule** — if you corrected Claude, encode it so it never repeats
-3. **Concise > comprehensive** — ~200 lines max. Claude ignores bloated files.
+3. **Concise > comprehensive** — ~100 lines per file max. Claude ignores bloated files.
 4. **Team-shared via git** — the whole team contributes. Review CLAUDE.md changes like code.
+5. **Hierarchy = scope** — put rules where they apply. Backend rules in `backend/CLAUDE.md`. Frontend rules in `frontend/CLAUDE.md`. Only cross-cutting concerns in root.
 
 ---
 

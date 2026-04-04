@@ -41,31 +41,42 @@ Continue from Labs 1–3. You should have CLAUDE.md, Region, Country, and Locati
 
 ---
 
-## Exercise 1: Fill the Context (15 min)
+## Exercise 1: Architect a Clean Multi-Phase Build (15 min)
 
 ### Goal
-Deliberately overload a single session to experience degradation.
+Plan how to build three entities across multiple clean sessions — keeping context lean by design rather than waiting for it to degrade.
+
+### The Professional Mindset
+
+Rather than asking "why does context degrade," ask "how would I plan this work so I never get there?" That's how experienced Claude Code users operate. The degradation curve exists — but professionals design around it, not into it.
 
 ### Instructions
 
-1. **In a single session, without clearing**, perform all of these tasks sequentially:
+1. **Design the session architecture.** You need to build three entities: `HrDepartment`, `HrJob`, and `HrEmployee`. Each requires scaffold → compile → verify. Ask Claude to lay out the plan:
+   ```
+   I need to build HrDepartment, HrJob, and HrEmployee entities.
+   Each needs an entity, repo, DTO, request, service, and controller.
+   HrEmployee depends on HrDepartment and HrJob (FK references).
 
-   a. Read the full requirements document:
-   ```
-   Read docs/requirement.md and summarize the key entities.
-   ```
-
-   b. Read the technical design:
-   ```
-   Read docs/technical-design.md and list all API endpoints.
-   ```
-
-   c. Read the schema:
-   ```
-   Read database/schema.sql and list all tables with their columns.
+   Design a session architecture that keeps context clean.
+   For each session: what do I do, what do I clear before starting,
+   and what does the next session depend on?
    ```
 
-   d. Ask Claude to generate a Department entity:
+2. **Discuss the reading question.** Ask:
+   ```
+   If I need to read docs/requirement.md and docs/technical-design.md
+   before I start building, which session should I do that in, and why?
+   What's the cleanest way to use that information without polluting
+   every implementation session with it?
+   ```
+   Expected answer: read in a dedicated first session (or use a subagent — covered in Lab 6), then `/clear` before building. The key insight: reading docs and building code are different activities and should not share a context window.
+
+3. **Execute Session 1: HrDepartment.** Check `/status` before starting:
+   ```
+   /status
+   ```
+   Then scaffold:
    ```
    Scaffold HrDepartment: entity, repo, DTO, request, service, controller.
    Departments have a tree structure (parent_department_id FK to self).
@@ -73,84 +84,101 @@ Deliberately overload a single session to experience degradation.
    nested children. Follow all CLAUDE.md conventions.
    ```
 
-2. **Check `/status`** — observe the context usage percentage.
+4. **Check `/status` again** after scaffolding. This is your "before /clear" baseline.
 
-3. Now ask Claude to generate the Job entity:
-   ```
-   Scaffold HrJob: entity (job_id VARCHAR PK, job_title, min_salary, max_salary),
-   repo, DTO, request, service with salary range validation, controller.
-   Cache the findAll() results for 1 hour. Follow all CLAUDE.md conventions.
-   ```
-
-4. **Review the Job output carefully:**
+5. **Review the output:**
    - [ ] Did Claude follow all CLAUDE.md conventions?
-   - [ ] Is the logging pattern correct?
-   - [ ] Is the caching annotation correct?
-   - [ ] Did it validate min_salary < max_salary?
+   - [ ] Is logging pattern correct (`HrLogHelper` entry/exit)?
+   - [ ] Does the entity use `@SQLRestriction` (not `@Where`)?
+   - [ ] Does the controller return `HrApiResponse<T>`?
 
-5. **Score the quality** on a 1–5 scale: _____
-
-> If context is above 70%, you'll likely see 1–2 convention violations that wouldn't have happened in a fresh session.
+> You've just completed Session 1 cleanly. Sessions 2 and 3 (HrJob and HrEmployee) would each start with `/clear` — by the time you build Employee (which depends on both), the context is fresh and only contains what that session needs.
 
 ---
 
-## Exercise 2: The Clean Way (15 min)
+## Exercise 2: Session 2 — HrJob with Clean Context (15 min)
 
 ### Goal
-Redo the Job entity with proper context management.
+Execute the next session cleanly, observing context usage before and after `/clear`.
 
 ### Instructions
 
-1. **Clear the context:**
+1. **Clear context from Exercise 1:**
    ```
    /clear
    ```
+   Check `/status` — you should be back near 0%.
 
-2. Ask for the Job entity with the **same prompt** as Exercise 1:
+2. Scaffold HrJob in this clean context:
    ```
    Scaffold HrJob: entity (job_id VARCHAR PK, job_title, min_salary, max_salary),
    repo, DTO, request, service with salary range validation, controller.
    Cache the findAll() results for 1 hour. Follow all CLAUDE.md conventions.
    ```
 
-3. **Review the output.** Score quality 1–5: _____
+3. **Review the output:**
+   - [ ] Did Claude follow all CLAUDE.md conventions?
+   - [ ] Is the caching annotation correct (`@Cacheable`)?
+   - [ ] Did it validate `min_salary < max_salary`?
 
-4. **Compare:**
-   - Quality score with overloaded context: _____
-   - Quality score with clean context: _____
+4. **Check `/status`.** Notice how much context the scaffold consumed. This is your baseline for one focused task.
 
 ### What You Should See
 
-The clean-context version should score higher — conventions followed more precisely, fewer omissions, cleaner code structure.
+A focused session — one entity, no accumulated reads from prior tasks — stays well under 30% context. Claude follows conventions precisely because it isn't sifting through a history of prior work.
 
 ---
 
-## Exercise 3: Subagent for Research (10 min)
+## Exercise 3: Using /compact for Long Tasks (10 min)
 
 ### Goal
-Use a subagent to do research without polluting your main context.
+Use `/compact` to compress a long session without losing the key implementation context you need to continue working.
+
+### When to Use /compact
+
+`/compact` is for situations where:
+- You're mid-task and can't start fresh (too much context built up)
+- You want to shed accumulated file reads and tool outputs
+- You need to continue the same task but context is getting large
+
+Unlike `/clear` (which wipes everything), `/compact` summarizes history while preserving what you tell it to keep.
 
 ### Instructions
 
-1. Instead of reading large files yourself, delegate:
+1. Continue from Exercise 2. You have a session with the HrJob scaffold. Check `/status` to note the current percentage.
+
+2. Add some bulk to the session — ask Claude to read a large file:
    ```
-   Use a subagent to read docs/requirement.md and extract:
-   1. All entity names and their relationships
-   2. All RBAC rules
-   3. All API endpoints
-   Return a concise summary — not the full document.
+   Read docs/requirement.md and list the entities mentioned.
+   ```
+   Check `/status` again. Context has grown.
+
+3. Now run `/compact` with a directive:
+   ```
+   /compact
+   ```
+   When prompted (or in the same message), tell Claude what to preserve:
+   ```
+   Compact this session. Preserve: the CLAUDE.md rules in effect,
+   the HrJob entity we scaffolded (entity fields, service methods,
+   caching annotation), and any pending compile issues.
+   Discard: the full requirement.md content we just read.
    ```
 
-2. **Check `/status`** after the subagent returns. Notice that the full document content stayed in the subagent's context, not yours. Only the summary was added to your main context.
+4. **Check `/status` after** — context should be significantly reduced.
 
-3. Now use the summary to do work:
+5. Verify Claude retained the key context:
    ```
-   Based on that entity summary, which entities still need to be scaffolded?
+   What caching configuration did we add to HrJob?
+   What CLAUDE.md rules are we following in this session?
    ```
+   It should answer correctly from the compacted summary.
 
 ### What You Should See
 
-Your main context consumed only the summary (~50 lines), not the full document (~500+ lines). This is how you keep context clean during research-heavy work.
+`/compact` compresses prior history while keeping the context you directed it to preserve. The percentage drops. Claude still knows your session's key decisions and the code it produced.
+
+> **Comparison:** `/clear` = full reset. `/compact` = summarize and continue. Use `/clear` between tasks. Use `/compact` within a long task that isn't done yet.
 
 ---
 
@@ -158,10 +186,11 @@ Your main context consumed only the summary (~50 lines), not the full document (
 
 Review and internalize these habits:
 
+- [ ] **Design sessions before starting** — one entity per session, explicit `/clear` between them
 - [ ] **`/clear` between tasks** — don't let Task A's context pollute Task B
 - [ ] **Don't read files "just in case"** — every file read costs tokens
-- [ ] **Delegate research to subagents** — keep your main context for implementation
-- [ ] **Use `/compact` for long tasks** — when you can't clear but context is growing
+- [ ] **Separate research from implementation** — read docs in a dedicated pass, then `/clear` before building
+- [ ] **Use `/compact` mid-task** — when you can't clear but context is growing and you need to continue
 - [ ] **Start fresh sessions for new features** — cheapest clean context
 - [ ] **Check `/status` periodically** — know your context level
 
@@ -171,36 +200,38 @@ Add to CLAUDE.md:
 - /clear between unrelated tasks
 - Delegate large file reads to subagents
 - If context > 70%, /compact or start fresh session
+- Check /status periodically — context is your most precious resource
 ```
 
 ---
 
 ## Success Criteria
 
-- [ ] Experienced measurable quality difference between overloaded and clean context
-- [ ] Used `/clear` to reset context between tasks
-- [ ] Used a subagent for research without polluting main context
+- [ ] Designed a session architecture for multi-entity build before starting
+- [ ] Used `/clear` between Exercise 1 and Exercise 2
+- [ ] Used `/compact` in Exercise 3 and verified Claude retained key context
 - [ ] Can explain the degradation curve (60% → 80% → 90%)
+- [ ] Can explain the difference between `/clear` and `/compact`
 - [ ] CLAUDE.md updated with session discipline rules
 
 ---
 
 ## Key Takeaways
 
-1. **Context is your most precious resource** — guard it jealously
+1. **Design sessions before you start** — one focused task per session is a professional habit, not a workaround
 2. **`/clear` is free, debugging isn't** — clearing context takes 0 seconds; fixing a context-poisoned generation takes 10 minutes
-3. **Subagents are context firewalls** — heavy reading stays in their context, only summaries cross into yours
-4. **Check `/status` like checking fuel** — you wouldn't drive without a gas gauge
+3. **`/compact` preserves intent** — use it mid-task to shed accumulated noise without losing your session's key decisions
+4. **Separate reading from building** — docs in one session, implementation in the next; never both in the same window
+5. **Check `/status` like checking fuel** — you wouldn't drive without a gas gauge
 
 ---
 
 <details>
-<summary><strong>Escape Hatch</strong> — If you can't trigger degradation</summary>
+<summary><strong>Escape Hatch</strong> — If /compact doesn't visibly reduce context</summary>
 
-Context degradation is easier to trigger with:
-- Reading multiple large files (requirement.md + technical-design.md + schema.sql)
-- Asking for multiple scaffolds in the same session
-- Pasting long error outputs
+`/compact` reduction depends on how much history has accumulated:
+- If context is under 30%, compaction may not show a dramatic percentage drop
+- Build up more history first: read `docs/requirement.md` and `docs/technical-design.md`, scaffold an additional entity, ask a few questions — then compact
 
-If you're on a model with a large context window and can't trigger degradation within the lab time, the instructor will demo the effect. The key insight remains: clean context = better output, always.
+The key test isn't the percentage number — it's whether Claude can answer "what did we build in this session?" correctly after compaction. If it can, the compaction preserved what matters.
 </details>
