@@ -2,7 +2,6 @@
 
 **Duration:** 45 minutes
 **Day:** 1 — Foundation
-**Checkpoint Branch:** `checkpoint/day1-start` (continues from Labs 1–3)
 **Builds On:** All Day 1 labs
 **Produces:** Practical context discipline habits
 

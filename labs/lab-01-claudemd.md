@@ -2,7 +2,6 @@
 
 **Duration:** 60 minutes
 **Day:** 1 — Foundation
-**Checkpoint Branch:** `checkpoint/day1-start`
 **Builds On:** Mindset Shift lecture
 **Produces:** A working CLAUDE.md that prevents convention violations
 
@@ -38,17 +37,30 @@ CLAUDE.md is a markdown file in the project root that Claude reads automatically
 
 ## Setup
 
+This lab teaches you to build CLAUDE.md from scratch by observing failures. The repo already contains a complete CLAUDE.md — for Exercise 1, temporarily rename it so Claude has no guidance and you can observe what goes wrong.
+
 ```bash
-# Start from the Day 1 checkpoint
-git checkout checkpoint/day1-start
+# Temporarily move the complete CLAUDE.md aside
+mv CLAUDE.md CLAUDE.md.complete
+
+# Create a minimal starting file — just enough for project orientation
+cat > CLAUDE.md << 'EOF'
+# CLAUDE.md — HR Enterprise Platform
+
+## Project Overview
+Spring Boot 3.2 + React 19 monorepo. Java 21, Maven multi-module.
+API base path: /app/hr/api/v1/
+EOF
 
 # Verify
-ls CLAUDE.md          # Should exist but be INCOMPLETE
+ls CLAUDE.md            # Should exist — minimal only
 ls database/schema.sql  # Reference DDL — READ ONLY
-ls backend/            # Maven project structure
+ls backend/             # Maven project structure
 ```
 
-You should see a **partial** CLAUDE.md that has basic project info but is missing several critical rules.
+You now have a minimal CLAUDE.md with no convention rules. Claude will make predictable mistakes — that's the point.
+
+> **After this lab:** Run `mv CLAUDE.md.complete CLAUDE.md` to restore the full version if you want to compare your work with the reference.
 
 ---
 

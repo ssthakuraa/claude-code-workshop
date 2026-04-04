@@ -2,7 +2,6 @@
 
 **Duration:** 60 minutes
 **Day:** 2 — Productivity
-**Checkpoint Branch:** `checkpoint/day2-start`
 **Builds On:** Lab 1 (CLAUDE.md — rules), Lab 4 (context discipline)
 **Produces:** 3 hooks in `.claude/settings.json` enforcing enterprise standards
 
@@ -45,9 +44,11 @@ Hooks are shell commands that execute automatically at specific lifecycle events
 ## Setup
 
 ```bash
-git checkout checkpoint/day2-start
-# Verify: CLAUDE.md exists, Region/Country/Location entities built
+# Verify the backend compiles cleanly
+cd backend && mvn compile -q && echo "Backend: OK"
 ```
+
+You should have CLAUDE.md with your rules from Day 1 and the Region/Country/Location entities built.
 
 ---
 

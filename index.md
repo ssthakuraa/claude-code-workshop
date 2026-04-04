@@ -44,22 +44,12 @@ This workshop requires a fundamental reorientation:
 
 ---
 
-## Git Checkpoint Branches
+## Start of Each Day
 
-Each day starts from a known state. If you fall behind, reset to the checkpoint:
+Run this before the first lab of each day to reload the database and verify the backend compiles:
 
 ```bash
-# Day 1: bare project, partial CLAUDE.md, schema only
-git checkout checkpoint/day1-start
-
-# Day 2: CLAUDE.md complete, Region/Country entities, skills configured
-git checkout checkpoint/day2-start
-
-# Day 3: full backend + frontend running, hooks in place
-git checkout checkpoint/day3-start
-
-# Day 4: MCP servers configured, most features working
-git checkout checkpoint/day4-start
+bash scripts/start-day.sh <day>   # 1, 2, 3, or 4
 ```
 
 ---

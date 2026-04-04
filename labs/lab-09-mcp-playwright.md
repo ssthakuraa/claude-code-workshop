@@ -2,7 +2,6 @@
 
 **Duration:** 75 minutes
 **Day:** 3 — Integration
-**Checkpoint Branch:** `checkpoint/day3-start`
 **Builds On:** Lab 8 (verification loops)
 **Produces:** Playwright MCP configured, 2 browser-driven verifications completed
 
@@ -40,8 +39,6 @@ You will connect Claude Code to a real browser via the Playwright MCP server. Cl
 ## Setup
 
 ```bash
-git checkout checkpoint/day3-start
-
 # Install Playwright browsers (if not done in pre-workshop)
 cd frontend && npx playwright install chromium
 

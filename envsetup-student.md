@@ -176,7 +176,6 @@ Both should print `OK`.
 ```bash
 git clone https://github.com/ssthakuraa/claude-code-workshop.git
 cd claude-code-workshop
-git checkout checkpoint/day1-start
 ```
 
 ### Load schema and demo data
@@ -300,7 +299,6 @@ You should see steven.king and admin with ROLE_ADMIN.
 
 ```bash
 cd claude-code-workshop
-git checkout checkpoint/day1-start
 cp .env.example .env
 
 # Fill in the JWT secret
@@ -346,7 +344,6 @@ Run each check. **Do not start Day 1 until all pass.**
 
 ```bash
 cd claude-code-workshop
-git checkout checkpoint/day1-start -q
 cd backend && mvn clean compile -q && echo "Backend: OK"
 ```
 
@@ -356,7 +353,6 @@ Expected: `Backend: OK`
 
 ```bash
 cd claude-code-workshop
-git checkout checkpoint/day3-start -q
 cd frontend && npm ci --silent && npm run build 2>&1 | tail -2
 ```
 
@@ -366,26 +362,10 @@ Expected: `✓ built in ...`
 
 ```bash
 cd claude-code-workshop
-git checkout checkpoint/day1-start -q
 claude --print "What file governs your behavior in this project? One sentence."
 ```
 
 Expected: Claude references `CLAUDE.md`
-
-### Checkpoint branches
-
-```bash
-cd claude-code-workshop && git checkout main -q
-git branch | grep checkpoint
-```
-
-Expected — all four lines:
-```
-  checkpoint/day1-start
-  checkpoint/day2-start
-  checkpoint/day3-start
-  checkpoint/day4-start
-```
 
 ### Database Access
 
@@ -408,11 +388,7 @@ Should be >= 2 (steven.king and admin).
 
 ## All Checks Pass?
 
-Return to main and you are ready for Day 1:
-
-```bash
-cd claude-code-workshop && git checkout main
-```
+You are ready for Day 1. Open `labs/lab-01-claudemd.md` and begin.
 
 ---
 

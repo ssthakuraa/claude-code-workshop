@@ -2,7 +2,6 @@
 
 **Duration:** 150 minutes (Part 1: 60 min, Part 2: 90 min)
 **Day:** 4 — Mastery
-**Checkpoint Branch:** `checkpoint/day4-start`
 **Builds On:** Everything from Labs 1–11
 **Produces:** The Transfer Employee feature — fully implemented, tested, and verified
 
@@ -84,7 +83,7 @@ Verify your hooks from Lab 5 are active. They should catch:
 - Any new Java class without `Hr` prefix
 - Any PII in logger statements
 
-If you're starting from `checkpoint/day4-start`, verify `.claude/settings.json` has the hooks.
+Verify `.claude/settings.json` has the hooks from Lab 5.
 
 ---
 
@@ -168,8 +167,8 @@ department as the database query? Any mismatch = a bug.
 
 1. **Review your CLAUDE.md.** Compare it to what you started with on Day 1.
    ```
-   Show me the git diff of CLAUDE.md from checkpoint/day1-start to now.
-   How many rules were added?
+   Compare my CLAUDE.md now to what it looked like at the start of Lab 1.
+   How many rules were added across the workshop?
    ```
 
 2. **Reflect on the techniques used:**

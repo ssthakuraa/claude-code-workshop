@@ -2,7 +2,6 @@
 
 **Duration:** 75 minutes
 **Day:** 3 — Integration
-**Checkpoint Branch:** `checkpoint/day3-start`
 **Builds On:** Lab 9 (Playwright MCP)
 **Produces:** MySQL MCP configured, data verification workflow demonstrated
 
@@ -40,8 +39,6 @@ Compare all three → any mismatch = bug
 ## Setup
 
 ```bash
-git checkout checkpoint/day3-start
-
 # Verify MySQL is running
 mysql -h 127.0.0.1 -u root -proot123 -e "SELECT COUNT(*) FROM hr_db.employees;"
 

@@ -2,7 +2,6 @@
 
 **Duration:** 60 minutes
 **Day:** 2 — Productivity
-**Checkpoint Branch:** `checkpoint/day2-start`
 **Builds On:** Lab 4 (context management), Lab 5 (hooks)
 **Produces:** A custom subagent (component-reviewer)
 
@@ -42,8 +41,8 @@ The reviewer sees code it didn't write — no confirmation bias, no context fati
 ## Setup
 
 ```bash
-git checkout checkpoint/day2-start
-# Verify: frontend/src/components/ exists with UI components
+# Verify frontend components exist
+ls frontend/src/components/hr/   # Should show existing HR components
 ```
 
 ---

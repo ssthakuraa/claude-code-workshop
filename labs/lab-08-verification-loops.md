@@ -2,7 +2,6 @@
 
 **Duration:** 60 minutes
 **Day:** 2 — Productivity
-**Checkpoint Branch:** `checkpoint/day2-start`
 **Builds On:** Labs 5 (hooks), 6 (subagents), 7 (parallel sessions)
 **Produces:** A feature built with test-driven verification and a visual check
 
@@ -38,9 +37,8 @@ Usually 2–3 iterations to reach quality.
 ## Setup
 
 ```bash
-git checkout checkpoint/day2-start
-# Verify: backend running, frontend running, tests passing
-cd backend && mvn test -pl hrapp-service -q  # Should pass
+# Verify tests pass
+cd backend && mvn test -pl hrapp-service -q && echo "Tests: OK"
 ```
 
 ---

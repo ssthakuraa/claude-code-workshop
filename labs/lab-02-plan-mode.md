@@ -2,7 +2,6 @@
 
 **Duration:** 60 minutes
 **Day:** 1 — Foundation
-**Checkpoint Branch:** `checkpoint/day1-start` (continues from Lab 1)
 **Builds On:** Lab 1 (CLAUDE.md in place)
 **Produces:** A fully designed and implemented `hireEmployee()` method
 
@@ -38,11 +37,7 @@ Explore → Plan → Implement → Commit
 
 ## Setup
 
-You should have a working CLAUDE.md from Lab 1. If not:
-```bash
-git checkout checkpoint/day1-start
-# Copy the escape hatch CLAUDE.md from Lab 1
-```
+Continue from Lab 1. You should have a working CLAUDE.md with naming, logging, database, and API response rules. If not, copy the escape hatch CLAUDE.md from Lab 1's Escape Hatch section into the project root.
 
 ---
 

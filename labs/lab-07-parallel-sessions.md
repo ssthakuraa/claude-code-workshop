@@ -2,7 +2,6 @@
 
 **Duration:** 60 minutes
 **Day:** 2 — Productivity
-**Checkpoint Branch:** `checkpoint/day2-start`
 **Builds On:** Labs 5–6 (hooks, subagents)
 **Produces:** 2–3 features built in parallel across separate worktrees
 
@@ -38,10 +37,11 @@ git worktree add ../hr-feature-c -b feature/dashboard
 ## Setup
 
 ```bash
-git checkout checkpoint/day2-start
-
 # Verify you have a clean working tree
 git status  # Should be clean
+
+# Verify backend compiles
+cd backend && mvn compile -q && echo "Backend: OK"
 ```
 
 ---

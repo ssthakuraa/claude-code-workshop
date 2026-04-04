@@ -2,7 +2,6 @@
 
 **Duration:** 60 minutes
 **Day:** 1 — Foundation
-**Checkpoint Branch:** `checkpoint/day1-start` (continues from Labs 1–2)
 **Builds On:** Lab 1 (CLAUDE.md), Lab 2 (Plan Mode)
 **Produces:** A `/scaffold-entity` skill and a `/run-tests` command
 
@@ -35,11 +34,7 @@ You will create a custom skill that encodes a repeatable pattern, then use it to
 
 ## Setup
 
-You should have CLAUDE.md and the Region entity from Labs 1–2. If not:
-```bash
-git checkout checkpoint/day1-start
-# Apply the escape hatch CLAUDE.md from Lab 1
-```
+Continue from Labs 1–2. You should have CLAUDE.md with your rules in place and the Region entity built. If CLAUDE.md is missing, copy the escape hatch version from Lab 1.
 
 ---
 

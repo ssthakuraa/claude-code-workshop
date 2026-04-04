@@ -4,12 +4,7 @@ This repository contains a 4-day hands-on workshop for mastering Claude Code in 
 
 ## Repository Structure
 
-- **main branch** - Training materials only (labs, decks, instructor guides)
-- **checkpoint branches** - HR Enterprise Platform code at each workshop stage
-  - `checkpoint/day1-start` - Backend only, minimal CLAUDE.md
-  - `checkpoint/day2-start` - Full backend + complete CLAUDE.md + skills
-  - `checkpoint/day3-start` - Full backend + frontend + hooks configured
-  - `checkpoint/day4-start` - Full backend + frontend + MCP servers configured
+- **main branch** - All workshop materials: labs, source code, frontend, database, scripts, and configs
 
 ## Getting Started
 
@@ -21,14 +16,9 @@ This repository contains a 4-day hands-on workshop for mastering Claude Code in 
    cd claude-code-workshop
    ```
 
-2. Start with Day 1 materials:
-   ```bash
-   git checkout checkpoint/day1-start
-   ```
+2. Follow the environment setup guide in `envsetup-student.md`
 
-3. Follow the environment setup guide in `envsetup-student.md`
-
-4. Begin with Lab 1: `labs/lab-01-claudemd.md`
+3. Begin with Lab 1: `labs/lab-01-claudemd.md`
 
 ### For Instructors
 

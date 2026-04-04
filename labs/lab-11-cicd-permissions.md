@@ -2,7 +2,6 @@
 
 **Duration:** 75 minutes
 **Day:** 4 — Mastery
-**Checkpoint Branch:** `checkpoint/day4-start`
 **Builds On:** Labs 5 (hooks), 9–10 (MCP)
 **Produces:** Makefile, Jenkinsfile, permissions profile
 
@@ -53,10 +52,9 @@ CI/CD: enforce rules in the pipeline (every PR, every merge)
 ## Setup
 
 ```bash
-git checkout checkpoint/day4-start
-# Verify: all backend + frontend code in place
-cd backend && mvn compile -q  # Should compile
-cd frontend && npm run build  # Should build
+# Verify backend and frontend are in place
+cd backend && mvn compile -q && echo "Backend: OK"
+cd frontend && npm run build 2>&1 | tail -2
 ```
 
 ---
