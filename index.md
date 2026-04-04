@@ -64,26 +64,21 @@ git checkout checkpoint/day4-start
 
 ---
 
-## Deliverables
+## Lab Exercises
 
-### For Instructors
-- [Presentation Decks](decks/) — one per module, with speaker notes
-- [Instructor Flow Guide](instructor/flow-guide.md) — pacing, transitions, recovery strategies
-
-### For Students
-- [Lab Exercises](labs/) — one per lab, hands-on instructions
-  - [Lab 01: CLAUDE.md — Your Enterprise Constitution](labs/lab-01-claudemd.md)
-  - [Lab 02: Plan Mode — Think Before You Build](labs/lab-02-plan-mode.md)
-  - [Lab 03: Skills & Commands — Reusable Knowledge Packs](labs/lab-03-skills-commands.md)
-  - [Lab 04: Context Management — The #1 Performance Lever](labs/lab-04-context-management.md)
-  - [Lab 05: Hooks — Deterministic Quality Gates](labs/lab-05-hooks.md)
-  - [Lab 06: Subagents — Isolated Specialist Workers](labs/lab-06-subagents.md)
-  - [Lab 07: Parallel Sessions & Git Worktrees](labs/lab-07-parallel-sessions.md)
-  - [Lab 08: Verification Loops — The Quality Multiplier](labs/lab-08-verification-loops.md)
-  - [Lab 09: MCP Servers — Playwright & Browser Verification](labs/lab-09-mcp-playwright.md)
-  - [Lab 10: MCP Servers — MySQL & Data Verification](labs/lab-10-mcp-mysql.md)
-  - [Lab 11: CI/CD, Permissions & Enterprise Governance](labs/lab-11-cicd-permissions.md)
-  - [Lab 12: Capstone — End-to-End Feature Build](labs/lab-12-capstone.md)
+- [Lab 01: CLAUDE.md — Your Enterprise Constitution](labs/lab-01-claudemd.md)
+- [Lab 02: Plan Mode — Think Before You Build](labs/lab-02-plan-mode.md)
+- [Lab 03: Skills & Commands — Reusable Knowledge Packs](labs/lab-03-skills-commands.md)
+- [Lab 04: Context Management — The #1 Performance Lever](labs/lab-04-context-management.md)
+- [Lab 05: Hooks — Deterministic Quality Gates](labs/lab-05-hooks.md)
+- [Lab 06: Subagents — Isolated Specialist Workers](labs/lab-06-subagents.md)
+- [Lab 07: Parallel Sessions & Git Worktrees](labs/lab-07-parallel-sessions.md)
+- [Lab 08: Verification Loops — The Quality Multiplier](labs/lab-08-verification-loops.md)
+- [Lab 09: MCP Servers — Playwright & Browser Verification](labs/lab-09-mcp-playwright.md)
+- [Lab 10: MCP Servers — MySQL & Data Verification](labs/lab-10-mcp-mysql.md)
+- [Lab 11: CI/CD, Permissions & Enterprise Governance](labs/lab-11-cicd-permissions.md)
+- [Lab 12: Capstone — End-to-End Feature Build](labs/lab-12-capstone.md)
+- All labs are in the `labs/` directory
 
 ---
 
