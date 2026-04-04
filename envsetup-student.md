@@ -180,14 +180,10 @@ cd claude-code-workshop
 
 ### Load schema and demo data
 
-The `database/schema.sql` file contains `USE hrdb;` (missing the underscore). Fix and load:
-
 ```bash
-sed 's/USE hrdb;/USE hr_db;/' database/schema.sql | mysql -u hrapp -phrapp_pass
-sed 's/USE hrdb;/USE hr_db;/' database/demo.sql | mysql -u hrapp -phrapp_pass
+mysql -u hrapp -phrapp_pass < database/schema.sql
+mysql -u hrapp -phrapp_pass < database/demo.sql
 ```
-
-> These commands use the shell to fix the `USE` statement before piping to MySQL. The files in git still contain `USE hrdb;` — this is intentional so the fix remains a known issue for Lab exercises.
 
 ### Verify data loaded
 
@@ -432,12 +428,3 @@ git checkout CLAUDE.md
 **Cannot log in to frontend — no admin user**
 Run Step 7. Check `mysql -u hrapp -phrapp_pass hr_db -e "SELECT * FROM hr_users;"` to confirm users exist.
 
-**Schema says `USE hrdb` instead of `USE hr_db`**
-```bash
-sed -i 's/USE hrdb;/USE hr_db;/' database/schema.sql
-sed -i 's/USE hrdb;/USE hr_db;/' database/demo.sql
-# Reload
-mysql -u hrapp -phrapp_pass -e "DROP DATABASE hr_db; CREATE DATABASE hr_db;"
-sed 's/USE hrdb;/USE hr_db;/' database/schema.sql | mysql -u hrapp -phrapp_pass
-sed 's/USE hrdb;/USE hr_db;/' database/demo.sql | mysql -u hrapp -phrapp_pass
-```

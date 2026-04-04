@@ -1,7 +1,7 @@
 -- MySQL Compatible Schema
 -- Converted from Oracle HR schema
 
-USE hrdb;
+USE hr_db;
 
 CREATE TABLE regions (
     region_id INT NOT NULL,

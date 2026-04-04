@@ -16,7 +16,7 @@
 --   EMPLOYEES and DEPARTMENTS.  The dept_mgr_fk constraint is initially
 --   disabled, data is loaded, and then enabled at the end of the script
 
-USE hrdb;
+USE hr_db;
 
 -- Disable foreign key checks to allow data insertion in any order
 SET FOREIGN_KEY_CHECKS=0;
