@@ -1,5 +1,30 @@
 .DS_Store
 *.swp
 *.swo
+
+# Maven build output
+target/
+*.class
+*.jar
+*.war
+
+# Node / frontend build
 node_modules/
+dist/
+.vite/
+
+# Environment files
+.env
+!.env.example
+
+# Claude local settings
 .claude/settings.local.json
+
+# Playwright test artifacts
+test-results/
+playwright-report/
+
+# IDE
+.idea/
+.vscode/
+*.iml

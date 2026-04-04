@@ -26,7 +26,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "f=$(jq -r '.tool_input.file_path // empty'); if echo \"$f\" | grep -q 'frontend/src/'; then cd /home/ssthakur/app/training/frontend && npx tsc --noEmit 2>&1 | tail -20; fi",
+            "command": "f=$(jq -r '.tool_input.file_path // empty'); if echo \"$f\" | grep -q 'frontend/src/'; then cd frontend && npx tsc --noEmit 2>&1 | tail -20; fi",
             "timeout": 60,
             "statusMessage": "TypeScript check..."
           },

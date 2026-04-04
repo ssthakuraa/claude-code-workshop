@@ -1,7 +1,7 @@
 -- MySQL Compatible Schema
 -- Converted from Oracle HR schema
 
-USE hr_db;
+USE hrdb;
 
 CREATE TABLE regions (
     region_id INT NOT NULL,
@@ -71,14 +71,14 @@ ADD CONSTRAINT dept_mgr_fk FOREIGN KEY (manager_id) REFERENCES employees(employe
 CREATE TABLE job_history (
     employee_id INT NOT NULL,
     start_date DATE NOT NULL,
-    end_date DATE NOT NULL,
+    end_date DATE NULL,
     job_id VARCHAR(10) NOT NULL,
     department_id INT,
     PRIMARY KEY (employee_id, start_date),
     FOREIGN KEY (job_id) REFERENCES jobs(job_id),
     FOREIGN KEY (employee_id) REFERENCES employees(employee_id),
     FOREIGN KEY (department_id) REFERENCES departments(department_id),
-    CHECK (end_date > start_date)
+    CHECK (end_date IS NULL OR end_date > start_date)
 ) COMMENT = 'Table that stores job history of the employees.';
 
 -- ========================

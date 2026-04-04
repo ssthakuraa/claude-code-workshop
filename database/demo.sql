@@ -16,7 +16,7 @@
 --   EMPLOYEES and DEPARTMENTS.  The dept_mgr_fk constraint is initially
 --   disabled, data is loaded, and then enabled at the end of the script
 
-USE hr_db;
+USE hrdb;
 
 -- Disable foreign key checks to allow data insertion in any order
 SET FOREIGN_KEY_CHECKS=0;
@@ -610,58 +610,58 @@ INSERT INTO hr_roles (role_id, role_name, description) VALUES
     (4, 'ROLE_EMPLOYEE', 'Employee with self-service access');
 
 -- *************************** insert data into the HR_USERS table
--- Passwords are BCrypt hashes of 'password123' (strength 12) — demo only
+-- Passwords are Argon2id hashes of 'password123' (strength 12) — demo only
 
 INSERT INTO hr_users (user_id, employee_id, username, password_hash, is_active, last_login) VALUES
-    ( 1, 100, 'steven.king',       '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 08:15', '%d-%m-%Y %H:%i')),
-    ( 2, 101, 'neena.kochhar',     '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 09:02', '%d-%m-%Y %H:%i')),
-    ( 3, 102, 'lex.dehaan',        '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('24-03-2026 14:30', '%d-%m-%Y %H:%i')),
-    ( 4, 103, 'alexander.hunold',  '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 07:45', '%d-%m-%Y %H:%i')),
-    ( 5, 200, 'jennifer.whalen',   '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('24-03-2026 16:10', '%d-%m-%Y %H:%i')),
-    ( 6, 203, 'susan.mavris',      '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 08:55', '%d-%m-%Y %H:%i')),
-    ( 7, 114, 'den.raphaely',      '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 10:20', '%d-%m-%Y %H:%i')),
-    ( 8, 145, 'john.russell',      '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 11:00', '%d-%m-%Y %H:%i')),
-    ( 9, 108, 'nancy.greenberg',   '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('24-03-2026 15:45', '%d-%m-%Y %H:%i')),
-    (10, 201, 'michael.hartstein', '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 09:30', '%d-%m-%Y %H:%i')),
-    (11, 205, 'shelley.higgins',   '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('24-03-2026 13:15', '%d-%m-%Y %H:%i')),
-    (12, 204, 'hermann.baer',      '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('21-03-2026 10:00', '%d-%m-%Y %H:%i')),
-    (13, 121, 'adam.johnson',      '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 06:30', '%d-%m-%Y %H:%i')),
-    (14, 120, 'matthew.weiss',     '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('24-03-2026 07:00', '%d-%m-%Y %H:%i')),
-    (15, 104, 'bruce.ernst',       '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('20-03-2026 09:00', '%d-%m-%Y %H:%i')),
-    (16, 107, 'diana.lorentz',     '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 08:00', '%d-%m-%Y %H:%i')),
-    (17, 206, 'william.gietz',     '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('24-03-2026 11:30', '%d-%m-%Y %H:%i')),
-    (18, 202, 'pat.fay',           '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 10:45', '%d-%m-%Y %H:%i')),
-    (19, 146, 'karen.partners',    '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 12:00', '%d-%m-%Y %H:%i')),
-    (20, 174, 'ellen.abel',        '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('23-03-2026 14:20', '%d-%m-%Y %H:%i')),
-    (21, 198, 'donna.snythia',     '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', FALSE, NULL),  -- terminated, account deactivated
-    (22, 199, 'dorothy.wallin',    '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', FALSE, NULL),  -- terminated, account deactivated
+    ( 1, 100, 'steven.king',       '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 08:15', '%d-%m-%Y %H:%i')),
+    ( 2, 101, 'neena.kochhar',     '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 09:02', '%d-%m-%Y %H:%i')),
+    ( 3, 102, 'lex.dehaan',        '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('24-03-2026 14:30', '%d-%m-%Y %H:%i')),
+    ( 4, 103, 'alexander.hunold',  '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 07:45', '%d-%m-%Y %H:%i')),
+    ( 5, 200, 'jennifer.whalen',   '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('24-03-2026 16:10', '%d-%m-%Y %H:%i')),
+    ( 6, 203, 'susan.mavris',      '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 08:55', '%d-%m-%Y %H:%i')),
+    ( 7, 114, 'den.raphaely',      '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 10:20', '%d-%m-%Y %H:%i')),
+    ( 8, 145, 'john.russell',      '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 11:00', '%d-%m-%Y %H:%i')),
+    ( 9, 108, 'nancy.greenberg',   '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('24-03-2026 15:45', '%d-%m-%Y %H:%i')),
+    (10, 201, 'michael.hartstein', '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 09:30', '%d-%m-%Y %H:%i')),
+    (11, 205, 'shelley.higgins',   '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('24-03-2026 13:15', '%d-%m-%Y %H:%i')),
+    (12, 204, 'hermann.baer',      '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('21-03-2026 10:00', '%d-%m-%Y %H:%i')),
+    (13, 121, 'adam.johnson',      '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 06:30', '%d-%m-%Y %H:%i')),
+    (14, 120, 'matthew.weiss',     '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('24-03-2026 07:00', '%d-%m-%Y %H:%i')),
+    (15, 104, 'bruce.ernst',       '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('20-03-2026 09:00', '%d-%m-%Y %H:%i')),
+    (16, 107, 'diana.lorentz',     '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 08:00', '%d-%m-%Y %H:%i')),
+    (17, 206, 'william.gietz',     '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('24-03-2026 11:30', '%d-%m-%Y %H:%i')),
+    (18, 202, 'pat.fay',           '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 10:45', '%d-%m-%Y %H:%i')),
+    (19, 146, 'karen.partners',    '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 12:00', '%d-%m-%Y %H:%i')),
+    (20, 174, 'ellen.abel',        '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('23-03-2026 14:20', '%d-%m-%Y %H:%i')),
+    (21, 198, 'donna.snythia',     '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', FALSE, NULL),  -- terminated, account deactivated
+    (22, 199, 'dorothy.wallin',    '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', FALSE, NULL),  -- terminated, account deactivated
     -- India team
-    (23, 207, 'rajesh.kumar',      '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 10:30', '%d-%m-%Y %H:%i')),
-    (24, 208, 'priya.sharma',      '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 10:45', '%d-%m-%Y %H:%i')),
-    (25, 209, 'arjun.patel',       '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 11:00', '%d-%m-%Y %H:%i')),
-    (26, 210, 'ananya.reddy',      '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('24-03-2026 12:15', '%d-%m-%Y %H:%i')),
-    (27, 211, 'vikram.singh',      '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('24-03-2026 11:30', '%d-%m-%Y %H:%i')),
-    (28, 212, 'deepa.nair',        '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 10:00', '%d-%m-%Y %H:%i')),
-    (29, 213, 'suresh.iyer',       '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 10:20', '%d-%m-%Y %H:%i')),
-    (30, 214, 'kavitha.menon',     '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('24-03-2026 09:45', '%d-%m-%Y %H:%i')),
-    (31, 215, 'amit.gupta',        '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('24-03-2026 14:00', '%d-%m-%Y %H:%i')),
-    (32, 216, 'meera.joshi',       '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 09:30', '%d-%m-%Y %H:%i')),
-    (33, 217, 'rahul.verma',       '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 10:10', '%d-%m-%Y %H:%i')),
-    (34, 218, 'sneha.chatterjee',  '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('24-03-2026 11:00', '%d-%m-%Y %H:%i')),
-    (35, 219, 'karthik.rajan',     '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 09:15', '%d-%m-%Y %H:%i')),
-    (36, 220, 'divya.krishnan',    '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 10:50', '%d-%m-%Y %H:%i')),
+    (23, 207, 'rajesh.kumar',      '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 10:30', '%d-%m-%Y %H:%i')),
+    (24, 208, 'priya.sharma',      '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 10:45', '%d-%m-%Y %H:%i')),
+    (25, 209, 'arjun.patel',       '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 11:00', '%d-%m-%Y %H:%i')),
+    (26, 210, 'ananya.reddy',      '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('24-03-2026 12:15', '%d-%m-%Y %H:%i')),
+    (27, 211, 'vikram.singh',      '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('24-03-2026 11:30', '%d-%m-%Y %H:%i')),
+    (28, 212, 'deepa.nair',        '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 10:00', '%d-%m-%Y %H:%i')),
+    (29, 213, 'suresh.iyer',       '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 10:20', '%d-%m-%Y %H:%i')),
+    (30, 214, 'kavitha.menon',     '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('24-03-2026 09:45', '%d-%m-%Y %H:%i')),
+    (31, 215, 'amit.gupta',        '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('24-03-2026 14:00', '%d-%m-%Y %H:%i')),
+    (32, 216, 'meera.joshi',       '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 09:30', '%d-%m-%Y %H:%i')),
+    (33, 217, 'rahul.verma',       '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 10:10', '%d-%m-%Y %H:%i')),
+    (34, 218, 'sneha.chatterjee',  '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('24-03-2026 11:00', '%d-%m-%Y %H:%i')),
+    (35, 219, 'karthik.rajan',     '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 09:15', '%d-%m-%Y %H:%i')),
+    (36, 220, 'divya.krishnan',    '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 10:50', '%d-%m-%Y %H:%i')),
     -- Mexico team
-    (37, 221, 'carlos.garcia',     '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 09:00', '%d-%m-%Y %H:%i')),
-    (38, 222, 'maria.lopez',       '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 09:30', '%d-%m-%Y %H:%i')),
-    (39, 223, 'alejandro.martinez','$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('24-03-2026 10:00', '%d-%m-%Y %H:%i')),
-    (40, 224, 'sofia.rodriguez',   '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('24-03-2026 11:15', '%d-%m-%Y %H:%i')),
-    (41, 225, 'diego.hernandez',   '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 08:45', '%d-%m-%Y %H:%i')),
-    (42, 226, 'valentina.flores',  '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 09:10', '%d-%m-%Y %H:%i')),
-    (43, 227, 'fernando.morales',  '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 08:30', '%d-%m-%Y %H:%i')),
-    (44, 228, 'lucia.sanchez',     '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('24-03-2026 09:00', '%d-%m-%Y %H:%i')),
-    (45, 229, 'miguel.ramirez',    '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('24-03-2026 10:30', '%d-%m-%Y %H:%i')),
-    (46, 230, 'camila.torres',     '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 08:00', '%d-%m-%Y %H:%i')),
-    (47, 231, 'andres.diaz',       '$2a$12$LJ3m4ys3uz0GFTkBs0MmDeYBGFr/PNWeHEuDKM3S1jVqKHBNUvUa6', TRUE,  STR_TO_DATE('25-03-2026 09:45', '%d-%m-%Y %H:%i'));
+    (37, 221, 'carlos.garcia',     '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 09:00', '%d-%m-%Y %H:%i')),
+    (38, 222, 'maria.lopez',       '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 09:30', '%d-%m-%Y %H:%i')),
+    (39, 223, 'alejandro.martinez','$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('24-03-2026 10:00', '%d-%m-%Y %H:%i')),
+    (40, 224, 'sofia.rodriguez',   '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('24-03-2026 11:15', '%d-%m-%Y %H:%i')),
+    (41, 225, 'diego.hernandez',   '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 08:45', '%d-%m-%Y %H:%i')),
+    (42, 226, 'valentina.flores',  '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 09:10', '%d-%m-%Y %H:%i')),
+    (43, 227, 'fernando.morales',  '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 08:30', '%d-%m-%Y %H:%i')),
+    (44, 228, 'lucia.sanchez',     '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('24-03-2026 09:00', '%d-%m-%Y %H:%i')),
+    (45, 229, 'miguel.ramirez',    '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('24-03-2026 10:30', '%d-%m-%Y %H:%i')),
+    (46, 230, 'camila.torres',     '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 08:00', '%d-%m-%Y %H:%i')),
+    (47, 231, 'andres.diaz',       '$argon2id$v=19$m=16384,t=2,p=1$R223zA9Zq229ZMgLNUjzsQ$CB2IzRIEIi/Ad0ocvTV7UmnaujRKEWY6LKHt8cmXy3s', TRUE,  STR_TO_DATE('25-03-2026 09:45', '%d-%m-%Y %H:%i'));
 
 -- *************************** insert data into the HR_USER_ROLES table
 
