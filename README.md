@@ -17,8 +17,8 @@ This repository contains a 4-day hands-on workshop for mastering Claude Code in 
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/ssthakuraa/claudetraining.git
-   cd claudetraining
+   git clone https://github.com/ssthakuraa/claude-code-workshop.git
+   cd claude-code-workshop
    ```
 
 2. Start with Day 1 materials:

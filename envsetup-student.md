@@ -174,8 +174,8 @@ Both should print `OK`.
 ## Step 6 — Clone the Repository and Load Schema
 
 ```bash
-git clone https://github.com/ssthakuraa/claudetraining.git
-cd claudetraining
+git clone https://github.com/ssthakuraa/claude-code-workshop.git
+cd claude-code-workshop
 git checkout checkpoint/day1-start
 ```
 
@@ -217,7 +217,7 @@ You need at least one **admin** account to log in to the frontend for Labs 9–1
 
 ```bash
 # Make sure you're in the project directory
-pwd   # should be .../claudetraining
+pwd   # should be .../claude-code-workshop
 cp .env.example .env
 sed -i "s|HR_JWT_SECRET=.*|HR_JWT_SECRET=$(openssl rand -base64 32)|" .env
 ```
@@ -299,7 +299,7 @@ You should see steven.king and admin with ROLE_ADMIN.
 ## Step 8 — Environment File
 
 ```bash
-cd claudetraining
+cd claude-code-workshop
 git checkout checkpoint/day1-start
 cp .env.example .env
 
@@ -345,7 +345,7 @@ Run each check. **Do not start Day 1 until all pass.**
 ### Backend compile
 
 ```bash
-cd claudetraining
+cd claude-code-workshop
 git checkout checkpoint/day1-start -q
 cd backend && mvn clean compile -q && echo "Backend: OK"
 ```
@@ -355,7 +355,7 @@ Expected: `Backend: OK`
 ### Frontend build
 
 ```bash
-cd claudetraining
+cd claude-code-workshop
 git checkout checkpoint/day3-start -q
 cd frontend && npm ci --silent && npm run build 2>&1 | tail -2
 ```
@@ -365,7 +365,7 @@ Expected: `✓ built in ...`
 ### Claude Code project awareness
 
 ```bash
-cd claudetraining
+cd claude-code-workshop
 git checkout checkpoint/day1-start -q
 claude --print "What file governs your behavior in this project? One sentence."
 ```
@@ -375,7 +375,7 @@ Expected: Claude references `CLAUDE.md`
 ### Checkpoint branches
 
 ```bash
-cd claudetraining && git checkout main -q
+cd claude-code-workshop && git checkout main -q
 git branch | grep checkpoint
 ```
 
@@ -411,7 +411,7 @@ Should be >= 2 (steven.king and admin).
 Return to main and you are ready for Day 1:
 
 ```bash
-cd claudetraining && git checkout main
+cd claude-code-workshop && git checkout main
 ```
 
 ---
