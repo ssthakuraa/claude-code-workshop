@@ -67,7 +67,7 @@ function OrgCard({ node, navigate, depth = 0 }: { node: OrgNode; navigate: (path
 
 export function OrgChartPage() {
   const navigate = useNavigate()
-  const { data: pagedResult, isLoading, isError } = useEmployees()
+  const { data: pagedResult, isLoading, isError } = useEmployees({ size: 300 })
   const employees = pagedResult?.data ?? []
   const roots = buildTree(employees, null)
 
