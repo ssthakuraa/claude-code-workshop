@@ -111,7 +111,7 @@ Use Playwright MCP to verify the dashboard page renders correctly.
 1. **Navigate and log in** (if auth is required):
    ```
    Navigate to http://localhost:5173/login.
-   Log in with username "admin" and password "admin123".
+   Log in with username "steven.king" and password "password123".
    Then navigate to the dashboard page.
    Take a screenshot and describe what KPI cards are showing.
    ```

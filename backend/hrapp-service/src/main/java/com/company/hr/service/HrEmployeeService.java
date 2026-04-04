@@ -98,8 +98,64 @@ public class HrEmployeeService {
     @Transactional
     @PreAuthorize("hasAnyRole('ADMIN','HR_SPECIALIST')")
     public HrEmployeeDetailDTO hireEmployee(HrEmployeeCreateRequest request) {
-        // TODO: implement in Lab 2
-        throw new UnsupportedOperationException("hireEmployee() not yet implemented");
+        LOGGER.info("Entering hireEmployee(email={}, jobId={})", request.getEmail(), request.getJobId());
+
+        // 1. Check idempotency
+        checkIdempotency(request.getIdempotencyKey(), "POST /employees/hire");
+
+        // 2. Check email uniqueness
+        if (employeeRepository.existsByEmail(request.getEmail())) {
+            throw new HrConflictException("Email already in use.", "EMAIL_EXISTS");
+        }
+
+        // 3. Load job and validate salary
+        HrJob job = jobRepository.findById(request.getJobId())
+                .orElseThrow(() -> new HrResourceNotFoundException("Job", request.getJobId()));
+        validateSalaryForJob(request.getSalary(), job);
+
+        // 4. Load manager if provided
+        HrEmployee manager = null;
+        if (request.getManagerId() != null) {
+            manager = employeeRepository.findById(request.getManagerId())
+                    .orElseThrow(() -> new HrResourceNotFoundException("Employee (manager)", request.getManagerId()));
+        }
+
+        // 5. Load department if provided
+        HrDepartment department = null;
+        if (request.getDepartmentId() != null) {
+            department = departmentRepository.findById(request.getDepartmentId())
+                    .orElseThrow(() -> new HrResourceNotFoundException("Department", request.getDepartmentId()));
+        }
+
+        // 6. Create and save employee
+        HrEmployee employee = new HrEmployee();
+        employee.setFirstName(request.getFirstName());
+        employee.setLastName(request.getLastName());
+        employee.setEmail(request.getEmail());
+        employee.setPhoneNumber(request.getPhoneNumber());
+        employee.setHireDate(request.getHireDate());
+        employee.setJob(job);
+        employee.setSalary(request.getSalary());
+        employee.setCommissionPct(request.getCommissionPct());
+        employee.setManager(manager);
+        employee.setDepartment(department);
+        employee.setEmploymentStatus(request.getEmploymentStatus());
+        employee.setEmploymentType(request.getEmploymentType());
+        employee.setContractEndDate(request.getContractEndDate());
+        employee = employeeRepository.save(employee);
+
+        // 7. Create user account
+        createUserForEmployee(employee, request.getUsername(), request.getInitialPassword());
+
+        // 8. Create initial job history entry
+        createJobHistoryEntry(employee, job, department, request.getHireDate(), null);
+
+        // 9. Record idempotency
+        recordIdempotency(request.getIdempotencyKey(), "POST /employees/hire", 201);
+
+        LOGGER.info("Exiting hireEmployee, hired {} {} (ID={})",
+                request.getFirstName(), request.getLastName(), employee.getEmployeeId());
+        return toDetailWithMasking(employee, HrSecurityUtil.getCurrentEmployeeId());
     }
 
     // =====================================================
@@ -386,6 +442,7 @@ public class HrEmployeeService {
             dto.setDepartmentName(e.getDepartment().getDepartmentName());
         }
         if (e.getManager() != null) {
+            dto.setManagerId(e.getManager().getEmployeeId());
             dto.setManagerName(formatter.formatFullName(e.getManager().getFirstName(), e.getManager().getLastName()));
         }
         return dto;

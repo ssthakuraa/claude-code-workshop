@@ -10,7 +10,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -42,9 +44,8 @@ public class HrDashboardService {
                 .filter(e -> e.getHireDate() != null && !e.getHireDate().isBefore(firstOfMonth))
                 .count();
 
-        long terminations = all.stream()
-                .filter(e -> e.getEmploymentStatus() == HrEmployee.EmploymentStatus.TERMINATED)
-                .count();
+        Instant startOfMonth = firstOfMonth.atStartOfDay().toInstant(ZoneOffset.UTC);
+        long terminations = employeeRepository.countTerminatedSince(startOfMonth);
 
         // Headcount by department (active only)
         Map<String, Long> byDept = all.stream()

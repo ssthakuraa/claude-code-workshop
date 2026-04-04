@@ -26,6 +26,7 @@ public class HrEmployeeSummaryDTO {
     private String employmentStatus;
     private String employmentType;
     private BigDecimal salary;      // Null if caller cannot view salary
+    private Integer managerId;
     private String managerName;
     private LocalDate hireDate;
 }

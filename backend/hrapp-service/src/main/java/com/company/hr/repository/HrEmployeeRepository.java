@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,4 +27,7 @@ public interface HrEmployeeRepository extends JpaRepository<HrEmployee, Integer>
     List<HrEmployee> findDirectAndIndirectReports(Integer managerId);
 
     Page<HrEmployee> findAll(Specification<HrEmployee> spec, Pageable pageable);
+
+    @Query(value = "SELECT COUNT(*) FROM employees WHERE employment_status = 'TERMINATED' AND deleted_at >= :since", nativeQuery = true)
+    long countTerminatedSince(Instant since);
 }

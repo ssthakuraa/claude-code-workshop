@@ -44,7 +44,7 @@ export function EmployeeDetailPage() {
     )
   }
 
-  const directReports = (allEmployees?.data ?? []).filter(e => e.managerId === employee.managerId && e.employeeId !== employee.employeeId)
+  const directReports = (allEmployees?.data ?? []).filter(e => e.managerId === employee.employeeId)
 
   const careerTimeline: ActivityItem[] = [
     {
