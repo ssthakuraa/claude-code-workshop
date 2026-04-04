@@ -123,6 +123,13 @@ Both sessions work independently — no conflicts, no waiting. Each reads CLAUDE
 ### Goal
 Bring both features back into the main branch.
 
+> **Training repo note:** The instructions below show what you would do when building
+> a real feature in your own codebase — commit each worktree and merge back to main.
+> In this training repo (read-only for students), skip the `git add`, `git commit`,
+> and `git merge` commands. Instead, complete steps 1 (verify the build in each
+> worktree) and 4 (remove worktrees), and treat the rest as a walkthrough of the
+> pattern you'd apply in production.
+
 ### Instructions
 
 1. When both sessions are done, verify each independently:
@@ -136,20 +143,24 @@ Bring both features back into the main branch.
 
 2. Commit in each worktree:
    ```bash
+   # --- In your real codebase, you would: ---
    # Terminal A
-   cd ../hr-worktree-a
-   git add -A && git commit -m "feat: add departments page with tree view"
+   # cd ../hr-worktree-a
+   # git add -A && git commit -m "feat: add departments page with tree view"
 
    # Terminal B
-   cd ../hr-worktree-b
-   git add -A && git commit -m "feat: add jobs page with CRUD and salary validation"
+   # cd ../hr-worktree-b
+   # git add -A && git commit -m "feat: add jobs page with CRUD and salary validation"
+   # --- In this training repo, skip the above and proceed to cleanup ---
    ```
 
 3. Merge back to your main working branch:
    ```bash
-   cd /home/ssthakur/app/hr
-   git merge feature/department-page
-   git merge feature/jobs-page
+   # --- In your real codebase, you would: ---
+   # cd /path/to/your/main/clone
+   # git merge feature/department-page
+   # git merge feature/jobs-page
+   # --- In this training repo, skip the above and proceed to cleanup ---
    ```
 
 4. Clean up worktrees:
@@ -158,7 +169,7 @@ Bring both features back into the main branch.
    git worktree remove ../hr-worktree-b
    ```
 
-5. Verify the merge — both pages should exist and the frontend should build.
+5. Verify — both pages should exist and the frontend should build.
 
 ---
 

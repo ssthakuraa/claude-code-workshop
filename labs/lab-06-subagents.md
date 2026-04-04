@@ -4,13 +4,13 @@
 **Day:** 2 — Productivity
 **Checkpoint Branch:** `checkpoint/day2-start`
 **Builds On:** Lab 4 (context management), Lab 5 (hooks)
-**Produces:** Two custom subagents (component-builder, component-reviewer)
+**Produces:** A custom subagent (component-reviewer)
 
 ---
 
 ## Learning Objective
 
-You will create two subagents — a builder and a reviewer — and observe how a fresh-context reviewer finds issues that a self-reviewing session misses. This pattern maps directly to enterprise code review workflows.
+You will create a reviewer subagent and observe how a fresh-context reviewer finds issues that a self-reviewing session misses. This pattern maps directly to enterprise code review workflows.
 
 ---
 
@@ -79,10 +79,10 @@ Build a component and ask the same session to review it. Observe limited critiqu
 
 ---
 
-## Exercise 2: Create Custom Subagents (15 min)
+## Exercise 2: Create the Reviewer Subagent (15 min)
 
 ### Goal
-Define a builder and reviewer subagent.
+Define a reviewer subagent with a critical persona and read-only tools.
 
 ### Instructions
 
@@ -91,19 +91,7 @@ Define a builder and reviewer subagent.
    mkdir -p .claude/agents
    ```
 
-2. Ask Claude to create the component-builder agent:
-   ```
-   Create .claude/agents/component-builder.md — a subagent that builds
-   React components for the HR app. It should:
-   - Follow all patterns from src/components/hr/ and src/components/ui/
-   - Use TypeScript, Tailwind CSS with Oracle Redwood tokens
-   - Include proper prop types, default values, and error states
-   - Follow CLAUDE.md conventions
-   Give it a clear persona: "You are a frontend specialist building
-   HR-specific React components."
-   ```
-
-3. Create the component-reviewer agent:
+2. Ask Claude to create the component-reviewer agent:
    ```
    Create .claude/agents/component-reviewer.md — a subagent that reviews
    React components. It should check:
@@ -115,8 +103,12 @@ Define a builder and reviewer subagent.
    - Missing edge cases (empty data, long strings, null values)
    Give it a critical persona: "You are a senior frontend engineer
    performing a thorough code review. Be specific and actionable."
-   It should be read-only (no edits).
+   It should be read-only (Read, Glob, Grep only — no edits).
    ```
+
+3. Note: You don't need a builder agent. You build in the main session.
+   The reviewer's value comes from NOT being the session that built the
+   code — fresh eyes, no confirmation bias.
 
 ---
 
@@ -140,9 +132,9 @@ Use the reviewer subagent on the component from Exercise 1.
    - Self-review (Exercise 1): _____ issues
    - Subagent review (Exercise 3): _____ issues
 
-4. **Apply the reviewer's feedback:**
+4. **Apply the reviewer's feedback in the main session:**
    ```
-   Use the component-builder agent to fix these issues in HrEmployeeCard:
+   Fix these issues in HrEmployeeCard (from the reviewer):
    [paste the reviewer's findings]
    ```
 
@@ -163,8 +155,8 @@ The fresh-context reviewer finds significantly more issues because:
    ```markdown
    ## Code Review Pattern
    - Never self-review in the same session — use component-reviewer agent
-   - Builder and reviewer agents in .claude/agents/
-   - Reviewer is read-only — it critiques, builder fixes
+   - Reviewer agent in .claude/agents/ — read-only, fresh context
+   - You build in the main session; reviewer critiques from separate context
    ```
 
 2. Reflect:
@@ -176,7 +168,6 @@ The fresh-context reviewer finds significantly more issues because:
 
 ## Success Criteria
 
-- [ ] `.claude/agents/component-builder.md` exists with clear persona
 - [ ] `.claude/agents/component-reviewer.md` exists with critical review checklist
 - [ ] Self-review found fewer issues than subagent review
 - [ ] Reviewer's feedback was applied and verified
@@ -189,40 +180,14 @@ The fresh-context reviewer finds significantly more issues because:
 1. **Self-review is weak** — Claude is lenient toward code it just wrote
 2. **Fresh context = fresh eyes** — the reviewer subagent has no history with the code
 3. **Personas matter** — "senior engineer performing a thorough review" produces better critique than "review this"
-4. **Read-only reviewers are safer** — they can't accidentally "fix" something by rewriting it
+4. **The reviewer's value is separation** — a different context reviewing code it didn't write
 5. **Subagents protect main context** — heavy review work stays in the subagent's window
 
 ---
 
 <details>
-<summary><strong>Escape Hatch</strong> — Agent file templates</summary>
+<summary><strong>Escape Hatch</strong> — component-reviewer agent template</summary>
 
-**`.claude/agents/component-builder.md`:**
-```markdown
----
-name: component-builder
-description: Builds HR-specific React components following project conventions
-model: sonnet
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash
----
-
-You are a frontend specialist building HR-specific React components.
-
-## Conventions
-- TypeScript with strict types — no `any`
-- Tailwind CSS with Oracle Redwood design tokens
-- Components in src/components/hr/ prefixed with Hr
-- Include proper prop types with JSDoc comments
-- Always handle: loading state, empty state, error state
-- Use existing patterns from src/components/hr/ as reference
-
-## Before building, always:
-1. Read 2-3 existing components in src/components/hr/ for patterns
-2. Check src/components/ui/ for reusable base components
-3. Follow CLAUDE.md conventions
-```
-
-**`.claude/agents/component-reviewer.md`:**
 ```markdown
 ---
 name: component-reviewer

@@ -28,6 +28,18 @@ Claude Code has a programmable safety model:
 - **`.claude/settings.json`** — team-shared permission profiles
 - **Never use `--dangerously-skip-permissions`** in production
 
+### Two Levels of Settings
+
+| File | Scope | Committed to git? | Who it applies to |
+|------|-------|-------------------|-------------------|
+| `~/.claude/settings.json` | User-level — all projects on this machine | No | You only |
+| `.claude/settings.json` | Project-level — this repo only | Yes | Whole team |
+
+**Rule of thumb:**
+- Hooks that enforce team standards → project-level (`.claude/settings.json`)
+- Personal preferences (editor style, model choice) → user-level (`~/.claude/settings.json`)
+- `allowedTools` for CI safety → project-level so every developer gets the same profile
+
 ### Enterprise Governance = Hooks + Permissions + CI/CD
 Together, these three create a governance layer:
 ```
@@ -120,32 +132,49 @@ Create a Jenkinsfile that orchestrates the Makefile targets.
 
 ---
 
-## Exercise 3: Pipeline Translation (20 min)
+## Exercise 3: Add a Governance Stage to the Pipeline (20 min)
 
 ### Goal
-Translate the Jenkinsfile to a different CI platform — demonstrating that Claude can work with any CI tool.
+The hooks from Lab 5 run locally — but only if the developer is using Claude Code.
+A developer using a plain editor, or someone who bypassed hooks, can still push
+code that violates naming conventions or contains PII in logs.
+
+Add a CI stage that runs the same checks as a pipeline gate.
 
 ### Instructions
 
-1. Ask Claude to translate:
+1. Ask Claude to add a Governance stage to the Jenkinsfile:
    ```
-   Convert this Jenkinsfile to a GitLab CI pipeline (.gitlab-ci.yml).
-   Keep the same 5 stages. Use the same Makefile targets where possible.
-   Map the branch condition on Package to GitLab's "only" or "rules" syntax.
+   Add a 'Governance' stage to the Jenkinsfile that runs after Backend Build.
+   It should:
+   1. Scan all new/changed Java files for class names without the Hr prefix
+      (same rule as our PostToolUse naming hook)
+   2. Scan all *Service.java files for LOGGER statements containing
+      email, phone, salary, password, ssn
+      (same rule as our PostToolUse PII hook)
+   3. Fail the build (exit 1) if either check finds a violation
+   Use shell commands — no extra tools required.
    ```
 
-2. **Compare the two files:**
+2. Test it: introduce a violation and verify the pipeline would catch it:
    ```
-   Show me a side-by-side comparison of the Jenkinsfile and .gitlab-ci.yml.
-   What's the same? What's different? Which concepts map 1:1?
+   Temporarily create a file called EmployeeValidator.java
+   with a class name that doesn't start with 'Hr'.
+   Does the governance check catch it?
    ```
 
-3. **Discussion:** *If your company announced a migration from Jenkins to GitLab CI, how long would this translation take with Claude? How long without?*
+3. Ask Claude:
+   ```
+   What's the relationship between the PostToolUse hooks in
+   .claude/settings.json and this Governance stage?
+   ```
+   Expected answer: they enforce the same rules at different layers —
+   hooks catch it during development (fast feedback), CI catches it
+   at merge time (safety net).
 
-4. (Optional) Try another translation:
-   ```
-   Now convert it to Azure DevOps (azure-pipelines.yml).
-   ```
+### Key Insight
+Hooks and CI stages should mirror each other for the same rules.
+Hooks = fast feedback loop. CI = safety net. Neither replaces the other.
 
 ---
 
@@ -175,9 +204,27 @@ Configure a permissions profile that allows safe operations and blocks dangerous
    - Any command with sudo
    ```
 
+   The `allowedTools` syntax uses glob patterns to match commands:
+   ```json
+   {
+     "allowedTools": [
+       "Bash(mvn compile*)",
+       "Bash(mvn test*)",
+       "Bash(mvn package*)",
+       "Bash(npm ci*)",
+       "Bash(npm run lint*)",
+       "Bash(npm run build*)",
+       "Bash(git status*)",
+       "Bash(git diff*)",
+       "Bash(git log*)"
+     ]
+   }
+   ```
+   The `*` glob matches any arguments after the command prefix. `Bash(mvn compile*)` allows `mvn compile`, `mvn compile -q`, `mvn compile -f backend/pom.xml`, etc. Without the glob, only the exact string matches.
+
 3. **Test the permissions:**
    ```
-   Run mvn test — did it prompt you for permission?  (Should not)
+   Run mvn test — did it prompt you for permission?  (Should not — the prompt appears inline in the Claude Code terminal if a command isn't pre-allowed)
    Now try: git push origin main — did it prompt you?  (Should prompt)
    ```
 
@@ -204,7 +251,14 @@ Configure a permissions profile that allows safe operations and blocks dangerous
    - DROP TABLE / DELETE FROM blocked by hook
    ```
 
-2. **Reflect:** The three governance layers are now in place:
+2. **Reflect on settings levels:**
+   ```
+   What would you put in your personal ~/.claude/settings.json that
+   you would NOT want to commit to the team repo?
+   ```
+   Expected answers: personal model preferences, personal notification settings, allowedTools for tools specific to their machine setup.
+
+3. **Reflect:** The three governance layers are now in place:
    - **Hooks** (Lab 5): schema guard, naming convention, PII detection
    - **Permissions** (this lab): safe commands allowed, dangerous ones blocked
    - **CI/CD** (this lab): automated quality gates on every PR
@@ -215,7 +269,7 @@ Configure a permissions profile that allows safe operations and blocks dangerous
 
 - [ ] `Makefile` exists with all composite targets; `make help` works
 - [ ] `Jenkinsfile` uses declarative syntax with branch-gated Package stage
-- [ ] `.gitlab-ci.yml` (or equivalent) translated from Jenkinsfile
+- [ ] Jenkinsfile includes Governance stage mirroring Lab 5 hooks
 - [ ] Permissions configured: build commands allowed, destructive commands blocked
 - [ ] You can explain: Makefile (what) vs Jenkinsfile (how) vs permissions (who can)
 
@@ -224,54 +278,45 @@ Configure a permissions profile that allows safe operations and blocks dangerous
 ## Key Takeaways
 
 1. **Makefile is the contract** — CI tools change; the Makefile stays. Migrate CI platforms by rewriting one file.
-2. **Claude translates between CI platforms** — Jenkins ↔ GitLab ↔ Azure in one prompt. This is a high-value enterprise skill.
-3. **Permissions are team-shared** — `.claude/settings.json` in git. Every developer gets the same safety profile.
-4. **Three governance layers** — hooks (local enforcement), permissions (action control), CI/CD (pipeline gates). Together they create enterprise-grade safety.
+2. **Permissions are team-shared** — `.claude/settings.json` in git. Every developer gets the same safety profile.
+3. **Hooks and CI mirror each other** — hooks catch violations during development (fast feedback), CI catches them at merge time (safety net). Neither replaces the other.
+4. **Two levels of settings** — project-level `.claude/settings.json` for team governance, user-level `~/.claude/settings.json` for personal preferences.
+5. **Three governance layers** — hooks (local enforcement), permissions (action control), CI/CD (pipeline gates). Together they create enterprise-grade safety.
 
 ---
 
 <details>
-<summary><strong>Escape Hatch</strong> — GitLab CI equivalent</summary>
+<summary><strong>Escape Hatch</strong> — Governance stage for Jenkinsfile</summary>
 
-```yaml
-stages:
-  - build
-  - test
-  - lint
-  - package
+```groovy
+stage('Governance') {
+    steps {
+        sh '''
+            VIOLATIONS=0
 
-backend-build-test:
-  stage: build
-  script:
-    - cd backend && mvn clean compile -q
-    - mvn test -pl hrapp-service -q
-  artifacts:
-    reports:
-      junit: backend/hrapp-service/target/surefire-reports/*.xml
+            # Check 1: Java class names must start with Hr
+            for f in \$(find backend/hrapp-service/src -name "*.java" -newer /dev/null 2>/dev/null || find backend/hrapp-service/src -name "*.java"); do
+                classname=\$(basename "\$f" .java)
+                if ! echo "\$classname" | grep -q "^Hr"; then
+                    echo "NAMING VIOLATION: \$f has class '\$classname' — must start with 'Hr'"
+                    VIOLATIONS=1
+                fi
+            done
 
-frontend-install-lint:
-  stage: lint
-  script:
-    - cd frontend && npm ci --silent
-    - npm run lint
+            # Check 2: Service.java files must not log PII
+            for f in \$(find backend/hrapp-service/src -name "*Service.java"); do
+                if grep -iE "LOGGER.*\\b(email|phone|salary|password|ssn)\\b" "\$f" > /dev/null 2>&1; then
+                    echo "PII VIOLATION: \$f contains sensitive data in LOGGER statement"
+                    VIOLATIONS=1
+                fi
+            done
 
-frontend-build:
-  stage: build
-  script:
-    - cd frontend && npm run build
-  artifacts:
-    paths:
-      - frontend/dist/
-
-package:
-  stage: package
-  script:
-    - cd backend && mvn package -DskipTests -q
-  artifacts:
-    paths:
-      - backend/hrapp-service/target/*.jar
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-    - if: $CI_COMMIT_BRANCH =~ /^release\/.*/
+            if [ "\$VIOLATIONS" -ne 0 ]; then
+                echo "BUILD FAILED: Governance checks found violations"
+                exit 1
+            fi
+        '''
+    }
+}
 ```
 </details>

@@ -141,11 +141,21 @@ Verify that a backend operation writes correct data across all relevant tables.
    Save these numbers — we'll compare after the hire.
    ```
 
-2. **Perform a hire operation via the API:**
+2. **Get an auth token first:**
+   ```bash
+   TOKEN=$(curl -s -X POST http://localhost:8080/app/hr/api/v1/auth/login \
+     -H "Content-Type: application/json" \
+     -d '{"username":"steven.king","password":"password123"}' \
+     | jq -r '.data.token')
+   echo "$TOKEN"   # Should print a JWT, not null or empty
+   ```
+   Note: `steven.king` is the admin user seeded in `database/demo.sql`. All demo users share the password `password123`.
+
+3. **Perform a hire operation via the API:**
    ```bash
    curl -X POST http://localhost:8080/app/hr/api/v1/employees \
      -H "Content-Type: application/json" \
-     -H "Authorization: Bearer [your-token]" \
+     -H "Authorization: Bearer $TOKEN" \
      -H "X-Idempotency-Key: lab10-test-001" \
      -d '{
        "firstName": "Lab",
@@ -158,8 +168,6 @@ Verify that a backend operation writes correct data across all relevant tables.
        "initialPassword": "password123"
      }'
    ```
-
-   (If auth is complex, ask Claude to help with the curl command or use the app's login flow.)
 
 3. **After the operation — verify all tables:**
    ```

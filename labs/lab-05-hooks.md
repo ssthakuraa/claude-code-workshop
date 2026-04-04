@@ -144,6 +144,17 @@ PII in logs is a compliance violation. Code review catches it sometimes; a hook 
    - Hook fires: `PII LEAK DETECTED in logger statement...`
    - Claude replaces the email with `MASKED` and retries
 
+> **Important limitation to understand:**
+> The PII hook reads `new_string` (Edit tool) or `content` (Write tool) from the tool
+> input — this is only the *changed fragment*, not the whole file. If Claude makes a
+> partial edit that inserts a PII log line, the hook sees only the new content and will
+> catch it. But if an existing PII log line was already in the file before this session,
+> the hook won't flag it — it only catches violations introduced in the current tool call.
+>
+> This is a fundamental property of PostToolUse hooks: they enforce "no new violations,"
+> not "no violations period." For comprehensive scanning, use a separate audit script
+> (`grep -r` across the whole codebase) as a CI step rather than relying on hooks alone.
+
 ---
 
 ## Exercise 4: Review All Hooks (10 min)
