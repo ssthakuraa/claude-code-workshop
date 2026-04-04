@@ -40,6 +40,8 @@ CLAUDE.md is a markdown file in the project root that Claude reads automatically
 This lab teaches you to build CLAUDE.md from scratch by observing failures. The repo already contains a complete CLAUDE.md — for Exercise 1, temporarily rename it so Claude has no guidance and you can observe what goes wrong.
 
 ```bash
+cd /tmp/trng/claude-code-workshop
+
 # Temporarily move the complete CLAUDE.md aside
 mv CLAUDE.md CLAUDE.md.complete
 
@@ -76,12 +78,12 @@ Ask Claude to scaffold a backend entity **without** the missing CLAUDE.md rules.
    claude
    ```
 
-2. Ask Claude to scaffold the `Region` entity:
+2. Ask Claude to scaffold the `PayGrade` entity:
    ```
-   Scaffold the Region entity for the HR app.
-   Create: JPA entity mapping to the "regions" table,
+   Scaffold the PayGrade entity for the HR app.
+   Create: JPA entity mapping to the "pay_grades" table,
    repository, DTO, request object, service with CRUD operations,
-   and REST controller at /app/hr/api/v1/regions.
+   and REST controller at /app/hr/api/v1/pay-grades.
    All endpoints should return a standard response envelope.
    ```
 
@@ -116,7 +118,7 @@ Update CLAUDE.md with rules that prevent every mistake you observed in Exercise 
 1. Open the existing CLAUDE.md:
    ```
    Read CLAUDE.md and tell me what conventions are missing
-   based on what went wrong in the Region scaffolding.
+   based on what went wrong in the PayGrade scaffolding.
    ```
 
 2. For **each mistake** from Exercise 1, write a rule. Use this format:
