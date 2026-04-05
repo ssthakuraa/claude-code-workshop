@@ -53,25 +53,22 @@ mysql -h 127.0.0.1 -u hr_readonly -preadonly_pass hr_db -e "SELECT 1;"
 
 ---
 
-## Exercise 1: Configure MySQL MCP (15 min)
+## Exercise 1: Study the Existing MySQL MCP Setup (15 min)
 
 ### Goal
-Add the MySQL MCP server to the project configuration.
+Understand how MySQL MCP is configured and verify the connection works.
 
 ### Instructions
 
-1. Ask Claude to add the MySQL MCP:
+1. **Read `.mcp.json` at the project root:**
    ```
-   Add a MySQL MCP server to .mcp.json alongside the existing Playwright config.
-   Use the read-only user:
-   - Host: 127.0.0.1
-   - Port: 3306
-   - User: hr_readonly
-   - Password: readonly_pass
-   - Database: hr_db
+   Read .mcp.json and explain the MySQL MCP configuration.
+   What host, port, user, and database does it connect to?
+   What safety flags are set (ALLOW_INSERT, ALLOW_UPDATE, ALLOW_DELETE)?
+   Why is this important for a verification tool?
    ```
 
-2. **Restart Claude Code session** to load the new MCP server.
+2. **Verify MySQL MCP tools are available.** Claude should confirm MySQL query tools are present. If they don't appear, restart Claude Code and ensure `.mcp.json` is correct.
 
 3. **Smoke test:**
    ```
@@ -81,7 +78,7 @@ Add the MySQL MCP server to the project configuration.
 
 ### What You Should See
 
-Claude runs SQL queries and returns results directly in the conversation. No need to open a separate MySQL client.
+Claude runs SQL queries and returns results directly in the conversation. The MySQL MCP uses the read-only user (`hr_readonly`), so Claude can SELECT but cannot mutate data. No need to open a separate MySQL client.
 
 ---
 
