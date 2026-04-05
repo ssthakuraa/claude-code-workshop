@@ -1,9 +1,9 @@
 # Lab 7: Parallel Sessions & Git Worktrees
 
-**Duration:** 60 minutes
+**Duration:** 90 minutes
 **Day:** 2 — Productivity
-**Builds On:** Labs 5–6 (hooks, subagents)
-**Produces:** 2–3 features built in parallel across separate worktrees
+**Builds On:** Lab 3 (Skills), Labs 5–6 (hooks, subagents)
+**Produces:** A `/build-page` skill and 2 features built in parallel across separate worktrees
 
 ---
 
@@ -46,7 +46,76 @@ cd backend && mvn compile -q && echo "Backend: OK"
 
 ---
 
-## Exercise 1: Create Worktrees (10 min)
+## Exercise 1: Study an Existing Page (10 min)
+
+### Goal
+Understand the enterprise page pattern before you try to replicate it.
+
+### Instructions
+
+1. Open `src/pages/employees/EmployeeDirectoryPage.tsx` and study its structure:
+   ```bash
+   wc -l src/pages/employees/EmployeeDirectoryPage.tsx
+   cat src/pages/employees/EmployeeDirectoryPage.tsx
+   ```
+
+2. **Note the pattern:**
+   - **Header:** Title, count, action buttons (RBAC-conditional)
+   - **Filters:** Search input + dropdowns, clear button when any filter active
+   - **Data table:** Loading skeletons (`HrSkeleton`), error state, empty state
+   - **Row design:** Avatar/initials, badges (`HrStatusBadge`, `HrEmploymentTypeBadge`), hover highlight
+   - **API layer:** TanStack Query (`useEmployees()` hook) — no raw fetch calls
+   - **Footer:** Results count vs total
+   - **Styling:** Tailwind with `bg-white rounded-lg border`, consistent spacing
+
+3. **Key insight:** This page follows every lab's conventions — TanStack Query, Hr naming, RBAC, error handling, loading states. If you clone this pattern, every new page will be correct by construction.
+
+---
+
+## Exercise 1.5: Build the Skill (15 min)
+
+### Goal
+Encode the page pattern from Exercise 1 into a reusable `/build-page` skill.
+
+### Instructions
+
+1. Create the skills directory:
+   ```bash
+   mkdir -p .claude/skills/build-page
+   ```
+
+2. Ask Claude to create the skill:
+   ```
+   Create .claude/skills/build-page/SKILL.md — a skill that encodes the
+   enterprise page pattern from EmployeeDirectoryPage.tsx. It should:
+
+   1. Accept parameters: page name, API endpoint, data columns/filters
+   2. Generate a complete page component with:
+      - Header with title, count, and RBAC-conditional action buttons
+      - Filter bar: search input + configurable dropdowns + clear button
+      - Data table with loading skeletons (HrSkeleton), error state, empty state
+      - Footer with results count
+      - All styling: Tailwind bg-white rounded-lg border, consistent spacing
+   3. Use TanStack Query (useQuery hook) — never raw fetch
+   4. Use HrStatusBadge, HrSkeleton, HrEmploymentTypeBadge where appropriate
+   5. Be user-invocable as /build-page
+
+   Study Employee_DIRECTORY_PAGE.tsx for the template pattern.
+   ```
+
+3. **Refine the skill:**
+   ```
+   The skill should also include:
+   - useNavigate for row click → detail page
+   - Responsive layout (flex-wrap on filters)
+   - Empty and error states with helpful messages
+   ```
+
+> **Reference:** A reference version already exists at `reference/.claude/skills/build-page/SKILL.md.reference` — build your own first, then compare.
+
+---
+
+## Exercise 2: Create Worktrees (10 min)
 
 ### Goal
 Set up two parallel working directories.
@@ -79,46 +148,47 @@ Set up two parallel working directories.
 
 ---
 
-## Exercise 2: Parallel Feature Build (30 min)
+## Exercise 3: Parallel Feature Build — Use the Skill (30 min)
 
 ### Goal
-Build two features simultaneously. Give each session its task and let them work.
+Build two features simultaneously using your `/build-page` skill.
 
 ### Instructions
 
 **In Terminal A** — Departments Page:
 ```
-Build the Departments page for the HR app:
-1. Create src/pages/organization/DepartmentsPage.tsx
-2. Use the SplitViewTemplate — tree on left, detail on right
-3. Left panel: department tree (nested children), clickable
-4. Right panel: department detail (name, manager, location, employee count)
-5. Add/Edit/Delete buttons for ADMIN and HR_SPECIALIST roles
-6. Use TanStack Query to fetch from /app/hr/api/v1/departments
-7. Follow all CLAUDE.md conventions and existing page patterns.
+/build-page
+Page: DepartmentsPage
+Title: Departments
+API: /app/hr/api/v1/departments
+Layout: tree view (SplitViewTemplate) — tree on left, detail on right
+Tree: department hierarchy (nested children), clickable
+Detail: name, manager, location, employee count
+Buttons: Add/Edit/Delete for ADMIN and HR_SPECIALIST roles
 ```
 
 **In Terminal B** — Jobs Page:
 ```
-Build the Jobs page for the HR app:
-1. Create src/pages/organization/JobsPage.tsx
-2. Use the DataManagementTemplate — table with CRUD
-3. Columns: Job ID, Title, Min Salary, Max Salary
-4. Add/Edit modal with salary range validation (min < max)
-5. Search and pagination
-6. Use TanStack Query to fetch from /app/hr/api/v1/jobs
-7. Follow all CLAUDE.md conventions and existing page patterns.
+/build-page
+Page: JobsPage
+Title: Jobs
+API: /app/hr/api/v1/jobs
+Layout: data table with CRUD
+Columns: Job ID, Title, Min Salary, Max Salary
+Features: Add/Edit modal with salary range validation (min < max), search, pagination
 ```
 
 **Now let them both work.** Switch between terminals to monitor progress. Don't wait for one to finish before checking the other.
 
 ### What You Should See
 
-Both sessions work independently — no conflicts, no waiting. Each reads CLAUDE.md from its own worktree copy.
+Both sessions work independently — no conflicts, no waiting. Each reads CLAUDE.md and the skill from its own worktree copy. The skill ensures both pages follow the same conventions automatically.
+
+> **Reference:** Pre-built versions exist at `reference/frontend/src/pages/organization/DepartmentsPage.tsx` and `reference/frontend/src/pages/organization/JobsPage.tsx`. Build your own first, then compare.
 
 ---
 
-## Exercise 3: Merge Results (15 min)
+## Exercise 4: Merge Results (15 min)
 
 ### Goal
 Bring both features back into the main branch.
@@ -163,7 +233,13 @@ Bring both features back into the main branch.
    # --- In this training repo, skip the above and proceed to cleanup ---
    ```
 
-4. Clean up worktrees:
+4. Before cleaning up, **update the router** in each worktree to include the new pages:
+   ```bash
+   # Uncomment the DepartmentsPage and JobsPage imports and routes
+   # in frontend/src/routes/router.tsx
+   ```
+
+5. Clean up worktrees:
    ```bash
    git worktree remove ../hr-worktree-a
    git worktree remove ../hr-worktree-b
@@ -173,7 +249,7 @@ Bring both features back into the main branch.
 
 ---
 
-## Exercise 4: Reflect and Encode (5 min)
+## Exercise 5: Reflect and Encode (5 min)
 
 1. **Time comparison:**
    - Estimated sequential time (both features one after another): _____ min
@@ -194,8 +270,10 @@ Bring both features back into the main branch.
 
 ## Success Criteria
 
+- [ ] Studied EmployeeDirectoryPage.tsx and understand the enterprise page pattern
+- [ ] Created `/build-page` skill encoding the page pattern
 - [ ] Two worktrees created and running separate Claude sessions
-- [ ] Both features built simultaneously without conflicts
+- [ ] Both features built simultaneously using the skill without conflicts
 - [ ] Both features merge cleanly back to the main branch
 - [ ] Frontend builds after merge
 - [ ] You can explain worktrees vs branches (separate directory vs same directory)

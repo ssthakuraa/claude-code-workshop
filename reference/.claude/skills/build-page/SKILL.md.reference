@@ -1,0 +1,54 @@
+---
+name: build-page
+description: Encode enterprise page pattern from EmployeeDirectoryPage — generate pages with header, filters, data table, loading/error/empty states
+user-invocable: true
+---
+
+## Enterprise Page Pattern
+
+When invoked, generate a complete React page component following the EmployeeDirectoryPage template.
+
+### 1. Page Structure
+
+```
+PageName.tsx
+├── Header: title + count + RBAC-conditional action buttons
+├── Filter bar: search input + N dropdowns + clear button
+├── Data table: loading skeletons → data rows → footer with count
+└── Error state / empty state
+```
+
+### 2. Required Conventions
+
+- **Data fetching:** TanStack Query (useQuery/useMutation) — never raw fetch
+- **Loading:** `<HrSkeleton />` for table rows (6+ skeleton rows)
+- **Badges:** `<HrStatusBadge />`, `<HrEmploymentTypeBadge />` where applicable
+- **Styling:** `bg-white rounded-lg border border-neutral-200` for content cards
+- **Spacing:** `space-y-4` for sections, Tailwind utility classes only
+- **RBAC:** Action buttons gated on `user?.role === 'ADMIN' || user?.role === 'HR_SPECIALIST'`
+- **Routing:** `useNavigate` for row click → detail page
+- **Filters:** Each filter is a controlled `<select>`, search uses `<input>` with Search icon
+- **Empty state:** centered message, spans full table
+- **Error state:** red text with guidance, centered
+
+### 3. Filter Bar Pattern
+
+- Search input with Search lucide icon (left-aligned)
+- Dropdowns: "All <Field>" as first option
+- Clear button: appears only when any filter is active
+- Responsive: `flex-wrap` on mobile
+
+### 4. Data Table Pattern
+
+- Header row: `border-b border-neutral-200 bg-neutral-50 text-neutral-600`
+- Body rows: `border-b border-neutral-100 hover:bg-neutral-50 cursor-pointer`
+- Loading: 6 skeleton `<tr>` rows with `<HrSkeleton className="h-4 w-XX" />`
+- No results: `<td colSpan={N}>` with centered message
+- Footer: "Showing {count} of {total} <entity>"
+
+### Gotchas
+
+- Don't hardcode data — use the API hook pattern (use{Entity}s)
+- Status/type dropdowns should match the enum options
+- Table must handle both loading AND error states independently
+- Don't forget `export function PageName()` — named export

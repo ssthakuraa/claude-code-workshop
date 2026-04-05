@@ -29,8 +29,11 @@ const TerminatePage = lazy(() => import('@/pages/actions/TerminatePage').then(m 
 const PromotePage = lazy(() => import('@/pages/actions/PromotePage').then(m => ({ default: m.PromotePage })))
 const TransferPage = lazy(() => import('@/pages/actions/TransferPage').then(m => ({ default: m.TransferPage })))
 const OrgChartPage = lazy(() => import('@/pages/organization/OrgChartPage').then(m => ({ default: m.OrgChartPage })))
-const DepartmentsPage = lazy(() => import('@/pages/organization/DepartmentsPage').then(m => ({ default: m.DepartmentsPage })))
-const JobsPage = lazy(() => import('@/pages/organization/JobsPage').then(m => ({ default: m.JobsPage })))
+// NOTE: DepartmentsPage and JobsPage are intentionally NOT imported here.
+// Lab 7 students build these from scratch in git worktrees.
+// Uncomment after completing Lab 7:
+// const DepartmentsPage = lazy(() => import('@/pages/organization/DepartmentsPage').then(m => ({ default: m.DepartmentsPage })))
+// const JobsPage = lazy(() => import('@/pages/organization/JobsPage').then(m => ({ default: m.JobsPage })))
 const AuditLogPage = lazy(() => import('@/pages/admin/AuditLogPage').then(m => ({ default: m.AuditLogPage })))
 const SettingsPage = lazy(() => import('@/pages/admin/SettingsPage').then(m => ({ default: m.SettingsPage })))
 const NotificationsPage = lazy(() => import('@/pages/admin/NotificationsPage').then(m => ({ default: m.NotificationsPage })))
@@ -53,8 +56,10 @@ export const router = createBrowserRouter([
           { path: 'employees', element: <S><EmployeeDirectoryPage /></S> },
           { path: 'employees/:id', element: <S><EmployeeDetailPage /></S> },
           { path: 'organization/chart', element: <S><OrgChartPage /></S> },
-          { path: 'organization/departments', element: <S><DepartmentsPage /></S> },
-          { path: 'organization/jobs', element: <S><JobsPage /></S> },
+          // NOTE: Department and Jobs routes created by Lab 7 students in worktrees
+          // Uncomment after completing Lab 7:
+          // { path: 'organization/departments', element: <S><DepartmentsPage /></S> },
+          // { path: 'organization/jobs', element: <S><JobsPage /></S> },
           { path: 'organization/locations', element: <S><LocationsPage /></S> },
           { path: 'organization/countries', element: <S><CountriesPage /></S> },
           { path: 'notifications', element: <S><NotificationsPage /></S> },
