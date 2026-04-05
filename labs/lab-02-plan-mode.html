@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 02-plan-mode — Claude Code Workshop</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.7; color: #1a1a2e; background: #fafafa; margin: 0;
+}
+.page-wrap {
+  max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem;
+  background: #fff; min-height: 100vh;
+  border-left: 1px solid #e8e8e8; border-right: 1px solid #e8e8e8;
+  box-shadow: 0 0 40px rgba(0,0,0,0.04);
+}
+.page-header {
+  border-bottom: 2px solid #2563eb; padding-bottom: 0.25rem; margin-bottom: 1.5rem;
+}
+.page-header h1 { font-size: 1.75rem; margin: 0 0 0.25rem; color: #1e3a5f; }
+.page-header .subtitle { color: #64748b; font-size: 0.9rem; }
+h1 { font-size: 1.6rem; color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.3rem; }
+h2 { font-size: 1.3rem; color: #1e3a5f; margin-top: 2.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.3rem; }
+h3 { font-size: 1.05rem; color: #334155; margin-top: 1.5rem; }
+h4 { font-size: 0.95rem; color: #475569; }
+h2:first-of-type, h3:first-of-type { margin-top: 0; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+ul, ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+li { margin: 0.25rem 0; }
+li li { margin: 0; }
+img { max-width: 100%; border-radius: 6px; }
+blockquote {
+  border-left: 4px solid #2563eb; padding: 0.5rem 1rem; margin: 1rem 0;
+  background: #f8fafc; border-radius: 0 6px 6px 0; color: #334155;
+}
+blockquote > p:first-child { margin-top: 0.2rem; }
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+th, td { border: 1px solid #e2e8f0; padding: 0.45rem 0.65rem; text-align: left; }
+th { background: #f1f5f9; font-weight: 600; color: #1e3a5f; }
+tr:nth-child(even) { background: #f8fafc; }
+pre {
+  background: #1e293b; color: #e2e8f0; padding: 1rem 1.25rem;
+  border-radius: 8px; overflow-x: auto; font-size: 0.85rem; margin: 1rem 0;
+  line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+code {
+  background: #f1f5f9; color: #dc2626; padding: 0.15em 0.35em;
+  border-radius: 4px; font-size: 0.88em; font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+}
+pre code { color: inherit; }
+details { margin: 1rem 0; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; }
+summary { cursor: pointer; padding: 0.75rem 1rem; font-weight: 600; color: #2563eb; user-select: none; }
+summary:hover { background: #f1f5f9; }
+details[open] summary { border-bottom: 1px solid #e2e8f0; }
+details > div, details > pre, details > p { padding: 0 1rem 1rem; }
+hr { border: none; border-top: 2px solid #e2e8f0; margin: 2rem 0; }
+nav.toc {
+  border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.5rem;
+  margin: 1rem 0 2rem; background: #f8fafc;
+}
+.toc-header { font-weight: 700; color: #1e3a5f; margin-bottom: 0.5rem; font-size: 0.95rem; }
+nav.toc a { color: #475569; font-size: 0.85rem; display: block; padding: 0.15rem 0; text-decoration: none; }
+nav.toc a:hover { color: #2563eb; }
+.back-link {
+  display: inline-block; margin-top: 3rem; padding: 0.5rem 1.25rem;
+  background: #2563eb; color: #fff; border-radius: 4px; font-size: 0.85rem;
+  text-decoration: none; font-weight: 500;
+}
+.back-link:hover { background: #1d4ed8; color: #fff; text-decoration: none; }
+.footer-nav { margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid #e2e8f0; display: flex; gap: 1rem; flex-wrap: wrap; }
+.footer-nav a { display: inline-block; font-size: 0.9rem; padding: 0.4rem 0.8rem; background: #f1f5f9; border-radius: 4px; text-decoration: none; }
+.footer-nav a:hover { background: #e2e8f0; text-decoration: none; }
+input[type="checkbox"] { margin-right: 0.3rem; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+<div class="page-header"><h1>Lab 02-plan-mode</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><nav class="toc">
+<div class="toc-header">Contents</div>
+  <a href="#lab-2-plan-mode-think-before-you-build">Lab 2: Plan Mode — Think Before You Build</a>
+    <a href="#learning-objective">Learning Objective</a>
+    <a href="#the-key-concept">The Key Concept</a>
+    <a href="#setup">Setup</a>
+    <a href="#exercise-1-the-bad-path-skip-the-plan-15-min">Exercise 1: The Bad Path — Skip the Plan (15 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#instructions">Instructions</a>
+    <a href="#exercise-2-the-good-path-plan-first-30-min">Exercise 2: The Good Path — Plan First (30 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#instructions">Instructions</a>
+      <a href="#what-you-should-see">What You Should See</a>
+    <a href="#exercise-3-compare-and-encode-15-min">Exercise 3: Compare and Encode (15 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#instructions">Instructions</a>
+    <a href="#success-criteria">Success Criteria</a>
+    <a href="#key-takeaways">Key Takeaways</a>
+</nav><h1 id="lab-2-plan-mode-think-before-you-build">Lab 2: Plan Mode — Think Before You Build<a class="anchor" href="#lab-2-plan-mode-think-before-you-build">&#182;</a></h1>
+<p><strong>Duration:</strong> 60 minutes
+<strong>Day:</strong> 1 — Foundation
+<strong>Builds On:</strong> Lab 1 (CLAUDE.md in place)
+<strong>Produces:</strong> A fully designed and implemented <code>hireEmployee()</code> method</p>
+<hr />
+<h2 id="learning-objective">Learning Objective<a class="anchor" href="#learning-objective">&#182;</a></h2>
+<p>You will design a complex service method using Plan Mode, observe how planning surfaces hidden requirements, and implement from the plan. You'll also see what happens when you skip planning — and why it costs more time than it saves.</p>
+<hr />
+<h2 id="the-key-concept">The Key Concept<a class="anchor" href="#the-key-concept">&#182;</a></h2>
+<p>Plan Mode is activated via <code>Shift+Tab</code> twice (or <code>/plan</code>). In Plan Mode, Claude researches and proposes an implementation plan <strong>without writing any code</strong>. You iterate on the plan until it's solid, then switch to normal mode and implement.</p>
+<p><strong>The 4-Phase Workflow:</strong></p>
+<pre><code>Explore → Plan → Implement → Commit
+</code></pre>
+<p><strong>When to use Plan Mode:</strong>
+- Any task that touches 3+ files
+- Any task with business rules, validation, or side effects
+- Any task where you're unsure of the approach
+- When a mistake would be expensive to fix</p>
+<p><strong>When to skip it:</strong>
+- You could describe the diff in one sentence
+- Simple renames, typo fixes, single-file changes</p>
+<hr />
+<h2 id="setup">Setup<a class="anchor" href="#setup">&#182;</a></h2>
+<p>Continue from Lab 1. You should have a working CLAUDE.md with naming, logging, database, and API response rules. If not, copy the escape hatch CLAUDE.md from Lab 1's Escape Hatch section into the project root.</p>
+<hr />
+<h2 id="exercise-1-the-bad-path-skip-the-plan-15-min">Exercise 1: The Bad Path — Skip the Plan (15 min)<a class="anchor" href="#exercise-1-the-bad-path-skip-the-plan-15-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Implement <code>hireEmployee()</code> WITHOUT planning. Observe what's missing.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>
+<p>Ask Claude to implement directly (do NOT use Plan Mode):
+   <code>Implement hireEmployee() in HrEmployeeService.
+   It should create a new employee record and return the employee detail DTO.
+   Use the existing patterns from HrRegionService.</code></p>
+</li>
+<li>
+<p><strong>Review the output.</strong> Check:</p>
+</li>
+<li>[ ] Does it write a <code>job_history</code> record? (It should — every hire needs one)</li>
+<li>[ ] Does it check idempotency? (Duplicate POST should not create two employees)</li>
+<li>[ ] Does it validate salary against the job's min/max range?</li>
+<li>[ ] Does it create an <code>hr_users</code> record for the new employee?</li>
+<li>
+<p>[ ] Does it mask PII in the response based on the caller's role?</p>
+</li>
+<li>
+<p><strong>Count the missing requirements.</strong> You'll likely find 2–4 gaps.</p>
+</li>
+</ol>
+<blockquote>
+<p><strong>This is intentional.</strong> "Create an employee" is what you said. That's all Claude did. The audit trail, idempotency, salary validation, and user account creation are implicit requirements that Claude couldn't infer from a one-line prompt.</p>
+</blockquote>
+<ol>
+<li>Undo the implementation:
+   <code>Undo all changes from the last implementation. We're going to redo this properly.</code></li>
+</ol>
+<hr />
+<h2 id="exercise-2-the-good-path-plan-first-30-min">Exercise 2: The Good Path — Plan First (30 min)<a class="anchor" href="#exercise-2-the-good-path-plan-first-30-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Design <code>hireEmployee()</code> in Plan Mode, iterate until the plan is complete, then implement.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>
+<p>Enter Plan Mode:
+   <code>Shift+Tab twice</code>
+   Or type:
+   <code>/plan</code></p>
+</li>
+<li>
+<p>Give Claude the full design brief:
+   ```
+   Design the hireEmployee() method for HrEmployeeService.</p>
+</li>
+</ol>
+<p>Requirements:
+   - Creates a new employee from HrEmployeeCreateRequest
+   - Must validate salary against the job's min_salary/max_salary range
+   - Must check idempotency (X-Idempotency-Key header, stored in hr_idempotency_keys)
+   - Must check email uniqueness (no duplicate employee emails)
+   - Must create a job_history record (every hire = first job history entry)
+   - Must create an hr_users record (username defaults to email prefix)
+   - Must return HrEmployeeDetailDTO with PII masking based on caller's role
+   - @PreAuthorize for ADMIN and HR_SPECIALIST only</p>
+<p>Show me the data flow, method signature, what repositories are needed,
+   and the transaction boundary. Don't implement yet.
+   ```</p>
+<ol>
+<li><strong>Review the plan.</strong> Look for:</li>
+<li>Does it identify all 7 steps (idempotency → email check → load job → validate salary → save employee → create user → create job history)?</li>
+<li>Does it show the correct transaction boundary (<code>@Transactional</code> wrapping all writes)?</li>
+<li>Does it call out which repositories are needed?</li>
+<li>
+<p>Does it mention error cases (job not found, department not found, salary out of range)?</p>
+</li>
+<li>
+<p><strong>Iterate on the plan.</strong> If anything is missing:
+   <code>The plan is missing error handling for when the manager ID doesn't exist.
+   Also, what happens if the username derived from email is already taken?
+   Update the plan.</code></p>
+</li>
+<li>
+<p>When the plan is solid, <strong>switch to normal mode</strong> and implement:
+   ```
+   Shift+Tab (back to normal mode)</p>
+</li>
+</ol>
+<p>Implement hireEmployee() exactly as designed in the plan above.
+   ```</p>
+<ol>
+<li><strong>Verify:</strong> Run <code>mvn compile</code> to check it compiles. Review the method against the plan.</li>
+</ol>
+<blockquote>
+<p><strong>Reference:</strong> If you get stuck, compare with <code>reference/backend/hrapp-service/src/main/java/com/company/hr/service/HrEmployeeService.java</code> — the full working version is there.</p>
+</blockquote>
+<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<p>The planned implementation should include all 7 steps, proper error handling, and the transaction boundary — everything that was missing in Exercise 1. The plan surfaced the implicit requirements before a single line of code was written.</p>
+<hr />
+<h2 id="exercise-3-compare-and-encode-15-min">Exercise 3: Compare and Encode (15 min)<a class="anchor" href="#exercise-3-compare-and-encode-15-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Compare the two approaches and encode the lesson.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>
+<p>Compare Exercise 1 vs Exercise 2:
+   <code>Compare the hireEmployee() implementation from our first attempt (no plan)
+   vs the current implementation (from plan). What requirements were missed
+   in the first attempt?</code></p>
+</li>
+<li>
+<p><strong>Add a rule to CLAUDE.md:</strong>
+   ```markdown
+   ## Employee Lifecycle Rules</p>
+</li>
+<li>Every hire/promote/transfer/terminate MUST write a job_history record</li>
+<li>Hire endpoint requires idempotency key (checked in service layer)</li>
+<li>
+<p>findById masks salary/PII based on HrSecurityUtil.canViewSalary()/canViewPii()
+   ```</p>
+</li>
+<li>
+<p>Ask Claude to self-critique:
+   <code>Is there anything in the current hireEmployee() implementation
+   that doesn't follow CLAUDE.md conventions? Check logging, response format,
+   security annotations, and error handling.</code></p>
+</li>
+<li>
+<p>Fix any issues Claude identifies.</p>
+</li>
+</ol>
+<hr />
+<h2 id="success-criteria">Success Criteria<a class="anchor" href="#success-criteria">&#182;</a></h2>
+<ul>
+<li>[ ] Exercise 1 is missing at least 2 requirements (job_history, idempotency, etc.)</li>
+<li>[ ] Exercise 2 plan includes all 7 steps before implementation starts</li>
+<li>[ ] Final <code>hireEmployee()</code> compiles and follows all CLAUDE.md conventions</li>
+<li>[ ] CLAUDE.md now contains Employee Lifecycle Rules</li>
+<li>[ ] You can explain when to use Plan Mode vs when to skip it</li>
+</ul>
+<hr />
+<h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">&#182;</a></h2>
+<ol>
+<li><strong>"Create X" prompts produce only X.</strong> Audit trails, idempotency, and masking need explicit mention — or a plan that surfaces them.</li>
+<li><strong>Planning is cheaper than debugging.</strong> 5 minutes of planning saved 20 minutes of rework.</li>
+<li><strong>The plan output feeds CLAUDE.md.</strong> Don't discard the plan — extract rules from it.</li>
+<li><strong>Iterate the plan, not the code.</strong> It's much cheaper to rewrite a plan bullet than refactor 50 lines of Java.</li>
+</ol>
+<hr />
+<details>
+<summary><strong>Escape Hatch</strong> — Click if stuck on Plan Mode</summary>
+
+If Plan Mode isn't activating:
+- Type `/plan` explicitly
+- Or press `Shift+Tab` **twice** (once switches to auto-accept, twice switches to Plan Mode)
+
+If the plan is incomplete, try this prompt:
+
+<pre><code>Think harder about this design. I need:
+1. Every step in order, numbered
+2. Which repository method is called at each step
+3. What exception is thrown if each step fails
+4. The @Transactional boundary
+Show me a table: Step | Action | Repository | Error Case
+</code></pre>
+
+</details><div class="footer-nav"><a href="../index.html">← All Labs</a><a href="lab-01-claudemd.html">← Previous</a><a href="lab-03-skills-commands.html">Next →</a><a href="https://github.com/ssthakuraa/claude-code-workshop" target="_blank">GitHub Repo</a></div>
+</div>
+</body>
+</html>

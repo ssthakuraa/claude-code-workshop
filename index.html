@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mastering Claude Code for Enterprise Development — Claude Code Workshop</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.7; color: #1a1a2e; background: #fafafa; margin: 0;
+}
+.page-wrap {
+  max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem;
+  background: #fff; min-height: 100vh;
+  border-left: 1px solid #e8e8e8; border-right: 1px solid #e8e8e8;
+  box-shadow: 0 0 40px rgba(0,0,0,0.04);
+}
+.page-header {
+  border-bottom: 2px solid #2563eb; padding-bottom: 0.25rem; margin-bottom: 1.5rem;
+}
+.page-header h1 { font-size: 1.75rem; margin: 0 0 0.25rem; color: #1e3a5f; }
+.page-header .subtitle { color: #64748b; font-size: 0.9rem; }
+h1 { font-size: 1.6rem; color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.3rem; }
+h2 { font-size: 1.3rem; color: #1e3a5f; margin-top: 2.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.3rem; }
+h3 { font-size: 1.05rem; color: #334155; margin-top: 1.5rem; }
+h4 { font-size: 0.95rem; color: #475569; }
+h2:first-of-type, h3:first-of-type { margin-top: 0; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+ul, ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+li { margin: 0.25rem 0; }
+li li { margin: 0; }
+img { max-width: 100%; border-radius: 6px; }
+blockquote {
+  border-left: 4px solid #2563eb; padding: 0.5rem 1rem; margin: 1rem 0;
+  background: #f8fafc; border-radius: 0 6px 6px 0; color: #334155;
+}
+blockquote > p:first-child { margin-top: 0.2rem; }
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+th, td { border: 1px solid #e2e8f0; padding: 0.45rem 0.65rem; text-align: left; }
+th { background: #f1f5f9; font-weight: 600; color: #1e3a5f; }
+tr:nth-child(even) { background: #f8fafc; }
+pre {
+  background: #1e293b; color: #e2e8f0; padding: 1rem 1.25rem;
+  border-radius: 8px; overflow-x: auto; font-size: 0.85rem; margin: 1rem 0;
+  line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+code {
+  background: #f1f5f9; color: #dc2626; padding: 0.15em 0.35em;
+  border-radius: 4px; font-size: 0.88em; font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+}
+pre code { color: inherit; }
+details { margin: 1rem 0; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; }
+summary { cursor: pointer; padding: 0.75rem 1rem; font-weight: 600; color: #2563eb; user-select: none; }
+summary:hover { background: #f1f5f9; }
+details[open] summary { border-bottom: 1px solid #e2e8f0; }
+details > div, details > pre, details > p { padding: 0 1rem 1rem; }
+hr { border: none; border-top: 2px solid #e2e8f0; margin: 2rem 0; }
+nav.toc {
+  border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.5rem;
+  margin: 1rem 0 2rem; background: #f8fafc;
+}
+.toc-header { font-weight: 700; color: #1e3a5f; margin-bottom: 0.5rem; font-size: 0.95rem; }
+nav.toc a { color: #475569; font-size: 0.85rem; display: block; padding: 0.15rem 0; text-decoration: none; }
+nav.toc a:hover { color: #2563eb; }
+.back-link {
+  display: inline-block; margin-top: 3rem; padding: 0.5rem 1.25rem;
+  background: #2563eb; color: #fff; border-radius: 4px; font-size: 0.85rem;
+  text-decoration: none; font-weight: 500;
+}
+.back-link:hover { background: #1d4ed8; color: #fff; text-decoration: none; }
+.footer-nav { margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid #e2e8f0; display: flex; gap: 1rem; flex-wrap: wrap; }
+.footer-nav a { display: inline-block; font-size: 0.9rem; padding: 0.4rem 0.8rem; background: #f1f5f9; border-radius: 4px; text-decoration: none; }
+.footer-nav a:hover { background: #e2e8f0; text-decoration: none; }
+input[type="checkbox"] { margin-right: 0.3rem; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+<div class="page-header"><h1>Mastering Claude Code for Enterprise Development</h1><div class="subtitle">A 4-Day Hands-On Workshop</div></div><nav class="toc">
+<div class="toc-header">Contents</div>
+  <a href="#mastering-claude-code-for-enterprise-development">Mastering Claude Code for Enterprise Development</a>
+    <a href="#a-4-day-hands-on-workshop">A 4-Day Hands-On Workshop</a>
+    <a href="#workshop-structure">Workshop Structure</a>
+    <a href="#three-core-truths-reinforced-in-every-lab">Three Core Truths (Reinforced in Every Lab)</a>
+    <a href="#the-mindset-shift">The Mindset Shift</a>
+    <a href="#start-of-each-day">Start of Each Day</a>
+    <a href="#lab-exercises">Lab Exercises</a>
+    <a href="#the-self-improvement-loop-every-lab-ends-with-this">The Self-Improvement Loop (Every Lab Ends With This)</a>
+</nav><h1 id="mastering-claude-code-for-enterprise-development">Mastering Claude Code for Enterprise Development<a class="anchor" href="#mastering-claude-code-for-enterprise-development">&#182;</a></h1>
+<h2 id="a-4-day-hands-on-workshop">A 4-Day Hands-On Workshop<a class="anchor" href="#a-4-day-hands-on-workshop">&#182;</a></h2>
+<p><strong>Audience:</strong> Engineers, Tech Leads, Architects working in enterprise codebases
+<strong>Lab Project:</strong> Enterprise HR Management System (Spring Boot + React, Vertex Tech Modern Design System)</p>
+<hr />
+<h2 id="workshop-structure">Workshop Structure<a class="anchor" href="#workshop-structure">&#182;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Day</th>
+<th>Theme</th>
+<th>Labs</th>
+<th>Core Message</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 1</strong></td>
+<td>Foundation — Teach Claude Your Enterprise</td>
+<td>Labs 1–4</td>
+<td><em>Context is everything. Teach Claude once, benefit forever.</em></td>
+</tr>
+<tr>
+<td><strong>Day 2</strong></td>
+<td>Productivity — Scale and Automate</td>
+<td>Labs 5–8</td>
+<td><em>Encode quality. Parallelize. Let Claude verify its own work.</em></td>
+</tr>
+<tr>
+<td><strong>Day 3</strong></td>
+<td>Integration — Connect Claude to Your Ecosystem</td>
+<td>Labs 9–10</td>
+<td><em>MCP bridges Claude to databases, browsers, and external tools.</em></td>
+</tr>
+<tr>
+<td><strong>Day 4</strong></td>
+<td>Mastery — Operate at Enterprise Scale</td>
+<td>Labs 11–12</td>
+<td><em>CI/CD, permissions, and the full end-to-end workflow.</em></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="three-core-truths-reinforced-in-every-lab">Three Core Truths (Reinforced in Every Lab)<a class="anchor" href="#three-core-truths-reinforced-in-every-lab">&#182;</a></h2>
+<ol>
+<li>
+<p><strong>Context management is the #1 constraint.</strong> Claude's context window fills up fast and performance degrades. The most successful Claude Code users obsessively manage context.</p>
+</li>
+<li>
+<p><strong>Planning before implementation is non-negotiable.</strong> Explore → Plan → Implement → Commit. Skipping planning costs more time than it saves.</p>
+</li>
+<li>
+<p><strong>Simplicity beats complexity.</strong> Simple prompts + good CLAUDE.md &gt; elaborate multi-agent orchestration.</p>
+</li>
+</ol>
+<hr />
+<h2 id="the-mindset-shift">The Mindset Shift<a class="anchor" href="#the-mindset-shift">&#182;</a></h2>
+<p>This workshop requires a fundamental reorientation:</p>
+<table>
+<thead>
+<tr>
+<th>From</th>
+<th>To</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Writing code</td>
+<td>Describing intent</td>
+</tr>
+<tr>
+<td>Autocomplete assistant</td>
+<td>Autonomous collaborator</td>
+</tr>
+<tr>
+<td>Manual coding</td>
+<td>Steering and reviewing</td>
+</tr>
+<tr>
+<td>Single-task execution</td>
+<td>Parallel orchestration</td>
+</tr>
+<tr>
+<td>Individual memory</td>
+<td>Encoded team knowledge</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><em>"I want implementation to be boring. The creative work happens in the planning phase."</em> — Boris Cherny, creator of Claude Code</p>
+</blockquote>
+<hr />
+<h2 id="start-of-each-day">Start of Each Day<a class="anchor" href="#start-of-each-day">&#182;</a></h2>
+<p>Run this before the first lab of each day to reload the database and verify the backend compiles:</p>
+<pre><code class="language-bash">bash scripts/start-day.sh &lt;day&gt;   # 1, 2, 3, or 4
+</code></pre>
+<hr />
+<h2 id="lab-exercises">Lab Exercises<a class="anchor" href="#lab-exercises">&#182;</a></h2>
+<ul>
+<li><a href="labs/lab-01-claudemd.html">Lab 01: CLAUDE.md — Your Enterprise Constitution</a></li>
+<li><a href="labs/lab-02-plan-mode.html">Lab 02: Plan Mode — Think Before You Build</a></li>
+<li><a href="labs/lab-03-skills-commands.html">Lab 03: Skills &amp; Commands — Reusable Knowledge Packs</a></li>
+<li><a href="labs/lab-04-context-management.html">Lab 04: Context Management — The #1 Performance Lever</a></li>
+<li><a href="labs/lab-05-hooks.html">Lab 05: Hooks — Deterministic Quality Gates</a></li>
+<li><a href="labs/lab-06-subagents.html">Lab 06: Subagents — Isolated Specialist Workers</a></li>
+<li><a href="labs/lab-07-parallel-sessions.html">Lab 07: Parallel Sessions &amp; Git Worktrees</a></li>
+<li><a href="labs/lab-08-verification-loops.html">Lab 08: Verification Loops — The Quality Multiplier</a></li>
+<li><a href="labs/lab-09-mcp-playwright.html">Lab 09: MCP Servers — Playwright &amp; Browser Verification</a></li>
+<li><a href="labs/lab-10-mcp-mysql.html">Lab 10: MCP Servers — MySQL &amp; Data Verification</a></li>
+<li><a href="labs/lab-11-cicd-permissions.html">Lab 11: CI/CD, Permissions &amp; Enterprise Governance</a></li>
+<li><a href="labs/lab-12-capstone.html">Lab 12: Capstone — End-to-End Feature Build</a></li>
+<li>All labs are in the <code>labs/</code> directory</li>
+</ul>
+<hr />
+<h2 id="the-self-improvement-loop-every-lab-ends-with-this">The Self-Improvement Loop (Every Lab Ends With This)<a class="anchor" href="#the-self-improvement-loop-every-lab-ends-with-this">&#182;</a></h2>
+<p>After every lab exercise, complete this ritual:</p>
+<ol>
+<li><strong>What went wrong?</strong> — Identify where Claude made a mistake or missed a requirement</li>
+<li><strong>Write a rule</strong> — Add a line to CLAUDE.md that prevents the mistake</li>
+<li><strong>Verify it works</strong> — Run the same task again and confirm Claude follows the new rule</li>
+</ol>
+<blockquote>
+<p>By Lab 12, your CLAUDE.md will be meaningfully richer than what you started with — and Claude will be visibly better at your specific project. This is compounding engineering.</p>
+</blockquote><div class="footer-nav"><a href="https://github.com/ssthakuraa/claude-code-workshop" target="_blank">GitHub Repo</a></div>
+</div>
+</body>
+</html>

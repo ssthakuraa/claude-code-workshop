@@ -111,7 +111,7 @@ Encode the page pattern from Exercise 1 into a reusable `/build-page` skill.
    - Empty and error states with helpful messages
    ```
 
-> **Reference:** A reference version already exists at `reference/.claude/skills/build-page/SKILL.md.reference` — build your own first, then compare.
+> **Reference:** A reference version already exists at `reference/.claude/skills/build-page/SKILL.md` — build your own first, then compare.
 
 ---
 

@@ -13,7 +13,7 @@
 > - A Figma personal access token
 >
 > **If you don't have Figma access**, use the pre-exported alternative:
-> `docs/figma-ui-spec.md` — contains the full UI specification, Oracle Redwood design tokens,
+> `docs/figma-ui-spec.md` — contains the full UI specification, Vertex Tech Modern design tokens,
 > component specs, and screen layouts. All lab exercises can be completed using this file.
 >
 > See: `docs/claudetips/figma-mcp-setup.md` for full setup instructions.
@@ -31,7 +31,7 @@ Figma MCP allows Claude to:
 ## What This Lab Covers (without Figma MCP — using figma-ui-spec.md)
 
 The static spec file (`docs/figma-ui-spec.md`) covers the same design system:
-- Oracle Redwood design tokens (Blue-60 = `#1F6BCC`, etc.)
+- Vertex Tech Modern design tokens (Blue-60 = `#1F6BCC`, etc.)
 - Component layout specs (TopBar 56px, Sidebar 240px/64px collapsed)
 - All 22 screen templates with ASCII layout diagrams
 - Sample data for all screens

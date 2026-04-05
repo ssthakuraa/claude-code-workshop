@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/app/hr/api/v1/dashboard")
 @RequiredArgsConstructor
@@ -19,5 +21,10 @@ public class HrDashboardController {
     @GetMapping("/summary")
     public ResponseEntity<HrApiResponse<HrDashboardSummaryDTO>> getSummary() {
         return ResponseEntity.ok(HrApiResponse.success(service.getSummary()));
+    }
+
+    @GetMapping("/headcount-by-country")
+    public ResponseEntity<HrApiResponse<List<HrDashboardSummaryDTO.CountryCount>>> getHeadcountByCountry() {
+        return ResponseEntity.ok(HrApiResponse.success(service.getHeadcountByCountry()));
     }
 }

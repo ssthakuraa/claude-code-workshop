@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 01-claudemd — Claude Code Workshop</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.7; color: #1a1a2e; background: #fafafa; margin: 0;
+}
+.page-wrap {
+  max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem;
+  background: #fff; min-height: 100vh;
+  border-left: 1px solid #e8e8e8; border-right: 1px solid #e8e8e8;
+  box-shadow: 0 0 40px rgba(0,0,0,0.04);
+}
+.page-header {
+  border-bottom: 2px solid #2563eb; padding-bottom: 0.25rem; margin-bottom: 1.5rem;
+}
+.page-header h1 { font-size: 1.75rem; margin: 0 0 0.25rem; color: #1e3a5f; }
+.page-header .subtitle { color: #64748b; font-size: 0.9rem; }
+h1 { font-size: 1.6rem; color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.3rem; }
+h2 { font-size: 1.3rem; color: #1e3a5f; margin-top: 2.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.3rem; }
+h3 { font-size: 1.05rem; color: #334155; margin-top: 1.5rem; }
+h4 { font-size: 0.95rem; color: #475569; }
+h2:first-of-type, h3:first-of-type { margin-top: 0; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+ul, ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+li { margin: 0.25rem 0; }
+li li { margin: 0; }
+img { max-width: 100%; border-radius: 6px; }
+blockquote {
+  border-left: 4px solid #2563eb; padding: 0.5rem 1rem; margin: 1rem 0;
+  background: #f8fafc; border-radius: 0 6px 6px 0; color: #334155;
+}
+blockquote > p:first-child { margin-top: 0.2rem; }
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+th, td { border: 1px solid #e2e8f0; padding: 0.45rem 0.65rem; text-align: left; }
+th { background: #f1f5f9; font-weight: 600; color: #1e3a5f; }
+tr:nth-child(even) { background: #f8fafc; }
+pre {
+  background: #1e293b; color: #e2e8f0; padding: 1rem 1.25rem;
+  border-radius: 8px; overflow-x: auto; font-size: 0.85rem; margin: 1rem 0;
+  line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+code {
+  background: #f1f5f9; color: #dc2626; padding: 0.15em 0.35em;
+  border-radius: 4px; font-size: 0.88em; font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+}
+pre code { color: inherit; }
+details { margin: 1rem 0; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; }
+summary { cursor: pointer; padding: 0.75rem 1rem; font-weight: 600; color: #2563eb; user-select: none; }
+summary:hover { background: #f1f5f9; }
+details[open] summary { border-bottom: 1px solid #e2e8f0; }
+details > div, details > pre, details > p { padding: 0 1rem 1rem; }
+hr { border: none; border-top: 2px solid #e2e8f0; margin: 2rem 0; }
+nav.toc {
+  border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.5rem;
+  margin: 1rem 0 2rem; background: #f8fafc;
+}
+.toc-header { font-weight: 700; color: #1e3a5f; margin-bottom: 0.5rem; font-size: 0.95rem; }
+nav.toc a { color: #475569; font-size: 0.85rem; display: block; padding: 0.15rem 0; text-decoration: none; }
+nav.toc a:hover { color: #2563eb; }
+.back-link {
+  display: inline-block; margin-top: 3rem; padding: 0.5rem 1.25rem;
+  background: #2563eb; color: #fff; border-radius: 4px; font-size: 0.85rem;
+  text-decoration: none; font-weight: 500;
+}
+.back-link:hover { background: #1d4ed8; color: #fff; text-decoration: none; }
+.footer-nav { margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid #e2e8f0; display: flex; gap: 1rem; flex-wrap: wrap; }
+.footer-nav a { display: inline-block; font-size: 0.9rem; padding: 0.4rem 0.8rem; background: #f1f5f9; border-radius: 4px; text-decoration: none; }
+.footer-nav a:hover { background: #e2e8f0; text-decoration: none; }
+input[type="checkbox"] { margin-right: 0.3rem; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+<div class="page-header"><h1>Lab 01-claudemd</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><nav class="toc">
+<div class="toc-header">Contents</div>
+  <a href="#lab-1-claudemd-your-enterprise-constitution">Lab 1: CLAUDE.md — Your Enterprise Constitution</a>
+    <a href="#learning-objective">Learning Objective</a>
+    <a href="#the-key-concept">The Key Concept</a>
+    <a href="#setup">Setup</a>
+    <a href="#exercise-1-observe-the-failure-15-min">Exercise 1: Observe the Failure (15 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#instructions">Instructions</a>
+      <a href="#what-you-should-see">What You Should See</a>
+    <a href="#exercise-2-write-the-rules-20-min">Exercise 2: Write the Rules (20 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#instructions">Instructions</a>
+    <a href="#exercise-3-verify-the-rules-work-15-min">Exercise 3: Verify the Rules Work (15 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#instructions">Instructions</a>
+      <a href="#what-you-should-see">What You Should See</a>
+    <a href="#exercise-4-subdirectory-claudemd-hierarchy-15-min">Exercise 4: Subdirectory CLAUDE.md Hierarchy (15 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#the-concept">The Concept</a>
+      <a href="#instructions">Instructions</a>
+      <a href="#what-you-should-see">What You Should See</a>
+    <a href="#exercise-5-the-self-improvement-coda-10-min">Exercise 5: The Self-Improvement Coda (10 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#instructions">Instructions</a>
+    <a href="#success-criteria">Success Criteria</a>
+    <a href="#key-takeaways">Key Takeaways</a>
+</nav><h1 id="lab-1-claudemd-your-enterprise-constitution">Lab 1: CLAUDE.md — Your Enterprise Constitution<a class="anchor" href="#lab-1-claudemd-your-enterprise-constitution">&#182;</a></h1>
+<p><strong>Duration:</strong> 60 minutes
+<strong>Day:</strong> 1 — Foundation
+<strong>Builds On:</strong> Mindset Shift lecture
+<strong>Produces:</strong> A working CLAUDE.md that prevents convention violations</p>
+<hr />
+<h2 id="learning-objective">Learning Objective<a class="anchor" href="#learning-objective">&#182;</a></h2>
+<p>You will experience how Claude Code behaves <strong>without</strong> project conventions, observe it make predictable mistakes, and then fix those mistakes by writing CLAUDE.md rules. By the end, you'll understand why CLAUDE.md is the single most important file in any Claude Code project.</p>
+<hr />
+<h2 id="the-key-concept">The Key Concept<a class="anchor" href="#the-key-concept">&#182;</a></h2>
+<p>CLAUDE.md is a markdown file in the project root that Claude reads automatically at the start of every session. It acts as a permanent instruction manual — your team's conventions, standards, and hard-won lessons.</p>
+<p><strong>What makes it powerful:</strong>
+- Loaded every session — Claude never "forgets" what's in it
+- Checked into git — the whole team shares and contributes
+- Compounding — every correction you add prevents future mistakes
+- Concise — keep it under ~200 lines. Every line must earn its place.</p>
+<p><strong>What to include vs exclude:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Include</th>
+<th>Exclude</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Build/test/lint commands</td>
+<td>Things Claude figures out by reading code</td>
+</tr>
+<tr>
+<td>Conventions that differ from defaults</td>
+<td>Standard language conventions</td>
+</tr>
+<tr>
+<td>Architectural decisions specific to your project</td>
+<td>Long tutorials or API docs</td>
+</tr>
+<tr>
+<td>Common gotchas and anti-patterns</td>
+<td>Information that changes frequently</td>
+</tr>
+<tr>
+<td>Environment quirks</td>
+<td>File-by-file codebase descriptions</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="setup">Setup<a class="anchor" href="#setup">&#182;</a></h2>
+<p>This lab teaches you to build CLAUDE.md from scratch by observing failures. The repo already contains a complete CLAUDE.md — for Exercise 1, temporarily rename it so Claude has no guidance and you can observe what goes wrong.</p>
+<pre><code class="language-bash">cd /scratch/trng/claude-code-workshop
+
+# Temporarily move the complete CLAUDE.md aside
+mv CLAUDE.md CLAUDE.md.complete
+
+# Create a minimal starting file — just enough for project orientation
+cat &gt; CLAUDE.md &lt;&lt; 'EOF'
+# CLAUDE.md — HR Enterprise Platform
+
+## Project Overview
+Spring Boot 3.2 + React 19 monorepo. Java 21, Maven multi-module.
+API base path: /app/hr/api/v1/
+EOF
+
+# Verify
+ls CLAUDE.md            # Should exist — minimal only
+ls database/schema.sql  # Reference DDL — READ ONLY
+ls backend/             # Maven project structure
+</code></pre>
+<p>You now have a minimal CLAUDE.md with no convention rules. Claude will make predictable mistakes — that's the point.</p>
+<blockquote>
+<p><strong>After this lab:</strong> Run <code>cp CLAUDE.md.complete CLAUDE.md</code> to restore the full version if you want to compare your work with the reference.</p>
+</blockquote>
+<hr />
+<h2 id="exercise-1-observe-the-failure-15-min">Exercise 1: Observe the Failure (15 min)<a class="anchor" href="#exercise-1-observe-the-failure-15-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Ask Claude to scaffold a backend entity <strong>without</strong> the missing CLAUDE.md rules. Observe what goes wrong.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>
+<p>Open a Claude Code session in the project root:
+   <code>bash
+   claude</code></p>
+</li>
+<li>
+<p>Ask Claude to scaffold the <code>PayGrade</code> entity:
+   <code>Scaffold the PayGrade entity for the HR app.
+   Create: JPA entity mapping to the "pay_grades" table,
+   repository, DTO, request object, service with CRUD operations,
+   and REST controller at /app/hr/api/v1/pay-grades.
+   All endpoints should return a standard response envelope.</code></p>
+</li>
+<li>
+<p><strong>Observe the output carefully.</strong> Look for these common mistakes:</p>
+</li>
+<li>[ ] Does the entity use <code>@Where</code> (deprecated) or <code>@SQLRestriction</code>?</li>
+<li>[ ] Does the service have entry/exit logging on every method?</li>
+<li>[ ] Does the controller return <code>HrApiResponse&lt;T&gt;</code> or raw objects?</li>
+<li>[ ] Does the class name start with <code>Hr</code>?</li>
+<li>
+<p>[ ] Does the entity use the correct naming strategy for columns?</p>
+</li>
+<li>
+<p><strong>Write down every mistake you find.</strong> You'll fix them in Exercise 2.</p>
+</li>
+</ol>
+<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<p>Claude will likely make 2–4 of these mistakes because it has no project-specific guidance. Common ones:
+- Uses <code>@Where</code> instead of <code>@SQLRestriction</code> (deprecated in Hibernate 6.2)
+- Returns raw entity or DTO instead of wrapping in <code>HrApiResponse&lt;T&gt;</code>
+- Missing or inconsistent <code>HrLogHelper</code> logging pattern
+- Column naming mismatch with schema</p>
+<blockquote>
+<p><strong>This is the teaching moment.</strong> Claude is capable but ignorant of YOUR conventions. Without CLAUDE.md, every session is a blank slate.</p>
+</blockquote>
+<hr />
+<h2 id="exercise-2-write-the-rules-20-min">Exercise 2: Write the Rules (20 min)<a class="anchor" href="#exercise-2-write-the-rules-20-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Update CLAUDE.md with rules that prevent every mistake you observed in Exercise 1.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>
+<p>Open the existing CLAUDE.md:
+   <code>Read CLAUDE.md and tell me what conventions are missing
+   based on what went wrong in the PayGrade scaffolding.</code></p>
+</li>
+<li>
+<p>For <strong>each mistake</strong> from Exercise 1, write a rule. Use this format:
+   ```markdown
+   ## [Category]</p>
+</li>
+<li>
+<p>[Specific, actionable rule]
+   ```</p>
+</li>
+<li>
+<p>Key rules your CLAUDE.md should include (if not already present):</p>
+</li>
+</ol>
+<p><strong>Naming:</strong>
+   <code>markdown
+   ## Naming Conventions
+   - All Java classes prefixed with `Hr` — e.g., HrEmployee, HrRegionService
+   - Entities map directly to DB tables — HrRegion → `regions` table</code></p>
+<p><strong>Database:</strong>
+   <code>markdown
+   ## Database Rules
+   - Use @SQLRestriction("deleted_at IS NULL") — NOT @Where (deprecated Hibernate 6.2)
+   - database/schema.sql is READ ONLY — never edit it
+   - Schema changes go through Flyway migrations only</code></p>
+<p><strong>Logging:</strong>
+   <code>markdown
+   ## Logging Pattern
+   - Every service method MUST log entry and exit using HrLogHelper
+   - Never log PII (email, phone, salary) — use MASKED placeholder</code></p>
+<p><strong>API Response:</strong>
+   <code>markdown
+   ## API Response
+   - ALL endpoints return HrApiResponse&lt;T&gt; — never return raw objects</code></p>
+<ol>
+<li>Ask Claude to update the file:
+   <code>Update CLAUDE.md with these rules: [paste your rules].
+   Keep it concise — every line should prevent a specific mistake.</code></li>
+</ol>
+<hr />
+<h2 id="exercise-3-verify-the-rules-work-15-min">Exercise 3: Verify the Rules Work (15 min)<a class="anchor" href="#exercise-3-verify-the-rules-work-15-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Redo the same scaffolding task and confirm Claude now follows your rules.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>
+<p><strong>Start a fresh session</strong> — this is critical. CLAUDE.md is read at session start.
+   <code>/clear</code></p>
+</li>
+<li>
+<p>Ask Claude the <strong>exact same prompt</strong> as Exercise 1:
+   <code>Scaffold the PayGrade entity for the HR app.
+   Create: JPA entity mapping to the "pay_grades" table,
+   repository, DTO, request object, service with CRUD operations,
+   and REST controller at /app/hr/api/v1/pay-grades.
+   All endpoints should return a standard response envelope.</code></p>
+</li>
+<li>
+<p><strong>Check each mistake from Exercise 1:</strong></p>
+</li>
+<li>[ ] <code>@SQLRestriction</code> used (not <code>@Where</code>)?</li>
+<li>[ ] <code>HrLogHelper</code> entry/exit on every service method?</li>
+<li>[ ] <code>HrApiResponse&lt;T&gt;</code> on all controller endpoints?</li>
+<li>[ ] Class names start with <code>Hr</code>?</li>
+<li>
+<p>[ ] Naming strategy matches schema?</p>
+</li>
+<li>
+<p>If any mistakes remain, add another rule to CLAUDE.md and repeat.</p>
+</li>
+</ol>
+<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<p>Claude should now produce convention-compliant code on the <strong>first try</strong> — no corrections needed. The CLAUDE.md rules prevented every mistake from Exercise 1.</p>
+<hr />
+<h2 id="exercise-4-subdirectory-claudemd-hierarchy-15-min">Exercise 4: Subdirectory CLAUDE.md Hierarchy (15 min)<a class="anchor" href="#exercise-4-subdirectory-claudemd-hierarchy-15-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Split the root CLAUDE.md into three focused files using Claude Code's directory-level hierarchy. This is essential in monorepos where Java rules shouldn't clutter the frontend context and vice versa.</p>
+<blockquote>
+<p><strong>Note:</strong> Reference versions are at <code>reference/backend/CLAUDE.md</code> and <code>reference/frontend/CLAUDE.md</code>. Build your own first — compare with the reference at the end.</p>
+</blockquote>
+<h3 id="the-concept">The Concept<a class="anchor" href="#the-concept">&#182;</a></h3>
+<p>Claude Code automatically merges CLAUDE.md files from the project root down to the directory where Claude is running:</p>
+<pre><code>CLAUDE.md              ← always loaded (project-wide rules)
+backend/CLAUDE.md      ← loaded when working in backend/
+frontend/CLAUDE.md     ← loaded when working in frontend/
+</code></pre>
+<p>This means you can scope rules to where they apply — Java rules stay in <code>backend/CLAUDE.md</code>, React rules in <code>frontend/CLAUDE.md</code>, and only cross-cutting concerns (auth, idempotency, RBAC) live in the root.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>Ask Claude to create <code>backend/CLAUDE.md</code> with Java/Spring-specific rules extracted from the root:
+   ```
+   Create backend/CLAUDE.md. Extract from the root CLAUDE.md:</li>
+<li>@SQLRestriction rule (not @Where)</li>
+<li>HrLogHelper entry/exit logging pattern</li>
+<li>@PreAuthorize security rule</li>
+<li>Hr naming prefix rule</li>
+<li>
+<p>HrApiResponse / HrPagedResponse API response rules
+   Keep the root CLAUDE.md lean — leave only project overview, build commands,
+   and cross-cutting rules (employee lifecycle, idempotency, RBAC roles).
+   ```</p>
+</li>
+<li>
+<p>Ask Claude to create <code>frontend/CLAUDE.md</code> with React-specific rules:
+   ```
+   Create frontend/CLAUDE.md with:</p>
+</li>
+<li>Use TanStack Query (useQuery/useMutation) for all API calls</li>
+<li>Use HrApiClient for HTTP requests — never raw fetch/axios</li>
+<li>Tailwind CSS with Vertex Tech Modern design tokens only</li>
+<li>React Hook Form + Zod for all forms</li>
+<li>
+<p>Component naming: Hr prefix (e.g., HrEmployeeCard, HrDepartmentTree)
+   ```</p>
+</li>
+<li>
+<p><strong>Verify the hierarchy works.</strong> Start Claude from the <code>backend/</code> directory:
+   <code>bash
+   cd backend
+   claude</code>
+   Then ask:
+   <code>What CLAUDE.md rules are active right now?</code>
+   You should see it mention rules from <strong>both</strong> the root CLAUDE.md and <code>backend/CLAUDE.md</code>. The frontend rules should NOT appear.</p>
+</li>
+<li>
+<p>Start Claude from the <code>frontend/</code> directory and do the same check:
+   <code>bash
+   cd frontend
+   claude</code>
+   You should see root + frontend rules — backend rules absent.</p>
+</li>
+<li>
+<p><strong>Compare with the reference.</strong> How does your build compare with <code>reference/backend/CLAUDE.md</code> and <code>reference/frontend/CLAUDE.md</code>? Use <code>diff</code> or just visually inspect. Copy the reference if you got stuck or make incremental improvements to yours.</p>
+</li>
+</ol>
+<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<p>Running from <code>backend/</code> gives Claude the complete Java context without React noise. Running from <code>frontend/</code> gives the React context without Spring specifics. The root file now contains only what both sides need — keeping every file under ~100 lines.</p>
+<blockquote>
+<p><strong>Key insight:</strong> Subdirectory CLAUDE.md files compound on top of the root — they don't replace it. Claude always sees the full chain from root to working directory.</p>
+</blockquote>
+<hr />
+<h2 id="exercise-5-the-self-improvement-coda-10-min">Exercise 5: The Self-Improvement Coda (10 min)<a class="anchor" href="#exercise-5-the-self-improvement-coda-10-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Practice the compounding loop that you'll use at the end of every lab.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>Review your CLAUDE.md. Ask yourself:</li>
+<li>Is every rule specific and actionable? (Not vague like "write clean code")</li>
+<li>Is any rule something Claude already does correctly without being told? (Delete it)</li>
+<li>
+<p>Is any rule too long? (Shorten it — Claude reads better with terse rules)</p>
+</li>
+<li>
+<p>Ask Claude to critique its own CLAUDE.md:
+   ```
+   Read CLAUDE.md and identify any rules that are:</p>
+</li>
+<li>Too vague to be actionable</li>
+<li>Redundant with what you'd do by default</li>
+<li>
+<p>Missing — based on common Spring Boot + React mistakes
+   Suggest improvements.
+   ```</p>
+</li>
+<li>
+<p>Apply Claude's suggestions if they're good. Reject if they're not.</p>
+</li>
+</ol>
+<blockquote>
+<p><strong>This is the compounding loop:</strong> mistake → rule → verify → refine. By the end of this workshop, your CLAUDE.md will be a living document that makes Claude dramatically better at your specific project.</p>
+</blockquote>
+<hr />
+<h2 id="success-criteria">Success Criteria<a class="anchor" href="#success-criteria">&#182;</a></h2>
+<ul>
+<li>[ ] CLAUDE.md contains at least 5 project-specific rules</li>
+<li>[ ] Exercise 1 produces 2+ convention violations</li>
+<li>[ ] Exercise 3 produces 0 convention violations (same prompt, rules in place)</li>
+<li>[ ] <code>backend/CLAUDE.md</code> and <code>frontend/CLAUDE.md</code> exist with scoped rules</li>
+<li>[ ] You can explain the difference between CLAUDE.md (always loaded) and Skills (on-demand)</li>
+<li>[ ] You can describe the merge order: root → subdirectory</li>
+</ul>
+<hr />
+<h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">&#182;</a></h2>
+<ol>
+<li><strong>CLAUDE.md is production infrastructure</strong> — iterate on it like prompts, not like documentation</li>
+<li><strong>Every correction should become a rule</strong> — if you corrected Claude, encode it so it never repeats</li>
+<li><strong>Concise &gt; comprehensive</strong> — ~100 lines per file max. Claude ignores bloated files.</li>
+<li><strong>Team-shared via git</strong> — the whole team contributes. Review CLAUDE.md changes like code.</li>
+<li><strong>Hierarchy = scope</strong> — put rules where they apply. Backend rules in <code>backend/CLAUDE.md</code>. Frontend rules in <code>frontend/CLAUDE.md</code>. Only cross-cutting concerns in root.</li>
+</ol>
+<hr />
+<details>
+<summary><strong>Escape Hatch</strong> — Click if stuck for more than 5 minutes</summary>
+
+Here's a working CLAUDE.md for this project:
+
+
+<pre><code class="language-markdown"># CLAUDE.md — HR Enterprise Platform
+
+## Project
+Spring Boot 3.2 + React 19 monorepo. Java 21, Maven multi-module.
+API base: /app/hr/api/v1/
+
+## Naming
+- All Java classes prefixed `Hr` (HrEmployee, HrRegionService)
+- Entities map to DB tables (HrRegion → regions)
+
+## Database
+- database/schema.sql is READ ONLY — never edit
+- Use @SQLRestriction(&quot;deleted_at IS NULL&quot;) NOT @Where (deprecated)
+- Schema changes via Flyway migrations only (db/migration/)
+
+## Logging
+- Every service method: HrLogHelper entry/exit logging
+- Never log PII (email, phone, salary) — use MASKED
+
+## API
+- ALL endpoints return HrApiResponse&lt;T&gt; — never raw objects
+- Paginated lists return HrPagedResponse&lt;T&gt;
+
+## Security
+- All service methods need @PreAuthorize
+- RBAC: ROLE_ADMIN, ROLE_HR_SPECIALIST, ROLE_MANAGER, ROLE_EMPLOYEE
+
+## Build
+- Backend: cd backend &amp;&amp; mvn clean install
+- Frontend: cd frontend &amp;&amp; npm install &amp;&amp; npm run dev
+</code></pre>
+
+</details><div class="footer-nav"><a href="../index.html">← All Labs</a><a href="lab-02-plan-mode.html">Next →</a><a href="https://github.com/ssthakuraa/claude-code-workshop" target="_blank">GitHub Repo</a></div>
+</div>
+</body>
+</html>

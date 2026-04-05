@@ -40,7 +40,7 @@ CLAUDE.md is a markdown file in the project root that Claude reads automatically
 This lab teaches you to build CLAUDE.md from scratch by observing failures. The repo already contains a complete CLAUDE.md — for Exercise 1, temporarily rename it so Claude has no guidance and you can observe what goes wrong.
 
 ```bash
-cd /tmp/trng/claude-code-workshop
+cd /scratch/trng/claude-code-workshop
 
 # Temporarily move the complete CLAUDE.md aside
 mv CLAUDE.md CLAUDE.md.complete
@@ -206,7 +206,7 @@ Claude should now produce convention-compliant code on the **first try** — no 
 ### Goal
 Split the root CLAUDE.md into three focused files using Claude Code's directory-level hierarchy. This is essential in monorepos where Java rules shouldn't clutter the frontend context and vice versa.
 
-> **Note:** Reference versions are at `reference/backend/CLAUDE.md.reference` and `reference/frontend/CLAUDE.md.reference`. Build your own first — compare with the reference at the end.
+> **Note:** Reference versions are at `reference/backend/CLAUDE.md` and `reference/frontend/CLAUDE.md`. Build your own first — compare with the reference at the end.
 
 ### The Concept
 
@@ -241,7 +241,7 @@ This means you can scope rules to where they apply — Java rules stay in `backe
    Create frontend/CLAUDE.md with:
    - Use TanStack Query (useQuery/useMutation) for all API calls
    - Use HrApiClient for HTTP requests — never raw fetch/axios
-   - Tailwind CSS with Oracle Redwood design tokens only
+   - Tailwind CSS with Vertex Tech Modern design tokens only
    - React Hook Form + Zod for all forms
    - Component naming: Hr prefix (e.g., HrEmployeeCard, HrDepartmentTree)
    ```
@@ -264,7 +264,7 @@ This means you can scope rules to where they apply — Java rules stay in `backe
    ```
    You should see root + frontend rules — backend rules absent.
 
-5. **Compare with the reference.** How does your build compare with `reference/backend/CLAUDE.md.reference` and `reference/frontend/CLAUDE.md.reference`? Use `diff` or just visually inspect. Copy the reference if you got stuck or make incremental improvements to yours.
+5. **Compare with the reference.** How does your build compare with `reference/backend/CLAUDE.md` and `reference/frontend/CLAUDE.md`? Use `diff` or just visually inspect. Copy the reference if you got stuck or make incremental improvements to yours.
 
 ### What You Should See
 

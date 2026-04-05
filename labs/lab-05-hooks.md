@@ -62,7 +62,7 @@ Create a PreToolUse hook that blocks any edit to `database/schema.sql`.
 
 ### Instructions
 
-> **Reference:** A reference version of `.claude/settings.json` with 6 fully working hooks already exists at `reference/.claude/settings.json.reference`. Create your own with 3 hooks first, then compare at the end.
+> **Reference:** A reference version of `.claude/settings.json` with 6 fully working hooks already exists at `reference/.claude/settings.json`. Create your own with 3 hooks first, then compare at the end.
 
 1. Ask Claude to set up the hook:
    ```

@@ -1,6 +1,6 @@
 -- MySQL Compatible Data Population Script
--- Converted from Oracle HR demo schema
--- Original Copyright (c) 2023 Oracle
+-- Converted from Vertex Tech HR demo schema
+-- Original Copyright (c) 2023 Vertex Tech
 --
 -- NAME
 --   hr_populate.sql - populates the HR (Human Resources) tables with data

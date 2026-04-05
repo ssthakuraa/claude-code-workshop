@@ -662,7 +662,7 @@ const router = createBrowserRouter([
 ]);
 ```
 
-### 3.7 Tailwind + Oracle Redwood Design Tokens
+### 3.7 Tailwind + Vertex Tech Modern Design Tokens
 
 ```typescript
 // tailwind.config.ts
@@ -670,7 +670,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Oracle Redwood (RDS 24C) tokens
+        // Vertex Tech Modern (Modern Design System 24C) tokens
         'blue-60': '#1F6BCC',      // Primary
         'blue-50': '#2B7DE0',
         'blue-10': '#C7E0FF',      // Background
@@ -939,7 +939,7 @@ alias zb='cd ../hr-frontend && claude --name frontend'
 |---|---|---|---|---|
 | 1 | State management | TanStack Query + Context | Redux, Zustand | Almost all state is server-cached. No complex client-side state. |
 | 2 | HTTP client | Axios via HrApiClient | fetch API | Interceptors (JWT, error handling), request cancellation, wide adoption |
-| 3 | CSS approach | Tailwind + RDS tokens | CSS Modules, styled-components | Matches rental app. Utility-first is fast for component building. |
+| 3 | CSS approach | Tailwind + Modern Design System tokens | CSS Modules, styled-components | Matches rental app. Utility-first is fast for component building. |
 | 4 | Form library | React Hook Form | Formik | Better performance (uncontrolled), simpler API, matches rental app |
 | 5 | Chart library | Recharts | Chart.js, D3 | Matches rental app. React-native composability. Good for dashboards. |
 | 6 | ORM | Spring Data JPA + Specifications | jOOQ, MyBatis | Standard for Spring Boot. Specification API for dynamic queries. |

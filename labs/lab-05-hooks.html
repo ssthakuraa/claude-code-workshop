@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 05-hooks — Claude Code Workshop</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.7; color: #1a1a2e; background: #fafafa; margin: 0;
+}
+.page-wrap {
+  max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem;
+  background: #fff; min-height: 100vh;
+  border-left: 1px solid #e8e8e8; border-right: 1px solid #e8e8e8;
+  box-shadow: 0 0 40px rgba(0,0,0,0.04);
+}
+.page-header {
+  border-bottom: 2px solid #2563eb; padding-bottom: 0.25rem; margin-bottom: 1.5rem;
+}
+.page-header h1 { font-size: 1.75rem; margin: 0 0 0.25rem; color: #1e3a5f; }
+.page-header .subtitle { color: #64748b; font-size: 0.9rem; }
+h1 { font-size: 1.6rem; color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.3rem; }
+h2 { font-size: 1.3rem; color: #1e3a5f; margin-top: 2.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.3rem; }
+h3 { font-size: 1.05rem; color: #334155; margin-top: 1.5rem; }
+h4 { font-size: 0.95rem; color: #475569; }
+h2:first-of-type, h3:first-of-type { margin-top: 0; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+ul, ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+li { margin: 0.25rem 0; }
+li li { margin: 0; }
+img { max-width: 100%; border-radius: 6px; }
+blockquote {
+  border-left: 4px solid #2563eb; padding: 0.5rem 1rem; margin: 1rem 0;
+  background: #f8fafc; border-radius: 0 6px 6px 0; color: #334155;
+}
+blockquote > p:first-child { margin-top: 0.2rem; }
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+th, td { border: 1px solid #e2e8f0; padding: 0.45rem 0.65rem; text-align: left; }
+th { background: #f1f5f9; font-weight: 600; color: #1e3a5f; }
+tr:nth-child(even) { background: #f8fafc; }
+pre {
+  background: #1e293b; color: #e2e8f0; padding: 1rem 1.25rem;
+  border-radius: 8px; overflow-x: auto; font-size: 0.85rem; margin: 1rem 0;
+  line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+code {
+  background: #f1f5f9; color: #dc2626; padding: 0.15em 0.35em;
+  border-radius: 4px; font-size: 0.88em; font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+}
+pre code { color: inherit; }
+details { margin: 1rem 0; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; }
+summary { cursor: pointer; padding: 0.75rem 1rem; font-weight: 600; color: #2563eb; user-select: none; }
+summary:hover { background: #f1f5f9; }
+details[open] summary { border-bottom: 1px solid #e2e8f0; }
+details > div, details > pre, details > p { padding: 0 1rem 1rem; }
+hr { border: none; border-top: 2px solid #e2e8f0; margin: 2rem 0; }
+nav.toc {
+  border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.5rem;
+  margin: 1rem 0 2rem; background: #f8fafc;
+}
+.toc-header { font-weight: 700; color: #1e3a5f; margin-bottom: 0.5rem; font-size: 0.95rem; }
+nav.toc a { color: #475569; font-size: 0.85rem; display: block; padding: 0.15rem 0; text-decoration: none; }
+nav.toc a:hover { color: #2563eb; }
+.back-link {
+  display: inline-block; margin-top: 3rem; padding: 0.5rem 1.25rem;
+  background: #2563eb; color: #fff; border-radius: 4px; font-size: 0.85rem;
+  text-decoration: none; font-weight: 500;
+}
+.back-link:hover { background: #1d4ed8; color: #fff; text-decoration: none; }
+.footer-nav { margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid #e2e8f0; display: flex; gap: 1rem; flex-wrap: wrap; }
+.footer-nav a { display: inline-block; font-size: 0.9rem; padding: 0.4rem 0.8rem; background: #f1f5f9; border-radius: 4px; text-decoration: none; }
+.footer-nav a:hover { background: #e2e8f0; text-decoration: none; }
+input[type="checkbox"] { margin-right: 0.3rem; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+<div class="page-header"><h1>Lab 05-hooks</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><nav class="toc">
+<div class="toc-header">Contents</div>
+  <a href="#lab-5-hooks-deterministic-quality-gates">Lab 5: Hooks — Deterministic Quality Gates</a>
+    <a href="#learning-objective">Learning Objective</a>
+    <a href="#the-key-concept">The Key Concept</a>
+    <a href="#setup">Setup</a>
+    <a href="#exercise-1-the-read-only-file-guard-15-min">Exercise 1: The Read-Only File Guard (15 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#why-this-matters">Why This Matters</a>
+      <a href="#instructions">Instructions</a>
+    <a href="#exercise-2-the-naming-convention-guard-15-min">Exercise 2: The Naming Convention Guard (15 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#why-this-matters">Why This Matters</a>
+      <a href="#instructions">Instructions</a>
+    <a href="#exercise-3-the-pii-leak-detector-15-min">Exercise 3: The PII Leak Detector (15 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#why-this-matters">Why This Matters</a>
+      <a href="#instructions">Instructions</a>
+    <a href="#exercise-4-review-all-hooks-10-min">Exercise 4: Review All Hooks (10 min)</a>
+      <a href="#instructions">Instructions</a>
+    <a href="#exercise-5-the-self-improvement-coda-5-min">Exercise 5: The Self-Improvement Coda (5 min)</a>
+    <a href="#success-criteria">Success Criteria</a>
+    <a href="#key-takeaways">Key Takeaways</a>
+</nav><h1 id="lab-5-hooks-deterministic-quality-gates">Lab 5: Hooks — Deterministic Quality Gates<a class="anchor" href="#lab-5-hooks-deterministic-quality-gates">&#182;</a></h1>
+<p><strong>Duration:</strong> 60 minutes
+<strong>Day:</strong> 2 — Productivity
+<strong>Builds On:</strong> Lab 1 (CLAUDE.md — rules), Lab 4 (context discipline)
+<strong>Produces:</strong> 3 hooks in <code>.claude/settings.json</code> enforcing enterprise standards</p>
+<hr />
+<h2 id="learning-objective">Learning Objective<a class="anchor" href="#learning-objective">&#182;</a></h2>
+<p>You will see the difference between <strong>advisory rules</strong> (CLAUDE.md — Claude might ignore them) and <strong>structural enforcement</strong> (hooks — Claude physically cannot override them). By the end, you'll understand why hooks are the enterprise governance feature of Claude Code.</p>
+<hr />
+<h2 id="the-key-concept">The Key Concept<a class="anchor" href="#the-key-concept">&#182;</a></h2>
+<p>Hooks are shell commands that execute automatically at specific lifecycle events. Unlike CLAUDE.md instructions (which Claude might forget at high context), hooks are <strong>guaranteed to execute</strong> every time.</p>
+<p><strong>Two critical events:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>When It Fires</th>
+<th>Use For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PreToolUse</code></td>
+<td>Before Claude edits/writes a file</td>
+<td><strong>Blocking</strong> — prevent forbidden actions (exit 1 = hard stop)</td>
+</tr>
+<tr>
+<td><code>PostToolUse</code></td>
+<td>After Claude edits/writes a file</td>
+<td><strong>Validating</strong> — check conventions, run linters, scan for issues</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Hook anatomy:</strong></p>
+<pre><code class="language-json">{
+  &quot;matcher&quot;: &quot;Edit|Write&quot;,        // Which tools trigger the hook
+  &quot;hooks&quot;: [{
+    &quot;type&quot;: &quot;command&quot;,             // Shell command
+    &quot;command&quot;: &quot;...&quot;,              // The actual check
+    &quot;timeout&quot;: 10,                // Max seconds
+    &quot;statusMessage&quot;: &quot;Checking...&quot;  // Spinner text
+  }]
+}
+</code></pre>
+<p><strong>The key insight:</strong> CLAUDE.md states the rules. Hooks <strong>enforce</strong> them.</p>
+<hr />
+<h2 id="setup">Setup<a class="anchor" href="#setup">&#182;</a></h2>
+<pre><code class="language-bash"># Verify the backend compiles cleanly
+cd backend &amp;&amp; mvn compile -q &amp;&amp; echo &quot;Backend: OK&quot;
+</code></pre>
+<p>You should have CLAUDE.md with your rules from Day 1 and the Region/Country/Location entities built.</p>
+<hr />
+<h2 id="exercise-1-the-read-only-file-guard-15-min">Exercise 1: The Read-Only File Guard (15 min)<a class="anchor" href="#exercise-1-the-read-only-file-guard-15-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Create a PreToolUse hook that blocks any edit to <code>database/schema.sql</code>.</p>
+<h3 id="why-this-matters">Why This Matters<a class="anchor" href="#why-this-matters">&#182;</a></h3>
+<p><code>schema.sql</code> is the reference DDL. Schema changes must go through Flyway migrations. But Claude might try to edit it directly when asked to "update the database schema." A CLAUDE.md rule says "don't edit it" — a hook makes it <strong>impossible</strong>.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<blockquote>
+<p><strong>Reference:</strong> A reference version of <code>.claude/settings.json</code> with 6 fully working hooks already exists at <code>reference/.claude/settings.json</code>. Create your own with 3 hooks first, then compare at the end.</p>
+</blockquote>
+<ol>
+<li>Ask Claude to set up the hook:
+   ```
+   Add a PreToolUse hook in .claude/settings.json that blocks any
+   Edit or Write to database/schema.sql. The hook should:</li>
+<li>Print a clear error message explaining WHY it's blocked</li>
+<li>Suggest the correct approach (create a Flyway migration instead)</li>
+<li>
+<p>Exit with code 1 (hard block)
+   Use jq to parse the tool input JSON from stdin.
+   ```</p>
+</li>
+<li>
+<p><strong>Test it.</strong> Ask Claude to do something that would trigger the guard:
+   <code>Add a new column "middle_name" to the employees table in the database schema.</code></p>
+</li>
+<li>
+<p><strong>What you should see:</strong></p>
+</li>
+<li>The hook fires and prints: <code>BLOCKED: database/schema.sql is READ ONLY...</code></li>
+<li>Claude sees the error and pivots to creating a Flyway migration file instead</li>
+<li>
+<p>Claude did NOT need to be told twice — the hook message guided it</p>
+</li>
+<li>
+<p><strong>Contrast with CLAUDE.md only:</strong> Imagine this at 85% context — Claude might ignore the CLAUDE.md rule. The hook fires regardless.</p>
+</li>
+</ol>
+<hr />
+<h2 id="exercise-2-the-naming-convention-guard-15-min">Exercise 2: The Naming Convention Guard (15 min)<a class="anchor" href="#exercise-2-the-naming-convention-guard-15-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Create a PostToolUse hook that rejects Java classes without the <code>Hr</code> prefix.</p>
+<h3 id="why-this-matters">Why This Matters<a class="anchor" href="#why-this-matters">&#182;</a></h3>
+<p>In a 50-developer enterprise team, naming conventions drift. One developer's <code>EmployeeValidator</code> breaks the pattern. Hooks enforce the convention automatically — every Claude session, every developer.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>
+<p>Add the hook:
+   <code>Add a PostToolUse hook that checks any new .java file written to
+   hrapp-service/src/main/java/. If the class name doesn't start with "Hr",
+   the hook should print a NAMING VIOLATION error and exit 1.
+   Extract the filename from the tool input JSON using jq.</code></p>
+</li>
+<li>
+<p><strong>Test it.</strong> Ask Claude to create a class with a wrong name:
+   <code>Create a utility class called EmployeeValidator.java in the service package
+   that validates employee email formats.</code></p>
+</li>
+<li>
+<p><strong>What you should see:</strong></p>
+</li>
+<li>Hook fires: <code>NAMING VIOLATION: 'EmployeeValidator' must start with 'Hr'...</code></li>
+<li>Claude self-corrects to <code>HrEmployeeValidator.java</code> without you saying anything</li>
+</ol>
+<hr />
+<h2 id="exercise-3-the-pii-leak-detector-15-min">Exercise 3: The PII Leak Detector (15 min)<a class="anchor" href="#exercise-3-the-pii-leak-detector-15-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Create a PostToolUse hook that scans service file changes for sensitive field names in logger statements.</p>
+<h3 id="why-this-matters">Why This Matters<a class="anchor" href="#why-this-matters">&#182;</a></h3>
+<p>PII in logs is a compliance violation. Code review catches it sometimes; a hook catches it every time. In regulated industries (healthcare, finance), this is a regulatory requirement.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>
+<p>Add the hook:
+   <code>Add a PostToolUse hook that scans any Service.java file change for
+   LOGGER statements containing sensitive words: email, phone, salary,
+   password, ssn. If found, print "PII LEAK DETECTED" with the offending
+   line and exit 1. Read the new content from the tool input JSON,
+   not from the file on disk.</code></p>
+</li>
+<li>
+<p><strong>Test it.</strong> Ask Claude to add a log line with PII:
+   <code>In HrRegionService, add a debug log line that shows the full
+   employee email when processing a region assignment.</code></p>
+</li>
+<li>
+<p><strong>What you should see:</strong></p>
+</li>
+<li>Hook fires: <code>PII LEAK DETECTED in logger statement...</code></li>
+<li>Claude replaces the email with <code>MASKED</code> and retries</li>
+</ol>
+<blockquote>
+<p><strong>Important limitation to understand:</strong>
+The PII hook reads <code>new_string</code> (Edit tool) or <code>content</code> (Write tool) from the tool
+input — this is only the <em>changed fragment</em>, not the whole file. If Claude makes a
+partial edit that inserts a PII log line, the hook sees only the new content and will
+catch it. But if an existing PII log line was already in the file before this session,
+the hook won't flag it — it only catches violations introduced in the current tool call.</p>
+<p>This is a fundamental property of PostToolUse hooks: they enforce "no new violations,"
+not "no violations period." For comprehensive scanning, use a separate audit script
+(<code>grep -r</code> across the whole codebase) as a CI step rather than relying on hooks alone.</p>
+</blockquote>
+<hr />
+<h2 id="exercise-4-review-all-hooks-10-min">Exercise 4: Review All Hooks (10 min)<a class="anchor" href="#exercise-4-review-all-hooks-10-min">&#182;</a></h2>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>
+<p>View the final settings:
+   <code>Read .claude/settings.json and explain each hook —
+   what it does, when it fires, and what it prevents.</code></p>
+</li>
+<li>
+<p><strong>Verify the hook categories:</strong></p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>Event</th>
+<th>Severity</th>
+<th>What It Prevents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>schema.sql guard</td>
+<td>PreToolUse</td>
+<td>Hard block</td>
+<td>Direct schema modification</td>
+</tr>
+<tr>
+<td>Naming convention</td>
+<td>PostToolUse</td>
+<td>Hard block</td>
+<td>Convention drift</td>
+</tr>
+<tr>
+<td>PII detector</td>
+<td>PostToolUse</td>
+<td>Hard block</td>
+<td>Compliance violation</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li><strong>Add to CLAUDE.md:</strong>
+   ```markdown
+   ## Active Hooks</li>
+<li>PreToolUse: schema.sql is read-only (use Flyway migrations)</li>
+<li>PostToolUse: Java classes must start with Hr</li>
+<li>PostToolUse: No PII (email, phone, salary) in LOGGER statements
+   ```</li>
+</ol>
+<hr />
+<h2 id="exercise-5-the-self-improvement-coda-5-min">Exercise 5: The Self-Improvement Coda (5 min)<a class="anchor" href="#exercise-5-the-self-improvement-coda-5-min">&#182;</a></h2>
+<p>Reflect on the difference:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>CLAUDE.md Rule</th>
+<th>Hook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Enforcement</strong></td>
+<td>Advisory — Claude might ignore under pressure</td>
+<td>Structural — physically impossible to bypass</td>
+</tr>
+<tr>
+<td><strong>Context dependency</strong></td>
+<td>Degrades at high context</td>
+<td>Fires regardless of context</td>
+</tr>
+<tr>
+<td><strong>Scope</strong></td>
+<td>Per-session (loaded at start)</td>
+<td>Per-action (fires every tool call)</td>
+</tr>
+<tr>
+<td><strong>Best for</strong></td>
+<td>Conventions, patterns, guidelines</td>
+<td>Inviolable rules, compliance, safety</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Think about your codebase:</strong> What rules are currently advisory (code review catches them sometimes) that should be structural (hooks catch them always)?</p>
+</blockquote>
+<hr />
+<h2 id="success-criteria">Success Criteria<a class="anchor" href="#success-criteria">&#182;</a></h2>
+<ul>
+<li>[ ] <code>.claude/settings.json</code> contains 3 hooks (schema guard, naming, PII)</li>
+<li>[ ] schema.sql edit attempt is blocked with clear error message</li>
+<li>[ ] Claude self-corrects naming violation without being told</li>
+<li>[ ] PII in logger statement is caught and prevented</li>
+<li>[ ] You can explain PreToolUse (blocking) vs PostToolUse (validating)</li>
+</ul>
+<hr />
+<h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">&#182;</a></h2>
+<ol>
+<li><strong>CLAUDE.md = advisory, Hooks = structural</strong> — use both, for different things</li>
+<li><strong>Hooks run as you, not as Claude</strong> — Claude cannot override or disable them</li>
+<li><strong>PreToolUse + exit 1 = hard block</strong> — for inviolable rules</li>
+<li><strong>PostToolUse + exit 1 = catch and correct</strong> — for convention enforcement</li>
+<li><strong>Project settings are team-wide</strong> — <code>.claude/settings.json</code> is committed to git</li>
+</ol>
+<hr />
+<details>
+<summary><strong>Escape Hatch</strong> — settings.json with all 3 hooks</summary>
+
+
+<pre><code class="language-json">{
+  &quot;hooks&quot;: {
+    &quot;PreToolUse&quot;: [{
+      &quot;matcher&quot;: &quot;Edit|Write&quot;,
+      &quot;hooks&quot;: [{
+        &quot;type&quot;: &quot;command&quot;,
+        &quot;command&quot;: &quot;f=$(jq -r '.tool_input.file_path // empty'); if echo \&quot;$f\&quot; | grep -q 'database/schema.sql'; then echo 'BLOCKED: database/schema.sql is READ ONLY. Use a Flyway migration in db/migration/ instead.' &gt;&amp;2; exit 1; fi&quot;,
+        &quot;timeout&quot;: 10,
+        &quot;statusMessage&quot;: &quot;Checking schema.sql guard...&quot;
+      }]
+    }],
+    &quot;PostToolUse&quot;: [{
+      &quot;matcher&quot;: &quot;Edit|Write&quot;,
+      &quot;hooks&quot;: [
+        {
+          &quot;type&quot;: &quot;command&quot;,
+          &quot;command&quot;: &quot;f=$(jq -r '.tool_input.file_path // empty'); if echo \&quot;$f\&quot; | grep -q 'hrapp-service/src/main/java' &amp;&amp; echo \&quot;$f\&quot; | grep -q '\\.java$'; then classname=$(basename \&quot;$f\&quot; .java); if ! echo \&quot;$classname\&quot; | grep -q '^Hr'; then echo \&quot;NAMING VIOLATION: '$classname' must start with 'Hr'.\&quot; &gt;&amp;2; exit 1; fi; fi&quot;,
+          &quot;timeout&quot;: 10,
+          &quot;statusMessage&quot;: &quot;Checking Hr naming convention...&quot;
+        },
+        {
+          &quot;type&quot;: &quot;command&quot;,
+          &quot;command&quot;: &quot;f=$(jq -r '.tool_input.file_path // empty'); if echo \&quot;$f\&quot; | grep -q 'Service\\.java$'; then matches=$(jq -r '.tool_input.new_string // .tool_input.content // empty' | grep -iE 'LOGGER.*\\b(email|phone|salary|password|ssn)\\b' || true); if [ -n \&quot;$matches\&quot; ]; then echo 'PII LEAK DETECTED in logger statement. Use MASKED placeholder.' &gt;&amp;2; exit 1; fi; fi&quot;,
+          &quot;timeout&quot;: 10,
+          &quot;statusMessage&quot;: &quot;Scanning for PII in logs...&quot;
+        }
+      ]
+    }]
+  }
+}
+</code></pre>
+
+</details><div class="footer-nav"><a href="../index.html">← All Labs</a><a href="lab-04-context-management.html">← Previous</a><a href="lab-06-subagents.html">Next →</a><a href="https://github.com/ssthakuraa/claude-code-workshop" target="_blank">GitHub Repo</a></div>
+</div>
+</body>
+</html>

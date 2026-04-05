@@ -164,6 +164,57 @@ One prompt → all 7 layers → compiles clean → all conventions followed. The
 
 ---
 
+## Exercise 3: Wire Frontend to Real API (10 min)
+
+### Goal
+You just built the Notification backend (Exercise 2). But the NotificationsPage at `/hr/notifications` currently uses hardcoded mock data. Wire it to call the real `/app/hr/api/v1/notifications` API you just scaffolded.
+
+### The Key Concept
+
+Frontend development often starts against mock data when the backend API isn't ready yet. This is the most common enterprise workflow — build the UI first, wire it to the real API when the backend exists.
+
+### Instructions
+
+1. Navigate to the NotificationsPage in your running frontend (`/hr/notifications`). It currently shows 5 hardcoded notifications.
+
+2. Ask Claude to wire the page to the real API:
+   ```
+   Rewire src/pages/admin/NotificationsPage.tsx to fetch notifications
+   from the real backend API at GET /app/hr/api/v1/notifications.
+
+   Use TanStack Query (useQuery) for the data fetching — follow the
+   pattern from src/api/employees.ts for the hook setup.
+   Replace the hardcoded mock data completely.
+
+   The backend returns:
+   {
+     "status": 200,
+     "data": [array of notifications with notificationId, notificationType, title, message, isRead, createdAt]
+   }
+
+   Requirements:
+   - Create a useNotifications() hook in src/api/notifications.ts
+   - Use HrStatusBadge for read/unread status (use green dot for read, amber for unread)
+   - Keep the mark-as-read and mark-all-read functionality
+   - Add loading skeletons (HrSkeleton) and empty state
+   - Sort by createdAt descending (newest first)
+   - Mark-as-read should call PUT /app/hr/api/v1/notifications/{id}/mark-read
+   - After mark-read, invalidate the notifications query so the list refreshes
+   ```
+
+3. After Claude makes the changes, verify it compiles:
+   ```bash
+   cd frontend && npx tsc --noEmit 2>&1 | head -20
+   ```
+
+4. Start the frontend and navigate to `/hr/notifications`. The page should now load data from the real Notification API you scaffolded in Exercise 2.
+
+> **Reference:** A reference version exists at `reference/frontend/src/pages/admin/NotificationsPage.real.tsx`. Build your own first, then compare.
+
+5. **What you just learned:** This is the standard enterprise workflow — mock data for rapid UI prototyping, then wire to the real API when the backend is ready. The skill gave you the backend in one prompt; wiring it is a single command on the frontend.
+
+---
+
 ## Exercise 4: Create a Slash Command (10 min)
 
 ### Goal
@@ -215,6 +266,8 @@ Create a `/run-tests` command for daily use.
 
 - [ ] `/scaffold-entity` skill exists in `.claude/skills/scaffold-entity/SKILL.md`
 - [ ] Notification entity scaffolded with one prompt, zero corrections
+- [ ] NotificationsPage wired to real API via `useNotifications()` hook in `src/api/notifications.ts`
+- [ ] Mark-as-read and mark-all-read work with query invalidation
 - [ ] `/run-tests` command exists and runs successfully
 - [ ] Manual scaffolding (Exercise 1) required 2+ prompts; skill required 1
 - [ ] CLAUDE.md updated with skill/command references

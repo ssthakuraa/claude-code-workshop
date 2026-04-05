@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 11-cicd-permissions — Claude Code Workshop</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.7; color: #1a1a2e; background: #fafafa; margin: 0;
+}
+.page-wrap {
+  max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem;
+  background: #fff; min-height: 100vh;
+  border-left: 1px solid #e8e8e8; border-right: 1px solid #e8e8e8;
+  box-shadow: 0 0 40px rgba(0,0,0,0.04);
+}
+.page-header {
+  border-bottom: 2px solid #2563eb; padding-bottom: 0.25rem; margin-bottom: 1.5rem;
+}
+.page-header h1 { font-size: 1.75rem; margin: 0 0 0.25rem; color: #1e3a5f; }
+.page-header .subtitle { color: #64748b; font-size: 0.9rem; }
+h1 { font-size: 1.6rem; color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.3rem; }
+h2 { font-size: 1.3rem; color: #1e3a5f; margin-top: 2.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.3rem; }
+h3 { font-size: 1.05rem; color: #334155; margin-top: 1.5rem; }
+h4 { font-size: 0.95rem; color: #475569; }
+h2:first-of-type, h3:first-of-type { margin-top: 0; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+ul, ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+li { margin: 0.25rem 0; }
+li li { margin: 0; }
+img { max-width: 100%; border-radius: 6px; }
+blockquote {
+  border-left: 4px solid #2563eb; padding: 0.5rem 1rem; margin: 1rem 0;
+  background: #f8fafc; border-radius: 0 6px 6px 0; color: #334155;
+}
+blockquote > p:first-child { margin-top: 0.2rem; }
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+th, td { border: 1px solid #e2e8f0; padding: 0.45rem 0.65rem; text-align: left; }
+th { background: #f1f5f9; font-weight: 600; color: #1e3a5f; }
+tr:nth-child(even) { background: #f8fafc; }
+pre {
+  background: #1e293b; color: #e2e8f0; padding: 1rem 1.25rem;
+  border-radius: 8px; overflow-x: auto; font-size: 0.85rem; margin: 1rem 0;
+  line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+code {
+  background: #f1f5f9; color: #dc2626; padding: 0.15em 0.35em;
+  border-radius: 4px; font-size: 0.88em; font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+}
+pre code { color: inherit; }
+details { margin: 1rem 0; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; }
+summary { cursor: pointer; padding: 0.75rem 1rem; font-weight: 600; color: #2563eb; user-select: none; }
+summary:hover { background: #f1f5f9; }
+details[open] summary { border-bottom: 1px solid #e2e8f0; }
+details > div, details > pre, details > p { padding: 0 1rem 1rem; }
+hr { border: none; border-top: 2px solid #e2e8f0; margin: 2rem 0; }
+nav.toc {
+  border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.5rem;
+  margin: 1rem 0 2rem; background: #f8fafc;
+}
+.toc-header { font-weight: 700; color: #1e3a5f; margin-bottom: 0.5rem; font-size: 0.95rem; }
+nav.toc a { color: #475569; font-size: 0.85rem; display: block; padding: 0.15rem 0; text-decoration: none; }
+nav.toc a:hover { color: #2563eb; }
+.back-link {
+  display: inline-block; margin-top: 3rem; padding: 0.5rem 1.25rem;
+  background: #2563eb; color: #fff; border-radius: 4px; font-size: 0.85rem;
+  text-decoration: none; font-weight: 500;
+}
+.back-link:hover { background: #1d4ed8; color: #fff; text-decoration: none; }
+.footer-nav { margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid #e2e8f0; display: flex; gap: 1rem; flex-wrap: wrap; }
+.footer-nav a { display: inline-block; font-size: 0.9rem; padding: 0.4rem 0.8rem; background: #f1f5f9; border-radius: 4px; text-decoration: none; }
+.footer-nav a:hover { background: #e2e8f0; text-decoration: none; }
+input[type="checkbox"] { margin-right: 0.3rem; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+<div class="page-header"><h1>Lab 11-cicd-permissions</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><nav class="toc">
+<div class="toc-header">Contents</div>
+  <a href="#lab-11-cicd-permissions-amp-enterprise-governance">Lab 11: CI/CD, Permissions &amp; Enterprise Governance</a>
+    <a href="#learning-objective">Learning Objective</a>
+    <a href="#the-key-concepts">The Key Concepts</a>
+      <a href="#cicd-with-claude-code">CI/CD with Claude Code</a>
+      <a href="#permissions-amp-security">Permissions &amp; Security</a>
+      <a href="#two-levels-of-settings">Two Levels of Settings</a>
+      <a href="#enterprise-governance-hooks-permissions-cicd">Enterprise Governance = Hooks + Permissions + CI/CD</a>
+    <a href="#setup">Setup</a>
+    <a href="#exercise-1-study-the-makefile-15-min">Exercise 1: Study the Makefile (15 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#background">Background</a>
+      <a href="#instructions">Instructions</a>
+    <a href="#exercise-2-study-the-jenkins-pipeline-20-min">Exercise 2: Study the Jenkins Pipeline (20 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#background">Background</a>
+      <a href="#instructions">Instructions</a>
+    <a href="#exercise-3-add-a-governance-stage-to-the-pipeline-20-min">Exercise 3: Add a Governance Stage to the Pipeline (20 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#instructions">Instructions</a>
+      <a href="#key-insight">Key Insight</a>
+    <a href="#exercise-4-permissions-profile-15-min">Exercise 4: Permissions Profile (15 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#instructions">Instructions</a>
+    <a href="#exercise-5-the-self-improvement-coda-5-min">Exercise 5: The Self-Improvement Coda (5 min)</a>
+    <a href="#success-criteria">Success Criteria</a>
+    <a href="#key-takeaways">Key Takeaways</a>
+</nav><h1 id="lab-11-cicd-permissions-amp-enterprise-governance">Lab 11: CI/CD, Permissions &amp; Enterprise Governance<a class="anchor" href="#lab-11-cicd-permissions-amp-enterprise-governance">&#182;</a></h1>
+<p><strong>Duration:</strong> 75 minutes
+<strong>Day:</strong> 4 — Mastery
+<strong>Builds On:</strong> Labs 5 (hooks), 9–10 (MCP)
+<strong>Produces:</strong> Makefile, Jenkinsfile, permissions profile</p>
+<hr />
+<h2 id="learning-objective">Learning Objective<a class="anchor" href="#learning-objective">&#182;</a></h2>
+<p>You will use Claude Code to generate CI/CD pipeline configuration for enterprise environments, configure a permissions profile that balances productivity with safety, and translate pipeline definitions across CI platforms. These are high-value enterprise skills — companies regularly migrate CI tools, and getting the pipeline right is critical.</p>
+<hr />
+<h2 id="the-key-concepts">The Key Concepts<a class="anchor" href="#the-key-concepts">&#182;</a></h2>
+<h3 id="cicd-with-claude-code">CI/CD with Claude Code<a class="anchor" href="#cicd-with-claude-code">&#182;</a></h3>
+<p>Claude can generate, maintain, debug, and translate pipeline configurations for any CI platform — Jenkins, GitLab CI, Azure DevOps, CircleCI, GitHub Actions. The key insight:</p>
+<blockquote>
+<p><strong>Use a Makefile as the contract.</strong> The Makefile defines what "build," "test," and "package" mean. The CI tool just calls <code>make build</code>, <code>make test</code>. This decouples the pipeline stages from the CI platform.</p>
+</blockquote>
+<h3 id="permissions-amp-security">Permissions &amp; Security<a class="anchor" href="#permissions-amp-security">&#182;</a></h3>
+<p>Claude Code has a programmable safety model:
+- <strong><code>/permissions</code></strong> — pre-allow safe commands (shared via <code>.claude/settings.json</code>)
+- <strong>PreToolUse hooks</strong> — block dangerous operations structurally
+- <strong><code>.claude/settings.json</code></strong> — team-shared permission profiles
+- <strong>Never use <code>--dangerously-skip-permissions</code></strong> in production</p>
+<h3 id="two-levels-of-settings">Two Levels of Settings<a class="anchor" href="#two-levels-of-settings">&#182;</a></h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Scope</th>
+<th>Committed to git?</th>
+<th>Who it applies to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>~/.claude/settings.json</code></td>
+<td>User-level — all projects on this machine</td>
+<td>No</td>
+<td>You only</td>
+</tr>
+<tr>
+<td><code>.claude/settings.json</code></td>
+<td>Project-level — this repo only</td>
+<td>Yes</td>
+<td>Whole team</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Rule of thumb:</strong>
+- Hooks that enforce team standards → project-level (<code>.claude/settings.json</code>)
+- Personal preferences (editor style, model choice) → user-level (<code>~/.claude/settings.json</code>)
+- <code>allowedTools</code> for CI safety → project-level so every developer gets the same profile</p>
+<h3 id="enterprise-governance-hooks-permissions-cicd">Enterprise Governance = Hooks + Permissions + CI/CD<a class="anchor" href="#enterprise-governance-hooks-permissions-cicd">&#182;</a></h3>
+<p>Together, these three create a governance layer:</p>
+<pre><code>Hooks: enforce rules locally (every developer, every session)
+Permissions: control what Claude can/can't do
+CI/CD: enforce rules in the pipeline (every PR, every merge)
+</code></pre>
+<hr />
+<h2 id="setup">Setup<a class="anchor" href="#setup">&#182;</a></h2>
+<pre><code class="language-bash"># Verify backend and frontend are in place
+cd backend &amp;&amp; mvn compile -q &amp;&amp; echo &quot;Backend: OK&quot;
+cd frontend &amp;&amp; npm run build 2&gt;&amp;1 | tail -2
+</code></pre>
+<hr />
+<h2 id="exercise-1-study-the-makefile-15-min">Exercise 1: Study the Makefile (15 min)<a class="anchor" href="#exercise-1-study-the-makefile-15-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Understand the platform-agnostic pipeline contract.</p>
+<h3 id="background">Background<a class="anchor" href="#background">&#182;</a></h3>
+<p>The project already has a Makefile at the project root. This is the foundation of the enterprise CI/CD approach — it works on ANY CI system.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>
+<p><strong>Study the Makefile:</strong>
+   <code>Read the Makefile at the project root.
+   Explain the composite targets (build, test, lint, package, verify)
+   and how they chain the individual backend/frontend targets.</code></p>
+</li>
+<li>
+<p><strong>Test it locally:</strong>
+   <code>bash
+   make help      # Should list all targets
+   make test      # Should run backend tests</code></p>
+</li>
+<li>
+<p><strong>Key insight:</strong> This Makefile works on ANY CI system. The CI config just calls <code>make build</code>, <code>make test</code>. When your company migrates from Jenkins to GitHub Actions, you only rewrite the Jenkinsfile — the Makefile stays.</p>
+</li>
+</ol>
+<hr />
+<h2 id="exercise-2-study-the-jenkins-pipeline-20-min">Exercise 2: Study the Jenkins Pipeline (20 min)<a class="anchor" href="#exercise-2-study-the-jenkins-pipeline-20-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Understand the Jenkins pipeline that orchestrates the Makefile targets.</p>
+<h3 id="background">Background<a class="anchor" href="#background">&#182;</a></h3>
+<p>The project already has a Jenkinsfile with full declarative pipeline syntax, 5 stages, and branch-gated Package stage.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li><strong>Study the Jenkinsfile:</strong>
+   ```
+   Read the Jenkinsfile. Walk me through each stage.
+   Then explain what happens differently on:</li>
+<li>A feature branch (feature/new-page)</li>
+<li>
+<p>The main branch
+   ```</p>
+</li>
+<li>
+<p><strong>Review the Jenkinsfile.</strong> Check:</p>
+</li>
+<li>[ ] Declarative syntax (not scripted)?</li>
+<li>[ ] <code>when { branch 'main' }</code> on Package stage?</li>
+<li>[ ] JUnit results published in <code>post { always { } }</code>?</li>
+<li>[ ] Artifacts archived with fingerprinting?</li>
+<li>
+<p>[ ] cleanWs() in post-always?</p>
+</li>
+<li>
+<p><strong>Ask Claude to explain the Makefile ↔ Jenkinsfile relationship:</strong>
+   <code>How does this Jenkinsfile use the Makefile as a contract?
+   Where does it call make directly vs running the commands itself?</code></p>
+</li>
+</ol>
+<hr />
+<h2 id="exercise-3-add-a-governance-stage-to-the-pipeline-20-min">Exercise 3: Add a Governance Stage to the Pipeline (20 min)<a class="anchor" href="#exercise-3-add-a-governance-stage-to-the-pipeline-20-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>The hooks from Lab 5 run locally — but only if the developer is using Claude Code.
+A developer using a plain editor, or someone who bypassed hooks, can still push
+code that violates naming conventions or contains PII in logs.</p>
+<p>Add a CI stage that runs the same checks as a pipeline gate.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>Ask Claude to add a Governance stage to the Jenkinsfile:
+   ```
+   Add a 'Governance' stage to the Jenkinsfile that runs after Backend Build.
+   It should:</li>
+<li>Scan all new/changed Java files for class names without the Hr prefix
+      (same rule as our PostToolUse naming hook)</li>
+<li>Scan all *Service.java files for LOGGER statements containing
+      email, phone, salary, password, ssn
+      (same rule as our PostToolUse PII hook)</li>
+<li>
+<p>Fail the build (exit 1) if either check finds a violation
+   Use shell commands — no extra tools required.
+   ```</p>
+</li>
+<li>
+<p>Test it: introduce a violation and verify the pipeline would catch it:
+   <code>Temporarily create a file called EmployeeValidator.java
+   with a class name that doesn't start with 'Hr'.
+   Does the governance check catch it?</code></p>
+</li>
+<li>
+<p>Ask Claude:
+   <code>What's the relationship between the PostToolUse hooks in
+   .claude/settings.json and this Governance stage?</code>
+   Expected answer: they enforce the same rules at different layers —
+   hooks catch it during development (fast feedback), CI catches it
+   at merge time (safety net).</p>
+</li>
+</ol>
+<h3 id="key-insight">Key Insight<a class="anchor" href="#key-insight">&#182;</a></h3>
+<p>Hooks and CI stages should mirror each other for the same rules.
+Hooks = fast feedback loop. CI = safety net. Neither replaces the other.</p>
+<hr />
+<h2 id="exercise-4-permissions-profile-15-min">Exercise 4: Permissions Profile (15 min)<a class="anchor" href="#exercise-4-permissions-profile-15-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Configure a permissions profile that allows safe operations and blocks dangerous ones.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>
+<p>Ask Claude about current permissions:
+   <code>What commands am I currently allowing Claude to run without prompting?
+   What should I pre-allow for this project to reduce friction?</code></p>
+</li>
+<li>
+<p>Configure safe command permissions:
+   ```
+   Update .claude/settings.json to pre-allow these commands without prompting:</p>
+</li>
+<li>mvn compile, mvn test, mvn package (build commands)</li>
+<li>npm ci, npm run lint, npm run build (frontend commands)</li>
+<li>git status, git diff, git log (read-only git)</li>
+</ol>
+<p>But ensure these still require approval:
+   - git push, git reset (destructive git)
+   - rm, rmdir (file deletion)
+   - Any command with sudo
+   ```</p>
+<p>The <code>allowedTools</code> syntax uses glob patterns to match commands:
+   <code>json
+   {
+     "allowedTools": [
+       "Bash(mvn compile*)",
+       "Bash(mvn test*)",
+       "Bash(mvn package*)",
+       "Bash(npm ci*)",
+       "Bash(npm run lint*)",
+       "Bash(npm run build*)",
+       "Bash(git status*)",
+       "Bash(git diff*)",
+       "Bash(git log*)"
+     ]
+   }</code>
+   The <code>*</code> glob matches any arguments after the command prefix. <code>Bash(mvn compile*)</code> allows <code>mvn compile</code>, <code>mvn compile -q</code>, <code>mvn compile -f backend/pom.xml</code>, etc. Without the glob, only the exact string matches.</p>
+<ol>
+<li>
+<p><strong>Test the permissions:</strong>
+   <code>Run mvn test — did it prompt you for permission?  (Should not — the prompt appears inline in the Claude Code terminal if a command isn't pre-allowed)
+   Now try: git push origin main — did it prompt you?  (Should prompt)</code></p>
+</li>
+<li>
+<p><strong>Add a safety hook:</strong>
+   <code>Add a PreToolUse hook that blocks any Bash command containing
+   "DROP TABLE" or "DELETE FROM" to prevent accidental database mutations.</code></p>
+</li>
+</ol>
+<hr />
+<h2 id="exercise-5-the-self-improvement-coda-5-min">Exercise 5: The Self-Improvement Coda (5 min)<a class="anchor" href="#exercise-5-the-self-improvement-coda-5-min">&#182;</a></h2>
+<ol>
+<li>Add to CLAUDE.md:
+   ```markdown
+   ## CI/CD</li>
+<li>Makefile defines pipeline stages (platform-agnostic)</li>
+<li>Jenkinsfile orchestrates (production CI)</li>
+<li>Package stage gated to main and release/* branches only</li>
+</ol>
+<p>## Permissions
+   - Build/test/lint commands pre-allowed
+   - Git push, file deletion, sudo require approval
+   - DROP TABLE / DELETE FROM blocked by hook
+   ```</p>
+<ol>
+<li>
+<p><strong>Reflect on settings levels:</strong>
+   <code>What would you put in your personal ~/.claude/settings.json that
+   you would NOT want to commit to the team repo?</code>
+   Expected answers: personal model preferences, personal notification settings, allowedTools for tools specific to their machine setup.</p>
+</li>
+<li>
+<p><strong>Reflect:</strong> The three governance layers are now in place:</p>
+</li>
+<li><strong>Hooks</strong> (Lab 5): schema guard, naming convention, PII detection</li>
+<li><strong>Permissions</strong> (this lab): safe commands allowed, dangerous ones blocked</li>
+<li><strong>CI/CD</strong> (this lab): automated quality gates on every PR</li>
+</ol>
+<hr />
+<h2 id="success-criteria">Success Criteria<a class="anchor" href="#success-criteria">&#182;</a></h2>
+<ul>
+<li>[ ] <code>Makefile</code> exists with all composite targets; <code>make help</code> works</li>
+<li>[ ] <code>Jenkinsfile</code> uses declarative syntax with branch-gated Package stage</li>
+<li>[ ] Jenkinsfile includes Governance stage mirroring Lab 5 hooks</li>
+<li>[ ] Permissions configured: build commands allowed, destructive commands blocked</li>
+<li>[ ] You can explain: Makefile (what) vs Jenkinsfile (how) vs permissions (who can)</li>
+</ul>
+<hr />
+<h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">&#182;</a></h2>
+<ol>
+<li><strong>Makefile is the contract</strong> — CI tools change; the Makefile stays. Migrate CI platforms by rewriting one file.</li>
+<li><strong>Permissions are team-shared</strong> — <code>.claude/settings.json</code> in git. Every developer gets the same safety profile.</li>
+<li><strong>Hooks and CI mirror each other</strong> — hooks catch violations during development (fast feedback), CI catches them at merge time (safety net). Neither replaces the other.</li>
+<li><strong>Two levels of settings</strong> — project-level <code>.claude/settings.json</code> for team governance, user-level <code>~/.claude/settings.json</code> for personal preferences.</li>
+<li><strong>Three governance layers</strong> — hooks (local enforcement), permissions (action control), CI/CD (pipeline gates). Together they create enterprise-grade safety.</li>
+</ol>
+<hr />
+<details>
+<summary><strong>Escape Hatch</strong> — Governance stage for Jenkinsfile</summary>
+
+
+<pre><code class="language-groovy">stage('Governance') {
+    steps {
+        sh '''
+            VIOLATIONS=0
+
+            # Check 1: Java class names must start with Hr
+            for f in \$(find backend/hrapp-service/src -name &quot;*.java&quot; -newer /dev/null 2&gt;/dev/null || find backend/hrapp-service/src -name &quot;*.java&quot;); do
+                classname=\$(basename &quot;\$f&quot; .java)
+                if ! echo &quot;\$classname&quot; | grep -q &quot;^Hr&quot;; then
+                    echo &quot;NAMING VIOLATION: \$f has class '\$classname' — must start with 'Hr'&quot;
+                    VIOLATIONS=1
+                fi
+            done
+
+            # Check 2: Service.java files must not log PII
+            for f in \$(find backend/hrapp-service/src -name &quot;*Service.java&quot;); do
+                if grep -iE &quot;LOGGER.*\\b(email|phone|salary|password|ssn)\\b&quot; &quot;\$f&quot; &gt; /dev/null 2&gt;&amp;1; then
+                    echo &quot;PII VIOLATION: \$f contains sensitive data in LOGGER statement&quot;
+                    VIOLATIONS=1
+                fi
+            done
+
+            if [ &quot;\$VIOLATIONS&quot; -ne 0 ]; then
+                echo &quot;BUILD FAILED: Governance checks found violations&quot;
+                exit 1
+            fi
+        '''
+    }
+}
+</code></pre>
+
+</details><div class="footer-nav"><a href="../index.html">← All Labs</a><a href="lab-10-mcp-mysql.html">← Previous</a><a href="lab-12-capstone.html">Next →</a><a href="https://github.com/ssthakuraa/claude-code-workshop" target="_blank">GitHub Repo</a></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 03-skills-commands — Claude Code Workshop</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.7; color: #1a1a2e; background: #fafafa; margin: 0;
+}
+.page-wrap {
+  max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem;
+  background: #fff; min-height: 100vh;
+  border-left: 1px solid #e8e8e8; border-right: 1px solid #e8e8e8;
+  box-shadow: 0 0 40px rgba(0,0,0,0.04);
+}
+.page-header {
+  border-bottom: 2px solid #2563eb; padding-bottom: 0.25rem; margin-bottom: 1.5rem;
+}
+.page-header h1 { font-size: 1.75rem; margin: 0 0 0.25rem; color: #1e3a5f; }
+.page-header .subtitle { color: #64748b; font-size: 0.9rem; }
+h1 { font-size: 1.6rem; color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.3rem; }
+h2 { font-size: 1.3rem; color: #1e3a5f; margin-top: 2.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.3rem; }
+h3 { font-size: 1.05rem; color: #334155; margin-top: 1.5rem; }
+h4 { font-size: 0.95rem; color: #475569; }
+h2:first-of-type, h3:first-of-type { margin-top: 0; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+ul, ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+li { margin: 0.25rem 0; }
+li li { margin: 0; }
+img { max-width: 100%; border-radius: 6px; }
+blockquote {
+  border-left: 4px solid #2563eb; padding: 0.5rem 1rem; margin: 1rem 0;
+  background: #f8fafc; border-radius: 0 6px 6px 0; color: #334155;
+}
+blockquote > p:first-child { margin-top: 0.2rem; }
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+th, td { border: 1px solid #e2e8f0; padding: 0.45rem 0.65rem; text-align: left; }
+th { background: #f1f5f9; font-weight: 600; color: #1e3a5f; }
+tr:nth-child(even) { background: #f8fafc; }
+pre {
+  background: #1e293b; color: #e2e8f0; padding: 1rem 1.25rem;
+  border-radius: 8px; overflow-x: auto; font-size: 0.85rem; margin: 1rem 0;
+  line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+code {
+  background: #f1f5f9; color: #dc2626; padding: 0.15em 0.35em;
+  border-radius: 4px; font-size: 0.88em; font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+}
+pre code { color: inherit; }
+details { margin: 1rem 0; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; }
+summary { cursor: pointer; padding: 0.75rem 1rem; font-weight: 600; color: #2563eb; user-select: none; }
+summary:hover { background: #f1f5f9; }
+details[open] summary { border-bottom: 1px solid #e2e8f0; }
+details > div, details > pre, details > p { padding: 0 1rem 1rem; }
+hr { border: none; border-top: 2px solid #e2e8f0; margin: 2rem 0; }
+nav.toc {
+  border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.5rem;
+  margin: 1rem 0 2rem; background: #f8fafc;
+}
+.toc-header { font-weight: 700; color: #1e3a5f; margin-bottom: 0.5rem; font-size: 0.95rem; }
+nav.toc a { color: #475569; font-size: 0.85rem; display: block; padding: 0.15rem 0; text-decoration: none; }
+nav.toc a:hover { color: #2563eb; }
+.back-link {
+  display: inline-block; margin-top: 3rem; padding: 0.5rem 1.25rem;
+  background: #2563eb; color: #fff; border-radius: 4px; font-size: 0.85rem;
+  text-decoration: none; font-weight: 500;
+}
+.back-link:hover { background: #1d4ed8; color: #fff; text-decoration: none; }
+.footer-nav { margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid #e2e8f0; display: flex; gap: 1rem; flex-wrap: wrap; }
+.footer-nav a { display: inline-block; font-size: 0.9rem; padding: 0.4rem 0.8rem; background: #f1f5f9; border-radius: 4px; text-decoration: none; }
+.footer-nav a:hover { background: #e2e8f0; text-decoration: none; }
+input[type="checkbox"] { margin-right: 0.3rem; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+<div class="page-header"><h1>Lab 03-skills-commands</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><nav class="toc">
+<div class="toc-header">Contents</div>
+  <a href="#lab-3-skills-amp-commands-reusable-knowledge-packs">Lab 3: Skills &amp; Commands — Reusable Knowledge Packs</a>
+    <a href="#learning-objective">Learning Objective</a>
+    <a href="#the-key-concepts">The Key Concepts</a>
+      <a href="#skills-claudeskills">Skills (<code>.claude/skills/</code>)</a>
+      <a href="#slash-commands-claudecommands">Slash Commands (<code>.claude/commands/</code>)</a>
+      <a href="#the-rule">The Rule</a>
+    <a href="#setup">Setup</a>
+    <a href="#exercise-1-the-manual-way-15-min">Exercise 1: The Manual Way (15 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#instructions">Instructions</a>
+    <a href="#exercise-2-create-the-skill-20-min">Exercise 2: Create the Skill (20 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#instructions">Instructions</a>
+    <a href="#exercise-3-use-the-skill-10-min">Exercise 3: Use the Skill (10 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#instructions">Instructions</a>
+      <a href="#what-you-should-see">What You Should See</a>
+    <a href="#exercise-3-wire-frontend-to-real-api-10-min">Exercise 3: Wire Frontend to Real API (10 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#the-key-concept">The Key Concept</a>
+      <a href="#instructions">Instructions</a>
+    <a href="#exercise-4-create-a-slash-command-10-min">Exercise 4: Create a Slash Command (10 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#instructions">Instructions</a>
+    <a href="#exercise-5-the-self-improvement-coda-5-min">Exercise 5: The Self-Improvement Coda (5 min)</a>
+    <a href="#success-criteria">Success Criteria</a>
+    <a href="#key-takeaways">Key Takeaways</a>
+</nav><h1 id="lab-3-skills-amp-commands-reusable-knowledge-packs">Lab 3: Skills &amp; Commands — Reusable Knowledge Packs<a class="anchor" href="#lab-3-skills-amp-commands-reusable-knowledge-packs">&#182;</a></h1>
+<p><strong>Duration:</strong> 60 minutes
+<strong>Day:</strong> 1 — Foundation
+<strong>Builds On:</strong> Lab 1 (CLAUDE.md), Lab 2 (Plan Mode)
+<strong>Produces:</strong> A <code>/scaffold-entity</code> skill and a <code>/run-tests</code> command</p>
+<hr />
+<h2 id="learning-objective">Learning Objective<a class="anchor" href="#learning-objective">&#182;</a></h2>
+<p>You will create a custom skill that encodes a repeatable pattern, then use it to scaffold an entity in a single prompt. You'll also create a slash command for a daily workflow. The contrast — 10 prompts manually vs 1 with a skill — demonstrates why encoding patterns is the #1 productivity multiplier.</p>
+<hr />
+<h2 id="the-key-concepts">The Key Concepts<a class="anchor" href="#the-key-concepts">&#182;</a></h2>
+<h3 id="skills-claudeskills">Skills (<code>.claude/skills/</code>)<a class="anchor" href="#skills-claudeskills">&#182;</a></h3>
+<ul>
+<li>Markdown files with YAML frontmatter that Claude discovers <strong>automatically</strong> when relevant</li>
+<li>Unlike CLAUDE.md (loaded every session), skills load <strong>on-demand</strong> — keeping context lean</li>
+<li>Can include templates, scripts, and reference files</li>
+<li>Can be invoked as slash commands with <code>user-invocable: true</code></li>
+</ul>
+<h3 id="slash-commands-claudecommands">Slash Commands (<code>.claude/commands/</code>)<a class="anchor" href="#slash-commands-claudecommands">&#182;</a></h3>
+<ul>
+<li>Markdown files that create reusable <code>/command</code> shortcuts</li>
+<li>Checked into git — shared with the team</li>
+<li>Can include inline bash to pre-compute context</li>
+<li><code>$ARGUMENTS</code> placeholder for dynamic input</li>
+</ul>
+<h3 id="the-rule">The Rule<a class="anchor" href="#the-rule">&#182;</a></h3>
+<blockquote>
+<p><em>"If you do something more than once a day, turn it into a skill or command."</em></p>
+</blockquote>
+<hr />
+<h2 id="setup">Setup<a class="anchor" href="#setup">&#182;</a></h2>
+<p>Continue from Labs 1–2. You should have CLAUDE.md with your rules in place and the Region entity built. If CLAUDE.md is missing, copy the escape hatch version from Lab 1.</p>
+<hr />
+<h2 id="exercise-1-the-manual-way-15-min">Exercise 1: The Manual Way (15 min)<a class="anchor" href="#exercise-1-the-manual-way-15-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Scaffold the <code>Country</code> entity manually to feel the pain of re-explaining patterns.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>Ask Claude to scaffold Country:
+   ```
+   Scaffold the Country entity for the HR app.</li>
+<li>HrCountry entity → countries table (countryId CHAR(2), countryName, region FK)</li>
+<li>HrCountryRepository</li>
+<li>HrCountryDTO, HrCountryRequest</li>
+<li>HrCountryService with findAll, findById, create, update, delete</li>
+<li>
+<p>HrCountryController at /app/hr/api/v1/countries
+   Follow CLAUDE.md conventions: Hr prefix, HrLogHelper, HrApiResponse envelope,
+   @PreAuthorize, @SQLRestriction for soft delete.
+   Also use MapStruct for the mapper: HrCountryMapper.
+   ```</p>
+</li>
+<li>
+<p><strong>Count the prompt length.</strong> You had to re-specify:</p>
+</li>
+<li>Every layer (entity, repo, DTO, request, service, controller, mapper)</li>
+<li>Every convention (Hr prefix, logging, response envelope, security)</li>
+<li>
+<p>The table mapping and field details</p>
+</li>
+<li>
+<p>If Claude missed anything, you'll need <strong>follow-up prompts</strong> to fix it. Count those too.</p>
+</li>
+<li>
+<p><strong>Total prompt count:</strong> _____ (likely 2–4 prompts to get it right)</p>
+</li>
+</ol>
+<blockquote>
+<p>Now imagine doing this for 8 entities. That's 16–32 prompts of mostly-repeated instructions.</p>
+</blockquote>
+<hr />
+<h2 id="exercise-2-create-the-skill-20-min">Exercise 2: Create the Skill (20 min)<a class="anchor" href="#exercise-2-create-the-skill-20-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Package the scaffolding pattern into a reusable skill.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>
+<p>Create the skill directory:
+   <code>bash
+   mkdir -p .claude/skills/scaffold-entity</code></p>
+</li>
+<li>
+<p>Ask Claude to create the skill based on the Region + Country patterns:
+   ```
+   Create a skill at .claude/skills/scaffold-entity/SKILL.md that encodes
+   our entity scaffolding pattern. The skill should:</p>
+</li>
+<li>
+<p>Accept parameters: entity name, table name, fields with types and constraints</p>
+</li>
+<li>Generate all 7 layers: Entity, Repository, DTO, Request, Mapper (MapStruct),
+      Service (with HrLogHelper entry/exit), Controller (with HrApiResponse)</li>
+<li>Follow all CLAUDE.md conventions automatically</li>
+<li>Be user-invocable as /scaffold-entity</li>
+</ol>
+<p>Base it on the patterns from HrRegion and HrCountry that we just built.
+   Include a section on common gotchas (deprecated annotations, naming strategy).
+   ```</p>
+<ol>
+<li><strong>Review the generated SKILL.md.</strong> It should have:
+   ```yaml</li>
+</ol>
+<hr />
+<p>name: scaffold-entity
+   description: Scaffold a complete HR entity with all layers following project conventions
+   user-invocable: true</p>
+<hr />
+<p>```
+   Followed by the pattern description, field mapping rules, and gotchas.</p>
+<ol>
+<li><strong>Refine the skill</strong> if needed:
+   ```
+   The skill should also mention:</li>
+<li>countryId uses @Id with String type (CHAR columns), not Integer</li>
+<li>FK relationships use @ManyToOne(fetch = FetchType.LAZY)</li>
+<li>Soft delete uses deletedAt Instant + @SQLRestriction
+   Update the skill.
+   ```</li>
+</ol>
+<hr />
+<h2 id="exercise-3-use-the-skill-10-min">Exercise 3: Use the Skill (10 min)<a class="anchor" href="#exercise-3-use-the-skill-10-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Scaffold a genuinely new entity using the skill — proving it works on something no one has built before.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>
+<p><strong>Start a fresh context:</strong>
+   <code>/clear</code></p>
+</li>
+<li>
+<p>Use the skill to scaffold Notification:
+   ```
+   /scaffold-entity
+   Entity: Notification
+   Table: hr_notifications
+   Fields:</p>
+</li>
+<li>notificationId (Long, PK, auto-generated)</li>
+<li>recipientUserId (Integer, FK → HrUser, required)</li>
+<li>notificationType (ENUM: PROBATION_ALERT, CONTRACT_EXPIRY, ACTION_COMPLETE, SYSTEM, required)</li>
+<li>title (String, max 255, required)</li>
+<li>message (String/TEXT, optional)</li>
+<li>referenceTable (String, max 60, optional)</li>
+<li>referenceId (String, max 60, optional)</li>
+<li>isRead (Boolean, default false)</li>
+<li>createdAt (Instant/LocalDateTime, auto)</li>
+<li>
+<p>No soft delete needed — notifications are lightweight.
+   ```</p>
+</li>
+<li>
+<p><strong>Compare with Exercise 1:</strong></p>
+</li>
+<li>Prompts needed in Exercise 1: _____ (2–4 to scaffold Country)</li>
+<li>Prompts needed with skill: <strong>1</strong></li>
+<li>
+<p>Did Claude follow all conventions? (Hr prefix, HrLogHelper, HrApiResponse, @PreAuthorize, @SQLRestriction, etc.)</p>
+</li>
+<li>
+<p>Verify: <code>cd backend &amp;&amp; mvn compile</code></p>
+</li>
+<li>
+<p><strong>Why this matters:</strong> Notification is a real entity your HR app will need. You didn't build it yet — the skill just delivered all 7 layers in one prompt. Compare that with Exercise 1 where you needed multiple prompts for Country and still had gaps.</p>
+</li>
+</ol>
+<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<p>One prompt → all 7 layers → compiles clean → all conventions followed. The skill eliminated the need to re-explain the pattern and delivered a production-ready entity you actually need.</p>
+<hr />
+<h2 id="exercise-3-wire-frontend-to-real-api-10-min">Exercise 3: Wire Frontend to Real API (10 min)<a class="anchor" href="#exercise-3-wire-frontend-to-real-api-10-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>You just built the Notification backend (Exercise 2). But the NotificationsPage at <code>/hr/notifications</code> currently uses hardcoded mock data. Wire it to call the real <code>/app/hr/api/v1/notifications</code> API you just scaffolded.</p>
+<h3 id="the-key-concept">The Key Concept<a class="anchor" href="#the-key-concept">&#182;</a></h3>
+<p>Frontend development often starts against mock data when the backend API isn't ready yet. This is the most common enterprise workflow — build the UI first, wire it to the real API when the backend exists.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>
+<p>Navigate to the NotificationsPage in your running frontend (<code>/hr/notifications</code>). It currently shows 5 hardcoded notifications.</p>
+</li>
+<li>
+<p>Ask Claude to wire the page to the real API:
+   ```
+   Rewire src/pages/admin/NotificationsPage.tsx to fetch notifications
+   from the real backend API at GET /app/hr/api/v1/notifications.</p>
+</li>
+</ol>
+<p>Use TanStack Query (useQuery) for the data fetching — follow the
+   pattern from src/api/employees.ts for the hook setup.
+   Replace the hardcoded mock data completely.</p>
+<p>The backend returns:
+   {
+     "status": 200,
+     "data": [array of notifications with notificationId, notificationType, title, message, isRead, createdAt]
+   }</p>
+<p>Requirements:
+   - Create a useNotifications() hook in src/api/notifications.ts
+   - Use HrStatusBadge for read/unread status (use green dot for read, amber for unread)
+   - Keep the mark-as-read and mark-all-read functionality
+   - Add loading skeletons (HrSkeleton) and empty state
+   - Sort by createdAt descending (newest first)
+   - Mark-as-read should call PUT /app/hr/api/v1/notifications/{id}/mark-read
+   - After mark-read, invalidate the notifications query so the list refreshes
+   ```</p>
+<ol>
+<li>
+<p>After Claude makes the changes, verify it compiles:
+   <code>bash
+   cd frontend &amp;&amp; npx tsc --noEmit 2&gt;&amp;1 | head -20</code></p>
+</li>
+<li>
+<p>Start the frontend and navigate to <code>/hr/notifications</code>. The page should now load data from the real Notification API you scaffolded in Exercise 2.</p>
+</li>
+</ol>
+<blockquote>
+<p><strong>Reference:</strong> A reference version exists at <code>reference/frontend/src/pages/admin/NotificationsPage.real.tsx</code>. Build your own first, then compare.</p>
+</blockquote>
+<ol>
+<li><strong>What you just learned:</strong> This is the standard enterprise workflow — mock data for rapid UI prototyping, then wire to the real API when the backend is ready. The skill gave you the backend in one prompt; wiring it is a single command on the frontend.</li>
+</ol>
+<hr />
+<h2 id="exercise-4-create-a-slash-command-10-min">Exercise 4: Create a Slash Command (10 min)<a class="anchor" href="#exercise-4-create-a-slash-command-10-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Create a <code>/run-tests</code> command for daily use.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>
+<p>Create the commands directory:
+   <code>bash
+   mkdir -p .claude/commands</code></p>
+</li>
+<li>
+<p>Ask Claude to create a test runner command:
+   ```
+   Create a slash command at .claude/commands/run-tests.md that:</p>
+</li>
+<li>Runs backend unit tests (mvn test -pl hrapp-service)</li>
+<li>Shows only failures (not full output)</li>
+<li>
+<p>Reports a summary: total tests, passed, failed
+   If $ARGUMENTS contains "frontend", also run npm run lint in frontend/.
+   ```</p>
+</li>
+<li>
+<p>Test it:
+   <code>/run-tests</code>
+   Then:
+   <code>/run-tests frontend</code></p>
+</li>
+</ol>
+<blockquote>
+<p><strong>Note:</strong> You will see <code>hireEmployee</code> test failures if you haven't implemented it yet in Lab 2. That's expected — the test suite covers the full service contract. If you completed Lab 2, those tests should pass. Either way, the command itself is working correctly if it runs and reports results.</p>
+</blockquote>
+<hr />
+<h2 id="exercise-5-the-self-improvement-coda-5-min">Exercise 5: The Self-Improvement Coda (5 min)<a class="anchor" href="#exercise-5-the-self-improvement-coda-5-min">&#182;</a></h2>
+<ol>
+<li>Add to CLAUDE.md:
+   ```markdown
+   ## Skills &amp; Commands</li>
+<li>Entity scaffolding: use /scaffold-entity skill for new entities</li>
+<li>
+<p>Test runner: /run-tests (add "frontend" arg to include lint)
+   ```</p>
+</li>
+<li>
+<p>Reflect: <em>What other patterns in your real codebase could become skills?</em></p>
+</li>
+</ol>
+<hr />
+<h2 id="success-criteria">Success Criteria<a class="anchor" href="#success-criteria">&#182;</a></h2>
+<ul>
+<li>[ ] <code>/scaffold-entity</code> skill exists in <code>.claude/skills/scaffold-entity/SKILL.md</code></li>
+<li>[ ] Notification entity scaffolded with one prompt, zero corrections</li>
+<li>[ ] NotificationsPage wired to real API via <code>useNotifications()</code> hook in <code>src/api/notifications.ts</code></li>
+<li>[ ] Mark-as-read and mark-all-read work with query invalidation</li>
+<li>[ ] <code>/run-tests</code> command exists and runs successfully</li>
+<li>[ ] Manual scaffolding (Exercise 1) required 2+ prompts; skill required 1</li>
+<li>[ ] CLAUDE.md updated with skill/command references</li>
+</ul>
+<hr />
+<h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">&#182;</a></h2>
+<ol>
+<li><strong>Skills compound engineering</strong> — define the pattern once, reuse it N times without context drift</li>
+<li><strong>Skills are on-demand, CLAUDE.md is always-on</strong> — use skills for large patterns that would bloat CLAUDE.md</li>
+<li><strong>Slash commands for daily workflows</strong> — if you do it more than once a day, make it a <code>/command</code></li>
+<li><strong>Team-shared via git</strong> — <code>.claude/skills/</code> and <code>.claude/commands/</code> are checked in. The whole team benefits.</li>
+</ol>
+<hr />
+<details>
+<summary><strong>Escape Hatch</strong> — Skill YAML frontmatter</summary>
+
+
+<pre><code class="language-yaml">---
+name: scaffold-entity
+description: Scaffold a complete HR entity (Entity, Repo, DTO, Request, Mapper, Service, Controller) following CLAUDE.md conventions
+user-invocable: true
+---
+
+## Entity Scaffolding Pattern
+
+When invoked, generate all 7 layers for an HR entity:
+
+### 1. Entity (model/)
+- Class: Hr{EntityName}, @Entity, @Table(name = &quot;{table_name}&quot;)
+- @SQLRestriction(&quot;deleted_at IS NULL&quot;) for soft delete
+- @EntityListeners(HrAuditListener.class)
+- FKs: @ManyToOne(fetch = FetchType.LAZY)
+
+### 2. Repository (repository/)
+- Hr{EntityName}Repository extends JpaRepository&lt;Hr{EntityName}, {IdType}&gt;
+
+### 3. DTO (dto/response/)
+- Hr{EntityName}DTO with all display fields
+
+### 4. Request (dto/request/)
+- Hr{EntityName}Request with validation annotations (@NotBlank, @Size, etc.)
+
+### 5. Mapper (mapper/)
+- Hr{EntityName}Mapper using MapStruct (@Mapper(componentModel = &quot;spring&quot;))
+- toDTO, fromRequest, updateFromRequest methods
+
+### 6. Service (service/)
+- Hr{EntityName}Service with HrLogHelper entry/exit on EVERY method
+- findAll, findById, create, update, delete
+- @Transactional, @PreAuthorize
+
+### 7. Controller (controller/)
+- Hr{EntityName}Controller at /app/hr/api/v1/{plural_name}
+- ALL endpoints return HrApiResponse&lt;T&gt;
+
+## Gotchas
+- Use @SQLRestriction NOT @Where (deprecated Hibernate 6.2)
+- Column names must match schema.sql exactly (PhysicalNamingStrategyStandardImpl)
+- Never log PII in HrLogHelper calls
+</code></pre>
+
+</details><div class="footer-nav"><a href="../index.html">← All Labs</a><a href="lab-02-plan-mode.html">← Previous</a><a href="lab-04-context-management.html">Next →</a><a href="https://github.com/ssthakuraa/claude-code-workshop" target="_blank">GitHub Repo</a></div>
+</div>
+</body>
+</html>

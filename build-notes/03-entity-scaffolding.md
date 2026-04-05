@@ -37,8 +37,8 @@ Scaffold the Region entity following CLAUDE.md conventions:
 
 ## What Failed First
 
-- **Symptom:** Generated `HrRegion` used `@Column(name = "region_id")` on the `@Id` field but the DB column is `REGION_ID` (Oracle-style). Flyway migration failed.
-- **Root cause:** Claude defaulted to lowercase column naming. Schema uses uppercase because it was designed for Oracle.
+- **Symptom:** Generated `HrRegion` used `@Column(name = "region_id")` on the `@Id` field but the DB column is `REGION_ID` (uppercase style). Flyway migration failed.
+- **Root cause:** Claude defaulted to lowercase column naming. Schema uses uppercase because it was designed for Vertex Tech conventions.
 - **Fix:** Added `spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl` to application.yml and documented in CLAUDE.md.
 
 - **Symptom:** `@SQLRestriction` import not found — Claude used the deprecated `@Where` annotation.

@@ -9,7 +9,7 @@ This file governs Claude Code behavior for this project. Always read this before
 **HR Enterprise Platform** — Spring Boot + React monorepo.
 
 - **Backend:** Java 21, Spring Boot 3.2, Maven multi-module (`hrapp-common` + `hrapp-service`)
-- **Frontend:** React 19, TypeScript, Vite, Tailwind CSS (Oracle Redwood tokens)
+- **Frontend:** React 19, TypeScript, Vite, Tailwind CSS (Vertex Tech Modern tokens)
 - **Database:** MySQL 8.0, Flyway migrations
 - **API Base Path:** `/app/hr/api/v1/`
 

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 12-capstone — Claude Code Workshop</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.7; color: #1a1a2e; background: #fafafa; margin: 0;
+}
+.page-wrap {
+  max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem;
+  background: #fff; min-height: 100vh;
+  border-left: 1px solid #e8e8e8; border-right: 1px solid #e8e8e8;
+  box-shadow: 0 0 40px rgba(0,0,0,0.04);
+}
+.page-header {
+  border-bottom: 2px solid #2563eb; padding-bottom: 0.25rem; margin-bottom: 1.5rem;
+}
+.page-header h1 { font-size: 1.75rem; margin: 0 0 0.25rem; color: #1e3a5f; }
+.page-header .subtitle { color: #64748b; font-size: 0.9rem; }
+h1 { font-size: 1.6rem; color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.3rem; }
+h2 { font-size: 1.3rem; color: #1e3a5f; margin-top: 2.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.3rem; }
+h3 { font-size: 1.05rem; color: #334155; margin-top: 1.5rem; }
+h4 { font-size: 0.95rem; color: #475569; }
+h2:first-of-type, h3:first-of-type { margin-top: 0; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+ul, ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+li { margin: 0.25rem 0; }
+li li { margin: 0; }
+img { max-width: 100%; border-radius: 6px; }
+blockquote {
+  border-left: 4px solid #2563eb; padding: 0.5rem 1rem; margin: 1rem 0;
+  background: #f8fafc; border-radius: 0 6px 6px 0; color: #334155;
+}
+blockquote > p:first-child { margin-top: 0.2rem; }
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+th, td { border: 1px solid #e2e8f0; padding: 0.45rem 0.65rem; text-align: left; }
+th { background: #f1f5f9; font-weight: 600; color: #1e3a5f; }
+tr:nth-child(even) { background: #f8fafc; }
+pre {
+  background: #1e293b; color: #e2e8f0; padding: 1rem 1.25rem;
+  border-radius: 8px; overflow-x: auto; font-size: 0.85rem; margin: 1rem 0;
+  line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+code {
+  background: #f1f5f9; color: #dc2626; padding: 0.15em 0.35em;
+  border-radius: 4px; font-size: 0.88em; font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+}
+pre code { color: inherit; }
+details { margin: 1rem 0; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; }
+summary { cursor: pointer; padding: 0.75rem 1rem; font-weight: 600; color: #2563eb; user-select: none; }
+summary:hover { background: #f1f5f9; }
+details[open] summary { border-bottom: 1px solid #e2e8f0; }
+details > div, details > pre, details > p { padding: 0 1rem 1rem; }
+hr { border: none; border-top: 2px solid #e2e8f0; margin: 2rem 0; }
+nav.toc {
+  border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.5rem;
+  margin: 1rem 0 2rem; background: #f8fafc;
+}
+.toc-header { font-weight: 700; color: #1e3a5f; margin-bottom: 0.5rem; font-size: 0.95rem; }
+nav.toc a { color: #475569; font-size: 0.85rem; display: block; padding: 0.15rem 0; text-decoration: none; }
+nav.toc a:hover { color: #2563eb; }
+.back-link {
+  display: inline-block; margin-top: 3rem; padding: 0.5rem 1.25rem;
+  background: #2563eb; color: #fff; border-radius: 4px; font-size: 0.85rem;
+  text-decoration: none; font-weight: 500;
+}
+.back-link:hover { background: #1d4ed8; color: #fff; text-decoration: none; }
+.footer-nav { margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid #e2e8f0; display: flex; gap: 1rem; flex-wrap: wrap; }
+.footer-nav a { display: inline-block; font-size: 0.9rem; padding: 0.4rem 0.8rem; background: #f1f5f9; border-radius: 4px; text-decoration: none; }
+.footer-nav a:hover { background: #e2e8f0; text-decoration: none; }
+input[type="checkbox"] { margin-right: 0.3rem; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+<div class="page-header"><h1>Lab 12-capstone</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><nav class="toc">
+<div class="toc-header">Contents</div>
+  <a href="#lab-12-capstone-end-to-end-visual-improvement">Lab 12: Capstone — End-to-End Visual Improvement</a>
+    <a href="#learning-objective">Learning Objective</a>
+    <a href="#the-task-dashboard-chart-swap">The Task: Dashboard Chart Swap</a>
+    <a href="#part-1-plan-amp-setup-60-min">Part 1: Plan &amp; Setup (60 min)</a>
+      <a href="#step-1-before-screenshot-5-min">Step 1: Before Screenshot (5 min)</a>
+      <a href="#step-2-plan-mode-15-min">Step 2: Plan Mode (15 min)</a>
+      <a href="#step-3-set-up-hooks-10-min">Step 3: Set Up Hooks (10 min)</a>
+      <a href="#step-4-write-a-verification-spec-15-min">Step 4: Write a Verification Spec (15 min)</a>
+      <a href="#step-5-context-discipline-15-min">Step 5: Context Discipline (15 min)</a>
+    <a href="#part-2-implement-amp-verify-90-min">Part 2: Implement &amp; Verify (90 min)</a>
+      <a href="#step-6-implement-the-change-20-min">Step 6: Implement the Change (20 min)</a>
+      <a href="#step-7-visual-verification-20-min">Step 7: Visual Verification (20 min)</a>
+      <a href="#step-8-subagent-review-10-min">Step 8: Subagent Review (10 min)</a>
+      <a href="#step-9-full-verification-loop-25-min">Step 9: Full Verification Loop (25 min)</a>
+      <a href="#step-10-the-final-self-improvement-coda-15-min">Step 10: The Final Self-Improvement Coda (15 min)</a>
+    <a href="#success-criteria">Success Criteria</a>
+    <a href="#capstone-presentation-15-min-per-student">Capstone Presentation (15 min per student)</a>
+    <a href="#your-adoption-plan-take-this-home">Your Adoption Plan (Take This Home)</a>
+</nav><h1 id="lab-12-capstone-end-to-end-visual-improvement">Lab 12: Capstone — End-to-End Visual Improvement<a class="anchor" href="#lab-12-capstone-end-to-end-visual-improvement">&#182;</a></h1>
+<p><strong>Duration:</strong> 150 minutes (Part 1: 60 min, Part 2: 90 min)
+<strong>Day:</strong> 4 — Mastery
+<strong>Builds On:</strong> Everything from Labs 1–11
+<strong>Produces:</strong> A dashboard visualization improvement — fully verified with screenshots and data checks</p>
+<hr />
+<h2 id="learning-objective">Learning Objective<a class="anchor" href="#learning-objective">&#182;</a></h2>
+<p>You will improve the dashboard visualization using every technique from this workshop. This is the synthesis lab. There is no new concept to learn. The goal is to prove you can orchestrate CLAUDE.md, Plan Mode, Skills, Hooks, Subagents, Verification, and MCP into a single, cohesive workflow.</p>
+<hr />
+<h2 id="the-task-dashboard-chart-swap">The Task: Dashboard Chart Swap<a class="anchor" href="#the-task-dashboard-chart-swap">&#182;</a></h2>
+<p><strong>Management request:</strong> The dashboard charts need a visual refresh to match new stakeholder requirements:</p>
+<ol>
+<li><strong>"Headcount by Country"</strong> — currently a donut chart, convert to a <strong>horizontal bar chart</strong> for easier value comparison between countries</li>
+<li><strong>"Top Departments"</strong> — currently a horizontal bar chart, convert to a <strong>donut chart</strong> with the title <strong>"Headcount by Department"</strong> for a more compact look</li>
+</ol>
+<p>The change is in <code>frontend/src/pages/dashboard/DashboardPage.tsx</code>. Two <code>Card</code> components need their chart component swapped, with data adapted to the new format.</p>
+<p><strong>Visual proof:</strong> Take a screenshot before and after — the swap should be obvious and visually correct.</p>
+<hr />
+<h2 id="part-1-plan-amp-setup-60-min">Part 1: Plan &amp; Setup (60 min)<a class="anchor" href="#part-1-plan-amp-setup-60-min">&#182;</a></h2>
+<h3 id="step-1-before-screenshot-5-min">Step 1: Before Screenshot (5 min)<a class="anchor" href="#step-1-before-screenshot-5-min">&#182;</a></h3>
+<p>First, capture the current state for comparison:</p>
+<pre><code>Navigate to http://localhost:5173/hr/dashboard (or wherever the dashboard is).
+Take a screenshot of the charts row. This is our &quot;before&quot; image.
+</code></pre>
+<h3 id="step-2-plan-mode-15-min">Step 2: Plan Mode (15 min)<a class="anchor" href="#step-2-plan-mode-15-min">&#182;</a></h3>
+<p>Enter Plan Mode and design the approach:</p>
+<pre><code>/plan
+I need to swap two charts on the dashboard:
+1. Headcount by Country: change from HrDonutChart to HrHorizontalBarChart
+2. Top Departments: change from HrHorizontalBarChart to HrDonutChart
+
+Read DashboardPage.tsx and identify exactly what changes are needed.
+Plan the data format adapters — each chart component expects slightly different
+data shapes. Don't implement yet.
+</code></pre>
+<p>Iterate on the plan. <strong>Do not proceed until the plan is solid.</strong></p>
+<h3 id="step-3-set-up-hooks-10-min">Step 3: Set Up Hooks (10 min)<a class="anchor" href="#step-3-set-up-hooks-10-min">&#182;</a></h3>
+<p>Verify your hooks from Lab 5 are active. They should catch:
+- Any accidental edit to <code>schema.sql</code>
+- Any new Java class without <code>Hr</code> prefix
+- Any PII in logger statements</p>
+<p>This is a frontend-only change, but verify hooks are in place.</p>
+<h3 id="step-4-write-a-verification-spec-15-min">Step 4: Write a Verification Spec (15 min)<a class="anchor" href="#step-4-write-a-verification-spec-15-min">&#182;</a></h3>
+<p>Define what "done" looks like before implementing:</p>
+<pre><code>Create a verification checklist for the dashboard chart swap.
+What should I see in a screenshot after the change?
+What data integrity checks should I run via Playwright and MySQL?
+</code></pre>
+<p>Save this as a reference — you'll use it in Part 2.</p>
+<h3 id="step-5-context-discipline-15-min">Step 5: Context Discipline (15 min)<a class="anchor" href="#step-5-context-discipline-15-min">&#182;</a></h3>
+<p>Before implementation, use <code>/compact</code> to free context. You're about to start the build phase and want Claude focused on the task, not the plan conversation.</p>
+<hr />
+<h2 id="part-2-implement-amp-verify-90-min">Part 2: Implement &amp; Verify (90 min)<a class="anchor" href="#part-2-implement-amp-verify-90-min">&#182;</a></h2>
+<h3 id="step-6-implement-the-change-20-min">Step 6: Implement the Change (20 min)<a class="anchor" href="#step-6-implement-the-change-20-min">&#182;</a></h3>
+<p>Switch to normal mode and implement:</p>
+<pre><code>Implement the dashboard chart swap following the plan:
+1. Headcount by Country → HrHorizontalBarChart
+2. Top Departments → HrDonutChart (title: &quot;Headcount by Department&quot;)
+
+Make minimal changes — only what's needed to swap the charts.
+</code></pre>
+<h3 id="step-7-visual-verification-20-min">Step 7: Visual Verification (20 min)<a class="anchor" href="#step-7-visual-verification-20-min">&#182;</a></h3>
+<p>After — take screenshots and compare:</p>
+<pre><code>Navigate to the dashboard and take a screenshot of the charts row.
+Compare to our &quot;before&quot; screenshot:
+1. Is Headcount by Country now a horizontal bar chart?
+2. Is Top Departments now a donut chart with title &quot;Headcount by Department&quot;?
+3. Are the data values correct? (same numbers, different visualization)
+4. Are there any console errors?
+Report what you find.
+</code></pre>
+<p>If issues are found, iterate:</p>
+<pre><code>Fix [the specific issue found], then take another screenshot.
+</code></pre>
+<h3 id="step-8-subagent-review-10-min">Step 8: Subagent Review (10 min)<a class="anchor" href="#step-8-subagent-review-10-min">&#182;</a></h3>
+<p>Send the implementation to the reviewer:</p>
+<pre><code>Use the component-reviewer agent to review the changed DashboardPage.tsx.
+Check accessibility, chart data formats, and edge cases.
+</code></pre>
+<p>Apply any feedback.</p>
+<h3 id="step-9-full-verification-loop-25-min">Step 9: Full Verification Loop (25 min)<a class="anchor" href="#step-9-full-verification-loop-25-min">&#182;</a></h3>
+<p>Now verify with the complete three-layer loop from Labs 8–10:</p>
+<p><strong>9a. Backend compilation (still works):</strong></p>
+<pre><code>Run make build to confirm the full project still compiles after the change.
+</code></pre>
+<p><strong>9b. Visual verification (Playwright MCP):</strong> Take the "after" screenshot.</p>
+<pre><code>Navigate to the dashboard. Screenshot the charts row. Compare to the before image.
+</code></pre>
+<p><strong>9c. Data verification (MySQL MCP):</strong> The chart data comes from the backend API, which queries the database. Verify the raw data:</p>
+<pre><code>Query the database to verify the headcount numbers that should appear:
+1. Employee count by country (through the location → country join)
+2. Employee count by department
+Show me the actual counts. Do they match what the dashboard charts display?
+</code></pre>
+<p><strong>9d. Cross-verification:</strong></p>
+<pre><code>Compare: does the dashboard chart data match the raw database query results?
+Any mismatch = a bug in the data layer.
+</code></pre>
+<h3 id="step-10-the-final-self-improvement-coda-15-min">Step 10: The Final Self-Improvement Coda (15 min)<a class="anchor" href="#step-10-the-final-self-improvement-coda-15-min">&#182;</a></h3>
+<ol>
+<li>
+<p><strong>Review your CLAUDE.md.</strong> Compare it to what you started with on Day 1.
+   <code>Compare my CLAUDE.md now to what it looked like at the start of Lab 1.
+   How many rules were added across the workshop?</code></p>
+</li>
+<li>
+<p><strong>Reflect on the techniques used:</strong>
+   | Technique | Where You Used It |
+   |-----------|------------------|
+   | CLAUDE.md | Conventions followed automatically |
+   | Plan Mode | Step 2 — feature design |
+   | Context Management | Step 5 — /compact before build |
+   | Hooks | Passive check during implementation |
+   | Subagents | Step 8 — component review |
+   | Verification (visual) | Step 7 — Playwright before/after screenshots |
+   | Verification (data) | Step 9c — MySQL query |
+   | Full verification loop | Step 9d — cross-reference chart data with DB |
+   | Full pipeline (make build) | Step 9a — compile check |</p>
+</li>
+<li>
+<p><strong>The compounding effect:</strong> On Day 1, a simple change took 10 prompts and multiple corrections. By Day 4, you made a multi-component visual change with fewer corrections because your CLAUDE.md, hooks, and verification loops prevented mistakes that would have slowed you down.</p>
+</li>
+</ol>
+<hr />
+<h2 id="success-criteria">Success Criteria<a class="anchor" href="#success-criteria">&#182;</a></h2>
+<ul>
+<li>[ ] Dashboard planned in Plan Mode before any implementation</li>
+<li>[ ] "Headcount by Country" displays as a horizontal bar chart</li>
+<li>[ ] "Top Departments" displays as a donut chart titled "Headcount by Department"</li>
+<li>[ ] Before/after screenshots captured and compared</li>
+<li>[ ] Subagent review completed and feedback applied</li>
+<li>[ ] Playwright MCP verified the visual change</li>
+<li>[ ] MySQL MCP verified the underlying data matches the chart values</li>
+<li>[ ] <code>make build</code> still passes (no broken code)</li>
+<li>[ ] CLAUDE.md grown significantly from Day 1 starting point</li>
+</ul>
+<hr />
+<h2 id="capstone-presentation-15-min-per-student">Capstone Presentation (15 min per student)<a class="anchor" href="#capstone-presentation-15-min-per-student">&#182;</a></h2>
+<p>After completing the capstone, be prepared to walk through:</p>
+<ol>
+<li><strong>Your plan</strong> — what did Plan Mode surface that you wouldn't have caught otherwise?</li>
+<li><strong>Your before/after screenshots</strong> — show the visual diff</li>
+<li><strong>Your verification loop</strong> — show the Playwright screenshot and the MySQL data cross-check</li>
+<li><strong>Your CLAUDE.md growth</strong> — what rules did you add? Which was most valuable?</li>
+<li><strong>Your adoption plan</strong> — what will you bring back to your team on Monday?</li>
+</ol>
+<hr />
+<h2 id="your-adoption-plan-take-this-home">Your Adoption Plan (Take This Home)<a class="anchor" href="#your-adoption-plan-take-this-home">&#182;</a></h2>
+<p>Write three concrete commitments:</p>
+<ol>
+<li>
+<p><strong>CLAUDE.md:</strong> <em>"I will create a CLAUDE.md for <strong><em>_</em></strong><strong><em>_</em>_ that includes </strong><strong><em>_</em></strong>____"</em></p>
+</li>
+<li>
+<p><strong>Hooks:</strong> <em>"I will add a <strong><em>_</em></strong><strong><em>_</em>_ hook that prevents </strong><strong><em>_</em></strong>____"</em></p>
+</li>
+<li>
+<p><strong>Workflow:</strong> <em>"I will use <strong><em>_</em></strong><strong><em>_</em>_ (Plan Mode / Skills / Subagents / MCP) for </strong><strong><em>_</em></strong>____"</em></p>
+</li>
+</ol>
+<blockquote>
+<p>Share these with your team. Claude Code compounds — the sooner you start, the faster it improves.</p>
+</blockquote>
+<hr />
+<details>
+<summary><strong>Escape Hatch</strong> — what the change looks like</summary>
+
+The swap is straightforward — only the dashboard file changes:
+
+**Headcount by Country:** Replace `HrDonutChart` with `HrHorizontalBarChart`. The country data needs a small format adapter for bar chart (remove percentage/centerLabel fields).
+
+**Top Departments:** Replace `HrHorizontalBarChart` with `HrDonutChart`. The department data needs percentage calculation for the donut chart.
+
+The actual change is roughly 15-20 lines of JSX with data format adjustments.
+
+If you're behind at the end of Part 2:
+1. Focus on the visual change and Playwright verification
+2. Skip the MySQL cross-check step — the data comes from the backend API which is already verified by `make build`
+3. For the presentation, focus on: your plan, your before/after screenshots, and your CLAUDE.md growth
+</details><div class="footer-nav"><a href="../index.html">← All Labs</a><a href="lab-11-cicd-permissions.html">← Previous</a><a href="https://github.com/ssthakuraa/claude-code-workshop" target="_blank">GitHub Repo</a></div>
+</div>
+</body>
+</html>

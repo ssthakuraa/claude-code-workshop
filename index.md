@@ -3,7 +3,7 @@
 ## A 4-Day Hands-On Workshop
 
 **Audience:** Engineers, Tech Leads, Architects working in enterprise codebases
-**Lab Project:** Enterprise HR Management System (Spring Boot + React, Oracle Redwood Design System)
+**Lab Project:** Enterprise HR Management System (Spring Boot + React, Vertex Tech Modern Design System)
 
 ---
 

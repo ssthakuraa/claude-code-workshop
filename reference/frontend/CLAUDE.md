@@ -18,7 +18,7 @@ Applies when working in the `frontend/` directory. Loaded in addition to root CL
 
 ## Styling
 
-- Use Oracle Redwood design tokens via Tailwind CSS
+- Use Vertex Tech Modern design tokens via Tailwind CSS
 - Color tokens: `redwood-primary`, `redwood-secondary`, `redwood-surface` — never raw hex values
 - Layout: use the existing `HrLayout`, `HrPageHeader`, `HrCard` wrapper components
 

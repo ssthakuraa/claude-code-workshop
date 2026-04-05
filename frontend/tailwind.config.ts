@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Oracle Redwood Design System (RDS 24C) tokens
+        // Vertex Tech Modern Design System (MDS) tokens
         'blue-60': '#1F6BCC',
         'blue-50': '#2B7DE0',
         'blue-10': '#C7E0FF',

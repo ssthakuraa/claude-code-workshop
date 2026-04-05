@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 10-mcp-mysql — Claude Code Workshop</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.7; color: #1a1a2e; background: #fafafa; margin: 0;
+}
+.page-wrap {
+  max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem;
+  background: #fff; min-height: 100vh;
+  border-left: 1px solid #e8e8e8; border-right: 1px solid #e8e8e8;
+  box-shadow: 0 0 40px rgba(0,0,0,0.04);
+}
+.page-header {
+  border-bottom: 2px solid #2563eb; padding-bottom: 0.25rem; margin-bottom: 1.5rem;
+}
+.page-header h1 { font-size: 1.75rem; margin: 0 0 0.25rem; color: #1e3a5f; }
+.page-header .subtitle { color: #64748b; font-size: 0.9rem; }
+h1 { font-size: 1.6rem; color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.3rem; }
+h2 { font-size: 1.3rem; color: #1e3a5f; margin-top: 2.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.3rem; }
+h3 { font-size: 1.05rem; color: #334155; margin-top: 1.5rem; }
+h4 { font-size: 0.95rem; color: #475569; }
+h2:first-of-type, h3:first-of-type { margin-top: 0; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+ul, ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+li { margin: 0.25rem 0; }
+li li { margin: 0; }
+img { max-width: 100%; border-radius: 6px; }
+blockquote {
+  border-left: 4px solid #2563eb; padding: 0.5rem 1rem; margin: 1rem 0;
+  background: #f8fafc; border-radius: 0 6px 6px 0; color: #334155;
+}
+blockquote > p:first-child { margin-top: 0.2rem; }
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+th, td { border: 1px solid #e2e8f0; padding: 0.45rem 0.65rem; text-align: left; }
+th { background: #f1f5f9; font-weight: 600; color: #1e3a5f; }
+tr:nth-child(even) { background: #f8fafc; }
+pre {
+  background: #1e293b; color: #e2e8f0; padding: 1rem 1.25rem;
+  border-radius: 8px; overflow-x: auto; font-size: 0.85rem; margin: 1rem 0;
+  line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+code {
+  background: #f1f5f9; color: #dc2626; padding: 0.15em 0.35em;
+  border-radius: 4px; font-size: 0.88em; font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+}
+pre code { color: inherit; }
+details { margin: 1rem 0; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; }
+summary { cursor: pointer; padding: 0.75rem 1rem; font-weight: 600; color: #2563eb; user-select: none; }
+summary:hover { background: #f1f5f9; }
+details[open] summary { border-bottom: 1px solid #e2e8f0; }
+details > div, details > pre, details > p { padding: 0 1rem 1rem; }
+hr { border: none; border-top: 2px solid #e2e8f0; margin: 2rem 0; }
+nav.toc {
+  border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.5rem;
+  margin: 1rem 0 2rem; background: #f8fafc;
+}
+.toc-header { font-weight: 700; color: #1e3a5f; margin-bottom: 0.5rem; font-size: 0.95rem; }
+nav.toc a { color: #475569; font-size: 0.85rem; display: block; padding: 0.15rem 0; text-decoration: none; }
+nav.toc a:hover { color: #2563eb; }
+.back-link {
+  display: inline-block; margin-top: 3rem; padding: 0.5rem 1.25rem;
+  background: #2563eb; color: #fff; border-radius: 4px; font-size: 0.85rem;
+  text-decoration: none; font-weight: 500;
+}
+.back-link:hover { background: #1d4ed8; color: #fff; text-decoration: none; }
+.footer-nav { margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid #e2e8f0; display: flex; gap: 1rem; flex-wrap: wrap; }
+.footer-nav a { display: inline-block; font-size: 0.9rem; padding: 0.4rem 0.8rem; background: #f1f5f9; border-radius: 4px; text-decoration: none; }
+.footer-nav a:hover { background: #e2e8f0; text-decoration: none; }
+input[type="checkbox"] { margin-right: 0.3rem; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+<div class="page-header"><h1>Lab 10-mcp-mysql</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><nav class="toc">
+<div class="toc-header">Contents</div>
+  <a href="#lab-10-mcp-servers-mysql-amp-data-verification">Lab 10: MCP Servers — MySQL &amp; Data Verification</a>
+    <a href="#learning-objective">Learning Objective</a>
+    <a href="#the-key-concept">The Key Concept</a>
+    <a href="#setup">Setup</a>
+    <a href="#exercise-1-study-the-existing-mysql-mcp-setup-15-min">Exercise 1: Study the Existing MySQL MCP Setup (15 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#instructions">Instructions</a>
+      <a href="#what-you-should-see">What You Should See</a>
+    <a href="#exercise-2-data-exploration-15-min">Exercise 2: Data Exploration (15 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#instructions">Instructions</a>
+      <a href="#what-you-should-see">What You Should See</a>
+    <a href="#exercise-3-operation-verification-30-min">Exercise 3: Operation Verification (30 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#instructions">Instructions</a>
+      <a href="#what-you-should-see">What You Should See</a>
+    <a href="#exercise-4-the-self-improvement-coda-15-min">Exercise 4: The Self-Improvement Coda (15 min)</a>
+    <a href="#success-criteria">Success Criteria</a>
+    <a href="#key-takeaways">Key Takeaways</a>
+</nav><h1 id="lab-10-mcp-servers-mysql-amp-data-verification">Lab 10: MCP Servers — MySQL &amp; Data Verification<a class="anchor" href="#lab-10-mcp-servers-mysql-amp-data-verification">&#182;</a></h1>
+<p><strong>Duration:</strong> 75 minutes
+<strong>Day:</strong> 3 — Integration
+<strong>Builds On:</strong> Lab 9 (Playwright MCP)
+<strong>Produces:</strong> MySQL MCP configured, data verification workflow demonstrated</p>
+<hr />
+<h2 id="learning-objective">Learning Objective<a class="anchor" href="#learning-objective">&#182;</a></h2>
+<p>You will connect Claude Code to your MySQL database via MCP, then use it to verify that backend operations write correct data. Combined with Playwright MCP from Lab 9, this creates a <strong>full verification loop</strong>: browser → API → database.</p>
+<hr />
+<h2 id="the-key-concept">The Key Concept<a class="anchor" href="#the-key-concept">&#182;</a></h2>
+<p><strong>MySQL MCP</strong> gives Claude direct SQL query access (read-only) to your database. This lets Claude:
+- Verify that an API operation wrote correct data
+- Investigate bugs by checking actual database state
+- Generate reports from live data
+- Validate data integrity across tables</p>
+<p><strong>Security:</strong> The MCP uses a read-only database user. Claude can SELECT but cannot INSERT, UPDATE, or DELETE. This is intentional — verification should never mutate data.</p>
+<p><strong>The Full Verification Loop:</strong></p>
+<pre><code>Playwright (Browser) → sees UI state
+    ↓
+API (curl/fetch) → sees API response
+    ↓
+MySQL MCP (Database) → sees actual stored data
+    ↓
+Compare all three → any mismatch = bug
+</code></pre>
+<hr />
+<h2 id="setup">Setup<a class="anchor" href="#setup">&#182;</a></h2>
+<pre><code class="language-bash"># Verify MySQL is running
+mysql -h 127.0.0.1 -u root -proot123 -e &quot;SELECT COUNT(*) FROM hr_db.employees;&quot;
+
+# Create the read-only user (if not done in pre-workshop)
+mysql -h 127.0.0.1 -u root -proot123 &lt; database/create-readonly-user.sql
+
+# Verify read-only user works
+mysql -h 127.0.0.1 -u hr_readonly -preadonly_pass hr_db -e &quot;SELECT 1;&quot;
+
+# Ensure backend + frontend are running from Lab 9
+</code></pre>
+<hr />
+<h2 id="exercise-1-study-the-existing-mysql-mcp-setup-15-min">Exercise 1: Study the Existing MySQL MCP Setup (15 min)<a class="anchor" href="#exercise-1-study-the-existing-mysql-mcp-setup-15-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Understand how MySQL MCP is configured and verify the connection works.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>
+<p><strong>Read <code>.mcp.json</code> at the project root:</strong>
+   <code>Read .mcp.json and explain the MySQL MCP configuration.
+   What host, port, user, and database does it connect to?
+   What safety flags are set (ALLOW_INSERT, ALLOW_UPDATE, ALLOW_DELETE)?
+   Why is this important for a verification tool?</code></p>
+</li>
+<li>
+<p><strong>Verify MySQL MCP tools are available.</strong> Claude should confirm MySQL query tools are present. If they don't appear, restart Claude Code and ensure <code>.mcp.json</code> is correct.</p>
+</li>
+<li>
+<p><strong>Smoke test:</strong>
+   <code>Query the database: how many employees are in the employees table?
+   How many departments? How many jobs?</code></p>
+</li>
+</ol>
+<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<p>Claude runs SQL queries and returns results directly in the conversation. The MySQL MCP uses the read-only user (<code>hr_readonly</code>), so Claude can SELECT but cannot mutate data. No need to open a separate MySQL client.</p>
+<hr />
+<h2 id="exercise-2-data-exploration-15-min">Exercise 2: Data Exploration (15 min)<a class="anchor" href="#exercise-2-data-exploration-15-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Use MySQL MCP to understand the data landscape before verification.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>
+<p><strong>Explore the schema:</strong>
+   <code>Show me all tables in hr_db with their row counts.
+   Then show the columns and types for the employees table.</code></p>
+</li>
+<li>
+<p><strong>Run business queries:</strong>
+   ```
+   Show me:</p>
+</li>
+<li>Employee count by department</li>
+<li>Average salary by job title</li>
+<li>Employees hired in the last 30 days</li>
+<li>
+<p>The management hierarchy (who reports to whom) for the top 3 levels
+   ```</p>
+</li>
+<li>
+<p><strong>Check data integrity:</strong>
+   ```
+   Are there any data integrity issues?</p>
+</li>
+<li>Employees without a job assignment?</li>
+<li>Departments without a manager?</li>
+<li>Job history records without matching employees?</li>
+<li>Orphaned records in any table?
+   ```</li>
+</ol>
+<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<p>Claude runs precise SQL queries and reports findings. This is how you'd investigate a production data issue — Claude as your SQL co-pilot.</p>
+<hr />
+<h2 id="exercise-3-operation-verification-30-min">Exercise 3: Operation Verification (30 min)<a class="anchor" href="#exercise-3-operation-verification-30-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Verify that a backend operation writes correct data across all relevant tables.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li><strong>Before the operation — capture baseline:</strong>
+   ```
+   Query the database and tell me:</li>
+<li>Current employee count</li>
+<li>Current job_history record count</li>
+<li>
+<p>Current hr_users record count
+   Save these numbers — we'll compare after the hire.
+   ```</p>
+</li>
+<li>
+<p><strong>Get an auth token first:</strong>
+   <code>bash
+   TOKEN=$(curl -s -X POST http://localhost:8080/app/hr/api/v1/auth/login \
+     -H "Content-Type: application/json" \
+     -d '{"username":"steven.king","password":"password123"}' \
+     | jq -r '.data.token')
+   echo "$TOKEN"   # Should print a JWT, not null or empty</code>
+   Note: <code>steven.king</code> is the admin user seeded in <code>database/demo.sql</code>. All demo users share the password <code>password123</code>.</p>
+</li>
+<li>
+<p><strong>Perform a hire operation via the API:</strong>
+   <code>bash
+   curl -X POST http://localhost:8080/app/hr/api/v1/employees \
+     -H "Content-Type: application/json" \
+     -H "Authorization: Bearer $TOKEN" \
+     -H "X-Idempotency-Key: lab10-test-001" \
+     -d '{
+       "firstName": "Lab",
+       "lastName": "TestHire",
+       "email": "lab.testhire@example.com",
+       "jobId": "IT_PROG",
+       "salary": 8000,
+       "hireDate": "2026-03-31",
+       "departmentId": 60,
+       "initialPassword": "password123"
+     }'</code></p>
+</li>
+<li>
+<p><strong>After the operation — verify all tables:</strong>
+   ```
+   Now verify the hire operation wrote correctly:</p>
+</li>
+<li>Is there a new row in employees with email 'lab.testhire@example.com'?</li>
+<li>Is there a matching job_history record with the correct start date?</li>
+<li>Is there a matching hr_users record?</li>
+<li>Does the employee count match baseline + 1?</li>
+<li>Is the salary stored correctly (8000)?</li>
+<li>
+<p>Is the job_id 'IT_PROG'?
+   Show me the actual data for each check.
+   ```</p>
+</li>
+<li>
+<p><strong>Cross-reference with UI (combine with Playwright MCP):</strong>
+   <code>Navigate to the employee directory in the browser.
+   Search for "Lab TestHire". Does the UI show the same data
+   that's in the database? Compare the salary, job title,
+   and department between the UI and the database query.</code></p>
+</li>
+</ol>
+<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<p>The full loop:
+- <strong>Database confirms</strong> the hire wrote to 3 tables correctly
+- <strong>Browser confirms</strong> the new employee appears in the UI
+- <strong>Any mismatch</strong> between DB and UI = a bug to investigate</p>
+<hr />
+<h2 id="exercise-4-the-self-improvement-coda-15-min">Exercise 4: The Self-Improvement Coda (15 min)<a class="anchor" href="#exercise-4-the-self-improvement-coda-15-min">&#182;</a></h2>
+<ol>
+<li>Add to CLAUDE.md:
+   ```markdown
+   ## MCP — MySQL</li>
+<li>Configured in .mcp.json with read-only user (hr_readonly)</li>
+<li>Use for: data verification after operations, integrity checks, reporting</li>
+<li>Never use for mutations — read-only access only</li>
+<li>
+<p>Full verification loop: Playwright (UI) + API (curl) + MySQL (data)
+   ```</p>
+</li>
+<li>
+<p><strong>The Verification Loop concept:</strong>
+   ```
+   Run a full verification loop for the hire operation we just did:</p>
+</li>
+<li>Playwright: navigate to employee detail page, screenshot</li>
+<li>MySQL: query the employee record and job_history</li>
+<li>
+<p>Compare: does the UI match the database?
+   Report any discrepancies.
+   ```</p>
+</li>
+<li>
+<p><strong>MCP Ecosystem Awareness</strong> (combine with instructor lecture):</p>
+</li>
+</ol>
+<p>Other MCP servers available for enterprise use:</p>
+<table>
+<thead>
+<tr>
+<th>MCP Server</th>
+<th>What It Connects</th>
+<th>Enterprise Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Figma</td>
+<td>Design files</td>
+<td>Extract tokens, compare UI to designs</td>
+</tr>
+<tr>
+<td>Slack</td>
+<td>Team communication</td>
+<td>Read bug reports, post status updates</td>
+</tr>
+<tr>
+<td>Sentry</td>
+<td>Error monitoring</td>
+<td>Pull stack traces during debugging</td>
+</tr>
+<tr>
+<td>Jira / Linear</td>
+<td>Issue tracking</td>
+<td>Fetch ticket context for implementations</td>
+</tr>
+<tr>
+<td>BigQuery</td>
+<td>Analytics warehouse</td>
+<td>Query metrics during performance work</td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td>Postgres databases</td>
+<td>Same as MySQL MCP, different DB</td>
+</tr>
+</tbody>
+</table>
+<p>The pattern is always the same: add to <code>.mcp.json</code>, restart session, Claude has new tools.</p>
+<hr />
+<h2 id="success-criteria">Success Criteria<a class="anchor" href="#success-criteria">&#182;</a></h2>
+<ul>
+<li>[ ] MySQL MCP configured in <code>.mcp.json</code> with read-only user</li>
+<li>[ ] Claude can query tables and return results</li>
+<li>[ ] Hire operation verified across 3 tables (employees, job_history, hr_users)</li>
+<li>[ ] UI data matches database data (cross-verified with Playwright)</li>
+<li>[ ] CLAUDE.md updated with MySQL MCP patterns and verification loop</li>
+</ul>
+<hr />
+<h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">&#182;</a></h2>
+<ol>
+<li><strong>Read-only MCP for safety</strong> — verification should never mutate data</li>
+<li><strong>The full verification loop</strong> — Browser + API + Database = complete confidence</li>
+<li><strong>Cross-table verification catches bugs</strong> — an API might return 200 but miss writing job_history</li>
+<li><strong>MCP config is team-shared</strong> — <code>.mcp.json</code> in git, same as Playwright</li>
+<li><strong>The pattern transfers</strong> — MySQL today, PostgreSQL/BigQuery/Sentry tomorrow. Same <code>.mcp.json</code> pattern.</li>
+</ol>
+<hr />
+<details>
+<summary><strong>Escape Hatch</strong> — .mcp.json with both servers</summary>
+
+
+<pre><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;playwright&quot;: {
+      &quot;type&quot;: &quot;stdio&quot;,
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;@playwright/mcp&quot;, &quot;--headless&quot;],
+      &quot;env&quot;: {}
+    },
+    &quot;mysql&quot;: {
+      &quot;type&quot;: &quot;stdio&quot;,
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;@benborla29/mcp-server-mysql&quot;],
+      &quot;env&quot;: {
+        &quot;MYSQL_HOST&quot;: &quot;127.0.0.1&quot;,
+        &quot;MYSQL_PORT&quot;: &quot;3306&quot;,
+        &quot;MYSQL_USER&quot;: &quot;hr_readonly&quot;,
+        &quot;MYSQL_PASS&quot;: &quot;readonly_pass&quot;,
+        &quot;MYSQL_DB&quot;: &quot;hr_db&quot;,
+        &quot;ALLOW_INSERT_OPERATION&quot;: &quot;false&quot;,
+        &quot;ALLOW_UPDATE_OPERATION&quot;: &quot;false&quot;,
+        &quot;ALLOW_DELETE_OPERATION&quot;: &quot;false&quot;
+      }
+    }
+  }
+}
+</code></pre>
+
+
+If MySQL MCP fails:
+
+<pre><code class="language-bash"># Check MySQL is running
+mysql -h 127.0.0.1 -u hr_readonly -preadonly_pass hr_db -e &quot;SELECT 1;&quot;
+
+# Check read-only user has SELECT permissions
+mysql -h 127.0.0.1 -u root -proot123 -e &quot;SHOW GRANTS FOR 'hr_readonly'@'localhost';&quot;
+
+# Restart Claude Code session after .mcp.json changes
+</code></pre>
+
+</details><div class="footer-nav"><a href="../index.html">← All Labs</a><a href="lab-09-mcp-playwright.html">← Previous</a><a href="lab-11-cicd-permissions.html">Next →</a><a href="https://github.com/ssthakuraa/claude-code-workshop" target="_blank">GitHub Repo</a></div>
+</div>
+</body>
+</html>

@@ -1,5 +1,5 @@
 -- MySQL Compatible Schema
--- Converted from Oracle HR schema
+-- Converted from Vertex Tech HR schema
 
 USE hr_db;
 

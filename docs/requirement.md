@@ -10,7 +10,7 @@ The application covers 7 core HR entities (Regions, Countries, Locations, Depart
 - **RBAC Security:** Granular role-based access control and session management via Spring Security.
 - **API-First Design:** Versioned endpoints (`/app/hr/api/v1/`) documented via OpenAPI/Swagger.
 - **Global Readiness:** Full NLS/MLS support with user-managed regional preferences.
-- **Component-Driven UI:** Oracle Redwood Design System (RDS 24C) with reusable atomic components before screen implementation.
+- **Component-Driven UI:** Vertex Tech Modern Design System with reusable atomic components before screen implementation.
 
 ---
 
@@ -18,13 +18,13 @@ The application covers 7 core HR entities (Regions, Countries, Locations, Depart
 
 The application follows a **Decoupled Three-Tier Architecture**:
 
-- **Client Layer:** React SPA utilizing Oracle Redwood Design System (RDS 24C).
+- **Client Layer:** React SPA utilizing Vertex Tech Modern Design System.
 - **API Layer:** Spring Boot 3.2 RESTful Web Services (Java 21).
 - **Data Layer:** MySQL 8.0 (InnoDB, `utf8mb4` character encoding).
 
 ```mermaid
 graph TD
-    User((HR User)) -->|HTTPS/TLS| React[React Frontend - Oracle RDS]
+    User((HR User)) -->|HTTPS/TLS| React[React Frontend - Vertex Modern UI]
     subgraph Spring Boot Backend
         Auth[Spring Security / JWT]
         Controller[HrControllers - /app/hr/api/v1/]
@@ -52,8 +52,8 @@ graph TD
 | **Auth** | Spring Security + JWT (Nimbus JOSE, HS256) with RBAC/ABAC enforcement |
 | **Password Hashing** | Argon2id (BouncyCastle) |
 | **Frontend Framework** | React 18+ with TypeScript |
-| **Design System** | Oracle Redwood Design System (RDS 24C) — design tokens and patterns from Figma toolkit |
-| **Styling** | Tailwind CSS with RDS design tokens (colors, spacing 8px grid, typography, elevation) |
+| **Design System** | Vertex Tech Modern Design System — design tokens and patterns from Figma toolkit |
+| **Styling** | Tailwind CSS with Modern Design System design tokens (colors, spacing 8px grid, typography, elevation) |
 | **Frontend Routing** | React Router |
 | **State / Data Fetching** | TanStack Query (React Query) for server state; React Context for auth and user preferences |
 | **API Client** | Axios with a centralized `HrApiClient` wrapper (interceptors for JWT, error handling, base URL) |
@@ -65,7 +65,7 @@ graph TD
 | **i18n** | Backend: Java ResourceBundle; Frontend: i18next with translation bundles |
 | **Frontend Testing** | Vitest + React Testing Library (component); Cypress (E2E) |
 | **Backend Testing** | JUnit 5 + Mockito (unit); Spring Boot Test (integration) |
-| **Figma** | Redwood Design RDS toolkit for wireframes, mockups, and component reference |
+| **Figma** | Modern Design toolkit for wireframes, mockups, and component reference |
 | **Build** | Maven multi-module (`hrapp-common` framework, `hrapp-service` domain) |
 | **Migration** | Flyway |
 | **Mapping** | MapStruct |
@@ -83,7 +83,7 @@ graph TD
 | Enterprise Req | Security | RBAC enforcement via Spring Security and JWT; no PII or passwords in logs. |
 | Enterprise Req | API Pathing | All endpoints must follow the `/app/hr/api/v1/` format. |
 | Enterprise Req | NLS/MLS | Support for multiple languages, timezones, and currency formats. |
-| Enterprise Req | UI Design | Implementation of Atomic Design (Components -> Templates -> Screens) using RDS 24C. |
+| Enterprise Req | UI Design | Implementation of Atomic Design (Components -> Templates -> Screens) using Modern Design System. |
 | Enterprise Req | Quality Gate | Mandatory code reviews at every stage and 80% JUnit/Cypress coverage. |
 
 ---
@@ -574,7 +574,7 @@ The dashboard is the primary landing page after login. It is **role-adaptive** �
 
 ### 13.1 KPI Scoreboard Cards (Row 1)
 
-Admin, HR Specialist, and Line Manager roles see the following KPI cards displayed as RDS Scoreboard Cards (Employee role has a simplified view — see Section 13.5):
+Admin, HR Specialist, and Line Manager roles see the following KPI cards displayed as Modern Design System Scoreboard Cards (Employee role has a simplified view — see Section 13.5):
 
 | KPI Card | Definition | Sample Value | Trend Indicator |
 |---|---|---|---|
@@ -608,7 +608,7 @@ Visibility: "Hire Employee" only visible to `HR_SPECIALIST` and `ADMIN`. "Transf
 
 | Panel | Content |
 |---|---|
-| Recent Activity Feed | Last 10 audit log entries relevant to the logged-in user (e.g., "Neena Kochhar updated salary for Alexander Hunold"). Uses RDS Activity Feed component. |
+| Recent Activity Feed | Last 10 audit log entries relevant to the logged-in user (e.g., "Neena Kochhar updated salary for Alexander Hunold"). Uses Modern Design System Activity Feed component. |
 | Pending Alerts Summary | Count badges: "5 Probation Reviews Due", "4 Contracts Expiring", "2 Unread Notifications". Each clickable — navigates to the filtered Notification Center. |
 
 ### 13.5 Role-Specific Dashboard Variations
@@ -641,13 +641,13 @@ Visibility: "Hire Employee" only visible to `HR_SPECIALIST` and `ADMIN`. "Transf
 
 ## 15. Frontend Design: Component-Driven Philosophy
 
-The UI will be built as a **Design System** using RDS 24C rather than a set of independent pages.
+The UI will be built as a **Design System** using Modern Design System rather than a set of independent pages.
 
-### 15.1 RDS 24C Component Mapping
+### 15.1 Modern Design System Component Mapping
 
-| Component | RDS Reference | Functional Intent |
+| Component | Modern Design System Reference | Functional Intent |
 |---|---|---|
-| `HrButton` | — | Standardized button with RDS sizing, colors, and loading states. |
+| `HrButton` | — | Standardized button with Modern Design System sizing, colors, and loading states. |
 | `HrInput` | — | Form input with validation styling and ARIA labels. |
 | `HrDataTable` | DataTable (#21) | All high-volume lists with "Freeze Header", selection, server-side pagination, sorting, and "Export to CSV/Excel." |
 | `HrActivityFeed` | Activity Feed (#25) | "Career Timeline" on Employee Detail page to show every job change. |
@@ -657,7 +657,7 @@ The UI will be built as a **Design System** using RDS 24C rather than a set of i
 | `HrFormTemplate` | — | Standardized layout with built-in validation messages and ARIA labels. |
 | `HrLanguageSwitcher` | — | Global utility for NLS/MLS language toggling. |
 
-### 15.2 RDS Layout Templates
+### 15.2 Modern Design System Layout Templates
 
 | Template | Usage |
 |---|---|
@@ -667,7 +667,7 @@ The UI will be built as a **Design System** using RDS 24C rather than a set of i
 
 ### 15.3 Tailwind Configuration
 
-Extend `tailwind.config.js` with RDS 24C tokens for colors, spacing (8px grid), and typography scale.
+Extend `tailwind.config.js` with Modern Design System tokens for colors, spacing (8px grid), and typography scale.
 
 ### 15.4 State Management Rules
 
@@ -759,7 +759,7 @@ An HR app must be usable by ALL employees. This is a legal requirement in many j
 
 - **Code Review:** Mandatory review at every development stage to verify `Hr` naming, logging standards, and NLS usage.
 - **JUnit Testing:** JUnit 5 for all Services. Minimum 80% line coverage for all `HrService` and `HrUtility` classes.
-- **Component Testing:** Vitest + React Testing Library for all RDS base components (`HrButton`, `HrDataTable`, `HrInput`, etc.). Storybook for visual component documentation.
+- **Component Testing:** Vitest + React Testing Library for all Modern Design System base components (`HrButton`, `HrDataTable`, `HrInput`, etc.). Storybook for visual component documentation.
 - **E2E Testing:** Cypress for the following flows:
   1. User Login -> Change Language Preference -> Verify UI changes.
   2. HR Specialist -> Hire Employee Wizard -> Verify DB entry.
@@ -798,7 +798,7 @@ Before any code is considered complete, verify:
 - [ ] **Prefix Check:** Does every file/class start with `Hr`?
 - [ ] **Log Check:** Does every service method have Entry/Exit logs via `HrLogHelper`?
 - [ ] **NLS Check:** Are there any hardcoded strings? (All must be in `messages.properties` or `translation.json`).
-- [ ] **UI Check:** Does the UI match the Oracle Redwood 24C spacing and color tokens?
+- [ ] **UI Check:** Does the UI match the Vertex Tech Modern 24C spacing and color tokens?
 - [ ] **API Check:** Is the endpoint prefixed with `/app/hr/api/v1/`?
 - [ ] **Security Check:** Is the salary field masked for non-authorized users?
 - [ ] **Test Check:** Are unit tests and component tests written and passing?

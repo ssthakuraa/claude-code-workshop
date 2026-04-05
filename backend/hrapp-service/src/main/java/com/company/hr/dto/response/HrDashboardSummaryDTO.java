@@ -31,4 +31,10 @@ public class HrDashboardSummaryDTO {
         private String status;
         private long count;
     }
+
+    @Data @NoArgsConstructor @AllArgsConstructor
+    public static class CountryCount {
+        private String countryName;
+        private long count;
+    }
 }

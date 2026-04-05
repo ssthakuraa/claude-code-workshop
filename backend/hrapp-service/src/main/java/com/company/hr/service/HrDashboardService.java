@@ -4,8 +4,8 @@ import com.company.hr.common.log.HrLogHelper;
 import com.company.hr.dto.response.HrDashboardSummaryDTO;
 import com.company.hr.model.HrEmployee;
 import com.company.hr.repository.HrEmployeeRepository;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +24,7 @@ public class HrDashboardService {
     private static final HrLogHelper LOGGER = new HrLogHelper(HrDashboardService.class);
 
     private final HrEmployeeRepository employeeRepository;
+    private final EntityManager entityManager;
 
     @Transactional(readOnly = true)
     @PreAuthorize("hasAnyRole('ADMIN','HR_SPECIALIST','MANAGER','EMPLOYEE')")
@@ -81,5 +82,32 @@ public class HrDashboardService {
 
         LOGGER.info("Exiting getSummary(), headcount={}", total);
         return dto;
+    }
+
+    /** Headcount grouped by country name using a native query to handle the JOIN chain. */
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAnyRole('ADMIN','HR_SPECIALIST','MANAGER','EMPLOYEE')")
+    @SuppressWarnings("unchecked")
+    public List<HrDashboardSummaryDTO.CountryCount> getHeadcountByCountry() {
+        LOGGER.info("Entering getHeadcountByCountry()");
+
+        String sql = "SELECT c.country_name, COUNT(e.employee_id) " +
+                "FROM employees e " +
+                "JOIN departments d ON e.department_id = d.department_id " +
+                "JOIN locations l ON d.location_id = l.location_id " +
+                "JOIN countries c ON l.country_id = c.country_id " +
+                "WHERE e.deleted_at IS NULL AND e.employment_status = 'ACTIVE' " +
+                "GROUP BY c.country_name " +
+                "ORDER BY COUNT(e.employee_id) DESC";
+
+        List<Object[]> rows = entityManager.createNativeQuery(sql)
+                .getResultList();
+
+        return rows.stream()
+                .map(row -> new HrDashboardSummaryDTO.CountryCount(
+                        (String) row[0],
+                        ((Number) row[1]).longValue()
+                ))
+                .collect(Collectors.toList());
     }
 }

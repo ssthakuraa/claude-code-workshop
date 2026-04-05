@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 06-subagents — Claude Code Workshop</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.7; color: #1a1a2e; background: #fafafa; margin: 0;
+}
+.page-wrap {
+  max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem;
+  background: #fff; min-height: 100vh;
+  border-left: 1px solid #e8e8e8; border-right: 1px solid #e8e8e8;
+  box-shadow: 0 0 40px rgba(0,0,0,0.04);
+}
+.page-header {
+  border-bottom: 2px solid #2563eb; padding-bottom: 0.25rem; margin-bottom: 1.5rem;
+}
+.page-header h1 { font-size: 1.75rem; margin: 0 0 0.25rem; color: #1e3a5f; }
+.page-header .subtitle { color: #64748b; font-size: 0.9rem; }
+h1 { font-size: 1.6rem; color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.3rem; }
+h2 { font-size: 1.3rem; color: #1e3a5f; margin-top: 2.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.3rem; }
+h3 { font-size: 1.05rem; color: #334155; margin-top: 1.5rem; }
+h4 { font-size: 0.95rem; color: #475569; }
+h2:first-of-type, h3:first-of-type { margin-top: 0; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+ul, ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+li { margin: 0.25rem 0; }
+li li { margin: 0; }
+img { max-width: 100%; border-radius: 6px; }
+blockquote {
+  border-left: 4px solid #2563eb; padding: 0.5rem 1rem; margin: 1rem 0;
+  background: #f8fafc; border-radius: 0 6px 6px 0; color: #334155;
+}
+blockquote > p:first-child { margin-top: 0.2rem; }
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+th, td { border: 1px solid #e2e8f0; padding: 0.45rem 0.65rem; text-align: left; }
+th { background: #f1f5f9; font-weight: 600; color: #1e3a5f; }
+tr:nth-child(even) { background: #f8fafc; }
+pre {
+  background: #1e293b; color: #e2e8f0; padding: 1rem 1.25rem;
+  border-radius: 8px; overflow-x: auto; font-size: 0.85rem; margin: 1rem 0;
+  line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+code {
+  background: #f1f5f9; color: #dc2626; padding: 0.15em 0.35em;
+  border-radius: 4px; font-size: 0.88em; font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+}
+pre code { color: inherit; }
+details { margin: 1rem 0; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; }
+summary { cursor: pointer; padding: 0.75rem 1rem; font-weight: 600; color: #2563eb; user-select: none; }
+summary:hover { background: #f1f5f9; }
+details[open] summary { border-bottom: 1px solid #e2e8f0; }
+details > div, details > pre, details > p { padding: 0 1rem 1rem; }
+hr { border: none; border-top: 2px solid #e2e8f0; margin: 2rem 0; }
+nav.toc {
+  border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.5rem;
+  margin: 1rem 0 2rem; background: #f8fafc;
+}
+.toc-header { font-weight: 700; color: #1e3a5f; margin-bottom: 0.5rem; font-size: 0.95rem; }
+nav.toc a { color: #475569; font-size: 0.85rem; display: block; padding: 0.15rem 0; text-decoration: none; }
+nav.toc a:hover { color: #2563eb; }
+.back-link {
+  display: inline-block; margin-top: 3rem; padding: 0.5rem 1.25rem;
+  background: #2563eb; color: #fff; border-radius: 4px; font-size: 0.85rem;
+  text-decoration: none; font-weight: 500;
+}
+.back-link:hover { background: #1d4ed8; color: #fff; text-decoration: none; }
+.footer-nav { margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid #e2e8f0; display: flex; gap: 1rem; flex-wrap: wrap; }
+.footer-nav a { display: inline-block; font-size: 0.9rem; padding: 0.4rem 0.8rem; background: #f1f5f9; border-radius: 4px; text-decoration: none; }
+.footer-nav a:hover { background: #e2e8f0; text-decoration: none; }
+input[type="checkbox"] { margin-right: 0.3rem; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+<div class="page-header"><h1>Lab 06-subagents</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><nav class="toc">
+<div class="toc-header">Contents</div>
+  <a href="#lab-6-subagents-isolated-specialist-workers">Lab 6: Subagents — Isolated Specialist Workers</a>
+    <a href="#learning-objective">Learning Objective</a>
+    <a href="#the-key-concept">The Key Concept</a>
+      <a href="#the-writerreviewer-pattern">The Writer/Reviewer Pattern</a>
+    <a href="#setup">Setup</a>
+    <a href="#exercise-1-self-review-the-weak-version-15-min">Exercise 1: Self-Review (The Weak Version) (15 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#instructions">Instructions</a>
+    <a href="#exercise-2-create-the-reviewer-subagent-15-min">Exercise 2: Create the Reviewer Subagent (15 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#instructions">Instructions</a>
+    <a href="#exercise-3-the-fresh-context-review-20-min">Exercise 3: The Fresh-Context Review (20 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#instructions">Instructions</a>
+      <a href="#what-you-should-see">What You Should See</a>
+    <a href="#exercise-4-the-self-improvement-coda-10-min">Exercise 4: The Self-Improvement Coda (10 min)</a>
+    <a href="#success-criteria">Success Criteria</a>
+    <a href="#key-takeaways">Key Takeaways</a>
+</nav><h1 id="lab-6-subagents-isolated-specialist-workers">Lab 6: Subagents — Isolated Specialist Workers<a class="anchor" href="#lab-6-subagents-isolated-specialist-workers">&#182;</a></h1>
+<p><strong>Duration:</strong> 60 minutes
+<strong>Day:</strong> 2 — Productivity
+<strong>Builds On:</strong> Lab 4 (context management), Lab 5 (hooks)
+<strong>Produces:</strong> A custom subagent (component-reviewer)</p>
+<hr />
+<h2 id="learning-objective">Learning Objective<a class="anchor" href="#learning-objective">&#182;</a></h2>
+<p>You will create a reviewer subagent and observe how a fresh-context reviewer finds issues that a self-reviewing session misses. This pattern maps directly to enterprise code review workflows.</p>
+<hr />
+<h2 id="the-key-concept">The Key Concept<a class="anchor" href="#the-key-concept">&#182;</a></h2>
+<p>Subagents are specialized Claude instances that:
+- Run in their <strong>own context</strong> (don't pollute your main window)
+- Have <strong>scoped tool access</strong> (you control what they can do)
+- Return <strong>only results</strong> to the main conversation</p>
+<p><strong>Three built-in types:</strong>
+| Type | Use For |
+|------|---------|
+| <code>Explore</code> | Read-only codebase exploration and research |
+| <code>Plan</code> | Architecture and design (no edits) |
+| <code>general-purpose</code> | Full capability — research, edit, run commands |</p>
+<p><strong>Custom subagents</strong> are defined in <code>.claude/agents/</code> with persona, tools, and model specification.</p>
+<h3 id="the-writerreviewer-pattern">The Writer/Reviewer Pattern<a class="anchor" href="#the-writerreviewer-pattern">&#182;</a></h3>
+<pre><code>Session A (Writer) → builds code
+Session B (Reviewer) → reviews with fresh context → finds issues Writer missed
+</code></pre>
+<p>The reviewer sees code it didn't write — no confirmation bias, no context fatigue.</p>
+<hr />
+<h2 id="setup">Setup<a class="anchor" href="#setup">&#182;</a></h2>
+<pre><code class="language-bash"># Verify frontend components exist
+ls frontend/src/components/hr/   # Should show existing HR components
+</code></pre>
+<hr />
+<h2 id="exercise-1-self-review-the-weak-version-15-min">Exercise 1: Self-Review (The Weak Version) (15 min)<a class="anchor" href="#exercise-1-self-review-the-weak-version-15-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Build a component and ask the same session to review it. Observe limited critique.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>Ask Claude to build a new HR component:
+   ```
+   Create src/components/hr/HrEmployeeCard.tsx — a card component that displays:</li>
+<li>Employee avatar (initials fallback), name, job title</li>
+<li>Department and location</li>
+<li>Employment status badge (using HrStatusBadge)</li>
+<li>Hire date</li>
+<li>
+<p>Click handler for navigation to detail page
+   Follow the patterns from existing components in src/components/hr/.
+   ```</p>
+</li>
+<li>
+<p>In the <strong>same session</strong>, ask Claude to review it:
+   <code>Review the HrEmployeeCard component you just created.
+   Check for: accessibility issues, missing error states,
+   performance concerns, and consistency with our existing components.</code></p>
+</li>
+<li>
+<p><strong>Count the issues found:</strong> _____ (likely 0–2)</p>
+</li>
+</ol>
+<blockquote>
+<p>Claude tends to be lenient reviewing its own code — it just wrote it and thinks it's correct.</p>
+</blockquote>
+<hr />
+<h2 id="exercise-2-create-the-reviewer-subagent-15-min">Exercise 2: Create the Reviewer Subagent (15 min)<a class="anchor" href="#exercise-2-create-the-reviewer-subagent-15-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Define a reviewer subagent with a critical persona and read-only tools.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>
+<p>Create the agents directory:
+   <code>bash
+   mkdir -p .claude/agents</code></p>
+</li>
+<li>
+<p>Ask Claude to create the component-reviewer agent:
+   ```
+   Create .claude/agents/component-reviewer.md — a subagent that reviews
+   React components. It should check:</p>
+</li>
+<li>Accessibility (aria labels, keyboard navigation, color contrast)</li>
+<li>Error states and loading states</li>
+<li>Prop validation and type safety</li>
+<li>Consistency with existing component patterns</li>
+<li>Performance (unnecessary re-renders, missing memoization)</li>
+<li>Missing edge cases (empty data, long strings, null values)
+   Give it a critical persona: "You are a senior frontend engineer
+   performing a thorough code review. Be specific and actionable."
+   It should be read-only (Read, Glob, Grep only — no edits).
+   ```</li>
+</ol>
+<blockquote>
+<p><strong>Reference:</strong> A reference version already exists at <code>reference/.claude/agents/component-reviewer.md</code>. Create your own first, then compare.</p>
+</blockquote>
+<ol>
+<li>Note: You don't need a builder agent. You build in the main session.
+   The reviewer's value comes from NOT being the session that built the
+   code — fresh eyes, no confirmation bias.</li>
+</ol>
+<hr />
+<h2 id="exercise-3-the-fresh-context-review-20-min">Exercise 3: The Fresh-Context Review (20 min)<a class="anchor" href="#exercise-3-the-fresh-context-review-20-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Use the reviewer subagent on the component from Exercise 1.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>
+<p>Send the component to the reviewer:
+   <code>Use the component-reviewer agent to review
+   src/components/hr/HrEmployeeCard.tsx.
+   Focus on accessibility, error states, and edge cases.</code></p>
+</li>
+<li>
+<p><strong>Count the issues found:</strong> _____ (likely 3–6)</p>
+</li>
+<li>
+<p><strong>Compare:</strong></p>
+</li>
+<li>Self-review (Exercise 1): _____ issues</li>
+<li>
+<p>Subagent review (Exercise 3): _____ issues</p>
+</li>
+<li>
+<p><strong>Apply the reviewer's feedback in the main session:</strong>
+   <code>Fix these issues in HrEmployeeCard (from the reviewer):
+   [paste the reviewer's findings]</code></p>
+</li>
+<li>
+<p><strong>Optional: Review again</strong> after fixes to verify they're addressed.</p>
+</li>
+</ol>
+<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<p>The fresh-context reviewer finds significantly more issues because:
+- It didn't write the code (no confirmation bias)
+- Its context is clean (no fatigue from the build session)
+- Its persona is explicitly critical (optimized for finding problems)</p>
+<hr />
+<h2 id="exercise-4-the-self-improvement-coda-10-min">Exercise 4: The Self-Improvement Coda (10 min)<a class="anchor" href="#exercise-4-the-self-improvement-coda-10-min">&#182;</a></h2>
+<ol>
+<li>Add to CLAUDE.md:
+   ```markdown
+   ## Code Review Pattern</li>
+<li>Never self-review in the same session — use component-reviewer agent</li>
+<li>Reviewer agent in .claude/agents/ — read-only, fresh context</li>
+<li>
+<p>You build in the main session; reviewer critiques from separate context
+   ```</p>
+</li>
+<li>
+<p>Reflect:</p>
+</li>
+<li><em>What types of review agents would your enterprise team need?</em></li>
+<li>Security reviewer? Performance reviewer? API contract reviewer?</li>
+<li><em>How would you customize the persona for your codebase?</em></li>
+</ol>
+<hr />
+<h2 id="success-criteria">Success Criteria<a class="anchor" href="#success-criteria">&#182;</a></h2>
+<ul>
+<li>[ ] <code>.claude/agents/component-reviewer.md</code> exists with critical review checklist</li>
+<li>[ ] Self-review found fewer issues than subagent review</li>
+<li>[ ] Reviewer's feedback was applied and verified</li>
+<li>[ ] You can explain why fresh-context review beats self-review</li>
+</ul>
+<hr />
+<h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">&#182;</a></h2>
+<ol>
+<li><strong>Self-review is weak</strong> — Claude is lenient toward code it just wrote</li>
+<li><strong>Fresh context = fresh eyes</strong> — the reviewer subagent has no history with the code</li>
+<li><strong>Personas matter</strong> — "senior engineer performing a thorough review" produces better critique than "review this"</li>
+<li><strong>The reviewer's value is separation</strong> — a different context reviewing code it didn't write</li>
+<li><strong>Subagents protect main context</strong> — heavy review work stays in the subagent's window</li>
+</ol>
+<hr />
+<details>
+<summary><strong>Escape Hatch</strong> — component-reviewer agent template</summary>
+
+
+<pre><code class="language-markdown">---
+name: component-reviewer
+description: Reviews React components for quality, accessibility, and consistency
+model: sonnet
+allowed-tools: Read, Glob, Grep
+---
+
+You are a senior frontend engineer performing a thorough code review.
+Be specific and actionable. Do NOT make changes — only report findings.
+
+## Review Checklist
+1. **Accessibility:** aria labels, keyboard nav, color contrast, screen reader support
+2. **Error handling:** null props, empty arrays, missing data, API failures
+3. **Edge cases:** long strings (truncation?), zero items, single item, 1000+ items
+4. **Type safety:** no `any`, proper optional chaining, exhaustive switch cases
+5. **Performance:** unnecessary re-renders, missing useMemo/useCallback where needed
+6. **Consistency:** matches patterns in sibling components? Uses shared UI primitives?
+7. **Missing states:** loading spinner? Empty state message? Error boundary?
+
+## Output format
+For each finding:
+- **Severity:** Critical / Warning / Suggestion
+- **Location:** file:line
+- **Issue:** what's wrong
+- **Fix:** what to do instead
+</code></pre>
+
+</details><div class="footer-nav"><a href="../index.html">← All Labs</a><a href="lab-05-hooks.html">← Previous</a><a href="lab-07-parallel-sessions.html">Next →</a><a href="https://github.com/ssthakuraa/claude-code-workshop" target="_blank">GitHub Repo</a></div>
+</div>
+</body>
+</html>

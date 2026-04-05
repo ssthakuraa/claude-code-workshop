@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 04-context-management — Claude Code Workshop</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.7; color: #1a1a2e; background: #fafafa; margin: 0;
+}
+.page-wrap {
+  max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem;
+  background: #fff; min-height: 100vh;
+  border-left: 1px solid #e8e8e8; border-right: 1px solid #e8e8e8;
+  box-shadow: 0 0 40px rgba(0,0,0,0.04);
+}
+.page-header {
+  border-bottom: 2px solid #2563eb; padding-bottom: 0.25rem; margin-bottom: 1.5rem;
+}
+.page-header h1 { font-size: 1.75rem; margin: 0 0 0.25rem; color: #1e3a5f; }
+.page-header .subtitle { color: #64748b; font-size: 0.9rem; }
+h1 { font-size: 1.6rem; color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.3rem; }
+h2 { font-size: 1.3rem; color: #1e3a5f; margin-top: 2.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.3rem; }
+h3 { font-size: 1.05rem; color: #334155; margin-top: 1.5rem; }
+h4 { font-size: 0.95rem; color: #475569; }
+h2:first-of-type, h3:first-of-type { margin-top: 0; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+ul, ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+li { margin: 0.25rem 0; }
+li li { margin: 0; }
+img { max-width: 100%; border-radius: 6px; }
+blockquote {
+  border-left: 4px solid #2563eb; padding: 0.5rem 1rem; margin: 1rem 0;
+  background: #f8fafc; border-radius: 0 6px 6px 0; color: #334155;
+}
+blockquote > p:first-child { margin-top: 0.2rem; }
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+th, td { border: 1px solid #e2e8f0; padding: 0.45rem 0.65rem; text-align: left; }
+th { background: #f1f5f9; font-weight: 600; color: #1e3a5f; }
+tr:nth-child(even) { background: #f8fafc; }
+pre {
+  background: #1e293b; color: #e2e8f0; padding: 1rem 1.25rem;
+  border-radius: 8px; overflow-x: auto; font-size: 0.85rem; margin: 1rem 0;
+  line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+code {
+  background: #f1f5f9; color: #dc2626; padding: 0.15em 0.35em;
+  border-radius: 4px; font-size: 0.88em; font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+}
+pre code { color: inherit; }
+details { margin: 1rem 0; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; }
+summary { cursor: pointer; padding: 0.75rem 1rem; font-weight: 600; color: #2563eb; user-select: none; }
+summary:hover { background: #f1f5f9; }
+details[open] summary { border-bottom: 1px solid #e2e8f0; }
+details > div, details > pre, details > p { padding: 0 1rem 1rem; }
+hr { border: none; border-top: 2px solid #e2e8f0; margin: 2rem 0; }
+nav.toc {
+  border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.5rem;
+  margin: 1rem 0 2rem; background: #f8fafc;
+}
+.toc-header { font-weight: 700; color: #1e3a5f; margin-bottom: 0.5rem; font-size: 0.95rem; }
+nav.toc a { color: #475569; font-size: 0.85rem; display: block; padding: 0.15rem 0; text-decoration: none; }
+nav.toc a:hover { color: #2563eb; }
+.back-link {
+  display: inline-block; margin-top: 3rem; padding: 0.5rem 1.25rem;
+  background: #2563eb; color: #fff; border-radius: 4px; font-size: 0.85rem;
+  text-decoration: none; font-weight: 500;
+}
+.back-link:hover { background: #1d4ed8; color: #fff; text-decoration: none; }
+.footer-nav { margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid #e2e8f0; display: flex; gap: 1rem; flex-wrap: wrap; }
+.footer-nav a { display: inline-block; font-size: 0.9rem; padding: 0.4rem 0.8rem; background: #f1f5f9; border-radius: 4px; text-decoration: none; }
+.footer-nav a:hover { background: #e2e8f0; text-decoration: none; }
+input[type="checkbox"] { margin-right: 0.3rem; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+<div class="page-header"><h1>Lab 04-context-management</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><nav class="toc">
+<div class="toc-header">Contents</div>
+  <a href="#lab-4-context-management-the-1-performance-lever">Lab 4: Context Management — The #1 Performance Lever</a>
+    <a href="#learning-objective">Learning Objective</a>
+    <a href="#the-key-concept">The Key Concept</a>
+    <a href="#setup">Setup</a>
+    <a href="#exercise-1-review-with-fresh-context-15-min">Exercise 1: Review with Fresh Context (15 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#the-professional-mindset">The Professional Mindset</a>
+      <a href="#instructions">Instructions</a>
+    <a href="#exercise-2-session-2-plan-the-next-entity-with-clean-context-15-min">Exercise 2: Session 2 — Plan the Next Entity with Clean Context (15 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#instructions">Instructions</a>
+      <a href="#what-you-should-see">What You Should See</a>
+    <a href="#exercise-3-using-compact-for-long-tasks-10-min">Exercise 3: Using /compact for Long Tasks (10 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#when-to-use-compact">When to Use /compact</a>
+      <a href="#instructions">Instructions</a>
+      <a href="#what-you-should-see">What You Should See</a>
+    <a href="#exercise-4-context-habits-checklist-5-min">Exercise 4: Context Habits Checklist (5 min)</a>
+    <a href="#success-criteria">Success Criteria</a>
+    <a href="#key-takeaways">Key Takeaways</a>
+</nav><h1 id="lab-4-context-management-the-1-performance-lever">Lab 4: Context Management — The #1 Performance Lever<a class="anchor" href="#lab-4-context-management-the-1-performance-lever">&#182;</a></h1>
+<p><strong>Duration:</strong> 45 minutes
+<strong>Day:</strong> 1 — Foundation
+<strong>Builds On:</strong> All Day 1 labs
+<strong>Produces:</strong> Practical context discipline habits</p>
+<hr />
+<h2 id="learning-objective">Learning Objective<a class="anchor" href="#learning-objective">&#182;</a></h2>
+<p>You will experience context window degradation firsthand — watching Claude's quality drop as context fills up — then redo the same work with proper context hygiene. This lab teaches the single most important operational discipline for Claude Code.</p>
+<hr />
+<h2 id="the-key-concept">The Key Concept<a class="anchor" href="#the-key-concept">&#182;</a></h2>
+<p>Claude's context window is finite. Everything — files read, command outputs, messages, tool results — consumes tokens.</p>
+<p><strong>The degradation curve:</strong>
+- <strong>0–60% full:</strong> Claude is sharp, follows all rules, produces quality code
+- <strong>60–80% full:</strong> Subtle drift — may miss a convention, skip a step
+- <strong>80–90% full:</strong> Noticeable quality drop — hallucinations increase, CLAUDE.md rules get ignored
+- <strong>90%+:</strong> Erratic — Claude may contradict itself or produce broken code</p>
+<p><strong>The tools:</strong>
+| Tool | When to Use |
+|------|-------------|
+| <code>/clear</code> | Between different tasks — wipe conversation history |
+| <code>/compact</code> | Within a long task — compress history while preserving key context |
+| Subagents | For research-heavy work — keeps main context clean |
+| Fresh session | New task entirely — cheapest way to get clean context |
+| <code>/status</code> | Check current context usage |</p>
+<hr />
+<h2 id="setup">Setup<a class="anchor" href="#setup">&#182;</a></h2>
+<p>Continue from Labs 1–3. You should have CLAUDE.md, Region (or PayGrade), Country, Location, and the Notification entity you scaffolded in Lab 3 using <code>/scaffold-entity</code>.</p>
+<hr />
+<h2 id="exercise-1-review-with-fresh-context-15-min">Exercise 1: Review with Fresh Context (15 min)<a class="anchor" href="#exercise-1-review-with-fresh-context-15-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Experience the difference between "accumulated context" and "clean context" by reviewing the Notification entity you built in Lab 3.</p>
+<h3 id="the-professional-mindset">The Professional Mindset<a class="anchor" href="#the-professional-mindset">&#182;</a></h3>
+<p>Rather than asking "why does context degrade," ask "how would I plan this work so I never get there?" That's how experienced Claude Code users operate. The degradation curve exists — but professionals design around it, not into it.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>
+<p><strong>Check your current session state.</strong> If you've been running Claude since Lab 3, your context is polluted with prior work:
+   <code>/status</code></p>
+</li>
+<li>
+<p><strong>Ask for a review with polluted context:</strong>
+   <code>Review my Notification entity for correctness and convention compliance.</code>
+   Notice what Claude reviews — in a long session, it may reference outdated details from earlier labs.</p>
+</li>
+<li>
+<p><strong>Now clear and review with fresh context:</strong>
+   <code>/clear</code>
+   Check <code>/status</code> — you should be back near 0%.</p>
+</li>
+</ol>
+<p>Then ask the same question:
+   <code>Review the HrNotification entity, HrNotificationController,
+   and HrNotificationService. Check for correct conventions:
+   Hr prefix, HrLogHelper entry/exit, @SQLRestriction,
+   @PreAuthorize, and HrApiResponse return types.</code></p>
+<ol>
+<li><strong>Compare the two reviews.</strong> Did the fresh-context review find things the polluted one missed?</li>
+</ol>
+<blockquote>
+<p>You've just experienced context degradation firsthand. Session 1 was polluted with accumulated state from labs past. Session 2 was clean — Claude focused only on what you asked about.</p>
+</blockquote>
+<hr />
+<h2 id="exercise-2-session-2-plan-the-next-entity-with-clean-context-15-min">Exercise 2: Session 2 — Plan the Next Entity with Clean Context (15 min)<a class="anchor" href="#exercise-2-session-2-plan-the-next-entity-with-clean-context-15-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Execute the next session cleanly, observing context usage before and after <code>/clear</code>.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>
+<p><strong>Check <code>/status</code>:</strong>
+   <code>/status</code>
+   Check the context percentage.</p>
+</li>
+<li>
+<p>Architect the next entity — HrDepartment:
+   <code>I need to scaffold HrDepartment in a clean session. Design the
+   session plan: what files to create, what order, what to verify.
+   Department hierarchy: parent_department_id FK to self (tree structure).
+   Include soft delete (@SQLRestriction). Service needs findTree()
+   returning nested children. Follow all CLAUDE.md conventions.</code>
+   Plan it first — don't build yet. This keeps the session focused on design, not implementation.</p>
+</li>
+<li>
+<p><strong>Check <code>/status</code> again.</strong> Notice how much context the design consumed. This is your baseline for one focused task.</p>
+</li>
+</ol>
+<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<p>A focused session — one focused question, no accumulated reads from prior tasks — stays well under 30% context. Claude follows conventions precisely because it isn't sifting through a history of prior work.</p>
+<hr />
+<h2 id="exercise-3-using-compact-for-long-tasks-10-min">Exercise 3: Using /compact for Long Tasks (10 min)<a class="anchor" href="#exercise-3-using-compact-for-long-tasks-10-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Use <code>/compact</code> to compress a long session without losing the key implementation context you need to continue working.</p>
+<h3 id="when-to-use-compact">When to Use /compact<a class="anchor" href="#when-to-use-compact">&#182;</a></h3>
+<p><code>/compact</code> is for situations where:
+- You're mid-task and can't start fresh (too much context built up)
+- You want to shed accumulated file reads and tool outputs
+- You need to continue the same task but context is getting large</p>
+<p>Unlike <code>/clear</code> (which wipes everything), <code>/compact</code> summarizes history while preserving what you tell it to keep.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>
+<p>Continue from Exercise 2. You have a session with the HrJob scaffold. Check <code>/status</code> to note the current percentage.</p>
+</li>
+<li>
+<p>Add some bulk to the session — ask Claude to read a large file:
+   <code>Read docs/requirement.md and list the entities mentioned.</code>
+   Check <code>/status</code> again. Context has grown.</p>
+</li>
+<li>
+<p>Now run <code>/compact</code> with a directive:
+   <code>/compact</code>
+   When prompted (or in the same message), tell Claude what to preserve:
+   <code>Compact this session. Preserve: the CLAUDE.md rules in effect,
+   the HrJob entity we scaffolded (entity fields, service methods,
+   caching annotation), and any pending compile issues.
+   Discard: the full requirement.md content we just read.</code></p>
+</li>
+<li>
+<p><strong>Check <code>/status</code> after</strong> — context should be significantly reduced.</p>
+</li>
+<li>
+<p>Verify Claude retained the key context:
+   <code>What caching configuration did we add to HrJob?
+   What CLAUDE.md rules are we following in this session?</code>
+   It should answer correctly from the compacted summary.</p>
+</li>
+</ol>
+<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<p><code>/compact</code> compresses prior history while keeping the context you directed it to preserve. The percentage drops. Claude still knows your session's key decisions and the code it produced.</p>
+<blockquote>
+<p><strong>Comparison:</strong> <code>/clear</code> = full reset. <code>/compact</code> = summarize and continue. Use <code>/clear</code> between tasks. Use <code>/compact</code> within a long task that isn't done yet.</p>
+</blockquote>
+<hr />
+<h2 id="exercise-4-context-habits-checklist-5-min">Exercise 4: Context Habits Checklist (5 min)<a class="anchor" href="#exercise-4-context-habits-checklist-5-min">&#182;</a></h2>
+<p>Review and internalize these habits:</p>
+<ul>
+<li>[ ] <strong>Design sessions before starting</strong> — one entity per session, explicit <code>/clear</code> between them</li>
+<li>[ ] <strong><code>/clear</code> between tasks</strong> — don't let Task A's context pollute Task B</li>
+<li>[ ] <strong>Don't read files "just in case"</strong> — every file read costs tokens</li>
+<li>[ ] <strong>Separate research from implementation</strong> — read docs in a dedicated pass, then <code>/clear</code> before building</li>
+<li>[ ] <strong>Use <code>/compact</code> mid-task</strong> — when you can't clear but context is growing and you need to continue</li>
+<li>[ ] <strong>Start fresh sessions for new features</strong> — cheapest clean context</li>
+<li>[ ] <strong>Check <code>/status</code> periodically</strong> — know your context level</li>
+</ul>
+<p>Add to CLAUDE.md:</p>
+<pre><code class="language-markdown">## Session Discipline
+- /clear between unrelated tasks
+- Delegate large file reads to subagents
+- If context &gt; 70%, /compact or start fresh session
+- Check /status periodically — context is your most precious resource
+</code></pre>
+<hr />
+<h2 id="success-criteria">Success Criteria<a class="anchor" href="#success-criteria">&#182;</a></h2>
+<ul>
+<li>[ ] Experienced context degradation by reviewing Notification in polluted vs fresh context</li>
+<li>[ ] Used <code>/clear</code> between Exercise 1 and Exercise 2</li>
+<li>[ ] Used <code>/compact</code> in Exercise 3 and verified Claude retained key context</li>
+<li>[ ] Can explain the degradation curve (60% → 80% → 90%)</li>
+<li>[ ] Can explain the difference between <code>/clear</code> and <code>/compact</code></li>
+<li>[ ] CLAUDE.md updated with session discipline rules</li>
+</ul>
+<hr />
+<h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">&#182;</a></h2>
+<ol>
+<li><strong>Design sessions before you start</strong> — one focused task per session is a professional habit, not a workaround</li>
+<li><strong><code>/clear</code> is free, debugging isn't</strong> — clearing context takes 0 seconds; fixing a context-poisoned generation takes 10 minutes</li>
+<li><strong><code>/compact</code> preserves intent</strong> — use it mid-task to shed accumulated noise without losing your session's key decisions</li>
+<li><strong>Separate reading from building</strong> — docs in one session, implementation in the next; never both in the same window</li>
+<li><strong>Check <code>/status</code> like checking fuel</strong> — you wouldn't drive without a gas gauge</li>
+</ol>
+<hr />
+<details>
+<summary><strong>Escape Hatch</strong> — If /compact doesn't visibly reduce context</summary>
+
+`/compact` reduction depends on how much history has accumulated:
+- If context is under 30%, compaction may not show a dramatic percentage drop
+- Build up more history first: read `docs/requirement.md` and `docs/technical-design.md`, scaffold an additional entity, ask a few questions — then compact
+
+The key test isn't the percentage number — it's whether Claude can answer "what did we build in this session?" correctly after compaction. If it can, the compaction preserved what matters.
+</details><div class="footer-nav"><a href="../index.html">← All Labs</a><a href="lab-03-skills-commands.html">← Previous</a><a href="lab-05-hooks.html">Next →</a><a href="https://github.com/ssthakuraa/claude-code-workshop" target="_blank">GitHub Repo</a></div>
+</div>
+</body>
+</html>

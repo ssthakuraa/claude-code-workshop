@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code Workshop — Claude Code Workshop</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.7; color: #1a1a2e; background: #fafafa; margin: 0;
+}
+.page-wrap {
+  max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem;
+  background: #fff; min-height: 100vh;
+  border-left: 1px solid #e8e8e8; border-right: 1px solid #e8e8e8;
+  box-shadow: 0 0 40px rgba(0,0,0,0.04);
+}
+.page-header {
+  border-bottom: 2px solid #2563eb; padding-bottom: 0.25rem; margin-bottom: 1.5rem;
+}
+.page-header h1 { font-size: 1.75rem; margin: 0 0 0.25rem; color: #1e3a5f; }
+.page-header .subtitle { color: #64748b; font-size: 0.9rem; }
+h1 { font-size: 1.6rem; color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.3rem; }
+h2 { font-size: 1.3rem; color: #1e3a5f; margin-top: 2.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.3rem; }
+h3 { font-size: 1.05rem; color: #334155; margin-top: 1.5rem; }
+h4 { font-size: 0.95rem; color: #475569; }
+h2:first-of-type, h3:first-of-type { margin-top: 0; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+ul, ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+li { margin: 0.25rem 0; }
+li li { margin: 0; }
+img { max-width: 100%; border-radius: 6px; }
+blockquote {
+  border-left: 4px solid #2563eb; padding: 0.5rem 1rem; margin: 1rem 0;
+  background: #f8fafc; border-radius: 0 6px 6px 0; color: #334155;
+}
+blockquote > p:first-child { margin-top: 0.2rem; }
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+th, td { border: 1px solid #e2e8f0; padding: 0.45rem 0.65rem; text-align: left; }
+th { background: #f1f5f9; font-weight: 600; color: #1e3a5f; }
+tr:nth-child(even) { background: #f8fafc; }
+pre {
+  background: #1e293b; color: #e2e8f0; padding: 1rem 1.25rem;
+  border-radius: 8px; overflow-x: auto; font-size: 0.85rem; margin: 1rem 0;
+  line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+code {
+  background: #f1f5f9; color: #dc2626; padding: 0.15em 0.35em;
+  border-radius: 4px; font-size: 0.88em; font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+}
+pre code { color: inherit; }
+details { margin: 1rem 0; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; }
+summary { cursor: pointer; padding: 0.75rem 1rem; font-weight: 600; color: #2563eb; user-select: none; }
+summary:hover { background: #f1f5f9; }
+details[open] summary { border-bottom: 1px solid #e2e8f0; }
+details > div, details > pre, details > p { padding: 0 1rem 1rem; }
+hr { border: none; border-top: 2px solid #e2e8f0; margin: 2rem 0; }
+nav.toc {
+  border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.5rem;
+  margin: 1rem 0 2rem; background: #f8fafc;
+}
+.toc-header { font-weight: 700; color: #1e3a5f; margin-bottom: 0.5rem; font-size: 0.95rem; }
+nav.toc a { color: #475569; font-size: 0.85rem; display: block; padding: 0.15rem 0; text-decoration: none; }
+nav.toc a:hover { color: #2563eb; }
+.back-link {
+  display: inline-block; margin-top: 3rem; padding: 0.5rem 1.25rem;
+  background: #2563eb; color: #fff; border-radius: 4px; font-size: 0.85rem;
+  text-decoration: none; font-weight: 500;
+}
+.back-link:hover { background: #1d4ed8; color: #fff; text-decoration: none; }
+.footer-nav { margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid #e2e8f0; display: flex; gap: 1rem; flex-wrap: wrap; }
+.footer-nav a { display: inline-block; font-size: 0.9rem; padding: 0.4rem 0.8rem; background: #f1f5f9; border-radius: 4px; text-decoration: none; }
+.footer-nav a:hover { background: #e2e8f0; text-decoration: none; }
+input[type="checkbox"] { margin-right: 0.3rem; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+<div class="page-header"><h1>Claude Code Workshop</h1><div class="subtitle">Enterprise HR Management System — Spring Boot + React</div></div><nav class="toc">
+<div class="toc-header">Contents</div>
+  <a href="#claude-code-enterprise-training-lab">Claude Code Enterprise Training Lab</a>
+    <a href="#repository-structure">Repository Structure</a>
+    <a href="#getting-started">Getting Started</a>
+      <a href="#for-students">For Students</a>
+      <a href="#for-instructors">For Instructors</a>
+    <a href="#workshop-overview">Workshop Overview</a>
+    <a href="#three-core-truths">Three Core Truths</a>
+    <a href="#license">License</a>
+</nav><h1 id="claude-code-enterprise-training-lab">Claude Code Enterprise Training Lab<a class="anchor" href="#claude-code-enterprise-training-lab">&#182;</a></h1>
+<p>This repository contains a 4-day hands-on workshop for mastering Claude Code in enterprise development environments.</p>
+<h2 id="repository-structure">Repository Structure<a class="anchor" href="#repository-structure">&#182;</a></h2>
+<ul>
+<li><strong>main branch</strong> - All workshop materials: labs, source code, frontend, database, scripts, and configs</li>
+</ul>
+<h2 id="getting-started">Getting Started<a class="anchor" href="#getting-started">&#182;</a></h2>
+<h3 id="for-students">For Students<a class="anchor" href="#for-students">&#182;</a></h3>
+<ol>
+<li>
+<p>Clone this repository:
+   <code>bash
+   git clone https://github.com/ssthakuraa/claude-code-workshop.git
+   cd claude-code-workshop</code></p>
+</li>
+<li>
+<p>Follow the environment setup guide in <code>envsetup-student.md</code></p>
+</li>
+<li>
+<p>Begin with Lab 1: <code>labs/lab-01-claudemd.md</code></p>
+</li>
+</ol>
+<h3 id="for-instructors">For Instructors<a class="anchor" href="#for-instructors">&#182;</a></h3>
+<ul>
+<li>Presentation decks: <code>decks/</code></li>
+<li>Instructor flow guide: <code>instructor/flow-guide.md</code></li>
+<li>Lab exercises: <code>labs/</code></li>
+</ul>
+<h2 id="workshop-overview">Workshop Overview<a class="anchor" href="#workshop-overview">&#182;</a></h2>
+<p>This 4-day workshop teaches enterprise-grade Claude Code usage through hands-on labs:</p>
+<p><strong>Day 1 - Foundation</strong>: CLAUDE.md, Plan Mode, Skills &amp; Commands, Context Management
+<strong>Day 2 - Productivity</strong>: Hooks, Subagents, Parallel Sessions &amp; Git Worktrees, Verification Loops
+<strong>Day 3 - Integration</strong>: Playwright MCP, MySQL MCP
+<strong>Day 4 - Mastery</strong>: CI/CD &amp; Permissions, Capstone Project</p>
+<p>Each lab builds on the previous ones, progressively teaching Claude Code features while building an HR Enterprise Platform (Spring Boot + React).</p>
+<h2 id="three-core-truths">Three Core Truths<a class="anchor" href="#three-core-truths">&#182;</a></h2>
+<ol>
+<li>Context management is the #1 constraint</li>
+<li>Planning before implementation is non-negotiable</li>
+<li>Simplicity beats complexity</li>
+</ol>
+<h2 id="license">License<a class="anchor" href="#license">&#182;</a></h2>
+<p>See individual files for licensing information.</p><div class="footer-nav"><a href="index.html">← Main Page</a><a href="https://github.com/ssthakuraa/claude-code-workshop" target="_blank">GitHub Repo</a></div>
+</div>
+</body>
+</html>
