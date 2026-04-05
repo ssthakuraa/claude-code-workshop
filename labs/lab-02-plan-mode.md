@@ -129,7 +129,7 @@ Design `hireEmployee()` in Plan Mode, iterate until the plan is complete, then i
 
 6. **Verify:** Run `mvn compile` to check it compiles. Review the method against the plan.
 
-> **Reference:** If you get stuck, compare with `HrEmployeeService.java.reference` — the full working version is there.
+> **Reference:** If you get stuck, compare with `reference/backend/hrapp-service/src/main/java/com/company/hr/service/HrEmployeeService.java.reference` — the full working version is there.
 
 ### What You Should See
 

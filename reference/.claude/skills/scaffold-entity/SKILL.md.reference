@@ -25,13 +25,17 @@ When invoked, generate all 6 layers for an HR entity:
 ### 4. Request (dto/request/)
 - Hr{EntityName}Request with validation annotations (@NotBlank, @Size, etc.)
 
-### 5. Service (service/)
+### 5. Mapper (mapper/)
+- Hr{EntityName}Mapper using MapStruct (@Mapper(componentModel = "spring"))
+- toDTO, fromRequest, updateFromRequest methods
+
+### 6. Service (service/)
 - Hr{EntityName}Service with HrLogHelper entry/exit on EVERY method
 - findAll, findById, create, update, delete
 - @Transactional, @PreAuthorize on all methods
 - ALL methods annotated with appropriate RBAC role
 
-### 6. Controller (controller/)
+### 7. Controller (controller/)
 - Hr{EntityName}Controller at /app/hr/api/v1/{plural_name}
 - ALL endpoints return HrApiResponse<T> or HrPagedResponse<T>
 - Never return raw objects
@@ -48,13 +52,17 @@ When invoked, generate all 6 layers for an HR entity:
 
 ```
 /scaffold-entity
-Entity: Location
-Table: locations
+Entity: Notification
+Table: hr_notifications
 Fields:
-- locationId (Integer, PK, auto-generated)
-- streetAddress (String, max 40)
-- postalCode (String, max 12)
-- city (String, max 30, required)
-- stateProvince (String, max 25)
-- country (FK → HrCountry)
+- notificationId (Long, PK, auto-generated)
+- recipientUserId (Integer, FK → HrUser, required)
+- notificationType (ENUM: PROBATION_ALERT, CONTRACT_EXPIRY, ACTION_COMPLETE, SYSTEM)
+- title (String, max 255, required)
+- message (String/TEXT)
+- referenceTable (String, max 60)
+- referenceId (String, max 60)
+- isRead (Boolean, default false)
+- createdAt (Instant, auto)
+```
 ```

@@ -62,7 +62,7 @@ ls backend/             # Maven project structure
 
 You now have a minimal CLAUDE.md with no convention rules. Claude will make predictable mistakes — that's the point.
 
-> **After this lab:** Run `mv CLAUDE.md.complete CLAUDE.md` to restore the full version if you want to compare your work with the reference.
+> **After this lab:** Run `cp CLAUDE.md.complete CLAUDE.md` to restore the full version if you want to compare your work with the reference.
 
 ---
 
@@ -206,7 +206,7 @@ Claude should now produce convention-compliant code on the **first try** — no 
 ### Goal
 Split the root CLAUDE.md into three focused files using Claude Code's directory-level hierarchy. This is essential in monorepos where Java rules shouldn't clutter the frontend context and vice versa.
 
-> **Note:** Reference versions are at `backend/CLAUDE.md.reference` and `frontend/CLAUDE.md.reference`. Build your own first — compare with the reference at the end.
+> **Note:** Reference versions are at `reference/backend/CLAUDE.md.reference` and `reference/frontend/CLAUDE.md.reference`. Build your own first — compare with the reference at the end.
 
 ### The Concept
 
@@ -264,7 +264,7 @@ This means you can scope rules to where they apply — Java rules stay in `backe
    ```
    You should see root + frontend rules — backend rules absent.
 
-5. **Compare with the reference.** How does your build compare with `backend/CLAUDE.md.reference` and `frontend/CLAUDE.md.reference`? Use `diff` or just visually inspect. Copy the reference if you got stuck or make incremental improvements to yours.
+5. **Compare with the reference.** How does your build compare with `reference/backend/CLAUDE.md.reference` and `reference/frontend/CLAUDE.md.reference`? Use `diff` or just visually inspect. Copy the reference if you got stuck or make incremental improvements to yours.
 
 ### What You Should See
 

@@ -122,7 +122,7 @@ Package the scaffolding pattern into a reusable skill.
 ## Exercise 3: Use the Skill (10 min)
 
 ### Goal
-Scaffold a new entity using the skill — one prompt, zero corrections.
+Scaffold a genuinely new entity using the skill — proving it works on something no one has built before.
 
 ### Instructions
 
@@ -131,30 +131,36 @@ Scaffold a new entity using the skill — one prompt, zero corrections.
    /clear
    ```
 
-2. Use the skill to scaffold Location:
+2. Use the skill to scaffold Notification:
    ```
    /scaffold-entity
-   Entity: Location
-   Table: locations
+   Entity: Notification
+   Table: hr_notifications
    Fields:
-   - locationId (Integer, PK, auto-generated)
-   - streetAddress (String, max 40)
-   - postalCode (String, max 12)
-   - city (String, max 30, required)
-   - stateProvince (String, max 25)
-   - country (FK → HrCountry)
+   - notificationId (Long, PK, auto-generated)
+   - recipientUserId (Integer, FK → HrUser, required)
+   - notificationType (ENUM: PROBATION_ALERT, CONTRACT_EXPIRY, ACTION_COMPLETE, SYSTEM, required)
+   - title (String, max 255, required)
+   - message (String/TEXT, optional)
+   - referenceTable (String, max 60, optional)
+   - referenceId (String, max 60, optional)
+   - isRead (Boolean, default false)
+   - createdAt (Instant/LocalDateTime, auto)
+   - No soft delete needed — notifications are lightweight.
    ```
 
 3. **Compare with Exercise 1:**
-   - Prompts needed in Exercise 1: _____ (2–4)
+   - Prompts needed in Exercise 1: _____ (2–4 to scaffold Country)
    - Prompts needed with skill: **1**
-   - Did Claude follow all conventions? (Hr prefix, logging, response envelope, etc.)
+   - Did Claude follow all conventions? (Hr prefix, HrLogHelper, HrApiResponse, @PreAuthorize, @SQLRestriction, etc.)
 
 4. Verify: `cd backend && mvn compile`
 
+5. **Why this matters:** Notification is a real entity your HR app will need. You didn't build it yet — the skill just delivered all 7 layers in one prompt. Compare that with Exercise 1 where you needed multiple prompts for Country and still had gaps.
+
 ### What You Should See
 
-One prompt → all 7 layers → compiles clean → all conventions followed. The skill eliminated the need to re-explain the pattern.
+One prompt → all 7 layers → compiles clean → all conventions followed. The skill eliminated the need to re-explain the pattern and delivered a production-ready entity you actually need.
 
 ---
 
@@ -208,7 +214,7 @@ Create a `/run-tests` command for daily use.
 ## Success Criteria
 
 - [ ] `/scaffold-entity` skill exists in `.claude/skills/scaffold-entity/SKILL.md`
-- [ ] Location entity scaffolded with one prompt, zero corrections
+- [ ] Notification entity scaffolded with one prompt, zero corrections
 - [ ] `/run-tests` command exists and runs successfully
 - [ ] Manual scaffolding (Exercise 1) required 2+ prompts; skill required 1
 - [ ] CLAUDE.md updated with skill/command references
