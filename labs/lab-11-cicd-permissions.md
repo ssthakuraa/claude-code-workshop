@@ -59,26 +59,22 @@ cd frontend && npm run build 2>&1 | tail -2
 
 ---
 
-## Exercise 1: Generate the Makefile (15 min)
+## Exercise 1: Study the Makefile (15 min)
 
 ### Goal
-Create a platform-agnostic pipeline definition.
+Understand the platform-agnostic pipeline contract.
+
+### Background
+
+The project already has a Makefile at the project root. This is the foundation of the enterprise CI/CD approach — it works on ANY CI system.
 
 ### Instructions
 
-1. Ask Claude to generate a Makefile:
+1. **Study the Makefile:**
    ```
-   Create a Makefile at the project root for this Spring Boot + React monorepo.
-   Include these targets:
-   - backend-build: mvn clean compile
-   - backend-test: mvn test (hrapp-service only)
-   - backend-package: mvn package -DskipTests
-   - frontend-install: npm ci
-   - frontend-lint: npm run lint
-   - frontend-build: npm run build
-   - Composite targets: build, test, lint, package, verify (all of the above)
-   - clean: remove all build artifacts
-   - help: list available targets
+   Read the Makefile at the project root.
+   Explain the composite targets (build, test, lint, package, verify)
+   and how they chain the individual backend/frontend targets.
    ```
 
 2. **Test it locally:**
@@ -87,31 +83,27 @@ Create a platform-agnostic pipeline definition.
    make test      # Should run backend tests
    ```
 
-3. **Key insight:** This Makefile works on ANY CI system. The CI config just calls `make build`, `make test`.
+3. **Key insight:** This Makefile works on ANY CI system. The CI config just calls `make build`, `make test`. When your company migrates from Jenkins to GitHub Actions, you only rewrite the Jenkinsfile — the Makefile stays.
 
 ---
 
-## Exercise 2: Generate the Jenkins Pipeline (20 min)
+## Exercise 2: Study the Jenkins Pipeline (20 min)
 
 ### Goal
-Create a Jenkinsfile that orchestrates the Makefile targets.
+Understand the Jenkins pipeline that orchestrates the Makefile targets.
+
+### Background
+
+The project already has a Jenkinsfile with full declarative pipeline syntax, 5 stages, and branch-gated Package stage.
 
 ### Instructions
 
-1. Ask Claude to generate the pipeline:
+1. **Study the Jenkinsfile:**
    ```
-   Create a declarative Jenkinsfile for this project with these stages:
-   1. Checkout
-   2. Backend Build & Test (mvn compile + mvn test, publish JUnit results)
-   3. Frontend Install & Lint (npm ci + npm run lint)
-   4. Frontend Build (npm run build, archive dist/ artifacts)
-   5. Package (mvn package, archive JAR — only on main and release/* branches)
-
-   Use declarative pipeline syntax. Include:
-   - 30-minute timeout
-   - Build discarder (keep 10 builds)
-   - cleanWs() in post-always
-   - Failure notification placeholder
+   Read the Jenkinsfile. Walk me through each stage.
+   Then explain what happens differently on:
+   1. A feature branch (feature/new-page)
+   2. The main branch
    ```
 
 2. **Review the Jenkinsfile.** Check:
@@ -119,13 +111,12 @@ Create a Jenkinsfile that orchestrates the Makefile targets.
    - [ ] `when { branch 'main' }` on Package stage?
    - [ ] JUnit results published in `post { always { } }`?
    - [ ] Artifacts archived with fingerprinting?
+   - [ ] cleanWs() in post-always?
 
-3. **Ask Claude to explain:**
+3. **Ask Claude to explain the Makefile ↔ Jenkinsfile relationship:**
    ```
-   Walk me through what happens when this pipeline runs on:
-   1. A feature branch (feature/new-page)
-   2. The main branch
-   What's different between the two?
+   How does this Jenkinsfile use the Makefile as a contract?
+   Where does it call make directly vs running the commands itself?
    ```
 
 ---
