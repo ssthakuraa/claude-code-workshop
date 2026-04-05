@@ -23,19 +23,21 @@ echo "=========================================="
 # Step 1: Reload the database
 echo ""
 echo "[1/2] Reloading database (hr_db)..."
+# Drop and recreate to avoid "table already exists" errors
+mysql -u hrapp -phrapp_pass -e "DROP DATABASE IF EXISTS hr_db; CREATE DATABASE hr_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;" 2>/dev/null
+
 if mysql -u hrapp -phrapp_pass hr_db < database/schema.sql 2>/dev/null; then
   echo "      schema.sql loaded OK"
 else
-  echo "      WARNING: schema.sql load had errors. Check MySQL connection."
+  echo "      ERROR: schema.sql failed. Check database/ files and MySQL connection."
   echo "      Manual fallback:"
   echo "        mysql -u hrapp -phrapp_pass hr_db < database/schema.sql"
-  echo "        mysql -u hrapp -phrapp_pass hr_db < database/demo.sql"
 fi
 
 if mysql -u hrapp -phrapp_pass hr_db < database/demo.sql 2>/dev/null; then
   echo "      demo.sql loaded OK"
 else
-  echo "      WARNING: demo.sql load had errors. Check MySQL connection."
+  echo "      ERROR: demo.sql failed. Check database/demo.sql."
 fi
 
 # Step 2: Compile check

@@ -1,20 +1,34 @@
 # Mastering Claude Code for Enterprise Development
 
-## A 4-Day Hands-On Workshop
+## A 2-Day Hands-On Workshop
 
 **Audience:** Engineers, Tech Leads, Architects working in enterprise codebases
 **Lab Project:** Enterprise HR Management System (Spring Boot + React, Vertex Tech Modern Design System)
+**Duration:** 2 full days (or 4 half-days)
 
 ---
 
 ## Workshop Structure
 
-| Day | Theme | Labs | Core Message |
-|-----|-------|------|--------------|
-| **Day 1** | Foundation — Teach Claude Your Enterprise | Labs 1–4 | *Context is everything. Teach Claude once, benefit forever.* |
-| **Day 2** | Productivity — Scale and Automate | Labs 5–8 | *Encode quality. Parallelize. Let Claude verify its own work.* |
-| **Day 3** | Integration — Connect Claude to Your Ecosystem | Labs 9–10 | *MCP bridges Claude to databases, browsers, and external tools.* |
-| **Day 4** | Mastery — Operate at Enterprise Scale | Labs 11–12 | *CI/CD, permissions, and the full end-to-end workflow.* |
+### 2-Day Track (Recommended)
+
+| Day | Theme | Labs | Duration | Core Message |
+|-----|-------|------|----------|--------------|
+| **Day 1** | Foundation + Productivity | Labs 1–6 | 6–7 hours | *Context is everything. Encode quality. Parallelize.* |
+| **Day 2** | Integration + Mastery | Labs 7–12 | 5–6 hours | *MCP bridges to your ecosystem. CI/CD and capstone.* |
+
+### Alternative: 4-Day Spread Track
+
+For teams who prefer half-day sessions spread across a week:
+
+| Day | Theme | Labs | Duration | Core Message |
+|-----|-------|------|----------|--------------|
+| **Day 1** | Foundation — Teach Claude Your Enterprise | Labs 1–4 | 3–3.5 hours | *Context is everything. Teach Claude once, benefit forever.* |
+| **Day 2** | Productivity — Scale and Automate | Labs 5–8 | 3–3.5 hours | *Encode quality. Parallelize. Let Claude verify its own work.* |
+| **Day 3** | Integration — Connect Claude to Your Ecosystem | Labs 9–10 | 2.5 hours | *MCP bridges Claude to databases, browsers, and external tools.* |
+| **Day 4** | Mastery — Operate at Enterprise Scale | Labs 11–12 | 3.5 hours | *CI/CD, permissions, and the full end-to-end workflow.* |
+
+> **Why 2 days works:** All 12 labs total ~12 hours of actual work. No labs are skipped — the same content is just packed differently. The 4-day spread exists for teams who want time between sessions to practice and absorb.
 
 ---
 
