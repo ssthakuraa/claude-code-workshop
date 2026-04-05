@@ -198,8 +198,31 @@ public class HrEmployeeService {
     @Transactional
     @PreAuthorize("hasAnyRole('ADMIN','HR_SPECIALIST')")
     public HrEmployeeDetailDTO promoteEmployee(HrPromoteRequest request) {
-        // TODO: Implement promoteEmployee — see Lab 8 instructions
-        throw new UnsupportedOperationException("promoteEmployee not yet implemented");
+        LOGGER.info("Entering promoteEmployee(employeeId={})", request.getEmployeeId());
+        checkIdempotency(request.getIdempotencyKey(), "POST /employees/promote");
+
+        HrEmployee employee = employeeRepository.findById(request.getEmployeeId())
+                .orElseThrow(() -> new HrResourceNotFoundException("Employee", request.getEmployeeId()));
+        HrJob newJob = jobRepository.findById(request.getNewJobId())
+                .orElseThrow(() -> new HrResourceNotFoundException("Job", request.getNewJobId()));
+
+        LocalDate effectiveDate = request.getEffectiveDate() != null ? request.getEffectiveDate() : LocalDate.now();
+        validateSalaryForJob(request.getNewSalary(), newJob);
+
+        // Close current job history
+        closeJobHistory(employee, effectiveDate.minusDays(1));
+
+        // Update employee
+        employee.setJob(newJob);
+        if (request.getNewSalary() != null) employee.setSalary(request.getNewSalary());
+        employeeRepository.save(employee);
+
+        // Open new job history entry
+        createJobHistoryEntry(employee, newJob, employee.getDepartment(), effectiveDate, null);
+
+        recordIdempotency(request.getIdempotencyKey(), "POST /employees/promote", 200);
+        LOGGER.info("Exiting promoteEmployee, promoted ID={} to job={}", employee.getEmployeeId(), newJob.getJobId());
+        return toDetailWithMasking(employee, HrSecurityUtil.getCurrentEmployeeId());
     }
 
     // =====================================================

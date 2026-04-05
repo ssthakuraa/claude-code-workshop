@@ -87,7 +87,28 @@ class HrEmployeeServiceTest {
     }
 
     // --- promoteEmployee ---
-    // TODO: Write tests and implement promoteEmployee() — see Lab 8 instructions
+
+    @Test
+    void promoteEmployee_throwsBusinessRule_whenSalaryExceedsNewJobMax() {
+        HrJob newJob = new HrJob("IT_MGR", "Manager", new BigDecimal("6000"), new BigDecimal("10000"));
+
+        HrEmployee employee = new HrEmployee();
+        employee.setEmployeeId(1);
+        employee.setJob(job);
+
+        HrPromoteRequest req = new HrPromoteRequest();
+        req.setEmployeeId(1);
+        req.setNewJobId("IT_MGR");
+        req.setNewSalary(new BigDecimal("99000")); // exceeds max
+        req.setIdempotencyKey("key-p1");
+
+        when(idempotencyKeyRepository.existsById("key-p1")).thenReturn(false);
+        when(employeeRepository.findById(1)).thenReturn(Optional.of(employee));
+        when(jobRepository.findById("IT_MGR")).thenReturn(Optional.of(newJob));
+
+        assertThatThrownBy(() -> service.promoteEmployee(req))
+                .isInstanceOf(HrBusinessRuleViolationException.class);
+    }
 
     // --- helpers ---
 
