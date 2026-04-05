@@ -179,10 +179,10 @@ Redo the same scaffolding task and confirm Claude now follows your rules.
 
 2. Ask Claude the **exact same prompt** as Exercise 1:
    ```
-   Scaffold the Region entity for the HR app.
-   Create: JPA entity mapping to the "regions" table,
+   Scaffold the PayGrade entity for the HR app.
+   Create: JPA entity mapping to the "pay_grades" table,
    repository, DTO, request object, service with CRUD operations,
-   and REST controller at /app/hr/api/v1/regions.
+   and REST controller at /app/hr/api/v1/pay-grades.
    All endpoints should return a standard response envelope.
    ```
 
@@ -206,7 +206,11 @@ Claude should now produce convention-compliant code on the **first try** — no 
 ### Goal
 Split the root CLAUDE.md into three focused files using Claude Code's directory-level hierarchy. This is essential in monorepos where Java rules shouldn't clutter the frontend context and vice versa.
 
+> **Note:** Reference versions are at `backend/CLAUDE.md.reference` and `frontend/CLAUDE.md.reference`. Build your own first — compare with the reference at the end.
+
 ### The Concept
+
+
 
 Claude Code automatically merges CLAUDE.md files from the project root down to the directory where Claude is running:
 
@@ -259,6 +263,8 @@ This means you can scope rules to where they apply — Java rules stay in `backe
    claude
    ```
    You should see root + frontend rules — backend rules absent.
+
+5. **Compare with the reference.** How does your build compare with `backend/CLAUDE.md.reference` and `frontend/CLAUDE.md.reference`? Use `diff` or just visually inspect. Copy the reference if you got stuck or make incremental improvements to yours.
 
 ### What You Should See
 
