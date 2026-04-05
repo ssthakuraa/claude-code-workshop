@@ -55,21 +55,20 @@ curl -s http://localhost:8080/app/hr/api/v1/regions | head -5  # Backend
 
 ---
 
-## Exercise 1: Configure Playwright MCP (15 min)
+## Exercise 1: Study the Existing Playwright MCP Setup (15 min)
 
 ### Goal
-Add the Playwright MCP server to the project.
+Understand how MCP server configuration works and verify Playwright is connected.
 
 ### Instructions
 
-1. Ask Claude to set up the MCP configuration:
+1. **Read `.mcp.json` at the project root:**
    ```
-   Configure the Playwright MCP server for this project.
-   Add it to .mcp.json so the whole team gets it.
-   Use headless Chromium on port 5173 (our Vite dev server).
+   Read .mcp.json and explain what MCP servers are configured.
+   For each, explain the command, arguments, and environment variables.
    ```
 
-2. **Verify the configuration.** `.mcp.json` should contain:
+2. **Verify the Playwright configuration.** `.mcp.json` should already contain:
    ```json
    {
      "mcpServers": {
@@ -83,17 +82,20 @@ Add the Playwright MCP server to the project.
    }
    ```
 
-3. **Restart Claude Code** to load the MCP server:
+3. **Verify Playwright tools are available.** Claude should confirm that Playwright tools (browser_navigate, browser_snapshot, etc.) are present.
+   If they don't appear, install Playwright browsers:
+   ```bash
+   cd frontend && npx playwright install chromium
    ```
-   /clear
-   ```
-   Then start a new session. Claude should now have Playwright tools available.
+   Then `/clear` to restart the session.
 
-4. **Smoke test:**
+4. **Smoke test — use Playwright to verify:**
    ```
    Navigate to http://localhost:5173 and take a screenshot.
    Describe what you see.
    ```
+
+5. **Understand the pattern:** MCP configuration is team-shared — `.mcp.json` is committed to git so every developer gets the same tools. This is why enterprise projects use MCP: one config, everyone benefits.
 
 ### What You Should See
 
