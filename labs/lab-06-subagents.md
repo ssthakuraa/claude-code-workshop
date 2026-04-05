@@ -105,6 +105,8 @@ Define a reviewer subagent with a critical persona and read-only tools.
    It should be read-only (Read, Glob, Grep only — no edits).
    ```
 
+> **Reference:** A reference version already exists at `reference/.claude/agents/component-reviewer.md.reference`. Create your own first, then compare.
+
 3. Note: You don't need a builder agent. You build in the main session.
    The reviewer's value comes from NOT being the session that built the
    code — fresh eyes, no confirmation bias.
