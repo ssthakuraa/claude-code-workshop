@@ -129,6 +129,8 @@ Design `hireEmployee()` in Plan Mode, iterate until the plan is complete, then i
 
 6. **Verify:** Run `mvn compile` to check it compiles. Review the method against the plan.
 
+> **Reference:** If you get stuck, compare with `HrEmployeeService.java.reference` — the full working version is there.
+
 ### What You Should See
 
 The planned implementation should include all 7 steps, proper error handling, and the transaction boundary — everything that was missing in Exercise 1. The plan surfaced the implicit requirements before a single line of code was written.

@@ -63,8 +63,82 @@ class HrEmployeeServiceTest {
                 .isInstanceOf(HrResourceNotFoundException.class);
     }
 
-    // --- hireEmployee tests: write these during Lab 2 ---
-    // See HrEmployeeServiceTest.java.reference for the completed test cases.
+    // --- hireEmployee ---
+
+    @Test
+    void hireEmployee_throwsConflict_onDuplicateIdempotencyKey() {
+        HrEmployeeCreateRequest req = buildHireRequest("key-001", "test@example.com", new BigDecimal("8000"));
+        when(idempotencyKeyRepository.existsById("key-001")).thenReturn(true);
+
+        assertThatThrownBy(() -> service.hireEmployee(req))
+                .isInstanceOf(HrConflictException.class);
+    }
+
+    @Test
+    void hireEmployee_throwsConflict_onDuplicateEmail() {
+        HrEmployeeCreateRequest req = buildHireRequest("key-002", "existing@example.com", new BigDecimal("8000"));
+        when(idempotencyKeyRepository.existsById("key-002")).thenReturn(false);
+        when(employeeRepository.existsByEmail("existing@example.com")).thenReturn(true);
+
+        assertThatThrownBy(() -> service.hireEmployee(req))
+                .isInstanceOf(HrConflictException.class);
+    }
+
+    @Test
+    void hireEmployee_throwsNotFound_whenJobMissing() {
+        HrEmployeeCreateRequest req = buildHireRequest("key-003", "new@example.com", new BigDecimal("8000"));
+        when(idempotencyKeyRepository.existsById("key-003")).thenReturn(false);
+        when(employeeRepository.existsByEmail("new@example.com")).thenReturn(false);
+        when(jobRepository.findById("IT_DEV")).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> service.hireEmployee(req))
+                .isInstanceOf(HrResourceNotFoundException.class);
+    }
+
+    @Test
+    void hireEmployee_throwsBusinessRule_whenSalaryBelowMin() {
+        HrEmployeeCreateRequest req = buildHireRequest("key-004", "new@example.com", new BigDecimal("1000")); // below 4000 min
+        when(idempotencyKeyRepository.existsById("key-004")).thenReturn(false);
+        when(employeeRepository.existsByEmail("new@example.com")).thenReturn(false);
+        when(jobRepository.findById("IT_DEV")).thenReturn(Optional.of(job));
+
+        assertThatThrownBy(() -> service.hireEmployee(req))
+                .isInstanceOf(HrBusinessRuleViolationException.class);
+    }
+
+    @Test
+    void hireEmployee_succeeds_withValidRequest() {
+        HrEmployeeCreateRequest req = buildHireRequest("key-005", "new@example.com", new BigDecimal("8000"));
+
+        HrEmployee saved = new HrEmployee();
+        saved.setEmployeeId(100);
+        saved.setFirstName("John");
+        saved.setLastName("Doe");
+        saved.setEmail("new@example.com");
+        saved.setHireDate(LocalDate.now());
+        saved.setJob(job);
+
+        HrRole role = new HrRole();
+        role.setRoleName("ROLE_EMPLOYEE");
+
+        when(idempotencyKeyRepository.existsById("key-005")).thenReturn(false);
+        when(employeeRepository.existsByEmail("new@example.com")).thenReturn(false);
+        when(jobRepository.findById("IT_DEV")).thenReturn(Optional.of(job));
+        when(employeeRepository.save(any())).thenReturn(saved);
+        when(userRepository.existsByUsername(anyString())).thenReturn(false);
+        when(roleRepository.findByRoleName("ROLE_EMPLOYEE")).thenReturn(Optional.of(role));
+        when(userRepository.save(any())).thenReturn(new HrUser());
+        when(jobHistoryRepository.save(any())).thenReturn(null);
+        when(idempotencyKeyRepository.save(any())).thenReturn(null);
+        when(jobHistoryRepository.findByEmployee_EmployeeIdOrderByIdStartDateDesc(100)).thenReturn(List.of());
+        when(formatter.formatFullName(any(), any())).thenReturn("John Doe");
+        when(passwordEncoder.encode(any())).thenReturn("hashed");
+
+        var result = service.hireEmployee(req);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getEmployeeId()).isEqualTo(100);
+    }
 
     // --- terminateEmployee ---
 
