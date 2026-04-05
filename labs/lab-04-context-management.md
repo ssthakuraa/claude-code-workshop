@@ -36,14 +36,14 @@ Claude's context window is finite. Everything — files read, command outputs, m
 
 ## Setup
 
-Continue from Labs 1–3. You should have CLAUDE.md, Region, Country, and Location entities.
+Continue from Labs 1–3. You should have CLAUDE.md, Region (or PayGrade), Country, Location, and the Notification entity you scaffolded in Lab 3 using `/scaffold-entity`.
 
 ---
 
-## Exercise 1: Architect a Clean Multi-Phase Build (15 min)
+## Exercise 1: Review with Fresh Context (15 min)
 
 ### Goal
-Plan how to build three entities across multiple clean sessions — keeping context lean by design rather than waiting for it to degrade.
+Experience the difference between "accumulated context" and "clean context" by reviewing the Notification entity you built in Lab 3.
 
 ### The Professional Mindset
 
@@ -51,80 +51,65 @@ Rather than asking "why does context degrade," ask "how would I plan this work s
 
 ### Instructions
 
-1. **Design the session architecture.** You need to build three entities: `HrDepartment`, `HrJob`, and `HrEmployee`. Each requires scaffold → compile → verify. Ask Claude to lay out the plan:
-   ```
-   I need to build HrDepartment, HrJob, and HrEmployee entities.
-   Each needs an entity, repo, DTO, request, service, and controller.
-   HrEmployee depends on HrDepartment and HrJob (FK references).
-
-   Design a session architecture that keeps context clean.
-   For each session: what do I do, what do I clear before starting,
-   and what does the next session depend on?
-   ```
-
-2. **Discuss the reading question.** Ask:
-   ```
-   If I need to read docs/requirement.md and docs/technical-design.md
-   before I start building, which session should I do that in, and why?
-   What's the cleanest way to use that information without polluting
-   every implementation session with it?
-   ```
-   Expected answer: read in a dedicated first session (or use a subagent — covered in Lab 6), then `/clear` before building. The key insight: reading docs and building code are different activities and should not share a context window.
-
-3. **Execute Session 1: HrDepartment.** Check `/status` before starting:
+1. **Check your current session state.** If you've been running Claude since Lab 3, your context is polluted with prior work:
    ```
    /status
    ```
-   Then scaffold:
+
+2. **Ask for a review with polluted context:**
    ```
-   Scaffold HrDepartment: entity, repo, DTO, request, service, controller.
-   Departments have a tree structure (parent_department_id FK to self).
-   Include soft delete. The service should support findTree() returning
-   nested children. Follow all CLAUDE.md conventions.
+   Review my Notification entity for correctness and convention compliance.
+   ```
+   Notice what Claude reviews — in a long session, it may reference outdated details from earlier labs.
+
+3. **Now clear and review with fresh context:**
+   ```
+   /clear
+   ```
+   Check `/status` — you should be back near 0%.
+
+   Then ask the same question:
+   ```
+   Review the HrNotification entity, HrNotificationController,
+   and HrNotificationService. Check for correct conventions:
+   Hr prefix, HrLogHelper entry/exit, @SQLRestriction,
+   @PreAuthorize, and HrApiResponse return types.
    ```
 
-4. **Check `/status` again** after scaffolding. This is your "before /clear" baseline.
+4. **Compare the two reviews.** Did the fresh-context review find things the polluted one missed?
 
-5. **Review the output:**
-   - [ ] Did Claude follow all CLAUDE.md conventions?
-   - [ ] Is logging pattern correct (`HrLogHelper` entry/exit)?
-   - [ ] Does the entity use `@SQLRestriction` (not `@Where`)?
-   - [ ] Does the controller return `HrApiResponse<T>`?
-
-> You've just completed Session 1 cleanly. Sessions 2 and 3 (HrJob and HrEmployee) would each start with `/clear` — by the time you build Employee (which depends on both), the context is fresh and only contains what that session needs.
+> You've just experienced context degradation firsthand. Session 1 was polluted with accumulated state from labs past. Session 2 was clean — Claude focused only on what you asked about.
 
 ---
 
-## Exercise 2: Session 2 — HrJob with Clean Context (15 min)
+## Exercise 2: Session 2 — Plan the Next Entity with Clean Context (15 min)
 
 ### Goal
 Execute the next session cleanly, observing context usage before and after `/clear`.
 
 ### Instructions
 
-1. **Clear context from Exercise 1:**
+1. **Check `/status`:**
    ```
-   /clear
+   /status
    ```
-   Check `/status` — you should be back near 0%.
+   Check the context percentage.
 
-2. Scaffold HrJob in this clean context:
+2. Architect the next entity — HrDepartment:
    ```
-   Scaffold HrJob: entity (job_id VARCHAR PK, job_title, min_salary, max_salary),
-   repo, DTO, request, service with salary range validation, controller.
-   Cache the findAll() results for 1 hour. Follow all CLAUDE.md conventions.
+   I need to scaffold HrDepartment in a clean session. Design the
+   session plan: what files to create, what order, what to verify.
+   Department hierarchy: parent_department_id FK to self (tree structure).
+   Include soft delete (@SQLRestriction). Service needs findTree()
+   returning nested children. Follow all CLAUDE.md conventions.
    ```
+   Plan it first — don't build yet. This keeps the session focused on design, not implementation.
 
-3. **Review the output:**
-   - [ ] Did Claude follow all CLAUDE.md conventions?
-   - [ ] Is the caching annotation correct (`@Cacheable`)?
-   - [ ] Did it validate `min_salary < max_salary`?
-
-4. **Check `/status`.** Notice how much context the scaffold consumed. This is your baseline for one focused task.
+3. **Check `/status` again.** Notice how much context the design consumed. This is your baseline for one focused task.
 
 ### What You Should See
 
-A focused session — one entity, no accumulated reads from prior tasks — stays well under 30% context. Claude follows conventions precisely because it isn't sifting through a history of prior work.
+A focused session — one focused question, no accumulated reads from prior tasks — stays well under 30% context. Claude follows conventions precisely because it isn't sifting through a history of prior work.
 
 ---
 
@@ -206,7 +191,7 @@ Add to CLAUDE.md:
 
 ## Success Criteria
 
-- [ ] Designed a session architecture for multi-entity build before starting
+- [ ] Experienced context degradation by reviewing Notification in polluted vs fresh context
 - [ ] Used `/clear` between Exercise 1 and Exercise 2
 - [ ] Used `/compact` in Exercise 3 and verified Claude retained key context
 - [ ] Can explain the degradation curve (60% → 80% → 90%)
