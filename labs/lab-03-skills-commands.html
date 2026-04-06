@@ -267,8 +267,13 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 <p>Did Claude follow all conventions? (Hr prefix, HrLogHelper, HrApiResponse, @PreAuthorize, @SQLRestriction, etc.)</p>
 </li>
 <li>
-<p>Verify: <code>cd backend &amp;&amp; mvn compile</code></p>
+<p>Verify: <code>cd backend &amp;&amp; mvn clean compile</code></p>
 </li>
+</ol>
+<details>
+<summary>Seeing lots of "cannot find symbol" errors?</summary>
+Run <code>mvn clean compile</code> (not just <code>mvn compile</code>). Lombok's annotation processor generates getters/setters in <code>target/generated-sources/annotations/</code>. When that directory has stale output from a previous build, Maven reuses cached output instead of regenerating for new or changed classes. <code>mvn clean</code> removes <code>target/</code> entirely, forcing a fresh rebuild. This is the #1 source of false compilation failures in Labs 2–3.
+</details>
 <li>
 <p><strong>Why this matters:</strong> Notification is a real entity your HR app will need. You didn't build it yet — the skill just delivered all 7 layers in one prompt. Compare that with Exercise 1 where you needed multiple prompts for Country and still had gaps.</p>
 </li>

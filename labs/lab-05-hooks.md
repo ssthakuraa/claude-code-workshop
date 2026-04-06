@@ -62,7 +62,7 @@ Create a PreToolUse hook that blocks any edit to `database/schema.sql`.
 
 ### Instructions
 
-> **Reference:** A reference version of `.claude/settings.json` with 6 fully working hooks already exists at `reference/.claude/settings.json`. Create your own with 3 hooks first, then compare at the end.
+> **Reference:** A reference version of `.claude/settings.json` exists at `reference/.claude/settings.json`. Create your own with 3 hooks first, then compare at the end. The reference includes 3 additional bonus hooks not covered in this lab — frontend TypeScript check (`tsc --noEmit`), Flyway migration naming validator, and `.env` file guard. These are optional real-world extras; your 3 hooks are complete for this exercise.
 
 1. Ask Claude to set up the hook:
    ```

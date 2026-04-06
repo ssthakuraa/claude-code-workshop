@@ -127,7 +127,12 @@ Design `hireEmployee()` in Plan Mode, iterate until the plan is complete, then i
    Implement hireEmployee() exactly as designed in the plan above.
    ```
 
-6. **Verify:** Run `mvn compile` to check it compiles. Review the method against the plan.
+6. **Verify:** Run `mvn clean compile` to check it compiles. Review the method against the plan.
+
+> <details>
+> <summary>Seeing lots of "cannot find symbol" errors?</summary>
+> Run `mvn clean compile` (not just `mvn compile`). Lombok's annotation processor generates getters/setters in `target/generated-sources/annotations/`. When that directory has stale output from a previous build, Maven reuses cached output instead of regenerating for new or changed classes. `mvn clean` removes `target/` entirely, forcing a fresh rebuild. This is the #1 source of false compilation failures in Labs 2–3.
+> </details>
 
 > **Reference:** If you get stuck, compare with `reference/backend/hrapp-service/src/main/java/com/company/hr/service/HrEmployeeService.java` — the full working version is there.
 

@@ -154,7 +154,12 @@ Scaffold a genuinely new entity using the skill — proving it works on somethin
    - Prompts needed with skill: **1**
    - Did Claude follow all conventions? (Hr prefix, HrLogHelper, HrApiResponse, @PreAuthorize, @SQLRestriction, etc.)
 
-4. Verify: `cd backend && mvn compile`
+4. Verify: `cd backend && mvn clean compile`
+
+> <details>
+> <summary>Seeing lots of "cannot find symbol" errors?</summary>
+> Run `mvn clean compile` (not just `mvn compile`). Lombok's annotation processor generates getters/setters in `target/generated-sources/annotations/`. When that directory has stale output from a previous build, Maven reuses cached output instead of regenerating for new or changed classes. `mvn clean` removes `target/` entirely, forcing a fresh rebuild. This is the #1 source of false compilation failures in Labs 2–3.
+> </details>
 
 5. **Why this matters:** Notification is a real entity your HR app will need. You didn't build it yet — the skill just delivered all 7 layers in one prompt. Compare that with Exercise 1 where you needed multiple prompts for Country and still had gaps.
 

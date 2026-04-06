@@ -209,8 +209,12 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 <p>Implement hireEmployee() exactly as designed in the plan above.
    ```</p>
 <ol>
-<li><strong>Verify:</strong> Run <code>mvn compile</code> to check it compiles. Review the method against the plan.</li>
+<li><strong>Verify:</strong> Run <code>mvn clean compile</code> to check it compiles. Review the method against the plan.</li>
 </ol>
+<details>
+<summary>Seeing lots of "cannot find symbol" errors?</summary>
+Run <code>mvn clean compile</code> (not just <code>mvn compile</code>). Lombok's annotation processor generates getters/setters in <code>target/generated-sources/annotations/</code>. When that directory has stale output from a previous build, Maven reuses cached output instead of regenerating for new or changed classes. <code>mvn clean</code> removes <code>target/</code> entirely, forcing a fresh rebuild. This is the #1 source of false compilation failures in Labs 2–3.
+</details>
 <blockquote>
 <p><strong>Reference:</strong> If you get stuck, compare with <code>reference/backend/hrapp-service/src/main/java/com/company/hr/service/HrEmployeeService.java</code> — the full working version is there.</p>
 </blockquote>
