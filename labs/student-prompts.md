@@ -4,6 +4,13 @@ For each lab: (1) the exact prompts to type into Claude, (2) what to check after
 
 ---
 
+## Troubleshooting
+
+**If you see lots of "cannot find symbol" errors after scaffolding a new backend entity:**
+Run `mvn clean compile` (not just `mvn compile`). Lombok's annotation processor generates getters/setters in `target/generated-sources/annotations/`. If that directory has stale output from a previous compile, Maven reuses it instead of regenerating for the new classes. `mvn clean` removes the target directory entirely, forcing a fresh build. This is the #1 source of false compilation failures in Labs 1-3.
+
+---
+
 ## Lab 1: CLAUDE.md — Your Enterprise Constitution
 
 **Goal:** Build CLAUDE.md from scratch by observing failures, then verify.
@@ -101,7 +108,9 @@ Review the plan. Iterate until all 7 steps are covered. Then exit Plan Mode:
 Implement hireEmployee() exactly as designed in the plan above.
 ```
 
-Verify: `cd backend && mvn compile`
+Verify: `cd backend && mvn clean compile`
+
+> **Troubleshooting:** If you see lots of "cannot find symbol" errors for getters/setters on Lombok entities, run `mvn clean compile` (not just `mvn compile`). The annotation processor output in `target/generated-sources/` gets stale — `clean` forces a fresh rebuild.
 
 ### Exercise 3 — Compare and Encode
 
@@ -153,7 +162,9 @@ Table: locations
 Fields: city, country_id (FK to countries)
 ```
 
-Verify: `cd backend && mvn compile`
+Verify: `cd backend && mvn clean compile`
+
+> **If you see lots of "cannot find symbol" errors:** run `mvn clean compile` (not just `mvn compile`). Lombok's annotation processor output in `target/generated-sources/` gets stale — `clean` forces fresh generation.
 
 Wire frontend to real API:
 ```
