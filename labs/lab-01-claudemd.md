@@ -37,22 +37,22 @@ CLAUDE.md is a markdown file in the project root that Claude reads automatically
 
 ## Setup
 
-This lab teaches you to build CLAUDE.md from scratch by observing failures. The repo already contains a complete CLAUDE.md — for Exercise 1, temporarily rename it so Claude has no guidance and you can observe what goes wrong.
+This lab teaches you to build CLAUDE.md from scratch by observing failures. You might already have a `CLAUDE.md` — from a prior `claude init`, a previous session, or a previous run of these labs. Preserve it first, then start fresh with the provided minimal template.
 
 ```bash
 cd /scratch/trng/claude-code-workshop
 
-# Temporarily move the complete CLAUDE.md aside
-mv CLAUDE.md CLAUDE.md.complete
+# IMPORTANT: confirm you are in the right directory
+pwd   # must end with claude-code-workshop
 
-# Create a minimal starting file — just enough for project orientation
-cat > CLAUDE.md << 'EOF'
-# CLAUDE.md — HR Enterprise Platform
+# If you already have a CLAUDE.md (from claude init or a prior session),
+# back it up first so you can compare later
+if [ -f CLAUDE.md ]; then
+  cp CLAUDE.md CLAUDE.md.complete
+fi
 
-## Project Overview
-Spring Boot 3.2 + React 19 monorepo. Java 21, Maven multi-module.
-API base path: /app/hr/api/v1/
-EOF
+# Use the provided minimal starting file
+cp reference/CLAUDEMINIMAL.md CLAUDE.md
 
 # Verify
 ls CLAUDE.md            # Should exist — minimal only
@@ -62,7 +62,7 @@ ls backend/             # Maven project structure
 
 You now have a minimal CLAUDE.md with no convention rules. Claude will make predictable mistakes — that's the point.
 
-> **After this lab:** Run `cp CLAUDE.md.complete CLAUDE.md` to restore the full version if you want to compare your work with the reference.
+> **After this lab:** Run `cp reference/CLAUDE.md CLAUDE.md` to restore the full reference version if you want to compare your work against the completed version. Or compare against your own `CLAUDE.md.complete` if you backed one up.
 
 ---
 
@@ -325,38 +325,9 @@ Practice the compounding loop that you'll use at the end of every lab.
 <details>
 <summary><strong>Escape Hatch</strong> — Click if stuck for more than 5 minutes</summary>
 
-Here's a working CLAUDE.md for this project:
+Copy the working Lab 1 CLAUDE.md from the reference directory:
 
-```markdown
-# CLAUDE.md — HR Enterprise Platform
-
-## Project
-Spring Boot 3.2 + React 19 monorepo. Java 21, Maven multi-module.
-API base: /app/hr/api/v1/
-
-## Naming
-- All Java classes prefixed `Hr` (HrEmployee, HrRegionService)
-- Entities map to DB tables (HrRegion → regions)
-
-## Database
-- database/schema.sql is READ ONLY — never edit
-- Use @SQLRestriction("deleted_at IS NULL") NOT @Where (deprecated)
-- Schema changes via Flyway migrations only (db/migration/)
-
-## Logging
-- Every service method: HrLogHelper entry/exit logging
-- Never log PII (email, phone, salary) — use MASKED
-
-## API
-- ALL endpoints return HrApiResponse<T> — never raw objects
-- Paginated lists return HrPagedResponse<T>
-
-## Security
-- All service methods need @PreAuthorize
-- RBAC: ROLE_ADMIN, ROLE_HR_SPECIALIST, ROLE_MANAGER, ROLE_EMPLOYEE
-
-## Build
-- Backend: cd backend && mvn clean install
-- Frontend: cd frontend && npm install && npm run dev
+```bash
+cp reference/CLAUDELAB01.md CLAUDE.md
 ```
 </details>

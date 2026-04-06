@@ -37,7 +37,32 @@ Explore → Plan → Implement → Commit
 
 ## Setup
 
-Continue from Lab 1. You should have a working CLAUDE.md with naming, logging, database, and API response rules. If not, copy the escape hatch CLAUDE.md from Lab 1's Escape Hatch section into the project root.
+Continue from Lab 1. You should have a working CLAUDE.md with naming, logging, database, and API response rules. If you used the Lab 1 escape hatch or got stuck, use it to get your starting CLAUDE.md — it's a fresh copy each time this lab runs.
+
+```bash
+# Copy the Lab 1 escape-hatch version (contains naming, database, logging, API, security rules)
+cp reference/CLAUDELAB01.md CLAUDE.md
+```
+
+> **Note:** If you started from a prior `claude init` or have your own `CLAUDE.md.complete` backed up, use `cp your-backup-of-claude.md CLAUDE.md` to restore your prior version before applying the Lab 2 escape hatch. The Lab 2 escape hatch below builds on the Lab 1 state.
+
+---
+
+### After Exercise 3: Add Employee Lifecycle Rules
+
+After completing Exercise 3, your CLAUDE.md should include the Employee Lifecycle Rules from the exercise. If you used the escape hatch for Lab 1, apply the Lab 2 escape hatch.
+
+> **Use it exactly as written.** Copy the file below.
+
+<details>
+<summary><strong>Escape Hatch</strong> — Click if stuck for more than 5 minutes</summary>
+
+Copy the fully built Lab 2 CLAUDE.md from the reference directory. This includes the Lab 1 rules (naming, database, logging, API, security, build) plus the Lab 2 Employee Lifecycle Rules:
+
+```bash
+cp reference/CLAUDELAB02.md CLAUDE.md
+```
+</details>
 
 ---
 
