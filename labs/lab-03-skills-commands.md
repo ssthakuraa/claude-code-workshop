@@ -169,7 +169,7 @@ One prompt → all 7 layers → compiles clean → all conventions followed. The
 
 ---
 
-## Exercise 3: Wire Frontend to Real API (10 min)
+## Exercise 3b: Wire Frontend to Real API (10 min)
 
 ### Goal
 You just built the Notification backend (Exercise 2). But the NotificationsPage at `/hr/notifications` currently uses hardcoded mock data. Wire it to call the real `/app/hr/api/v1/notifications` API you just scaffolded.
@@ -220,7 +220,90 @@ Frontend development often starts against mock data when the backend API isn't r
 
 ---
 
-## Exercise 4: Create a Slash Command (10 min)
+## Exercise 4: The Verification Agent Chain (15 min)
+
+### Goal
+Build a **verification chain** — a sequence of agent calls that progressively
+increases the quality bar on your output. Learn the pattern that separates
+"it compiles" from "it ships."
+
+### The Concept
+
+The professional workflow is not:
+```
+Build → Ship it
+```
+
+It's:
+```
+Build → Review (agent) → Fix → Test → Visual Verify (Playwright)
+```
+
+Each link catches different classes of defects:
+| Link | Catches |
+|------|---------|
+| **Agent review** | Edge cases, accessibility gaps, type safety, consistency |
+| **/run-tests** | Runtime bugs, incorrect logic, broken contracts |
+| **Playwright** | Visual regressions, broken renders, missing elements |
+
+### Instructions
+
+1. **Review** — Send the NotificationsPage you wired in Exercise 3b
+   to the component-reviewer agent:
+
+   ```
+   Use the component-reviewer agent to review
+   src/pages/admin/NotificationsPage.tsx.
+   Focus on accessibility, error states, and edge cases.
+   ```
+
+2. **Fix** — Address any Critical or Warning findings:
+
+   ```
+   Fix these issues from the component-reviewer:
+   [paste the agent's Critical and Warning findings]
+   ```
+
+3. **Test** — Run the suite to make sure nothing broke:
+
+   ```
+   /run-tests
+   ```
+
+4. **Visual Verify** — If Playwright MCP is configured (Lab 9),
+   navigate to the page and take a screenshot:
+
+   ```
+   Navigate to http://localhost:5173/hr/notifications.
+   Take a screenshot. Do the notifications render correctly?
+   Check for loading state, data state, and empty state.
+   ```
+   If Playwright isn't available yet, manually verify the page loads
+   and note what you'd automate in Lab 9.
+
+### The Escalation Pattern
+
+As you gain confidence, add links to the chain:
+
+```
+Level 1 (beginner):  Build it. Check it compiles.
+Level 2 (intermediate): Build → Review (agent) → Fix → Compile
+Level 3 (advanced):   Build → Review → Fix → Test → Visual verify
+```
+
+Most juniors stop at Level 1. Seniors operate at Level 3 minimum.
+
+### Add to CLAUDE.md
+
+```markdown
+## Verification Chain
+- After building a feature: run component-reviewer agent, fix findings, run tests
+- For frontend: also verify with Playwright MCP (screenshot + element check)
+```
+
+---
+
+## Exercise 5: Create a Slash Command (10 min)
 
 ### Goal
 Create a `/run-tests` command for daily use.
@@ -275,7 +358,7 @@ Create a `/run-tests` command for daily use.
 - [ ] Mark-as-read and mark-all-read work with query invalidation
 - [ ] `/run-tests` command exists and runs successfully
 - [ ] Manual scaffolding (Exercise 1) required 2+ prompts; skill required 1
-- [ ] CLAUDE.md updated with skill/command references
+- [ ] CLAUDE.md updated with skill/command references and verification chain rules
 
 ---
 
@@ -284,7 +367,11 @@ Create a `/run-tests` command for daily use.
 1. **Skills compound engineering** — define the pattern once, reuse it N times without context drift
 2. **Skills are on-demand, CLAUDE.md is always-on** — use skills for large patterns that would bloat CLAUDE.md
 3. **Slash commands for daily workflows** — if you do it more than once a day, make it a `/command`
-4. **Team-shared via git** — `.claude/skills/` and `.claude/commands/` are checked in. The whole team benefits.
+1. **Skills compound engineering** — define the pattern once, reuse it N times without context drift
+2. **Skills are on-demand, CLAUDE.md is always-on** — use skills for large patterns that would bloat CLAUDE.md
+3. **Slash commands for daily workflows** — if you do it more than once a day, make it a `/command`
+4. **Verification chain multiplies quality** — build → review (agent) → fix → test → visual verify (Playwright). Level 3 is production minimum.
+5. **Team-shared via git** — `.claude/skills/` and `.claude/commands/` are checked in. The whole team benefits.
 
 ---
 

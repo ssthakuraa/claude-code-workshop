@@ -96,6 +96,11 @@ input[type="checkbox"] { margin-right: 0.3rem; }
     <a href="#exercise-3-compare-and-encode-15-min">Exercise 3: Compare and Encode (15 min)</a>
       <a href="#goal">Goal</a>
       <a href="#instructions">Instructions</a>
+    <a href="#exercise-4-prompt-enhancement-via-agent-15-min">Exercise 4: Prompt Enhancement via Agent (15 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#the-problem">The Problem</a>
+      <a href="#instructions">Instructions</a>
+      <a href="#why-this-matters">Why This Matters</a>
     <a href="#success-criteria">Success Criteria</a>
     <a href="#key-takeaways">Key Takeaways</a>
 </nav><h1 id="lab-2-plan-mode-think-before-you-build">Lab 2: Plan Mode — Think Before You Build<a class="anchor" href="#lab-2-plan-mode-think-before-you-build">&#182;</a></h1>
@@ -254,6 +259,45 @@ Run <code>mvn clean compile</code> (not just <code>mvn compile</code>). Lombok's
 </li>
 </ol>
 <hr />
+<h2 id="exercise-4-prompt-enhancement-via-agent-15-min">Exercise 4: Prompt Enhancement via Agent (15 min)<a class="anchor" href="#exercise-4-prompt-enhancement-via-agent-15-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Use a subagent to transform a vague, under-specified prompt into a detailed, actionable implementation brief before you give it to your main Claude session.</p>
+<h3 id="the-problem">The Problem<a class="anchor" href="#the-problem">&#182;</a></h3>
+<p>Professional engineers rarely receive fully-specified requirements. A stakeholder says <em>"make a department manager page"</em> and expects you to know what that means. If you hand that vague prompt directly to Claude's main session, you get a thin, incomplete result that misses edge cases, conventions, and real-world needs.</p>
+<p><strong>The trick:</strong> use an agent to <em>research and enhance</em> the prompt first, before the main session ever touches it.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li><p>Look at the following deliberately vague prompt a manager might type:</p>
+<p><code>Make a department manager page</code></p>
+<p>No data model. No API contract. No conventions. No acceptance criteria.</p></li>
+<li><p><strong>Enhance the prompt with an agent.</strong> Instead of running it directly, ask an agent to research the codebase and improve it:</p>
+<p><pre><code>Use a general-purpose agent to improve this prompt:
+"Make a department manager page"
+
+Read the existing codebase to understand the HR app's patterns:
+- Component naming conventions (Hr prefix)
+- Frontend patterns (TanStack Query, HrApiClient, Vertex Tech tokens)
+- Backend API conventions (HrApiResponse envelope)
+Look at existing pages like EmployeeDirectoryPage for layout references.
+
+Return a detailed, structured prompt that an implementation Claude
+session could act on directly. Include: page file path and component name,
+API calls, UI layout structure, loading/empty/error states, component
+conventions, edge cases to handle, and acceptance criteria.</code></pre></p></li>
+<li><p><strong>Review the output.</strong> The agent should return a ~30-50 line structured prompt with specific file paths, component names, API endpoints, and edge cases pulled from the actual codebase.</p></li>
+<li><p><strong>Run the enhanced prompt.</strong> In a <strong>new session</strong> (<code>/clear</code>), paste the agent's enhanced prompt and build the feature.</p></li>
+<li><p><strong>Compare the results:</strong></p>
+<table>
+<thead><tr><th>Aspect</th><th>Original 4-word prompt</th><th>Agent-enhanced prompt</th></tr></thead>
+<tbody><tr><td>Specificity</td><td>Vague intent</td><td>Concrete file paths, APIs, conventions</td></tr><tr><td>Edge cases</td><td>None</td><td>3+ explicit scenarios</td></tr><tr><td>Acceptance criteria</td><td>None</td><td>5+ testable items</td></tr><tr><td>Follow-up prompts needed</td><td>3-5 to fill gaps</td><td>0-1 to polish</td></tr></tbody></table></li>
+</ol>
+<h3 id="why-this-matters">Why This Matters<a class="anchor" href="#why-this-matters">&#182;</a></h3>
+<ul>
+<li><strong>Agents are research assistants, not builders.</strong> They read the codebase, understand patterns, and synthesize a spec — without polluting your main session's context with file reads and dead ends.</li>
+<li><strong>Bad prompts waste tokens.</strong> A vague prompt produces a vague result, then you spend 5 follow-up prompts fixing gaps. One agent call + one implementation prompt costs fewer tokens and produces better output.</li>
+<li><strong>This is the professional pattern:</strong> <code>Agent (research + enhance prompt)</code> → <code>Main session (build)</code> → <code>Agent (review)</code> → <code>Command (test)</code>.</li>
+</ul>
+<hr />
 <h2 id="success-criteria">Success Criteria<a class="anchor" href="#success-criteria">&#182;</a></h2>
 <ul>
 <li>[ ] Exercise 1 is missing at least 2 requirements (job_history, idempotency, etc.)</li>
@@ -261,6 +305,7 @@ Run <code>mvn clean compile</code> (not just <code>mvn compile</code>). Lombok's
 <li>[ ] Final <code>hireEmployee()</code> compiles and follows all CLAUDE.md conventions</li>
 <li>[ ] CLAUDE.md now contains Employee Lifecycle Rules</li>
 <li>[ ] You can explain when to use Plan Mode vs when to skip it</li>
+<li>[ ] Used an agent to enhance a vague prompt before building</li>
 </ul>
 <hr />
 <h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">&#182;</a></h2>

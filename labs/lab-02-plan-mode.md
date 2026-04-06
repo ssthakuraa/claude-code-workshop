@@ -175,6 +175,80 @@ Compare the two approaches and encode the lesson.
 
 ---
 
+## Exercise 4: Prompt Enhancement via Agent (15 min)
+
+### Goal
+Use a subagent to transform a vague, under-specified prompt into a detailed,
+actionable implementation brief before you give it to your main Claude session.
+
+### The Problem
+
+Professional engineers rarely receive fully-specified requirements. A stakeholder
+says *"make a department manager page"* and expects you to know what that means.
+If you hand that vague prompt directly to Claude's main session, you get a thin,
+incomplete result that misses edge cases, conventions, and real-world needs.
+
+**The trick:** use an agent to *research and enhance* the prompt first, before
+the main session ever touches it.
+
+### Instructions
+
+1. Look at the following deliberately vague prompt a manager might type:
+
+   ```
+   Make a department manager page
+   ```
+
+   No data model. No API contract. No conventions. No acceptance criteria.
+
+2. **Enhance the prompt with an agent.** Instead of running it directly,
+   ask an agent to research the codebase and improve it:
+
+   ```
+   Use a general-purpose agent to improve this prompt:
+   "Make a department manager page"
+
+   Read the existing codebase to understand the HR app's patterns:
+   - Component naming conventions (Hr prefix)
+   - Frontend patterns (TanStack Query, HrApiClient, Vertex Tech tokens)
+   - Backend API conventions (HrApiResponse envelope)
+   Look at existing pages like EmployeeDirectoryPage for layout references.
+
+   Return a detailed, structured prompt that an implementation Claude
+   session could act on directly. Include: page file path and component name,
+   API calls, UI layout structure, loading/empty/error states, component
+   conventions, edge cases to handle, and acceptance criteria.
+   ```
+
+3. **Review the output.** The agent should return a ~30-50 line structured
+   prompt with specific file paths, component names, API endpoints, and
+   edge cases pulled from the actual codebase.
+
+4. **Run the enhanced prompt.** In a **new session** (`/clear`), paste the
+   agent's enhanced prompt and build the feature.
+
+5. **Compare the results:**
+
+   | Aspect | Original 4-word prompt | Agent-enhanced prompt |
+   |--------|----------------------|---------------------|
+   | Specificity | Vague intent | Concrete file paths, APIs, conventions |
+   | Edge cases | None | 3+ explicit scenarios |
+   | Acceptance criteria | None | 5+ testable items |
+   | Follow-up prompts needed | 3-5 to fill gaps | 0-1 to polish |
+
+### Why This Matters
+
+- **Agents are research assistants, not builders.** They read the codebase,
+  understand patterns, and synthesize a spec — without polluting your main
+  session's context with file reads and dead ends.
+- **Bad prompts waste tokens.** A vague prompt produces a vague result, then
+  you spend 5 follow-up prompts fixing gaps. One agent call + one implementation
+  prompt costs fewer tokens and produces better output.
+- **This is the professional pattern:** `Agent (research + enhance prompt)` →
+  `Main session (build)` → `Agent (review)` → `Command (test)`.
+
+---
+
 ## Success Criteria
 
 - [ ] Exercise 1 is missing at least 2 requirements (job_history, idempotency, etc.)
@@ -182,6 +256,7 @@ Compare the two approaches and encode the lesson.
 - [ ] Final `hireEmployee()` compiles and follows all CLAUDE.md conventions
 - [ ] CLAUDE.md now contains Employee Lifecycle Rules
 - [ ] You can explain when to use Plan Mode vs when to skip it
+- [ ] Used an agent to enhance a vague prompt before building
 
 ---
 

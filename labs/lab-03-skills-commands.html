@@ -99,14 +99,19 @@ input[type="checkbox"] { margin-right: 0.3rem; }
       <a href="#goal">Goal</a>
       <a href="#instructions">Instructions</a>
       <a href="#what-you-should-see">What You Should See</a>
-    <a href="#exercise-3-wire-frontend-to-real-api-10-min">Exercise 3: Wire Frontend to Real API (10 min)</a>
+    <a href="#exercise-3b-wire-frontend-to-real-api-10-min">Exercise 3b: Wire Frontend to Real API (10 min)</a>
       <a href="#goal">Goal</a>
       <a href="#the-key-concept">The Key Concept</a>
       <a href="#instructions">Instructions</a>
-    <a href="#exercise-4-create-a-slash-command-10-min">Exercise 4: Create a Slash Command (10 min)</a>
+    <a href="#exercise-4-the-verification-agent-chain-15-min">Exercise 4: The Verification Agent Chain (15 min)</a>
+      <a href="#goal">Goal</a>
+      <a href="#the-concept">The Concept</a>
+      <a href="#instructions">Instructions</a>
+      <a href="#the-escalation-pattern">The Escalation Pattern</a>
+    <a href="#exercise-5-create-a-slash-command-10-min">Exercise 5: Create a Slash Command (10 min)</a>
       <a href="#goal">Goal</a>
       <a href="#instructions">Instructions</a>
-    <a href="#exercise-5-the-self-improvement-coda-5-min">Exercise 5: The Self-Improvement Coda (5 min)</a>
+    <a href="#exercise-6-the-self-improvement-coda-5-min">Exercise 6: The Self-Improvement Coda (5 min)</a>
     <a href="#success-criteria">Success Criteria</a>
     <a href="#key-takeaways">Key Takeaways</a>
 </nav><h1 id="lab-3-skills-amp-commands-reusable-knowledge-packs">Lab 3: Skills &amp; Commands — Reusable Knowledge Packs<a class="anchor" href="#lab-3-skills-amp-commands-reusable-knowledge-packs">&#182;</a></h1>
@@ -281,7 +286,7 @@ Run <code>mvn clean compile</code> (not just <code>mvn compile</code>). Lombok's
 <h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
 <p>One prompt → all 7 layers → compiles clean → all conventions followed. The skill eliminated the need to re-explain the pattern and delivered a production-ready entity you actually need.</p>
 <hr />
-<h2 id="exercise-3-wire-frontend-to-real-api-10-min">Exercise 3: Wire Frontend to Real API (10 min)<a class="anchor" href="#exercise-3-wire-frontend-to-real-api-10-min">&#182;</a></h2>
+<h2 id="exercise-3b-wire-frontend-to-real-api-10-min">Exercise 3b: Wire Frontend to Real API (10 min)<a class="anchor" href="#exercise-3b-wire-frontend-to-real-api-10-min">&#182;</a></h2>
 <h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
 <p>You just built the Notification backend (Exercise 2). But the NotificationsPage at <code>/hr/notifications</code> currently uses hardcoded mock data. Wire it to call the real <code>/app/hr/api/v1/notifications</code> API you just scaffolded.</p>
 <h3 id="the-key-concept">The Key Concept<a class="anchor" href="#the-key-concept">&#182;</a></h3>
@@ -332,7 +337,49 @@ Run <code>mvn clean compile</code> (not just <code>mvn compile</code>). Lombok's
 <li><strong>What you just learned:</strong> This is the standard enterprise workflow — mock data for rapid UI prototyping, then wire to the real API when the backend is ready. The skill gave you the backend in one prompt; wiring it is a single command on the frontend.</li>
 </ol>
 <hr />
-<h2 id="exercise-4-create-a-slash-command-10-min">Exercise 4: Create a Slash Command (10 min)<a class="anchor" href="#exercise-4-create-a-slash-command-10-min">&#182;</a></h2>
+<h2 id="exercise-4-the-verification-agent-chain-15-min">Exercise 4: The Verification Agent Chain (15 min)<a class="anchor" href="#exercise-4-the-verification-agent-chain-15-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Build a <strong>verification chain</strong> — a sequence of agent calls that progressively increases the quality bar on your output. Learn the pattern that separates &quot;it compiles&quot; from &quot;it ships.&quot;</p>
+<h3 id="the-concept">The Concept<a class="anchor" href="#the-concept">&#182;</a></h3>
+<p>The professional workflow is not:</p>
+<p><code>Build → Ship it</code></p>
+<p>It's:</p>
+<p><code>Build → Review (agent) → Fix → Test → Visual Verify (Playwright)</code></p>
+<p>Each link catches different classes of defects:</p>
+<table>
+<thead><tr><th>Link</th><th>Catches</th></tr></thead>
+<tbody><tr><td><strong>Agent review</strong></td><td>Edge cases, accessibility gaps, type safety, consistency</td></tr><tr><td><strong>/run-tests</strong></td><td>Runtime bugs, incorrect logic, broken contracts</td></tr><tr><td><strong>Playwright</strong></td><td>Visual regressions, broken renders, missing elements</td></tr></tbody></table>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li><p><strong>Review</strong> — Send the NotificationsPage you wired in Exercise 3b to the component-reviewer agent:</p>
+<p><pre><code>Use the component-reviewer agent to review
+src/pages/admin/NotificationsPage.tsx.
+Focus on accessibility, error states, and edge cases.</code></pre></p></li>
+<li><p><strong>Fix</strong> — Address any Critical or Warning findings:</p>
+<p><pre><code>Fix these issues from the component-reviewer:
+[paste the agent's Critical and Warning findings]</code></pre></p></li>
+<li><p><strong>Test</strong> — Run the suite to make sure nothing broke:</p>
+<p><pre><code>/run-tests</code></pre></p></li>
+<li><p><strong>Visual Verify</strong> — If Playwright MCP is configured (Lab 9), navigate to the page and take a screenshot:</p>
+<p><pre><code>Navigate to http://localhost:5173/hr/notifications.
+Take a screenshot. Do the notifications render correctly?
+Check for loading state, data state, and empty state.</code></pre></p>
+<p>If Playwright isn't available yet, manually verify the page loads and note what you'd automate in Lab 9.</p></li>
+</ol>
+<h3 id="the-escalation-pattern">The Escalation Pattern<a class="anchor" href="#the-escalation-pattern">&#182;</a></h3>
+<p>As you gain confidence, add links to the chain:</p>
+<pre><code>Level 1 (beginner):  Build it. Check it compiles.
+Level 2 (intermediate): Build → Review (agent) → Fix → Compile
+Level 3 (advanced):   Build → Review → Fix → Test → Visual verify
+</code></pre>
+<p>Most juniors stop at Level 1. Seniors operate at Level 3 minimum.</p>
+<h3 id="add-to-claudemd">Add to CLAUDE.md<a class="anchor" href="#add-to-claudemd">&#182;</a></h3>
+<pre><code class="language-markdown">## Verification Chain
+- After building a feature: run component-reviewer agent, fix findings, run tests
+- For frontend: also verify with Playwright MCP (screenshot + element check)
+</code></pre>
+<hr />
+<h2 id="exercise-5-create-a-slash-command-10-min">Exercise 5: Create a Slash Command (10 min)<a class="anchor" href="#exercise-5-create-a-slash-command-10-min">&#182;</a></h2>
 <h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
 <p>Create a <code>/run-tests</code> command for daily use.</p>
 <h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
@@ -365,7 +412,7 @@ Run <code>mvn clean compile</code> (not just <code>mvn compile</code>). Lombok's
 <p><strong>Note:</strong> You will see <code>hireEmployee</code> test failures if you haven't implemented it yet in Lab 2. That's expected — the test suite covers the full service contract. If you completed Lab 2, those tests should pass. Either way, the command itself is working correctly if it runs and reports results.</p>
 </blockquote>
 <hr />
-<h2 id="exercise-5-the-self-improvement-coda-5-min">Exercise 5: The Self-Improvement Coda (5 min)<a class="anchor" href="#exercise-5-the-self-improvement-coda-5-min">&#182;</a></h2>
+<h2 id="exercise-6-the-self-improvement-coda-5-min">Exercise 6: The Self-Improvement Coda (5 min)<a class="anchor" href="#exercise-6-the-self-improvement-coda-5-min">&#182;</a></h2>
 <ol>
 <li>Add to CLAUDE.md:
    ```markdown
@@ -388,7 +435,7 @@ Run <code>mvn clean compile</code> (not just <code>mvn compile</code>). Lombok's
 <li>[ ] Mark-as-read and mark-all-read work with query invalidation</li>
 <li>[ ] <code>/run-tests</code> command exists and runs successfully</li>
 <li>[ ] Manual scaffolding (Exercise 1) required 2+ prompts; skill required 1</li>
-<li>[ ] CLAUDE.md updated with skill/command references</li>
+<li>[ ] CLAUDE.md updated with skill/command references and verification chain rules</li>
 </ul>
 <hr />
 <h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">&#182;</a></h2>
@@ -396,6 +443,7 @@ Run <code>mvn clean compile</code> (not just <code>mvn compile</code>). Lombok's
 <li><strong>Skills compound engineering</strong> — define the pattern once, reuse it N times without context drift</li>
 <li><strong>Skills are on-demand, CLAUDE.md is always-on</strong> — use skills for large patterns that would bloat CLAUDE.md</li>
 <li><strong>Slash commands for daily workflows</strong> — if you do it more than once a day, make it a <code>/command</code></li>
+<li><strong>Verification chain multiplies quality</strong> — build → review (agent) → fix → test → visual verify (Playwright). Level 3 is production minimum.</li>
 <li><strong>Team-shared via git</strong> — <code>.claude/skills/</code> and <code>.claude/commands/</code> are checked in. The whole team benefits.</li>
 </ol>
 <hr />
