@@ -308,41 +308,17 @@ cd backend &amp;&amp; mvn test -pl hrapp-service -q &amp;&amp; echo &quot;Tests:
 </ol>
 <hr />
 <details>
-<summary><strong>Escape Hatch</strong> — promoteEmployee test structure</summary>
+<summary><strong>Escape Hatch</strong> — promoteEmployee test &amp; impl</summary>
+
+For test structure, compare with the reference:
+
+<pre><code class="language-bash">cat reference/backend/hrapp-service/src/test/java/com/company/hr/service/HrEmployeeServiceTest.java
+</code></pre>
 
 
-<pre><code class="language-java">@ExtendWith(MockitoExtension.class)
-class HrEmployeeServicePromoteTest {
+For full implementation, compare with the reference:
 
-    @Mock HrEmployeeRepository employeeRepository;
-    @Mock HrJobRepository jobRepository;
-    @Mock HrIdempotencyKeyRepository idempotencyKeyRepository;
-    @Mock HrJobHistoryRepository jobHistoryRepository;
-    // ... other mocks
-
-    @InjectMocks HrEmployeeService service;
-
-    @Test
-    void promoteEmployee_throwsConflict_onDuplicateKey() {
-        HrPromoteRequest req = new HrPromoteRequest();
-        req.setIdempotencyKey(&quot;key-1&quot;);
-        when(idempotencyKeyRepository.existsById(&quot;key-1&quot;)).thenReturn(true);
-        assertThatThrownBy(() -&gt; service.promoteEmployee(req))
-                .isInstanceOf(HrConflictException.class);
-    }
-
-    @Test
-    void promoteEmployee_throwsBusinessRule_whenSalaryExceedsMax() {
-        // Setup: employee exists, new job has max 10000, request salary is 99000
-        // Assert: throws HrBusinessRuleViolationException
-    }
-
-    @Test
-    void promoteEmployee_updatesJobAndWritesHistory() {
-        // Setup: valid request, all repos return expected data
-        // Assert: employee.setJob(newJob) called, jobHistoryRepository.save() called
-    }
-}
+<pre><code class="language-bash">cat reference/backend/hrapp-service/src/main/java/com/company/hr/service/HrEmployeeService.java
 </code></pre>
 
 </details><div class="footer-nav"><a href="../index.html">← All Labs</a><a href="lab-07-parallel-sessions.html">← Previous</a><a href="lab-09-mcp-playwright.html">Next →</a><a href="https://github.com/ssthakuraa/claude-code-workshop" target="_blank">GitHub Repo</a></div>

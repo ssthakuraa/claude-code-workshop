@@ -370,40 +370,18 @@ Hooks = fast feedback loop. CI = safety net. Neither replaces the other.</p>
 </ol>
 <hr />
 <details>
-<summary><strong>Escape Hatch</strong> — Governance stage for Jenkinsfile</summary>
+<summary><strong>Escape Hatch</strong> — Governance stage reference</summary>
+
+Study the Governance stage already in the Jenkinsfile (line ~44):
 
 
-<pre><code class="language-groovy">stage('Governance') {
-    steps {
-        sh '''
-            VIOLATIONS=0
-
-            # Check 1: Java class names must start with Hr
-            for f in \$(find backend/hrapp-service/src -name &quot;*.java&quot; -newer /dev/null 2&gt;/dev/null || find backend/hrapp-service/src -name &quot;*.java&quot;); do
-                classname=\$(basename &quot;\$f&quot; .java)
-                if ! echo &quot;\$classname&quot; | grep -q &quot;^Hr&quot;; then
-                    echo &quot;NAMING VIOLATION: \$f has class '\$classname' — must start with 'Hr'&quot;
-                    VIOLATIONS=1
-                fi
-            done
-
-            # Check 2: Service.java files must not log PII
-            for f in \$(find backend/hrapp-service/src -name &quot;*Service.java&quot;); do
-                if grep -iE &quot;LOGGER.*\\b(email|phone|salary|password|ssn)\\b&quot; &quot;\$f&quot; &gt; /dev/null 2&gt;&amp;1; then
-                    echo &quot;PII VIOLATION: \$f contains sensitive data in LOGGER statement&quot;
-                    VIOLATIONS=1
-                fi
-            done
-
-            if [ &quot;\$VIOLATIONS&quot; -ne 0 ]; then
-                echo &quot;BUILD FAILED: Governance checks found violations&quot;
-                exit 1
-            fi
-        '''
-    }
-}
+<pre><code class="language-bash">grep -n &quot;Governance&quot; Jenkinsfile
 </code></pre>
 
+
+The Jenkinsfile already contains the full Governance stage implementation.
+If it doesn't match what the exercise asks for, ask Claude to update the
+existing stage to include the naming convention and PII checks.
 </details><div class="footer-nav"><a href="../index.html">← All Labs</a><a href="lab-10-mcp-mysql.html">← Previous</a><a href="lab-12-capstone.html">Next →</a><a href="https://github.com/ssthakuraa/claude-code-workshop" target="_blank">GitHub Repo</a></div>
 </div>
 </body>

@@ -98,7 +98,10 @@ input[type="checkbox"] { margin-right: 0.3rem; }
       <a href="#goal">Goal</a>
       <a href="#why-this-matters">Why This Matters</a>
       <a href="#instructions">Instructions</a>
-    <a href="#exercise-4-review-all-hooks-10-min">Exercise 4: Review All Hooks (10 min)</a>
+    <a href="#exercise-4-review-your-hooks-10-min">Exercise 4: Review Your Hooks (10 min)</a>
+      <a href="#instructions">Instructions</a>
+    <a href="#exercise-4b-bonus-hooks-optional-15-min">Exercise 4b: Bonus Hooks (optional — 15 min)</a>
+      <a href="#goal">Goal</a>
       <a href="#instructions">Instructions</a>
     <a href="#exercise-5-the-self-improvement-coda-5-min">Exercise 5: The Self-Improvement Coda (5 min)</a>
     <a href="#success-criteria">Success Criteria</a>
@@ -162,7 +165,7 @@ cd backend &amp;&amp; mvn compile -q &amp;&amp; echo &quot;Backend: OK&quot;
 <p><code>schema.sql</code> is the reference DDL. Schema changes must go through Flyway migrations. But Claude might try to edit it directly when asked to "update the database schema." A CLAUDE.md rule says "don't edit it" — a hook makes it <strong>impossible</strong>.</p>
 <h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
 <blockquote>
-<p><strong>Reference:</strong> A reference version of <code>.claude/settings.json</code> with 6 fully working hooks already exists at <code>reference/.claude/settings.json</code>. Create your own with 3 hooks first, then compare at the end.</p>
+<p><strong>Reference:</strong> A reference version of <code>.claude/settings.json</code> exists at <code>reference/.claude/settings.json</code>. Create your own with 3 hooks first, then compare at the end. The reference includes 3 additional bonus hooks not covered in this lab — frontend TypeScript check (<code>tsc --noEmit</code>), Flyway migration naming validator, and <code>.env</code> file guard. These are optional real-world extras; your 3 hooks are complete for this exercise.</p>
 </blockquote>
 <ol>
 <li>Ask Claude to set up the hook:
@@ -257,7 +260,7 @@ not "no violations period." For comprehensive scanning, use a separate audit scr
 (<code>grep -r</code> across the whole codebase) as a CI step rather than relying on hooks alone.</p>
 </blockquote>
 <hr />
-<h2 id="exercise-4-review-all-hooks-10-min">Exercise 4: Review All Hooks (10 min)<a class="anchor" href="#exercise-4-review-all-hooks-10-min">&#182;</a></h2>
+<h2 id="exercise-4-review-your-hooks-10-min">Exercise 4: Review Your Hooks (10 min)<a class="anchor" href="#exercise-4-review-your-hooks-10-min">&#182;</a></h2>
 <h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
 <ol>
 <li>
@@ -309,6 +312,38 @@ not "no violations period." For comprehensive scanning, use a separate audit scr
    ```</li>
 </ol>
 <hr />
+<h2 id="exercise-4b-bonus-hooks-optional-15-min">Exercise 4b: Bonus Hooks (optional — 15 min)<a class="anchor" href="#exercise-4b-bonus-hooks-optional-15-min">&#182;</a></h2>
+<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<p>Add three enterprise-grade bonus hooks that go beyond the core three.</p>
+<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<ol>
+<li>
+<p><strong><code>.env</code> file guard</strong> (PreToolUse) — prevents accidentally putting real secrets in <code>.env</code>:
+   <code>Add a PreToolUse hook matching Edit or Write on `.env` files that prints
+   a warning if you are editing a real .env file (not .env.example). The hook
+   should warn: "You are editing an environment file. Ensure no real secrets
+   are committed. Proceed only if this is .env.example."</code></p>
+</li>
+<li>
+<p><strong>Frontend TypeScript check</strong> (PostToolUse) — catches TS errors on every frontend file save:
+   <code>Add a PostToolUse hook matching any file written under frontend/src/ that
+   runs `cd frontend &amp;&amp; npx tsc --noEmit` and shows any errors. This should
+   fire on every frontend edit — not blocking, just informative.</code></p>
+</li>
+<li>
+<p><strong>Flyway migration naming validator</strong> (PostToolUse) — enforces <code>V{n}__description.sql</code> pattern:
+   <code>Add a PostToolUse hook matching any .sql file written under db/migration/
+   that validates the filename matches V{n}__description.sql (lowercase,
+   underscores only). Exit 1 with a clear error message if it doesn't match.</code></p>
+</li>
+<li>
+<p>After adding all three bonus hooks, read your <code>.claude/settings.json</code> and verify it now contains 6 hooks: 3 core (from Exercises 1–3) + 3 bonus.</p>
+</li>
+</ol>
+<blockquote>
+<p><strong>Note:</strong> The reference <code>.claude/settings.json</code> at <code>reference/.claude/settings.json</code> contains all 6 hooks. Compare yours against it when you're done.</p>
+</blockquote>
+<hr />
 <h2 id="exercise-5-the-self-improvement-coda-5-min">Exercise 5: The Self-Improvement Coda (5 min)<a class="anchor" href="#exercise-5-the-self-improvement-coda-5-min">&#182;</a></h2>
 <p>Reflect on the difference:</p>
 <table>
@@ -348,11 +383,12 @@ not "no violations period." For comprehensive scanning, use a separate audit scr
 <hr />
 <h2 id="success-criteria">Success Criteria<a class="anchor" href="#success-criteria">&#182;</a></h2>
 <ul>
-<li>[ ] <code>.claude/settings.json</code> contains 3 hooks (schema guard, naming, PII)</li>
+<li>[ ] <code>.claude/settings.json</code> contains at least 3 hooks (schema guard, naming, PII)</li>
 <li>[ ] schema.sql edit attempt is blocked with clear error message</li>
 <li>[ ] Claude self-corrects naming violation without being told</li>
 <li>[ ] PII in logger statement is caught and prevented</li>
 <li>[ ] You can explain PreToolUse (blocking) vs PostToolUse (validating)</li>
+<li>[ ] (Bonus) All 6 hooks configured — core + bonus</li>
 </ul>
 <hr />
 <h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">&#182;</a></h2>
@@ -365,41 +401,16 @@ not "no violations period." For comprehensive scanning, use a separate audit scr
 </ol>
 <hr />
 <details>
-<summary><strong>Escape Hatch</strong> — settings.json with all 3 hooks</summary>
+<summary><strong>Escape Hatch</strong> — settings.json with all 6 hooks</summary>
+
+Copy the complete reference settings.json with all core and bonus hooks:
 
 
-<pre><code class="language-json">{
-  &quot;hooks&quot;: {
-    &quot;PreToolUse&quot;: [{
-      &quot;matcher&quot;: &quot;Edit|Write&quot;,
-      &quot;hooks&quot;: [{
-        &quot;type&quot;: &quot;command&quot;,
-        &quot;command&quot;: &quot;f=$(jq -r '.tool_input.file_path // empty'); if echo \&quot;$f\&quot; | grep -q 'database/schema.sql'; then echo 'BLOCKED: database/schema.sql is READ ONLY. Use a Flyway migration in db/migration/ instead.' &gt;&amp;2; exit 1; fi&quot;,
-        &quot;timeout&quot;: 10,
-        &quot;statusMessage&quot;: &quot;Checking schema.sql guard...&quot;
-      }]
-    }],
-    &quot;PostToolUse&quot;: [{
-      &quot;matcher&quot;: &quot;Edit|Write&quot;,
-      &quot;hooks&quot;: [
-        {
-          &quot;type&quot;: &quot;command&quot;,
-          &quot;command&quot;: &quot;f=$(jq -r '.tool_input.file_path // empty'); if echo \&quot;$f\&quot; | grep -q 'hrapp-service/src/main/java' &amp;&amp; echo \&quot;$f\&quot; | grep -q '\\.java$'; then classname=$(basename \&quot;$f\&quot; .java); if ! echo \&quot;$classname\&quot; | grep -q '^Hr'; then echo \&quot;NAMING VIOLATION: '$classname' must start with 'Hr'.\&quot; &gt;&amp;2; exit 1; fi; fi&quot;,
-          &quot;timeout&quot;: 10,
-          &quot;statusMessage&quot;: &quot;Checking Hr naming convention...&quot;
-        },
-        {
-          &quot;type&quot;: &quot;command&quot;,
-          &quot;command&quot;: &quot;f=$(jq -r '.tool_input.file_path // empty'); if echo \&quot;$f\&quot; | grep -q 'Service\\.java$'; then matches=$(jq -r '.tool_input.new_string // .tool_input.content // empty' | grep -iE 'LOGGER.*\\b(email|phone|salary|password|ssn)\\b' || true); if [ -n \&quot;$matches\&quot; ]; then echo 'PII LEAK DETECTED in logger statement. Use MASKED placeholder.' &gt;&amp;2; exit 1; fi; fi&quot;,
-          &quot;timeout&quot;: 10,
-          &quot;statusMessage&quot;: &quot;Scanning for PII in logs...&quot;
-        }
-      ]
-    }]
-  }
-}
+<pre><code class="language-bash">cp reference/.claude/settings.json .claude/settings.json
 </code></pre>
 
+
+After copying, read the file to see what each hook does. The 3 bonus hooks (env guard, TypeScript check, Flyway naming) are the same ones from Exercise 4b.
 </details><div class="footer-nav"><a href="../index.html">← All Labs</a><a href="lab-04-context-management.html">← Previous</a><a href="lab-06-subagents.html">Next →</a><a href="https://github.com/ssthakuraa/claude-code-workshop" target="_blank">GitHub Repo</a></div>
 </div>
 </body>

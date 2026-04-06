@@ -108,10 +108,11 @@ input[type="checkbox"] { margin-right: 0.3rem; }
       <a href="#the-concept">The Concept</a>
       <a href="#instructions">Instructions</a>
       <a href="#the-escalation-pattern">The Escalation Pattern</a>
+      <a href="#add-to-claudemd">Add to CLAUDE.md</a>
     <a href="#exercise-5-create-a-slash-command-10-min">Exercise 5: Create a Slash Command (10 min)</a>
       <a href="#goal">Goal</a>
       <a href="#instructions">Instructions</a>
-    <a href="#exercise-6-the-self-improvement-coda-5-min">Exercise 6: The Self-Improvement Coda (5 min)</a>
+    <a href="#exercise-5-the-self-improvement-coda-5-min">Exercise 5: The Self-Improvement Coda (5 min)</a>
     <a href="#success-criteria">Success Criteria</a>
     <a href="#key-takeaways">Key Takeaways</a>
 </nav><h1 id="lab-3-skills-amp-commands-reusable-knowledge-packs">Lab 3: Skills &amp; Commands — Reusable Knowledge Packs<a class="anchor" href="#lab-3-skills-amp-commands-reusable-knowledge-packs">&#182;</a></h1>
@@ -144,7 +145,13 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 </blockquote>
 <hr />
 <h2 id="setup">Setup<a class="anchor" href="#setup">&#182;</a></h2>
-<p>Continue from Labs 1–2. You should have CLAUDE.md with your rules in place and the Region entity built. If CLAUDE.md is missing, copy the escape hatch version from Lab 1.</p>
+<p>Continue from Labs 1–2. You should have CLAUDE.md with your naming, logging, database, API, security, and employee lifecycle rules in place.</p>
+<pre><code class="language-bash"># If you used the Lab 2 escape hatch, this is already your starting CLAUDE.md
+cp reference/CLAUDELAB02.md CLAUDE.md
+</code></pre>
+<blockquote>
+<p><strong>Note:</strong> If you have your own built-up CLAUDE.md from Labs 1–2, use it. The escape hatch above is for students who started from a prior <code>claude init</code> or used a previous lab's escape hatch.</p>
+</blockquote>
 <hr />
 <h2 id="exercise-1-the-manual-way-15-min">Exercise 1: The Manual Way (15 min)<a class="anchor" href="#exercise-1-the-manual-way-15-min">&#182;</a></h2>
 <h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
@@ -275,13 +282,14 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 <p>Verify: <code>cd backend &amp;&amp; mvn clean compile</code></p>
 </li>
 </ol>
-<details>
+<blockquote>
+<p><details>
 <summary>Seeing lots of "cannot find symbol" errors?</summary>
 Run <code>mvn clean compile</code> (not just <code>mvn compile</code>). Lombok's annotation processor generates getters/setters in <code>target/generated-sources/annotations/</code>. When that directory has stale output from a previous build, Maven reuses cached output instead of regenerating for new or changed classes. <code>mvn clean</code> removes <code>target/</code> entirely, forcing a fresh rebuild. This is the #1 source of false compilation failures in Labs 2–3.
-</details>
-<li>
-<p><strong>Why this matters:</strong> Notification is a real entity your HR app will need. You didn't build it yet — the skill just delivered all 7 layers in one prompt. Compare that with Exercise 1 where you needed multiple prompts for Country and still had gaps.</p>
-</li>
+</details></p>
+</blockquote>
+<ol>
+<li><strong>Why this matters:</strong> Notification is a real entity your HR app will need. You didn't build it yet — the skill just delivered all 7 layers in one prompt. Compare that with Exercise 1 where you needed multiple prompts for Country and still had gaps.</li>
 </ol>
 <h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
 <p>One prompt → all 7 layers → compiles clean → all conventions followed. The skill eliminated the need to re-explain the pattern and delivered a production-ready entity you actually need.</p>
@@ -339,33 +347,48 @@ Run <code>mvn clean compile</code> (not just <code>mvn compile</code>). Lombok's
 <hr />
 <h2 id="exercise-4-the-verification-agent-chain-15-min">Exercise 4: The Verification Agent Chain (15 min)<a class="anchor" href="#exercise-4-the-verification-agent-chain-15-min">&#182;</a></h2>
 <h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
-<p>Build a <strong>verification chain</strong> — a sequence of agent calls that progressively increases the quality bar on your output. Learn the pattern that separates &quot;it compiles&quot; from &quot;it ships.&quot;</p>
+<p>Build a <strong>verification chain</strong> — a sequence of agent calls that progressively
+increases the quality bar on your output. Learn the pattern that separates
+"it compiles" from "it ships."</p>
 <h3 id="the-concept">The Concept<a class="anchor" href="#the-concept">&#182;</a></h3>
 <p>The professional workflow is not:</p>
-<p><code>Build → Ship it</code></p>
+<pre><code>Build → Ship it
+</code></pre>
 <p>It's:</p>
-<p><code>Build → Review (agent) → Fix → Test → Visual Verify (Playwright)</code></p>
-<p>Each link catches different classes of defects:</p>
-<table>
-<thead><tr><th>Link</th><th>Catches</th></tr></thead>
-<tbody><tr><td><strong>Agent review</strong></td><td>Edge cases, accessibility gaps, type safety, consistency</td></tr><tr><td><strong>/run-tests</strong></td><td>Runtime bugs, incorrect logic, broken contracts</td></tr><tr><td><strong>Playwright</strong></td><td>Visual regressions, broken renders, missing elements</td></tr></tbody></table>
+<pre><code>Build → Review (agent) → Fix → Test → Visual Verify (Playwright)
+</code></pre>
+<p>Each link catches different classes of defects:
+| Link | Catches |
+|------|---------|
+| <strong>Agent review</strong> | Edge cases, accessibility gaps, type safety, consistency |
+| <strong>/run-tests</strong> | Runtime bugs, incorrect logic, broken contracts |
+| <strong>Playwright</strong> | Visual regressions, broken renders, missing elements |</p>
 <h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
 <ol>
-<li><p><strong>Review</strong> — Send the NotificationsPage you wired in Exercise 3b to the component-reviewer agent:</p>
-<p><pre><code>Use the component-reviewer agent to review
-src/pages/admin/NotificationsPage.tsx.
-Focus on accessibility, error states, and edge cases.</code></pre></p></li>
-<li><p><strong>Fix</strong> — Address any Critical or Warning findings:</p>
-<p><pre><code>Fix these issues from the component-reviewer:
-[paste the agent's Critical and Warning findings]</code></pre></p></li>
-<li><p><strong>Test</strong> — Run the suite to make sure nothing broke:</p>
-<p><pre><code>/run-tests</code></pre></p></li>
-<li><p><strong>Visual Verify</strong> — If Playwright MCP is configured (Lab 9), navigate to the page and take a screenshot:</p>
-<p><pre><code>Navigate to http://localhost:5173/hr/notifications.
-Take a screenshot. Do the notifications render correctly?
-Check for loading state, data state, and empty state.</code></pre></p>
-<p>If Playwright isn't available yet, manually verify the page loads and note what you'd automate in Lab 9.</p></li>
+<li><strong>Review</strong> — Send the NotificationsPage you wired in Exercise 3b
+   to the component-reviewer agent:</li>
 </ol>
+<p><code>Use the component-reviewer agent to review
+   src/pages/admin/NotificationsPage.tsx.
+   Focus on accessibility, error states, and edge cases.</code></p>
+<ol>
+<li><strong>Fix</strong> — Address any Critical or Warning findings:</li>
+</ol>
+<p><code>Fix these issues from the component-reviewer:
+   [paste the agent's Critical and Warning findings]</code></p>
+<ol>
+<li><strong>Test</strong> — Run the suite to make sure nothing broke:</li>
+</ol>
+<p><code>/run-tests</code></p>
+<ol>
+<li><strong>Visual Verify</strong> — If Playwright MCP is configured (Lab 9),
+   navigate to the page and take a screenshot:</li>
+</ol>
+<p><code>Navigate to http://localhost:5173/hr/notifications.
+   Take a screenshot. Do the notifications render correctly?
+   Check for loading state, data state, and empty state.</code>
+   If Playwright isn't available yet, manually verify the page loads
+   and note what you'd automate in Lab 9.</p>
 <h3 id="the-escalation-pattern">The Escalation Pattern<a class="anchor" href="#the-escalation-pattern">&#182;</a></h3>
 <p>As you gain confidence, add links to the chain:</p>
 <pre><code>Level 1 (beginner):  Build it. Check it compiles.
@@ -412,7 +435,7 @@ Level 3 (advanced):   Build → Review → Fix → Test → Visual verify
 <p><strong>Note:</strong> You will see <code>hireEmployee</code> test failures if you haven't implemented it yet in Lab 2. That's expected — the test suite covers the full service contract. If you completed Lab 2, those tests should pass. Either way, the command itself is working correctly if it runs and reports results.</p>
 </blockquote>
 <hr />
-<h2 id="exercise-6-the-self-improvement-coda-5-min">Exercise 6: The Self-Improvement Coda (5 min)<a class="anchor" href="#exercise-6-the-self-improvement-coda-5-min">&#182;</a></h2>
+<h2 id="exercise-5-the-self-improvement-coda-5-min">Exercise 5: The Self-Improvement Coda (5 min)<a class="anchor" href="#exercise-5-the-self-improvement-coda-5-min">&#182;</a></h2>
 <ol>
 <li>Add to CLAUDE.md:
    ```markdown
@@ -443,10 +466,24 @@ Level 3 (advanced):   Build → Review → Fix → Test → Visual verify
 <li><strong>Skills compound engineering</strong> — define the pattern once, reuse it N times without context drift</li>
 <li><strong>Skills are on-demand, CLAUDE.md is always-on</strong> — use skills for large patterns that would bloat CLAUDE.md</li>
 <li><strong>Slash commands for daily workflows</strong> — if you do it more than once a day, make it a <code>/command</code></li>
+<li><strong>Skills compound engineering</strong> — define the pattern once, reuse it N times without context drift</li>
+<li><strong>Skills are on-demand, CLAUDE.md is always-on</strong> — use skills for large patterns that would bloat CLAUDE.md</li>
+<li><strong>Slash commands for daily workflows</strong> — if you do it more than once a day, make it a <code>/command</code></li>
 <li><strong>Verification chain multiplies quality</strong> — build → review (agent) → fix → test → visual verify (Playwright). Level 3 is production minimum.</li>
 <li><strong>Team-shared via git</strong> — <code>.claude/skills/</code> and <code>.claude/commands/</code> are checked in. The whole team benefits.</li>
 </ol>
 <hr />
+<details>
+<summary><strong>Escape Hatch</strong> — CLAUDE.md state at this point</summary>
+
+Copy the Lab 3 reference CLAUDE.md (includes Lab 1–2 rules plus Verification Chain and Skills & Commands):
+
+
+<pre><code class="language-bash">cp reference/CLAUDELAB03.md CLAUDE.md
+</code></pre>
+
+</details>
+
 <details>
 <summary><strong>Escape Hatch</strong> — Skill YAML frontmatter</summary>
 

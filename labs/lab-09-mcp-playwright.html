@@ -166,12 +166,17 @@ curl -s http://localhost:8080/app/hr/api/v1/regions | head -5  # Backend
    }</code></p>
 </li>
 <li>
-<p><strong>Verify Playwright tools are available.</strong> Claude should confirm that Playwright tools (browser_navigate, browser_snapshot, etc.) are present.
+<p><strong>Verify Playwright tools are available.</strong> Run:
+   <code>/mcp</code>
+   You should see <code>playwright</code> and <code>mysql</code> listed with their tools. Verify the tools for each server — Playwright should show <code>browser_navigate</code>, <code>browser_snapshot</code>, <code>browser_take_screenshot</code>, etc., and MySQL should show connect/query tools.</p>
+</li>
+</ol>
+<p><strong>If they don't appear</strong>, install Playwright browsers:
    If they don't appear, install Playwright browsers:
    <code>bash
    cd frontend &amp;&amp; npx playwright install chromium</code>
    Then <code>/clear</code> to restart the session.</p>
-</li>
+<ol>
 <li>
 <p><strong>Smoke test — use Playwright to verify:</strong>
    <code>Navigate to http://localhost:5173 and take a screenshot.
@@ -322,23 +327,10 @@ curl -s http://localhost:8080/app/hr/api/v1/regions | head -5  # Backend
 </ol>
 <hr />
 <details>
-<summary><strong>Escape Hatch</strong> — .mcp.json configuration</summary>
+<summary><strong>Escape Hatch</strong> — Playwright troubleshooting</summary>
 
+`.mcp.json` is already at the project root with Playwright configured. If it doesn't work:
 
-<pre><code class="language-json">{
-  &quot;mcpServers&quot;: {
-    &quot;playwright&quot;: {
-      &quot;type&quot;: &quot;stdio&quot;,
-      &quot;command&quot;: &quot;npx&quot;,
-      &quot;args&quot;: [&quot;@playwright/mcp&quot;, &quot;--headless&quot;],
-      &quot;env&quot;: {}
-    }
-  }
-}
-</code></pre>
-
-
-If Playwright fails to connect:
 
 <pre><code class="language-bash"># Check Chromium is installed
 npx playwright install chromium
@@ -346,7 +338,7 @@ npx playwright install chromium
 # Check frontend is running
 curl http://localhost:5173
 
-# Restart Claude Code session after adding .mcp.json
+# Restart Claude Code session after any .mcp.json change
 </code></pre>
 
 </details><div class="footer-nav"><a href="../index.html">← All Labs</a><a href="lab-08-verification-loops.html">← Previous</a><a href="lab-10-mcp-mysql.html">Next →</a><a href="https://github.com/ssthakuraa/claude-code-workshop" target="_blank">GitHub Repo</a></div>

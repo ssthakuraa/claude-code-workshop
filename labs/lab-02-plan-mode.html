@@ -86,6 +86,7 @@ input[type="checkbox"] { margin-right: 0.3rem; }
     <a href="#learning-objective">Learning Objective</a>
     <a href="#the-key-concept">The Key Concept</a>
     <a href="#setup">Setup</a>
+      <a href="#after-exercise-3-add-employee-lifecycle-rules">After Exercise 3: Add Employee Lifecycle Rules</a>
     <a href="#exercise-1-the-bad-path-skip-the-plan-15-min">Exercise 1: The Bad Path — Skip the Plan (15 min)</a>
       <a href="#goal">Goal</a>
       <a href="#instructions">Instructions</a>
@@ -127,7 +128,30 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 - Simple renames, typo fixes, single-file changes</p>
 <hr />
 <h2 id="setup">Setup<a class="anchor" href="#setup">&#182;</a></h2>
-<p>Continue from Lab 1. You should have a working CLAUDE.md with naming, logging, database, and API response rules. If not, copy the escape hatch CLAUDE.md from Lab 1's Escape Hatch section into the project root.</p>
+<p>Continue from Lab 1. You should have a working CLAUDE.md with naming, logging, database, and API response rules. If you used the Lab 1 escape hatch or got stuck, use it to get your starting CLAUDE.md — it's a fresh copy each time this lab runs.</p>
+<pre><code class="language-bash"># Copy the Lab 1 escape-hatch version (contains naming, database, logging, API, security rules)
+cp reference/CLAUDELAB01.md CLAUDE.md
+</code></pre>
+<blockquote>
+<p><strong>Note:</strong> If you started from a prior <code>claude init</code> or have your own <code>CLAUDE.md.complete</code> backed up, use <code>cp your-backup-of-claude.md CLAUDE.md</code> to restore your prior version before applying the Lab 2 escape hatch. The Lab 2 escape hatch below builds on the Lab 1 state.</p>
+</blockquote>
+<hr />
+<h3 id="after-exercise-3-add-employee-lifecycle-rules">After Exercise 3: Add Employee Lifecycle Rules<a class="anchor" href="#after-exercise-3-add-employee-lifecycle-rules">&#182;</a></h3>
+<p>After completing Exercise 3, your CLAUDE.md should include the Employee Lifecycle Rules from the exercise. If you used the escape hatch for Lab 1, apply the Lab 2 escape hatch.</p>
+<blockquote>
+<p><strong>Use it exactly as written.</strong> Copy the file below.</p>
+</blockquote>
+<details>
+<summary><strong>Escape Hatch</strong> — Click if stuck for more than 5 minutes</summary>
+
+Copy the fully built Lab 2 CLAUDE.md from the reference directory. This includes the Lab 1 rules (naming, database, logging, API, security, build) plus the Lab 2 Employee Lifecycle Rules:
+
+
+<pre><code class="language-bash">cp reference/CLAUDELAB02.md CLAUDE.md
+</code></pre>
+
+</details>
+
 <hr />
 <h2 id="exercise-1-the-bad-path-skip-the-plan-15-min">Exercise 1: The Bad Path — Skip the Plan (15 min)<a class="anchor" href="#exercise-1-the-bad-path-skip-the-plan-15-min">&#182;</a></h2>
 <h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
@@ -216,11 +240,11 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 <ol>
 <li><strong>Verify:</strong> Run <code>mvn clean compile</code> to check it compiles. Review the method against the plan.</li>
 </ol>
-<details>
+<blockquote>
+<p><details>
 <summary>Seeing lots of "cannot find symbol" errors?</summary>
 Run <code>mvn clean compile</code> (not just <code>mvn compile</code>). Lombok's annotation processor generates getters/setters in <code>target/generated-sources/annotations/</code>. When that directory has stale output from a previous build, Maven reuses cached output instead of regenerating for new or changed classes. <code>mvn clean</code> removes <code>target/</code> entirely, forcing a fresh rebuild. This is the #1 source of false compilation failures in Labs 2–3.
-</details>
-<blockquote>
+</details></p>
 <p><strong>Reference:</strong> If you get stuck, compare with <code>reference/backend/hrapp-service/src/main/java/com/company/hr/service/HrEmployeeService.java</code> — the full working version is there.</p>
 </blockquote>
 <h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
@@ -261,41 +285,93 @@ Run <code>mvn clean compile</code> (not just <code>mvn compile</code>). Lombok's
 <hr />
 <h2 id="exercise-4-prompt-enhancement-via-agent-15-min">Exercise 4: Prompt Enhancement via Agent (15 min)<a class="anchor" href="#exercise-4-prompt-enhancement-via-agent-15-min">&#182;</a></h2>
 <h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
-<p>Use a subagent to transform a vague, under-specified prompt into a detailed, actionable implementation brief before you give it to your main Claude session.</p>
+<p>Use a subagent to transform a vague, under-specified prompt into a detailed,
+actionable implementation brief before you give it to your main Claude session.</p>
 <h3 id="the-problem">The Problem<a class="anchor" href="#the-problem">&#182;</a></h3>
-<p>Professional engineers rarely receive fully-specified requirements. A stakeholder says <em>"make a department manager page"</em> and expects you to know what that means. If you hand that vague prompt directly to Claude's main session, you get a thin, incomplete result that misses edge cases, conventions, and real-world needs.</p>
-<p><strong>The trick:</strong> use an agent to <em>research and enhance</em> the prompt first, before the main session ever touches it.</p>
+<p>Professional engineers rarely receive fully-specified requirements. A stakeholder
+says <em>"make a department manager page"</em> and expects you to know what that means.
+If you hand that vague prompt directly to Claude's main session, you get a thin,
+incomplete result that misses edge cases, conventions, and real-world needs.</p>
+<p><strong>The trick:</strong> use an agent to <em>research and enhance</em> the prompt first, before
+the main session ever touches it.</p>
 <h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
 <ol>
-<li><p>Look at the following deliberately vague prompt a manager might type:</p>
-<p><code>Make a department manager page</code></p>
-<p>No data model. No API contract. No conventions. No acceptance criteria.</p></li>
-<li><p><strong>Enhance the prompt with an agent.</strong> Instead of running it directly, ask an agent to research the codebase and improve it:</p>
-<p><pre><code>Use a general-purpose agent to improve this prompt:
-"Make a department manager page"
-
-Read the existing codebase to understand the HR app's patterns:
-- Component naming conventions (Hr prefix)
-- Frontend patterns (TanStack Query, HrApiClient, Vertex Tech tokens)
-- Backend API conventions (HrApiResponse envelope)
-Look at existing pages like EmployeeDirectoryPage for layout references.
-
-Return a detailed, structured prompt that an implementation Claude
-session could act on directly. Include: page file path and component name,
-API calls, UI layout structure, loading/empty/error states, component
-conventions, edge cases to handle, and acceptance criteria.</code></pre></p></li>
-<li><p><strong>Review the output.</strong> The agent should return a ~30-50 line structured prompt with specific file paths, component names, API endpoints, and edge cases pulled from the actual codebase.</p></li>
-<li><p><strong>Run the enhanced prompt.</strong> In a <strong>new session</strong> (<code>/clear</code>), paste the agent's enhanced prompt and build the feature.</p></li>
-<li><p><strong>Compare the results:</strong></p>
-<table>
-<thead><tr><th>Aspect</th><th>Original 4-word prompt</th><th>Agent-enhanced prompt</th></tr></thead>
-<tbody><tr><td>Specificity</td><td>Vague intent</td><td>Concrete file paths, APIs, conventions</td></tr><tr><td>Edge cases</td><td>None</td><td>3+ explicit scenarios</td></tr><tr><td>Acceptance criteria</td><td>None</td><td>5+ testable items</td></tr><tr><td>Follow-up prompts needed</td><td>3-5 to fill gaps</td><td>0-1 to polish</td></tr></tbody></table></li>
+<li>Look at the following deliberately vague prompt a manager might type:</li>
 </ol>
+<p><code>Make a department manager page</code></p>
+<p>No data model. No API contract. No conventions. No acceptance criteria.</p>
+<ol>
+<li><strong>Enhance the prompt with an agent.</strong> Instead of running it directly,
+   ask an agent to research the codebase and improve it:</li>
+</ol>
+<p>```
+   Use a general-purpose agent to improve this prompt:
+   "Make a department manager page"</p>
+<p>Read the existing codebase to understand the HR app's patterns:
+   - Component naming conventions (Hr prefix)
+   - Frontend patterns (TanStack Query, HrApiClient, Vertex Tech tokens)
+   - Backend API conventions (HrApiResponse envelope)
+   Look at existing pages like EmployeeDirectoryPage for layout references.</p>
+<p>Return a detailed, structured prompt that an implementation Claude
+   session could act on directly. Include: page file path and component name,
+   API calls, UI layout structure, loading/empty/error states, component
+   conventions, edge cases to handle, and acceptance criteria.
+   ```</p>
+<ol>
+<li>
+<p><strong>Review the output.</strong> The agent should return a ~30-50 line structured
+   prompt with specific file paths, component names, API endpoints, and
+   edge cases pulled from the actual codebase.</p>
+</li>
+<li>
+<p><strong>Run the enhanced prompt.</strong> In a <strong>new session</strong> (<code>/clear</code>), paste the
+   agent's enhanced prompt and build the feature.</p>
+</li>
+<li>
+<p><strong>Compare the results:</strong></p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Original 4-word prompt</th>
+<th>Agent-enhanced prompt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Specificity</td>
+<td>Vague intent</td>
+<td>Concrete file paths, APIs, conventions</td>
+</tr>
+<tr>
+<td>Edge cases</td>
+<td>None</td>
+<td>3+ explicit scenarios</td>
+</tr>
+<tr>
+<td>Acceptance criteria</td>
+<td>None</td>
+<td>5+ testable items</td>
+</tr>
+<tr>
+<td>Follow-up prompts needed</td>
+<td>3-5 to fill gaps</td>
+<td>0-1 to polish</td>
+</tr>
+</tbody>
+</table>
 <h3 id="why-this-matters">Why This Matters<a class="anchor" href="#why-this-matters">&#182;</a></h3>
 <ul>
-<li><strong>Agents are research assistants, not builders.</strong> They read the codebase, understand patterns, and synthesize a spec — without polluting your main session's context with file reads and dead ends.</li>
-<li><strong>Bad prompts waste tokens.</strong> A vague prompt produces a vague result, then you spend 5 follow-up prompts fixing gaps. One agent call + one implementation prompt costs fewer tokens and produces better output.</li>
-<li><strong>This is the professional pattern:</strong> <code>Agent (research + enhance prompt)</code> → <code>Main session (build)</code> → <code>Agent (review)</code> → <code>Command (test)</code>.</li>
+<li><strong>Agents are research assistants, not builders.</strong> They read the codebase,
+  understand patterns, and synthesize a spec — without polluting your main
+  session's context with file reads and dead ends.</li>
+<li><strong>Bad prompts waste tokens.</strong> A vague prompt produces a vague result, then
+  you spend 5 follow-up prompts fixing gaps. One agent call + one implementation
+  prompt costs fewer tokens and produces better output.</li>
+<li><strong>This is the professional pattern:</strong> <code>Agent (research + enhance prompt)</code> →
+  <code>Main session (build)</code> → <code>Agent (review)</code> → <code>Command (test)</code>.</li>
 </ul>
 <hr />
 <h2 id="success-criteria">Success Criteria<a class="anchor" href="#success-criteria">&#182;</a></h2>

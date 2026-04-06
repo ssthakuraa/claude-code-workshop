@@ -363,46 +363,18 @@ mysql -h 127.0.0.1 -u hr_readonly -preadonly_pass hr_db -e &quot;SELECT 1;&quot;
 </ol>
 <hr />
 <details>
-<summary><strong>Escape Hatch</strong> — .mcp.json with both servers</summary>
+<summary><strong>Escape Hatch</strong> — MySQL MCP troubleshooting</summary>
+
+`.mcp.json` is already at the project root with both Playwright and MySQL configured. If MySQL doesn't work:
 
 
-<pre><code class="language-json">{
-  &quot;mcpServers&quot;: {
-    &quot;playwright&quot;: {
-      &quot;type&quot;: &quot;stdio&quot;,
-      &quot;command&quot;: &quot;npx&quot;,
-      &quot;args&quot;: [&quot;@playwright/mcp&quot;, &quot;--headless&quot;],
-      &quot;env&quot;: {}
-    },
-    &quot;mysql&quot;: {
-      &quot;type&quot;: &quot;stdio&quot;,
-      &quot;command&quot;: &quot;npx&quot;,
-      &quot;args&quot;: [&quot;-y&quot;, &quot;@benborla29/mcp-server-mysql&quot;],
-      &quot;env&quot;: {
-        &quot;MYSQL_HOST&quot;: &quot;127.0.0.1&quot;,
-        &quot;MYSQL_PORT&quot;: &quot;3306&quot;,
-        &quot;MYSQL_USER&quot;: &quot;hr_readonly&quot;,
-        &quot;MYSQL_PASS&quot;: &quot;readonly_pass&quot;,
-        &quot;MYSQL_DB&quot;: &quot;hr_db&quot;,
-        &quot;ALLOW_INSERT_OPERATION&quot;: &quot;false&quot;,
-        &quot;ALLOW_UPDATE_OPERATION&quot;: &quot;false&quot;,
-        &quot;ALLOW_DELETE_OPERATION&quot;: &quot;false&quot;
-      }
-    }
-  }
-}
-</code></pre>
-
-
-If MySQL MCP fails:
-
-<pre><code class="language-bash"># Check MySQL is running
+<pre><code class="language-bash"># Check MySQL is running and user works
 mysql -h 127.0.0.1 -u hr_readonly -preadonly_pass hr_db -e &quot;SELECT 1;&quot;
 
-# Check read-only user has SELECT permissions
+# Check read-only user has permissions
 mysql -h 127.0.0.1 -u root -proot123 -e &quot;SHOW GRANTS FOR 'hr_readonly'@'localhost';&quot;
 
-# Restart Claude Code session after .mcp.json changes
+# Restart Claude Code session after any .mcp.json change
 </code></pre>
 
 </details><div class="footer-nav"><a href="../index.html">← All Labs</a><a href="lab-09-mcp-playwright.html">← Previous</a><a href="lab-11-cicd-permissions.html">Next →</a><a href="https://github.com/ssthakuraa/claude-code-workshop" target="_blank">GitHub Repo</a></div>
