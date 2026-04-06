@@ -160,7 +160,7 @@ PII in logs is a compliance violation. Code review catches it sometimes; a hook 
 
 ---
 
-## Exercise 4: Review All Hooks (10 min)
+## Exercise 4: Review Your Hooks (10 min)
 
 ### Instructions
 
@@ -188,6 +188,41 @@ PII in logs is a compliance violation. Code review catches it sometimes; a hook 
 
 ---
 
+## Exercise 4b: Bonus Hooks (optional — 15 min)
+
+### Goal
+Add three enterprise-grade bonus hooks that go beyond the core three.
+
+### Instructions
+
+1. **`.env` file guard** (PreToolUse) — prevents accidentally putting real secrets in `.env`:
+   ```
+   Add a PreToolUse hook matching Edit or Write on `.env` files that prints
+   a warning if you are editing a real .env file (not .env.example). The hook
+   should warn: "You are editing an environment file. Ensure no real secrets
+   are committed. Proceed only if this is .env.example."
+   ```
+
+2. **Frontend TypeScript check** (PostToolUse) — catches TS errors on every frontend file save:
+   ```
+   Add a PostToolUse hook matching any file written under frontend/src/ that
+   runs `cd frontend && npx tsc --noEmit` and shows any errors. This should
+   fire on every frontend edit — not blocking, just informative.
+   ```
+
+3. **Flyway migration naming validator** (PostToolUse) — enforces `V{n}__description.sql` pattern:
+   ```
+   Add a PostToolUse hook matching any .sql file written under db/migration/
+   that validates the filename matches V{n}__description.sql (lowercase,
+   underscores only). Exit 1 with a clear error message if it doesn't match.
+   ```
+
+4. After adding all three bonus hooks, read your `.claude/settings.json` and verify it now contains 6 hooks: 3 core (from Exercises 1–3) + 3 bonus.
+
+> **Note:** The reference `.claude/settings.json` at `reference/.claude/settings.json` contains all 6 hooks. Compare yours against it when you're done.
+
+---
+
 ## Exercise 5: The Self-Improvement Coda (5 min)
 
 Reflect on the difference:
@@ -205,11 +240,12 @@ Reflect on the difference:
 
 ## Success Criteria
 
-- [ ] `.claude/settings.json` contains 3 hooks (schema guard, naming, PII)
+- [ ] `.claude/settings.json` contains at least 3 hooks (schema guard, naming, PII)
 - [ ] schema.sql edit attempt is blocked with clear error message
 - [ ] Claude self-corrects naming violation without being told
 - [ ] PII in logger statement is caught and prevented
 - [ ] You can explain PreToolUse (blocking) vs PostToolUse (validating)
+- [ ] (Bonus) All 6 hooks configured — core + bonus
 
 ---
 
@@ -224,38 +260,13 @@ Reflect on the difference:
 ---
 
 <details>
-<summary><strong>Escape Hatch</strong> — settings.json with all 3 hooks</summary>
+<summary><strong>Escape Hatch</strong> — settings.json with all 6 hooks</summary>
 
-```json
-{
-  "hooks": {
-    "PreToolUse": [{
-      "matcher": "Edit|Write",
-      "hooks": [{
-        "type": "command",
-        "command": "f=$(jq -r '.tool_input.file_path // empty'); if echo \"$f\" | grep -q 'database/schema.sql'; then echo 'BLOCKED: database/schema.sql is READ ONLY. Use a Flyway migration in db/migration/ instead.' >&2; exit 1; fi",
-        "timeout": 10,
-        "statusMessage": "Checking schema.sql guard..."
-      }]
-    }],
-    "PostToolUse": [{
-      "matcher": "Edit|Write",
-      "hooks": [
-        {
-          "type": "command",
-          "command": "f=$(jq -r '.tool_input.file_path // empty'); if echo \"$f\" | grep -q 'hrapp-service/src/main/java' && echo \"$f\" | grep -q '\\.java$'; then classname=$(basename \"$f\" .java); if ! echo \"$classname\" | grep -q '^Hr'; then echo \"NAMING VIOLATION: '$classname' must start with 'Hr'.\" >&2; exit 1; fi; fi",
-          "timeout": 10,
-          "statusMessage": "Checking Hr naming convention..."
-        },
-        {
-          "type": "command",
-          "command": "f=$(jq -r '.tool_input.file_path // empty'); if echo \"$f\" | grep -q 'Service\\.java$'; then matches=$(jq -r '.tool_input.new_string // .tool_input.content // empty' | grep -iE 'LOGGER.*\\b(email|phone|salary|password|ssn)\\b' || true); if [ -n \"$matches\" ]; then echo 'PII LEAK DETECTED in logger statement. Use MASKED placeholder.' >&2; exit 1; fi; fi",
-          "timeout": 10,
-          "statusMessage": "Scanning for PII in logs..."
-        }
-      ]
-    }]
-  }
-}
+Copy the complete reference settings.json with all core and bonus hooks:
+
+```bash
+cp reference/.claude/settings.json .claude/settings.json
 ```
+
+After copying, read the file to see what each hook does. The 3 bonus hooks (env guard, TypeScript check, Flyway naming) are the same ones from Exercise 4b.
 </details>

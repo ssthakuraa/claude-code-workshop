@@ -61,6 +61,11 @@ hr/
 - All service methods need `@PreAuthorize`
 - RBAC roles: `ROLE_ADMIN`, `ROLE_HR_SPECIALIST`, `ROLE_MANAGER`, `ROLE_EMPLOYEE`
 
+## Active Hooks
+- PreToolUse: `database/schema.sql` is read-only — edit blocked, use Flyway migrations instead
+- PostToolUse: Java class names must start with `Hr` — no exceptions
+- PostToolUse: No PII (email, phone, salary, password, ssn) in `LOGGER` statements
+
 ## Employee Lifecycle Rules
 - Every hire/promote/transfer/terminate MUST write a job_history record
 - Hire endpoint requires idempotency key (checked in service layer)
