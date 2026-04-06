@@ -34,7 +34,14 @@ You will create a custom skill that encodes a repeatable pattern, then use it to
 
 ## Setup
 
-Continue from Labs 1–2. You should have CLAUDE.md with your rules in place and the Region entity built. If CLAUDE.md is missing, copy the escape hatch version from Lab 1.
+Continue from Labs 1–2. You should have CLAUDE.md with your naming, logging, database, API, security, and employee lifecycle rules in place.
+
+```bash
+# If you used the Lab 2 escape hatch, this is already your starting CLAUDE.md
+cp reference/CLAUDELAB02.md CLAUDE.md
+```
+
+> **Note:** If you have your own built-up CLAUDE.md from Labs 1–2, use it. The escape hatch above is for students who started from a prior `claude init` or used a previous lab's escape hatch.
 
 ---
 
@@ -374,6 +381,16 @@ Create a `/run-tests` command for daily use.
 5. **Team-shared via git** — `.claude/skills/` and `.claude/commands/` are checked in. The whole team benefits.
 
 ---
+
+<details>
+<summary><strong>Escape Hatch</strong> — CLAUDE.md state at this point</summary>
+
+Copy the Lab 3 reference CLAUDE.md (includes Lab 1–2 rules plus Verification Chain and Skills & Commands):
+
+```bash
+cp reference/CLAUDELAB03.md CLAUDE.md
+```
+</details>
 
 <details>
 <summary><strong>Escape Hatch</strong> — Skill YAML frontmatter</summary>
