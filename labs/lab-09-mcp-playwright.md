@@ -82,7 +82,13 @@ Understand how MCP server configuration works and verify Playwright is connected
    }
    ```
 
-3. **Verify Playwright tools are available.** Claude should confirm that Playwright tools (browser_navigate, browser_snapshot, etc.) are present.
+3. **Verify Playwright tools are available.** Run:
+   ```
+   /mcp
+   ```
+   You should see `playwright` and `mysql` listed with their tools. Verify the tools for each server — Playwright should show `browser_navigate`, `browser_snapshot`, `browser_take_screenshot`, etc., and MySQL should show connect/query tools.
+
+   **If they don't appear**, install Playwright browsers:
    If they don't appear, install Playwright browsers:
    ```bash
    cd frontend && npx playwright install chromium
@@ -242,22 +248,10 @@ Use Playwright MCP to test an interactive form workflow.
 ---
 
 <details>
-<summary><strong>Escape Hatch</strong> — .mcp.json configuration</summary>
+<summary><strong>Escape Hatch</strong> — Playwright troubleshooting</summary>
 
-```json
-{
-  "mcpServers": {
-    "playwright": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["@playwright/mcp", "--headless"],
-      "env": {}
-    }
-  }
-}
-```
+`.mcp.json` is already at the project root with Playwright configured. If it doesn't work:
 
-If Playwright fails to connect:
 ```bash
 # Check Chromium is installed
 npx playwright install chromium
@@ -265,6 +259,6 @@ npx playwright install chromium
 # Check frontend is running
 curl http://localhost:5173
 
-# Restart Claude Code session after adding .mcp.json
+# Restart Claude Code session after any .mcp.json change
 ```
 </details>

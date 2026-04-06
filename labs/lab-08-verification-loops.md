@@ -207,40 +207,15 @@ See how test-driven and visual verification work together.
 ---
 
 <details>
-<summary><strong>Escape Hatch</strong> — promoteEmployee test structure</summary>
+<summary><strong>Escape Hatch</strong> — promoteEmployee test &amp; impl</summary>
 
-```java
-@ExtendWith(MockitoExtension.class)
-class HrEmployeeServicePromoteTest {
+For test structure, compare with the reference:
+```bash
+cat reference/backend/hrapp-service/src/test/java/com/company/hr/service/HrEmployeeServiceTest.java
+```
 
-    @Mock HrEmployeeRepository employeeRepository;
-    @Mock HrJobRepository jobRepository;
-    @Mock HrIdempotencyKeyRepository idempotencyKeyRepository;
-    @Mock HrJobHistoryRepository jobHistoryRepository;
-    // ... other mocks
-
-    @InjectMocks HrEmployeeService service;
-
-    @Test
-    void promoteEmployee_throwsConflict_onDuplicateKey() {
-        HrPromoteRequest req = new HrPromoteRequest();
-        req.setIdempotencyKey("key-1");
-        when(idempotencyKeyRepository.existsById("key-1")).thenReturn(true);
-        assertThatThrownBy(() -> service.promoteEmployee(req))
-                .isInstanceOf(HrConflictException.class);
-    }
-
-    @Test
-    void promoteEmployee_throwsBusinessRule_whenSalaryExceedsMax() {
-        // Setup: employee exists, new job has max 10000, request salary is 99000
-        // Assert: throws HrBusinessRuleViolationException
-    }
-
-    @Test
-    void promoteEmployee_updatesJobAndWritesHistory() {
-        // Setup: valid request, all repos return expected data
-        // Assert: employee.setJob(newJob) called, jobHistoryRepository.save() called
-    }
-}
+For full implementation, compare with the reference:
+```bash
+cat reference/backend/hrapp-service/src/main/java/com/company/hr/service/HrEmployeeService.java
 ```
 </details>

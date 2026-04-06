@@ -250,44 +250,17 @@ The full loop:
 ---
 
 <details>
-<summary><strong>Escape Hatch</strong> — .mcp.json with both servers</summary>
+<summary><strong>Escape Hatch</strong> — MySQL MCP troubleshooting</summary>
 
-```json
-{
-  "mcpServers": {
-    "playwright": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["@playwright/mcp", "--headless"],
-      "env": {}
-    },
-    "mysql": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@benborla29/mcp-server-mysql"],
-      "env": {
-        "MYSQL_HOST": "127.0.0.1",
-        "MYSQL_PORT": "3306",
-        "MYSQL_USER": "hr_readonly",
-        "MYSQL_PASS": "readonly_pass",
-        "MYSQL_DB": "hr_db",
-        "ALLOW_INSERT_OPERATION": "false",
-        "ALLOW_UPDATE_OPERATION": "false",
-        "ALLOW_DELETE_OPERATION": "false"
-      }
-    }
-  }
-}
-```
+`.mcp.json` is already at the project root with both Playwright and MySQL configured. If MySQL doesn't work:
 
-If MySQL MCP fails:
 ```bash
-# Check MySQL is running
+# Check MySQL is running and user works
 mysql -h 127.0.0.1 -u hr_readonly -preadonly_pass hr_db -e "SELECT 1;"
 
-# Check read-only user has SELECT permissions
+# Check read-only user has permissions
 mysql -h 127.0.0.1 -u root -proot123 -e "SHOW GRANTS FOR 'hr_readonly'@'localhost';"
 
-# Restart Claude Code session after .mcp.json changes
+# Restart Claude Code session after any .mcp.json change
 ```
 </details>

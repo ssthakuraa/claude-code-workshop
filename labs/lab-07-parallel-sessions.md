@@ -291,6 +291,26 @@ Bring both features back into the main branch.
 ---
 
 <details>
+<summary><strong>Escape Hatch</strong> — /build-page skill</summary>
+
+Copy the reference skill:
+
+```bash
+mkdir -p .claude/skills/build-page
+cp reference/.claude/skills/build-page/SKILL.md .claude/skills/build-page/SKILL.md
+```
+</details>
+
+<details>
+<summary><strong>Escape Hatch</strong> — Reference page components</summary>
+
+Compare your built pages with the references:
+
+- Departments: `reference/frontend/src/pages/organization/DepartmentsPage.tsx`
+- Jobs: `reference/frontend/src/pages/organization/JobsPage.tsx`
+</details>
+
+<details>
 <summary><strong>Escape Hatch</strong> — Git worktree commands</summary>
 
 ```bash
