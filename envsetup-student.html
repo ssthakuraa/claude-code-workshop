@@ -84,36 +84,51 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 <div class="toc-header">Contents</div>
   <a href="#lab-environment-setup-student-guide">Lab Environment Setup — Student Guide</a>
     <a href="#what-you-need">What You Need</a>
-    <a href="#step-1-verify-tools-already-installed">Step 1 — Verify Tools Already Installed</a>
-    <a href="#step-2-install-missing-tools">Step 2 — Install Missing Tools</a>
+    <a href="#step-1-prepare-directory-and-verify-git">Step 1 — Prepare Directory and Verify Git</a>
+      <a href="#create-scratch-directory">Create Scratch Directory</a>
+      <a href="#verify-git-is-installed">Verify Git is Installed</a>
+    <a href="#step-2-verify-all-other-tools">Step 2 — Verify All Other Tools</a>
+    <a href="#step-3-install-missing-tools">Step 3 — Install Missing Tools</a>
       <a href="#java-21">Java 21</a>
       <a href="#maven-39">Maven 3.9+</a>
       <a href="#nodejs-20">Node.js 20+</a>
       <a href="#git-make-jq">Git, make, jq</a>
       <a href="#mysql-server-and-client">MySQL Server and client</a>
-    <a href="#step-3-claude-code-cli">Step 3 — Claude Code CLI</a>
-    <a href="#step-4-mysql-root-access">Step 4 — MySQL Root Access</a>
-    <a href="#step-5-create-database-and-users">Step 5 — Create Database and Users</a>
-    <a href="#step-6-clone-the-repository-and-load-schema">Step 6 — Clone the Repository and Load Schema</a>
+    <a href="#step-4-claude-code-cli">Step 4 — Claude Code CLI</a>
+    <a href="#step-5-mysql-root-access">Step 5 — MySQL Root Access</a>
+    <a href="#step-6-create-database-and-users">Step 6 — Create Database and Users</a>
+    <a href="#step-7-load-schema">Step 7 — Load Schema</a>
       <a href="#load-schema-and-demo-data">Load schema and demo data</a>
       <a href="#verify-data-loaded">Verify data loaded</a>
-    <a href="#step-7-set-up-application-users-login">Step 7 — Set Up Application Users (Login)</a>
-      <a href="#generate-password-hashes-and-create-users">Generate password hashes and create users</a>
-      <a href="#manual-fallback-if-you-dont-have-claude-code-yet">Manual fallback (if you don't have Claude Code yet)</a>
     <a href="#step-8-environment-file">Step 8 — Environment File</a>
-    <a href="#step-9-verify-database-access">Step 9 — Verify Database Access</a>
-    <a href="#step-10-smoke-test">Step 10 — Smoke Test</a>
+  <a href="#fill-in-the-jwt-secret">Fill in the JWT secret</a>
+    <a href="#step-10-build-backend-and-frontend">Step 10 — Build Backend and Frontend</a>
       <a href="#backend-compile">Backend compile</a>
       <a href="#frontend-build">Frontend build</a>
       <a href="#claude-code-project-awareness">Claude Code project awareness</a>
-      <a href="#database-access">Database Access</a>
-      <a href="#application-users">Application Users</a>
+    <a href="#step-11-deploy-and-smoke-test-of-the-backend-and-front-end-convenience-scripts">Step 11 — Deploy and Smoke test of the backend and front end : Convenience Scripts</a>
+      <a href="#start-application">Start Application</a>
+      <a href="#verification-recommended-even-when-using-scripts">Verification (Recommended even when using scripts)</a>
+  <a href="#1-check-backend-health-should-return-statusup">1. Check backend health (should return {"status":"UP"})</a>
+  <a href="#2-check-api-docs-are-accessible">2. Check API docs are accessible</a>
+  <a href="#3-login-and-get-a-token">3. Login and get a token</a>
+  <a href="#4-test-a-protected-endpoint-departments-should-return-27">4. Test a protected endpoint (departments should return ~27+)</a>
+  <a href="#5-check-frontend-is-serving-html">5. Check frontend is serving HTML</a>
+  <a href="#6-optionally-you-can-check-from-the-broser-of-your-choice-by-navigating-to-the-url-httplocalhost5173-login-user-stevenking-passwordpassword123">6. Optionally you can check from the broser of your choice by navigating to the url http://localhost:5173, login user: steven.king password:password123</a>
+      <a href="#stop-application">Stop Application</a>
+    <a href="#step-13-manual-control">Step 13 — Manual Control</a>
+      <a href="#start-backend">Start Backend</a>
+      <a href="#start-frontend">Start Frontend</a>
+      <a href="#verification-same-as-script">Verification (Same as script)</a>
+      <a href="#stopshutdown-manual">Stop/Shutdown (Manual)</a>
     <a href="#all-checks-pass">All Checks Pass?</a>
-    <a href="#troubleshooting">Troubleshooting</a>
+    <a href="#troubleshooting-deploymentruntime">Troubleshooting (deployment/runtime)</a>
 </nav><h1 id="lab-environment-setup-student-guide">Lab Environment Setup — Student Guide<a class="anchor" href="#lab-environment-setup-student-guide">&#182;</a></h1>
 <blockquote>
 <p>Complete this before Day 1. Takes approximately 60–90 minutes.
-This training is fully self-guided — there is no instructor.</p>
+This training is fully self-guided — there is no instructor.
+This guide assumes
+Bash as the default shell. Verify your current shell by running echo $0; if the output shows another shell (e.g., zsh or csh), switch by entering bash and then run echo $0 again to confirm. If you choose to remain on your default shell, you may need to adjust command syntax accordingly.</p>
 </blockquote>
 <hr />
 <h2 id="what-you-need">What You Need<a class="anchor" href="#what-you-need">&#182;</a></h2>
@@ -165,15 +180,45 @@ This training is fully self-guided — there is no instructor.</p>
 <td>jq</td>
 <td>any</td>
 </tr>
+<tr>
+<td>curl</td>
+<td>any</td>
+</tr>
 </tbody>
 </table>
 <hr />
-<h2 id="step-1-verify-tools-already-installed">Step 1 — Verify Tools Already Installed<a class="anchor" href="#step-1-verify-tools-already-installed">&#182;</a></h2>
-<pre><code class="language-bash">java -version &amp;&amp; mvn -version &amp;&amp; node --version &amp;&amp; npm --version &amp;&amp; mysql --version &amp;&amp; git --version &amp;&amp; jq --version
+<h2 id="step-1-prepare-directory-and-verify-git">Step 1 — Prepare Directory and Verify Git<a class="anchor" href="#step-1-prepare-directory-and-verify-git">&#182;</a></h2>
+<h3 id="create-scratch-directory">Create Scratch Directory<a class="anchor" href="#create-scratch-directory">&#182;</a></h3>
+<p>The lab uses <code>/scratch</code> as a convenient location to clone the lab. Create it and set appropriate permissions:</p>
+<pre><code class="language-bash">sudo mkdir -p /scratch
+sudo chmod 777 /scratch
+cd /scratch
+pwd  # Should output: /scratch
 </code></pre>
-<p>Everything should print a version. If anything is missing, install it in Step 2.</p>
+<p>You'll clone the repository into this directory and the the application and the lab material witll be staged in the directory <code>/scratch/claude-code-workshop</code> and this direcotory will be referred to as workspace root or workspace top.</p>
+<h3 id="verify-git-is-installed">Verify Git is Installed<a class="anchor" href="#verify-git-is-installed">&#182;</a></h3>
+<pre><code class="language-bash">git --version
+</code></pre>
+<p>Expected output: <code>git version x.x.x</code></p>
+<p><strong>If git is NOT installed:</strong></p>
+<pre><code class="language-bash"># Ubuntu/Debian
+sudo apt-get update
+sudo apt-get install -y git
+
+# Verify
+git --version
+</code></pre>
+<p><strong>If git IS installed:</strong> You're ready to clone the lab repo</p>
+<p>git clone https://github.com/ssthakuraa/claude-code-workshop.git
+cd claude-code-workshop</p>
 <hr />
-<h2 id="step-2-install-missing-tools">Step 2 — Install Missing Tools<a class="anchor" href="#step-2-install-missing-tools">&#182;</a></h2>
+<h2 id="step-2-verify-all-other-tools">Step 2 — Verify All Other Tools<a class="anchor" href="#step-2-verify-all-other-tools">&#182;</a></h2>
+<p>From <code>/scratch</code>, verify all required tools:</p>
+<pre><code class="language-bash">java -version &amp;&amp; mvn -version &amp;&amp; node --version &amp;&amp; npm --version &amp;&amp; mysql --version &amp;&amp; jq --version
+</code></pre>
+<p>Everything should print a version. If anything is missing, install it in Step 3.</p>
+<hr />
+<h2 id="step-3-install-missing-tools">Step 3 — Install Missing Tools<a class="anchor" href="#step-3-install-missing-tools">&#182;</a></h2>
 <h3 id="java-21">Java 21<a class="anchor" href="#java-21">&#182;</a></h3>
 <pre><code class="language-bash">sudo apt-get update
 sudo apt-get install -y openjdk-21-jdk
@@ -211,7 +256,10 @@ mysql --version
 <p>On Ubuntu 25+, if <code>mysql-server</code> is unavailable in apt, install from <a href="https://dev.mysql.com/downloads/repo/apt/">MySQL APT Repository</a>.</p>
 </blockquote>
 <hr />
-<h2 id="step-3-claude-code-cli">Step 3 — Claude Code CLI<a class="anchor" href="#step-3-claude-code-cli">&#182;</a></h2>
+<h2 id="step-4-claude-code-cli">Step 4 — Claude Code CLI<a class="anchor" href="#step-4-claude-code-cli">&#182;</a></h2>
+<blockquote>
+<p>Change directory to workspace top, in this example /scratch/claude-code-workshop if you cloned the directory in /scratch</p>
+</blockquote>
 <pre><code class="language-bash">npm install -g @anthropic-ai/claude-code
 claude --version
 </code></pre>
@@ -223,11 +271,10 @@ claude --version
 <blockquote>
 <p><strong>Important — do NOT run <code>claude init</code>.</strong>
 When you open Claude Code in the project directory, it may offer to generate a <code>CLAUDE.md</code>.
-<strong>Decline.</strong> The project already has a <code>CLAUDE.md</code> that Lab 1 depends on.
-If it already generated one: <code>git checkout CLAUDE.md</code></p>
+<strong>Decline.</strong> The project already has a version of <code>CLAUDE.md</code> that Lab 1 depends on. if you already did or have it from prior installatin, Lab 1 has instruction to fix this.</p>
 </blockquote>
 <hr />
-<h2 id="step-4-mysql-root-access">Step 4 — MySQL Root Access<a class="anchor" href="#step-4-mysql-root-access">&#182;</a></h2>
+<h2 id="step-5-mysql-root-access">Step 5 — MySQL Root Access<a class="anchor" href="#step-5-mysql-root-access">&#182;</a></h2>
 <p>On Ubuntu, MySQL root uses <code>auth_socket</code> by default. Test:</p>
 <pre><code class="language-bash">sudo mysql -u root -e &quot;SELECT 1;&quot;
 </code></pre>
@@ -247,8 +294,8 @@ mysql -u root -proot123 -e &quot;SELECT 1;&quot;
 <p>For the remainder of this guide, if root uses <code>auth_socket</code>, prefix commands with <code>sudo</code>. If a password was set, use <code>mysql -u root -proot123</code>.</p>
 </blockquote>
 <hr />
-<h2 id="step-5-create-database-and-users">Step 5 — Create Database and Users<a class="anchor" href="#step-5-create-database-and-users">&#182;</a></h2>
-<pre><code class="language-bash"># Use the root connection method that works for you from Step 4.
+<h2 id="step-6-create-database-and-users">Step 6 — Create Database and Users<a class="anchor" href="#step-6-create-database-and-users">&#182;</a></h2>
+<pre><code class="language-bash"># Use the root connection method that works for you from Step 5.
 # If auth_socket: prefix with sudo
 # If password: use mysql -u root -proot123
 
@@ -275,10 +322,10 @@ mysql -u hr_readonly -preadonly_pass hr_db -e &quot;SELECT 'readonly user OK';&q
 </code></pre>
 <p>Both should print <code>OK</code>.</p>
 <hr />
-<h2 id="step-6-clone-the-repository-and-load-schema">Step 6 — Clone the Repository and Load Schema<a class="anchor" href="#step-6-clone-the-repository-and-load-schema">&#182;</a></h2>
-<pre><code class="language-bash">git clone https://github.com/ssthakuraa/claude-code-workshop.git
-cd claude-code-workshop
-</code></pre>
+<h2 id="step-7-load-schema">Step 7 — Load Schema<a class="anchor" href="#step-7-load-schema">&#182;</a></h2>
+<blockquote>
+<p>Ensure youi are in the workspace top, you should memorize this point as below instruciton use relative path</p>
+</blockquote>
 <h3 id="load-schema-and-demo-data">Load schema and demo data<a class="anchor" href="#load-schema-and-demo-data">&#182;</a></h3>
 <pre><code class="language-bash">mysql -u hrapp -phrapp_pass &lt; database/schema.sql
 mysql -u hrapp -phrapp_pass &lt; database/demo.sql
@@ -295,67 +342,55 @@ UNION ALL SELECT 'job_history', COUNT(*) FROM job_history;&quot;
 </code></pre>
 <p>Expected counts: regions: 4, countries: 25, locations: 28+, departments: 27+, jobs: 19, employees: 190+.</p>
 <hr />
-<h2 id="step-7-set-up-application-users-login">Step 7 — Set Up Application Users (Login)<a class="anchor" href="#step-7-set-up-application-users-login">&#182;</a></h2>
-<p>The HR app uses <strong>Argon2id</strong> password hashing. Application users live in <code>hr_users</code> table.</p>
-<p>You need at least one <strong>admin</strong> account to log in to the frontend for Labs 9–12.</p>
-<h3 id="generate-password-hashes-and-create-users">Generate password hashes and create users<a class="anchor" href="#generate-password-hashes-and-create-users">&#182;</a></h3>
-<pre><code class="language-bash"># Make sure you're in the project directory
-pwd   # should be .../claude-code-workshop
-cp .env.example .env
-sed -i &quot;s|HR_JWT_SECRET=.*|HR_JWT_SECRET=$(openssl rand -base64 32)|&quot; .env
+<h2 id="step-8-environment-file">Step 8 — Environment File<a class="anchor" href="#step-8-environment-file">&#182;</a></h2>
+<p>cp .env.example .env</p>
+<h1 id="fill-in-the-jwt-secret">Fill in the JWT secret<a class="anchor" href="#fill-in-the-jwt-secret">&#182;</a></h1>
+<p>sed -i "s|HR_JWT_SECRET=.*|HR_JWT_SECRET=$(openssl rand -base64 32)|" .env
+cat .env   # verify it looks right</p>
+<pre><code>
+Your `.env` should look like:
+
 </code></pre>
-<p>Start a Claude Code session in the project and ask:</p>
-<pre><code>I need to create admin users for the HR app.
+<p>HR_DB_USER=hrapp
+HR_DB_PASS=hrapp_pass
+HR_JWT_SECRET=<a long base64 string></p>
+<p>VITE_API_BASE_URL=http://localhost:8080/app/hr/api/v1
+VITE_USE_MOCK=true</p>
+<p>HR_DB_READONLY_USER=hr_readonly
+HR_DB_READONLY_PASS=readonly_pass</p>
+<pre><code>
+---
 
-The app uses Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8().
-Hash the password &quot;password123&quot; with this encoder.
+## Step 9 — Set Up Application Users (Login)
 
-Then run these SQL commands as the hrapp user:
+The HR app uses **Argon2id** password hashing. Application users live in `hr_users` table.
 
-INSERT INTO hr_users (username, password_hash, employee_id, is_active) VALUES
-('steven.king', '&lt;ARGON2_HASH&gt;', 100, 1),
-('admin', '&lt;ARGON2_HASH&gt;', NULL, 1);
+You need at least one **admin** account to log in to the frontend for Labs 9–12.
 
-INSERT INTO hr_user_roles (user_id, role_id) VALUES
+### Generate password hashes and create users
+
+Start a Claude Code session in the project and ask:
+
+</code></pre>
+<p>I need to create admin users for the HR app.</p>
+<p>The app uses Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8().
+Hash the password "password123" with this encoder.</p>
+<p>Then run these SQL commands as the hrapp user:</p>
+<p>INSERT INTO hr_users (username, password_hash, employee_id, is_active) VALUES
+('steven.king', '<ARGON2_HASH>', 100, 1),
+('admin', '<ARGON2_HASH>', NULL, 1);</p>
+<p>INSERT INTO hr_user_roles (user_id, role_id) VALUES
 ((SELECT user_id FROM hr_users WHERE username = 'steven.king'), 1),
-((SELECT user_id FROM hr_users WHERE username = 'admin'), 1);
+((SELECT user_id FROM hr_users WHERE username = 'admin'), 1);</p>
+<p>Verify with: SELECT u.username, r.role_name
+FROM hr_users u JOIN hr_user_roles ur ON u.user_id = ur.user_id JOIN hr_roles r ON ur.role_id = r.role_id;</p>
+<pre><code>
+Claude Code will hash the password and run the SQL via the MySQL shell.
 
-Verify with: SELECT u.username, r.role_name
-FROM hr_users u JOIN hr_user_roles ur ON u.user_id = ur.user_id JOIN hr_roles r ON ur.role_id = r.role_id;
-</code></pre>
-<p>Claude Code will hash the password and run the SQL via the MySQL shell.</p>
-<h3 id="manual-fallback-if-you-dont-have-claude-code-yet">Manual fallback (if you don't have Claude Code yet)<a class="anchor" href="#manual-fallback-if-you-dont-have-claude-code-yet">&#182;</a></h3>
-<pre><code class="language-bash"># Quick Java program to generate Argon2 hash
-mkdir -p /tmp/hashgen/src/main/java
-cat &gt; /tmp/hashgen/src/main/java/HashGen.java &lt;&lt;'JAVA'
-import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
-public class HashGen {
-    public static void main(String[] args) {
-        var enc = Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8();
-        System.out.println(enc.encode(&quot;password123&quot;));
-    }
-}
-JAVA
+Verify users exist:
 
-# Generate and capture hash
-HASH=$(cd /tmp/hashgen &amp;&amp; mvn -q compile exec:java \
-  -Dexec.mainClass=HashGen \
-  -Dexecution.classpath.scope=compile 2&gt;/dev/null || \
-  cd /tmp/hashgen &amp;&amp; mvn -q compile java:run -DmainClass=HashGen 2&gt;/dev/null)
-</code></pre>
-<p>Insert users:</p>
-<pre><code class="language-bash">mysql -u hrapp -phrapp_pass hr_db &lt;&lt;SQL
-INSERT INTO hr_users (username, password_hash, employee_id, is_active) VALUES
-('steven.king', '${HASH}', 100, 1),
-('admin', '${HASH}', NULL, 1);
-
-INSERT INTO hr_user_roles (user_id, role_id) VALUES
-((SELECT user_id FROM hr_users WHERE username = 'steven.king'), 1),
-((SELECT user_id FROM hr_users WHERE username = 'admin'), 1);
-SQL
-</code></pre>
-<p>Verify users exist:</p>
-<pre><code class="language-bash">mysql -u hrapp -phrapp_pass hr_db -e &quot;
+```bash
+mysql -u hrapp -phrapp_pass hr_db -e &quot;
 SELECT u.username, u.employee_id, r.role_name
 FROM hr_users u
 JOIN hr_user_roles ur ON u.user_id = ur.user_id
@@ -363,45 +398,15 @@ JOIN hr_roles r ON ur.role_id = r.role_id;&quot;
 </code></pre>
 <p>You should see steven.king and admin with ROLE_ADMIN.</p>
 <hr />
-<h2 id="step-8-environment-file">Step 8 — Environment File<a class="anchor" href="#step-8-environment-file">&#182;</a></h2>
-<pre><code class="language-bash">cd claude-code-workshop
-cp .env.example .env
-
-# Fill in the JWT secret
-sed -i &quot;s|HR_JWT_SECRET=.*|HR_JWT_SECRET=$(openssl rand -base64 32)|&quot; .env
-cat .env   # verify it looks right
-</code></pre>
-<p>Your <code>.env</code> should look like:</p>
-<pre><code>HR_DB_USER=hrapp
-HR_DB_PASS=hrapp_pass
-HR_JWT_SECRET=&lt;a long base64 string&gt;
-
-VITE_API_BASE_URL=http://localhost:8080/app/hr/api/v1
-VITE_USE_MOCK=true
-
-HR_DB_READONLY_USER=hr_readonly
-HR_DB_READONLY_PASS=readonly_pass
-</code></pre>
-<hr />
-<h2 id="step-9-verify-database-access">Step 9 — Verify Database Access<a class="anchor" href="#step-9-verify-database-access">&#182;</a></h2>
-<pre><code class="language-bash"># App user
-mysql -u hrapp -phrapp_pass hr_db -e &quot;SELECT COUNT(*) AS employees FROM employees;&quot;
-
-# Read-only user
-mysql -u hr_readonly -preadonly_pass hr_db -e &quot;SELECT COUNT(*) AS employees FROM employees;&quot;
-</code></pre>
-<p>Both should return a row count ~190+.</p>
-<hr />
-<h2 id="step-10-smoke-test">Step 10 — Smoke Test<a class="anchor" href="#step-10-smoke-test">&#182;</a></h2>
+<h2 id="step-10-build-backend-and-frontend">Step 10 — Build Backend and Frontend<a class="anchor" href="#step-10-build-backend-and-frontend">&#182;</a></h2>
 <p>Run each check. <strong>Do not start Day 1 until all pass.</strong></p>
 <h3 id="backend-compile">Backend compile<a class="anchor" href="#backend-compile">&#182;</a></h3>
-<pre><code class="language-bash">cd claude-code-workshop
+<pre><code class="language-bash">&gt; cd to your workspace top akd project root directory
 cd backend &amp;&amp; mvn clean compile -q &amp;&amp; echo &quot;Backend: OK&quot;
 </code></pre>
 <p>Expected: <code>Backend: OK</code></p>
 <h3 id="frontend-build">Frontend build<a class="anchor" href="#frontend-build">&#182;</a></h3>
-<pre><code class="language-bash">cd claude-code-workshop
-cd frontend &amp;&amp; npm ci --silent &amp;&amp; npm run build 2&gt;&amp;1 | tail -2
+<pre><code class="language-bash">cd ../frontend &amp;&amp; npm ci --silent &amp;&amp; npm run build 2&gt;&amp;1 | tail -2
 </code></pre>
 <p>Expected: <code>✓ built in ...</code></p>
 <h3 id="claude-code-project-awareness">Claude Code project awareness<a class="anchor" href="#claude-code-project-awareness">&#182;</a></h3>
@@ -409,44 +414,118 @@ cd frontend &amp;&amp; npm ci --silent &amp;&amp; npm run build 2&gt;&amp;1 | ta
 claude --print &quot;What file governs your behavior in this project? One sentence.&quot;
 </code></pre>
 <p>Expected: Claude references <code>CLAUDE.md</code></p>
-<h3 id="database-access">Database Access<a class="anchor" href="#database-access">&#182;</a></h3>
-<pre><code class="language-bash">mysql -u hrapp -phrapp_pass hr_db -e &quot;SELECT COUNT(*) AS cnt FROM employees;&quot;
-mysql -u hr_readonly -preadonly_pass hr_db -e &quot;SELECT COUNT(*) AS cnt FROM employees;&quot;
+<h2 id="step-11-deploy-and-smoke-test-of-the-backend-and-front-end-convenience-scripts">Step 11 — Deploy and Smoke test of the backend and front end : Convenience Scripts<a class="anchor" href="#step-11-deploy-and-smoke-test-of-the-backend-and-front-end-convenience-scripts">&#182;</a></h2>
+<blockquote>
+<p><strong>Important:</strong> All commands in this step assume you are in the <strong>workspace root directory</strong> — the directory that contains <code>backend/</code>, <code>frontend/</code>, and <code>scripts/</code>. This is the directory you <code>cd</code> into after cloning the repository.</p>
+</blockquote>
+<p>For example, if you cloned to <code>/scratch/claude-code-workshop</code>, that is your workspace root:</p>
+<pre><code class="language-bash">cd /scratch/claude-code-workshop   # workspace root
+pwd  # should show the directory containing backend/, frontend/, scripts/
+ls   # should list these directories
 </code></pre>
-<p>Both should return a count of 190+.</p>
-<h3 id="application-users">Application Users<a class="anchor" href="#application-users">&#182;</a></h3>
-<pre><code class="language-bash">mysql -u hrapp -phrapp_pass hr_db -e &quot;SELECT COUNT(*) AS cnt FROM hr_users;&quot;
+<h3 id="start-application">Start Application<a class="anchor" href="#start-application">&#182;</a></h3>
+<p>From the workspace root, run:</p>
+<pre><code class="language-bash">bash scripts/startApp.sh
 </code></pre>
-<p>Should be &gt;= 2 (steven.king and admin).</p>
+<p>This script:
+- Ensures the database is running
+- Starts the backend Spring Boot service (port 8080)
+- Starts the frontend development server (port 5173) 
+- Waits for both services to be ready
+- Reports status and URLs</p>
+<h3 id="verification-recommended-even-when-using-scripts">Verification (Recommended even when using scripts)<a class="anchor" href="#verification-recommended-even-when-using-scripts">&#182;</a></h3>
+<p>After starting the application, verify everything is working:</p>
+<h1 id="1-check-backend-health-should-return-statusup">1. Check backend health (should return {"status":"UP"})<a class="anchor" href="#1-check-backend-health-should-return-statusup">&#182;</a></h1>
+<p>curl -s http://localhost:8080/actuator/health | jq '.status'</p>
+<h1 id="2-check-api-docs-are-accessible">2. Check API docs are accessible<a class="anchor" href="#2-check-api-docs-are-accessible">&#182;</a></h1>
+<p>curl -s http://localhost:8080/app/hr/api-docs | jq '.info.version'</p>
+<h1 id="3-login-and-get-a-token">3. Login and get a token<a class="anchor" href="#3-login-and-get-a-token">&#182;</a></h1>
+<p>TOKEN=$(curl -s -X POST http://localhost:8080/app/hr/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"steven.king","password":"password123"}' | jq -r '.data.token')
+echo "Token: ${TOKEN:0:30}..."</p>
+<h1 id="4-test-a-protected-endpoint-departments-should-return-27">4. Test a protected endpoint (departments should return ~27+)<a class="anchor" href="#4-test-a-protected-endpoint-departments-should-return-27">&#182;</a></h1>
+<p>curl -s -H "Authorization: Bearer $TOKEN" \
+  "http://localhost:8080/app/hr/api/v1/departments" | jq '.data | length'</p>
+<h1 id="5-check-frontend-is-serving-html">5. Check frontend is serving HTML<a class="anchor" href="#5-check-frontend-is-serving-html">&#182;</a></h1>
+<p>curl -s http://localhost:5173 | head -5</p>
+<p>All checks should return valid data without errors.</p>
+<h1 id="6-optionally-you-can-check-from-the-broser-of-your-choice-by-navigating-to-the-url-httplocalhost5173-login-user-stevenking-passwordpassword123">6. Optionally you can check from the broser of your choice by navigating to the url http://localhost:5173, login user: steven.king password:password123<a class="anchor" href="#6-optionally-you-can-check-from-the-broser-of-your-choice-by-navigating-to-the-url-httplocalhost5173-login-user-stevenking-passwordpassword123">&#182;</a></h1>
+<hr />
+<h3 id="stop-application">Stop Application<a class="anchor" href="#stop-application">&#182;</a></h3>
+<pre><code class="language-bash">bash scripts/stopApp.sh
+</code></pre>
+<p>This script:
+- Stops the backend Spring Boot service
+- Stops the frontend development server</p>
+<h2 id="step-13-manual-control">Step 13 — Manual Control<a class="anchor" href="#step-13-manual-control">&#182;</a></h2>
+<p>If you prefer to start and stop services manually, follow these exact steps from the <strong>workspace root</strong> directory.</p>
+<h3 id="start-backend">Start Backend<a class="anchor" href="#start-backend">&#182;</a></h3>
+<pre><code class="language-bash">cd backend
+nohup mvn spring-boot:run -pl hrapp-service &gt; ../backend.log 2&gt;&amp;1 &amp;
+</code></pre>
+<p>Backend starts on http://localhost:8080/app/hr/api/v1/</p>
+<h3 id="start-frontend">Start Frontend<a class="anchor" href="#start-frontend">&#182;</a></h3>
+<pre><code class="language-bash">cd frontend
+nohup npm run dev &gt; ../frontend.log 2&gt;&amp;1 &amp;
+</code></pre>
+<p>Frontend dev server starts on http://localhost:5173</p>
+<h3 id="verification-same-as-script">Verification (Same as script)<a class="anchor" href="#verification-same-as-script">&#182;</a></h3>
+<p>Run the verification commands from Step 12 above to confirm both services are working.</p>
+<h3 id="stopshutdown-manual">Stop/Shutdown (Manual)<a class="anchor" href="#stopshutdown-manual">&#182;</a></h3>
+<p>To stop the running services:</p>
+<pre><code class="language-bash"># Stop backend
+pkill -f &quot;hrapp-service&quot;
+
+# Stop frontend
+pkill -f &quot;vite&quot;
+
+# Verify no processes remain
+ps aux | grep -E &quot;(hrapp-service|vite)&quot; | grep -v grep
+</code></pre>
+<p>If <code>pkill</code> doesn't work, find the PIDs and kill them:</p>
+<pre><code class="language-bash"># Find backend PID
+pgrep -f &quot;hrapp-service&quot;
+# Then: kill &lt;PID&gt;
+
+# Find frontend PID
+pgrep -f &quot;vite&quot;
+# Then: kill &lt;PID&gt;
+</code></pre>
+<p>You can also use: <code>kill $(pgrep -f "hrapp-service")</code> and <code>kill $(pgrep -f "vite")</code></p>
 <hr />
 <h2 id="all-checks-pass">All Checks Pass?<a class="anchor" href="#all-checks-pass">&#182;</a></h2>
 <p>You are ready for Day 1. Open <code>labs/lab-01-claudemd.md</code> and begin.</p>
 <hr />
-<h2 id="troubleshooting">Troubleshooting<a class="anchor" href="#troubleshooting">&#182;</a></h2>
-<p><strong>Backend compile fails — wrong Java version</strong></p>
-<pre><code class="language-bash">sudo update-alternatives --config java   # select Java 21
+<h2 id="troubleshooting-deploymentruntime">Troubleshooting (deployment/runtime)<a class="anchor" href="#troubleshooting-deploymentruntime">&#182;</a></h2>
+<p><strong>Backend fails to start — port already in use</strong></p>
+<pre><code class="language-bash"># Find and kill the process using port 8080
+lsof -ti:8080 | xargs kill -9
 </code></pre>
-<p><strong>Frontend build fails — wrong Node version</strong>
-Re-run the NodeSource install from Step 2.</p>
-<p><strong>MySQL access denied for hrapp</strong>
-Re-create the user (Step 5). Check you ran <code>FLUSH PRIVILEGES;</code>.</p>
-<p><strong>MySQL access denied for root</strong>
-Re-run Step 4 (MySQL root access).</p>
-<p><strong>MySQL client says "Can't connect to local MySQL server through socket"</strong></p>
-<pre><code class="language-bash">sudo systemctl status mysql   # is it running?
-sudo systemctl start mysql    # start it if stopped
+<p><strong>Frontend dev server fails — port already in use</strong></p>
+<pre><code class="language-bash"># Find and kill the process using port 5173
+lsof -ti:5173 | xargs kill -9
 </code></pre>
-<p><strong>Claude Code login not persisting</strong></p>
-<pre><code class="language-bash">claude auth logout &amp;&amp; claude
+<p><strong>Backend logs show database connection errors</strong>
+- Verify MySQL is running: <code>sudo systemctl status mysql</code>
+- Check credentials in <code>.env</code> file
+- Test connection: <code>mysql -u hrapp -phrapp_pass hr_db</code></p>
+<p><strong>Frontend build fails — missing dependencies</strong></p>
+<pre><code class="language-bash">cd frontend
+rm -rf node_modules package-lock.json
+npm ci --silent
+npm run build
 </code></pre>
-<p><strong><code>jq: command not found</code> during a lab hook</strong></p>
-<pre><code class="language-bash">sudo apt-get install -y jq
-</code></pre>
-<p><strong>Claude Code generated a CLAUDE.md — do not let it</strong></p>
-<pre><code class="language-bash">git checkout CLAUDE.md
-</code></pre>
-<p><strong>Cannot log in to frontend — no admin user</strong>
-Run Step 7. Check <code>mysql -u hrapp -phrapp_pass hr_db -e "SELECT * FROM hr_users;"</code> to confirm users exist.</p><div class="footer-nav"><a href="index.html">← All Labs</a><a href="https://github.com/ssthakuraa/claude-code-workshop" target="_blank">GitHub Repo</a></div>
+<p><strong>API calls return 401 Unauthorized</strong>
+- Verify you are sending the JWT token in the <code>Authorization: Bearer &lt;token&gt;</code> header
+- Ensure <code>.env</code> has the correct <code>HR_JWT_SECRET</code>
+- Check that the user exists in <code>hr_users</code> table and is active</p>
+<p><strong>CORS errors in browser console</strong>
+The backend CORS configuration allows <code>http://localhost:5173</code> (dev) and the backend itself. If you're using different ports, update <code>application.yml</code>:</p>
+<pre><code class="language-yaml">hr:
+  security:
+    cors-origins: http://localhost:5173
+</code></pre><div class="footer-nav"><a href="index.html">← All Labs</a><a href="https://github.com/ssthakuraa/claude-code-workshop" target="_blank">GitHub Repo</a></div>
 </div>
 </body>
 </html>
