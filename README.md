@@ -1,6 +1,6 @@
 # Claude Code Enterprise Training Lab
 
-This repository contains a 4-day hands-on workshop for mastering Claude Code in enterprise development environments.
+This repository contains a 2-day hands-on workshop for mastering Claude Code in enterprise development environments.
 
 ## Repository Structure
 
