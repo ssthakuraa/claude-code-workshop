@@ -260,7 +260,7 @@ HR_DB_PASS=hrapp_pass
 HR_JWT_SECRET=<a long base64 string>
 
 VITE_API_BASE_URL=http://localhost:8080/app/hr/api/v1
-VITE_USE_MOCK=true
+VITE_USE_MOCK=false
 
 HR_DB_READONLY_USER=hr_readonly
 HR_DB_READONLY_PASS=readonly_pass
