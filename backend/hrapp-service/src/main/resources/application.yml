@@ -47,6 +47,17 @@ hr:
     regions-ttl: 3600
     user-prefs-ttl: 300        # 5 minutes
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+
 springdoc:
   api-docs:
     path: /app/hr/api-docs
