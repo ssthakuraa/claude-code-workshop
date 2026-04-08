@@ -4,6 +4,7 @@ import type { HTMLAttributes, ReactNode } from 'react'
 export interface CardProps extends HTMLAttributes<HTMLDivElement> {
   variant?: 'default' | 'elevated' | 'outlined'
   padding?: 'none' | 'sm' | 'md' | 'lg'
+  header?: ReactNode
   children: ReactNode
 }
 
@@ -20,12 +21,13 @@ const paddingClasses = {
   lg:   'p-6',
 }
 
-export function Card({ variant = 'default', padding = 'md', className, children, ...props }: CardProps) {
+export function Card({ variant = 'default', padding = 'md', className, header, children, ...props }: CardProps) {
   return (
     <div
       className={cn('rounded-lg', variantClasses[variant], paddingClasses[padding], className)}
       {...props}
     >
+      {header && <div className="mb-4">{header}</div>}
       {children}
     </div>
   )
