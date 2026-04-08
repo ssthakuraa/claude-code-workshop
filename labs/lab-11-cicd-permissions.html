@@ -80,56 +80,28 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 </head>
 <body>
 <div class="page-wrap">
-<div class="page-header"><h1>Lab 11-cicd-permissions</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><nav class="toc">
-<div class="toc-header">Contents</div>
-  <a href="#lab-11-cicd-permissions-amp-enterprise-governance">Lab 11: CI/CD, Permissions &amp; Enterprise Governance</a>
-    <a href="#learning-objective">Learning Objective</a>
-    <a href="#the-key-concepts">The Key Concepts</a>
-      <a href="#cicd-with-claude-code">CI/CD with Claude Code</a>
-      <a href="#permissions-amp-security">Permissions &amp; Security</a>
-      <a href="#two-levels-of-settings">Two Levels of Settings</a>
-      <a href="#enterprise-governance-hooks-permissions-cicd">Enterprise Governance = Hooks + Permissions + CI/CD</a>
-    <a href="#setup">Setup</a>
-    <a href="#exercise-1-study-the-makefile-15-min">Exercise 1: Study the Makefile (15 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#background">Background</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-2-study-the-jenkins-pipeline-20-min">Exercise 2: Study the Jenkins Pipeline (20 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#background">Background</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-3-add-a-governance-stage-to-the-pipeline-20-min">Exercise 3: Add a Governance Stage to the Pipeline (20 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-      <a href="#key-insight">Key Insight</a>
-    <a href="#exercise-4-permissions-profile-15-min">Exercise 4: Permissions Profile (15 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-5-the-self-improvement-coda-5-min">Exercise 5: The Self-Improvement Coda (5 min)</a>
-    <a href="#success-criteria">Success Criteria</a>
-    <a href="#key-takeaways">Key Takeaways</a>
-</nav><h1 id="lab-11-cicd-permissions-amp-enterprise-governance">Lab 11: CI/CD, Permissions &amp; Enterprise Governance<a class="anchor" href="#lab-11-cicd-permissions-amp-enterprise-governance">&#182;</a></h1>
+<div class="page-header"><h1>Lab 11-cicd-permissions</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><h1 id="lab-11-cicd-permissions-amp-enterprise-governance">Lab 11: CI/CD, Permissions &amp; Enterprise Governance</h1>
 <p><strong>Duration:</strong> 75 minutes
 <strong>Day:</strong> 4 — Mastery
 <strong>Builds On:</strong> Labs 5 (hooks), 9–10 (MCP)
 <strong>Produces:</strong> Makefile, Jenkinsfile, permissions profile</p>
 <hr />
-<h2 id="learning-objective">Learning Objective<a class="anchor" href="#learning-objective">&#182;</a></h2>
+<h2 id="learning-objective">Learning Objective</h2>
 <p>You will use Claude Code to generate CI/CD pipeline configuration for enterprise environments, configure a permissions profile that balances productivity with safety, and translate pipeline definitions across CI platforms. These are high-value enterprise skills — companies regularly migrate CI tools, and getting the pipeline right is critical.</p>
 <hr />
-<h2 id="the-key-concepts">The Key Concepts<a class="anchor" href="#the-key-concepts">&#182;</a></h2>
-<h3 id="cicd-with-claude-code">CI/CD with Claude Code<a class="anchor" href="#cicd-with-claude-code">&#182;</a></h3>
+<h2 id="the-key-concepts">The Key Concepts</h2>
+<h3 id="cicd-with-claude-code">CI/CD with Claude Code</h3>
 <p>Claude can generate, maintain, debug, and translate pipeline configurations for any CI platform — Jenkins, GitLab CI, Azure DevOps, CircleCI, GitHub Actions. The key insight:</p>
 <blockquote>
 <p><strong>Use a Makefile as the contract.</strong> The Makefile defines what "build," "test," and "package" mean. The CI tool just calls <code>make build</code>, <code>make test</code>. This decouples the pipeline stages from the CI platform.</p>
 </blockquote>
-<h3 id="permissions-amp-security">Permissions &amp; Security<a class="anchor" href="#permissions-amp-security">&#182;</a></h3>
+<h3 id="permissions-amp-security">Permissions &amp; Security</h3>
 <p>Claude Code has a programmable safety model:
 - <strong><code>/permissions</code></strong> — pre-allow safe commands (shared via <code>.claude/settings.json</code>)
 - <strong>PreToolUse hooks</strong> — block dangerous operations structurally
 - <strong><code>.claude/settings.json</code></strong> — team-shared permission profiles
 - <strong>Never use <code>--dangerously-skip-permissions</code></strong> in production</p>
-<h3 id="two-levels-of-settings">Two Levels of Settings<a class="anchor" href="#two-levels-of-settings">&#182;</a></h3>
+<h3 id="two-levels-of-settings">Two Levels of Settings</h3>
 <table>
 <thead>
 <tr>
@@ -158,25 +130,25 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 - Hooks that enforce team standards → project-level (<code>.claude/settings.json</code>)
 - Personal preferences (editor style, model choice) → user-level (<code>~/.claude/settings.json</code>)
 - <code>allowedTools</code> for CI safety → project-level so every developer gets the same profile</p>
-<h3 id="enterprise-governance-hooks-permissions-cicd">Enterprise Governance = Hooks + Permissions + CI/CD<a class="anchor" href="#enterprise-governance-hooks-permissions-cicd">&#182;</a></h3>
+<h3 id="enterprise-governance-hooks-permissions-cicd">Enterprise Governance = Hooks + Permissions + CI/CD</h3>
 <p>Together, these three create a governance layer:</p>
 <pre><code>Hooks: enforce rules locally (every developer, every session)
 Permissions: control what Claude can/can't do
 CI/CD: enforce rules in the pipeline (every PR, every merge)
 </code></pre>
 <hr />
-<h2 id="setup">Setup<a class="anchor" href="#setup">&#182;</a></h2>
+<h2 id="setup">Setup</h2>
 <pre><code class="language-bash"># Verify backend and frontend are in place
 cd backend &amp;&amp; mvn compile -q &amp;&amp; echo &quot;Backend: OK&quot;
 cd frontend &amp;&amp; npm run build 2&gt;&amp;1 | tail -2
 </code></pre>
 <hr />
-<h2 id="exercise-1-study-the-makefile-15-min">Exercise 1: Study the Makefile (15 min)<a class="anchor" href="#exercise-1-study-the-makefile-15-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-1-study-the-makefile-15-min">Exercise 1: Study the Makefile (15 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Understand the platform-agnostic pipeline contract.</p>
-<h3 id="background">Background<a class="anchor" href="#background">&#182;</a></h3>
+<h3 id="background">Background</h3>
 <p>The project already has a Makefile at the project root. This is the foundation of the enterprise CI/CD approach — it works on ANY CI system.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p><strong>Study the Makefile:</strong>
@@ -195,12 +167,12 @@ cd frontend &amp;&amp; npm run build 2&gt;&amp;1 | tail -2
 </li>
 </ol>
 <hr />
-<h2 id="exercise-2-study-the-jenkins-pipeline-20-min">Exercise 2: Study the Jenkins Pipeline (20 min)<a class="anchor" href="#exercise-2-study-the-jenkins-pipeline-20-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-2-study-the-jenkins-pipeline-20-min">Exercise 2: Study the Jenkins Pipeline (20 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Understand the Jenkins pipeline that orchestrates the Makefile targets.</p>
-<h3 id="background">Background<a class="anchor" href="#background">&#182;</a></h3>
+<h3 id="background">Background</h3>
 <p>The project already has a Jenkinsfile with full declarative pipeline syntax, 5 stages, and branch-gated Package stage.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li><strong>Study the Jenkinsfile:</strong>
    ```
@@ -228,13 +200,13 @@ cd frontend &amp;&amp; npm run build 2&gt;&amp;1 | tail -2
 </li>
 </ol>
 <hr />
-<h2 id="exercise-3-add-a-governance-stage-to-the-pipeline-20-min">Exercise 3: Add a Governance Stage to the Pipeline (20 min)<a class="anchor" href="#exercise-3-add-a-governance-stage-to-the-pipeline-20-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-3-add-a-governance-stage-to-the-pipeline-20-min">Exercise 3: Add a Governance Stage to the Pipeline (20 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>The hooks from Lab 5 run locally — but only if the developer is using Claude Code.
 A developer using a plain editor, or someone who bypassed hooks, can still push
 code that violates naming conventions or contains PII in logs.</p>
 <p>Add a CI stage that runs the same checks as a pipeline gate.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>Ask Claude to add a Governance stage to the Jenkinsfile:
    ```
@@ -265,14 +237,14 @@ code that violates naming conventions or contains PII in logs.</p>
    at merge time (safety net).</p>
 </li>
 </ol>
-<h3 id="key-insight">Key Insight<a class="anchor" href="#key-insight">&#182;</a></h3>
+<h3 id="key-insight">Key Insight</h3>
 <p>Hooks and CI stages should mirror each other for the same rules.
 Hooks = fast feedback loop. CI = safety net. Neither replaces the other.</p>
 <hr />
-<h2 id="exercise-4-permissions-profile-15-min">Exercise 4: Permissions Profile (15 min)<a class="anchor" href="#exercise-4-permissions-profile-15-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-4-permissions-profile-15-min">Exercise 4: Permissions Profile (15 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Configure a permissions profile that allows safe operations and blocks dangerous ones.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p>Ask Claude about current permissions:
@@ -322,7 +294,7 @@ Hooks = fast feedback loop. CI = safety net. Neither replaces the other.</p>
 </li>
 </ol>
 <hr />
-<h2 id="exercise-5-the-self-improvement-coda-5-min">Exercise 5: The Self-Improvement Coda (5 min)<a class="anchor" href="#exercise-5-the-self-improvement-coda-5-min">&#182;</a></h2>
+<h2 id="exercise-5-the-self-improvement-coda-5-min">Exercise 5: The Self-Improvement Coda (5 min)</h2>
 <ol>
 <li>Add to CLAUDE.md:
    ```markdown
@@ -351,7 +323,7 @@ Hooks = fast feedback loop. CI = safety net. Neither replaces the other.</p>
 <li><strong>CI/CD</strong> (this lab): automated quality gates on every PR</li>
 </ol>
 <hr />
-<h2 id="success-criteria">Success Criteria<a class="anchor" href="#success-criteria">&#182;</a></h2>
+<h2 id="success-criteria">Success Criteria</h2>
 <ul>
 <li>[ ] <code>Makefile</code> exists with all composite targets; <code>make help</code> works</li>
 <li>[ ] <code>Jenkinsfile</code> uses declarative syntax with branch-gated Package stage</li>
@@ -360,7 +332,7 @@ Hooks = fast feedback loop. CI = safety net. Neither replaces the other.</p>
 <li>[ ] You can explain: Makefile (what) vs Jenkinsfile (how) vs permissions (who can)</li>
 </ul>
 <hr />
-<h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">&#182;</a></h2>
+<h2 id="key-takeaways">Key Takeaways</h2>
 <ol>
 <li><strong>Makefile is the contract</strong> — CI tools change; the Makefile stays. Migrate CI platforms by rewriting one file.</li>
 <li><strong>Permissions are team-shared</strong> — <code>.claude/settings.json</code> in git. Every developer gets the same safety profile.</li>

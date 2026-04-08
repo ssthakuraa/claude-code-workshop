@@ -80,41 +80,16 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 </head>
 <body>
 <div class="page-wrap">
-<div class="page-header"><h1>Lab 07-parallel-sessions</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><nav class="toc">
-<div class="toc-header">Contents</div>
-  <a href="#lab-7-parallel-sessions-amp-git-worktrees">Lab 7: Parallel Sessions &amp; Git Worktrees</a>
-    <a href="#learning-objective">Learning Objective</a>
-    <a href="#the-key-concept">The Key Concept</a>
-    <a href="#setup">Setup</a>
-    <a href="#exercise-1-study-an-existing-page-10-min">Exercise 1: Study an Existing Page (10 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-15-build-the-skill-15-min">Exercise 1.5: Build the Skill (15 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-2-create-worktrees-10-min">Exercise 2: Create Worktrees (10 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-3-parallel-feature-build-use-the-skill-30-min">Exercise 3: Parallel Feature Build — Use the Skill (30 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-      <a href="#what-you-should-see">What You Should See</a>
-    <a href="#exercise-4-merge-results-15-min">Exercise 4: Merge Results (15 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-5-reflect-and-encode-5-min">Exercise 5: Reflect and Encode (5 min)</a>
-    <a href="#success-criteria">Success Criteria</a>
-    <a href="#key-takeaways">Key Takeaways</a>
-</nav><h1 id="lab-7-parallel-sessions-amp-git-worktrees">Lab 7: Parallel Sessions &amp; Git Worktrees<a class="anchor" href="#lab-7-parallel-sessions-amp-git-worktrees">&#182;</a></h1>
+<div class="page-header"><h1>Lab 07-parallel-sessions</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><h1 id="lab-7-parallel-sessions-amp-git-worktrees">Lab 7: Parallel Sessions &amp; Git Worktrees</h1>
 <p><strong>Duration:</strong> 90 minutes
 <strong>Day:</strong> 2 — Productivity
 <strong>Builds On:</strong> Lab 3 (Skills), Labs 5–6 (hooks, subagents)
 <strong>Produces:</strong> A <code>/build-page</code> skill and 2 features built in parallel across separate worktrees</p>
 <hr />
-<h2 id="learning-objective">Learning Objective<a class="anchor" href="#learning-objective">&#182;</a></h2>
+<h2 id="learning-objective">Learning Objective</h2>
 <p>You will run multiple Claude Code sessions simultaneously — each in its own git worktree — and experience how parallelization compresses multi-feature work into a fraction of the time. This is what Boris Cherny calls the <strong>"single biggest productivity unlock."</strong></p>
 <hr />
-<h2 id="the-key-concept">The Key Concept<a class="anchor" href="#the-key-concept">&#182;</a></h2>
+<h2 id="the-key-concept">The Key Concept</h2>
 <p><strong>The problem:</strong> One Claude session = one feature at a time. Complex features take 15–30 minutes. Three features = 45–90 minutes sequential.</p>
 <p><strong>The solution:</strong> Git worktrees give each session its own working directory (not just a branch — a separate checkout on disk). No file conflicts. Each session works independently.</p>
 <pre><code class="language-bash"># Create worktrees
@@ -128,7 +103,7 @@ git worktree add ../hr-feature-c -b feature/dashboard
 - Shell aliases (<code>za</code>, <code>zb</code>, <code>zc</code>) for one-keystroke switching
 - 10–20% of sessions are abandoned — that's normal</p>
 <hr />
-<h2 id="setup">Setup<a class="anchor" href="#setup">&#182;</a></h2>
+<h2 id="setup">Setup</h2>
 <pre><code class="language-bash"># Verify you have a clean working tree
 git status  # Should be clean
 
@@ -136,10 +111,10 @@ git status  # Should be clean
 cd backend &amp;&amp; mvn compile -q &amp;&amp; echo &quot;Backend: OK&quot;
 </code></pre>
 <hr />
-<h2 id="exercise-1-study-an-existing-page-10-min">Exercise 1: Study an Existing Page (10 min)<a class="anchor" href="#exercise-1-study-an-existing-page-10-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-1-study-an-existing-page-10-min">Exercise 1: Study an Existing Page (10 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Understand the enterprise page pattern before you try to replicate it.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p>Open <code>src/pages/employees/EmployeeDirectoryPage.tsx</code> and study its structure:
@@ -164,10 +139,10 @@ cd backend &amp;&amp; mvn compile -q &amp;&amp; echo &quot;Backend: OK&quot;
 </li>
 </ol>
 <hr />
-<h2 id="exercise-15-build-the-skill-15-min">Exercise 1.5: Build the Skill (15 min)<a class="anchor" href="#exercise-15-build-the-skill-15-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-15-build-the-skill-15-min">Exercise 1.5: Build the Skill (15 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Encode the page pattern from Exercise 1 into a reusable <code>/build-page</code> skill.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p>Create the skills directory:
@@ -210,10 +185,10 @@ cd backend &amp;&amp; mvn compile -q &amp;&amp; echo &quot;Backend: OK&quot;
 <p><strong>Reference:</strong> A reference version already exists at <code>reference/.claude/skills/build-page/SKILL.md</code> — build your own first, then compare.</p>
 </blockquote>
 <hr />
-<h2 id="exercise-2-create-worktrees-10-min">Exercise 2: Create Worktrees (10 min)<a class="anchor" href="#exercise-2-create-worktrees-10-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-2-create-worktrees-10-min">Exercise 2: Create Worktrees (10 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Set up two parallel working directories.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p>Create two worktrees from the Day 2 checkpoint:
@@ -244,10 +219,10 @@ cd backend &amp;&amp; mvn compile -q &amp;&amp; echo &quot;Backend: OK&quot;
    cd ../hr-worktree-b &amp;&amp; claude
    ```</p>
 <hr />
-<h2 id="exercise-3-parallel-feature-build-use-the-skill-30-min">Exercise 3: Parallel Feature Build — Use the Skill (30 min)<a class="anchor" href="#exercise-3-parallel-feature-build-use-the-skill-30-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-3-parallel-feature-build-use-the-skill-30-min">Exercise 3: Parallel Feature Build — Use the Skill (30 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Build two features simultaneously using your <code>/build-page</code> skill.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <p><strong>In Terminal A</strong> — Departments Page:</p>
 <pre><code>/build-page
 Page: DepartmentsPage
@@ -268,14 +243,14 @@ Columns: Job ID, Title, Min Salary, Max Salary
 Features: Add/Edit modal with salary range validation (min &lt; max), search, pagination
 </code></pre>
 <p><strong>Now let them both work.</strong> Switch between terminals to monitor progress. Don't wait for one to finish before checking the other.</p>
-<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<h3 id="what-you-should-see">What You Should See</h3>
 <p>Both sessions work independently — no conflicts, no waiting. Each reads CLAUDE.md and the skill from its own worktree copy. The skill ensures both pages follow the same conventions automatically.</p>
 <blockquote>
 <p><strong>Reference:</strong> Pre-built versions exist at <code>reference/frontend/src/pages/organization/DepartmentsPage.tsx</code> and <code>reference/frontend/src/pages/organization/JobsPage.tsx</code>. Build your own first, then compare.</p>
 </blockquote>
 <hr />
-<h2 id="exercise-4-merge-results-15-min">Exercise 4: Merge Results (15 min)<a class="anchor" href="#exercise-4-merge-results-15-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-4-merge-results-15-min">Exercise 4: Merge Results (15 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Bring both features back into the main branch.</p>
 <blockquote>
 <p><strong>Training repo note:</strong> The instructions below show what you would do when building
@@ -285,7 +260,7 @@ and <code>git merge</code> commands. Instead, complete steps 1 (verify the build
 worktree) and 4 (remove worktrees), and treat the rest as a walkthrough of the
 pattern you'd apply in production.</p>
 </blockquote>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>When both sessions are done, verify each independently:
    ```bash
@@ -335,7 +310,7 @@ pattern you'd apply in production.</p>
 </li>
 </ol>
 <hr />
-<h2 id="exercise-5-reflect-and-encode-5-min">Exercise 5: Reflect and Encode (5 min)<a class="anchor" href="#exercise-5-reflect-and-encode-5-min">&#182;</a></h2>
+<h2 id="exercise-5-reflect-and-encode-5-min">Exercise 5: Reflect and Encode (5 min)</h2>
 <ol>
 <li><strong>Time comparison:</strong></li>
 <li>Estimated sequential time (both features one after another): _____ min</li>
@@ -359,7 +334,7 @@ pattern you'd apply in production.</p>
 </li>
 </ol>
 <hr />
-<h2 id="success-criteria">Success Criteria<a class="anchor" href="#success-criteria">&#182;</a></h2>
+<h2 id="success-criteria">Success Criteria</h2>
 <ul>
 <li>[ ] Studied EmployeeDirectoryPage.tsx and understand the enterprise page pattern</li>
 <li>[ ] Created <code>/build-page</code> skill encoding the page pattern</li>
@@ -370,7 +345,7 @@ pattern you'd apply in production.</p>
 <li>[ ] You can explain worktrees vs branches (separate directory vs same directory)</li>
 </ul>
 <hr />
-<h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">&#182;</a></h2>
+<h2 id="key-takeaways">Key Takeaways</h2>
 <ol>
 <li><strong>Worktrees, not branches</strong> — branches share a working directory; worktrees don't. Each Claude session needs its own directory.</li>
 <li><strong>Parallelism is multiplicative</strong> — 3 sessions × 15 min ≠ 45 min; it's ~18 min (15 min + merge overhead)</li>

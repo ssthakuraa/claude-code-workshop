@@ -80,36 +80,16 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 </head>
 <body>
 <div class="page-wrap">
-<div class="page-header"><h1>Lab 06-subagents</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><nav class="toc">
-<div class="toc-header">Contents</div>
-  <a href="#lab-6-subagents-isolated-specialist-workers">Lab 6: Subagents — Isolated Specialist Workers</a>
-    <a href="#learning-objective">Learning Objective</a>
-    <a href="#the-key-concept">The Key Concept</a>
-      <a href="#the-writerreviewer-pattern">The Writer/Reviewer Pattern</a>
-    <a href="#setup">Setup</a>
-    <a href="#exercise-1-self-review-the-weak-version-15-min">Exercise 1: Self-Review (The Weak Version) (15 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-2-create-the-reviewer-subagent-15-min">Exercise 2: Create the Reviewer Subagent (15 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-3-the-fresh-context-review-20-min">Exercise 3: The Fresh-Context Review (20 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-      <a href="#what-you-should-see">What You Should See</a>
-    <a href="#exercise-4-the-self-improvement-coda-10-min">Exercise 4: The Self-Improvement Coda (10 min)</a>
-    <a href="#success-criteria">Success Criteria</a>
-    <a href="#key-takeaways">Key Takeaways</a>
-</nav><h1 id="lab-6-subagents-isolated-specialist-workers">Lab 6: Subagents — Isolated Specialist Workers<a class="anchor" href="#lab-6-subagents-isolated-specialist-workers">&#182;</a></h1>
+<div class="page-header"><h1>Lab 06-subagents</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><h1 id="lab-6-subagents-isolated-specialist-workers">Lab 6: Subagents — Isolated Specialist Workers</h1>
 <p><strong>Duration:</strong> 60 minutes
 <strong>Day:</strong> 2 — Productivity
 <strong>Builds On:</strong> Lab 4 (context management), Lab 5 (hooks)
 <strong>Produces:</strong> A custom subagent (component-reviewer)</p>
 <hr />
-<h2 id="learning-objective">Learning Objective<a class="anchor" href="#learning-objective">&#182;</a></h2>
+<h2 id="learning-objective">Learning Objective</h2>
 <p>You will create a reviewer subagent and observe how a fresh-context reviewer finds issues that a self-reviewing session misses. This pattern maps directly to enterprise code review workflows.</p>
 <hr />
-<h2 id="the-key-concept">The Key Concept<a class="anchor" href="#the-key-concept">&#182;</a></h2>
+<h2 id="the-key-concept">The Key Concept</h2>
 <p>Subagents are specialized Claude instances that:
 - Run in their <strong>own context</strong> (don't pollute your main window)
 - Have <strong>scoped tool access</strong> (you control what they can do)
@@ -121,21 +101,21 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 | <code>Plan</code> | Architecture and design (no edits) |
 | <code>general-purpose</code> | Full capability — research, edit, run commands |</p>
 <p><strong>Custom subagents</strong> are defined in <code>.claude/agents/</code> with persona, tools, and model specification.</p>
-<h3 id="the-writerreviewer-pattern">The Writer/Reviewer Pattern<a class="anchor" href="#the-writerreviewer-pattern">&#182;</a></h3>
+<h3 id="the-writerreviewer-pattern">The Writer/Reviewer Pattern</h3>
 <pre><code>Session A (Writer) → builds code
 Session B (Reviewer) → reviews with fresh context → finds issues Writer missed
 </code></pre>
 <p>The reviewer sees code it didn't write — no confirmation bias, no context fatigue.</p>
 <hr />
-<h2 id="setup">Setup<a class="anchor" href="#setup">&#182;</a></h2>
+<h2 id="setup">Setup</h2>
 <pre><code class="language-bash"># Verify frontend components exist
 ls frontend/src/components/hr/   # Should show existing HR components
 </code></pre>
 <hr />
-<h2 id="exercise-1-self-review-the-weak-version-15-min">Exercise 1: Self-Review (The Weak Version) (15 min)<a class="anchor" href="#exercise-1-self-review-the-weak-version-15-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-1-self-review-the-weak-version-15-min">Exercise 1: Self-Review (The Weak Version) (15 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Build a component and ask the same session to review it. Observe limited critique.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>Ask Claude to build a new HR component:
    ```
@@ -163,10 +143,10 @@ ls frontend/src/components/hr/   # Should show existing HR components
 <p>Claude tends to be lenient reviewing its own code — it just wrote it and thinks it's correct.</p>
 </blockquote>
 <hr />
-<h2 id="exercise-2-create-the-reviewer-subagent-15-min">Exercise 2: Create the Reviewer Subagent (15 min)<a class="anchor" href="#exercise-2-create-the-reviewer-subagent-15-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-2-create-the-reviewer-subagent-15-min">Exercise 2: Create the Reviewer Subagent (15 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Define a reviewer subagent with a critical persona and read-only tools.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p>Create the agents directory:
@@ -199,10 +179,10 @@ ls frontend/src/components/hr/   # Should show existing HR components
    code — fresh eyes, no confirmation bias.</li>
 </ol>
 <hr />
-<h2 id="exercise-3-the-fresh-context-review-20-min">Exercise 3: The Fresh-Context Review (20 min)<a class="anchor" href="#exercise-3-the-fresh-context-review-20-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-3-the-fresh-context-review-20-min">Exercise 3: The Fresh-Context Review (20 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Use the reviewer subagent on the component from Exercise 1.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p>Send the component to the reviewer:
@@ -229,13 +209,13 @@ ls frontend/src/components/hr/   # Should show existing HR components
 <p><strong>Optional: Review again</strong> after fixes to verify they're addressed.</p>
 </li>
 </ol>
-<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<h3 id="what-you-should-see">What You Should See</h3>
 <p>The fresh-context reviewer finds significantly more issues because:
 - It didn't write the code (no confirmation bias)
 - Its context is clean (no fatigue from the build session)
 - Its persona is explicitly critical (optimized for finding problems)</p>
 <hr />
-<h2 id="exercise-4-the-self-improvement-coda-10-min">Exercise 4: The Self-Improvement Coda (10 min)<a class="anchor" href="#exercise-4-the-self-improvement-coda-10-min">&#182;</a></h2>
+<h2 id="exercise-4-the-self-improvement-coda-10-min">Exercise 4: The Self-Improvement Coda (10 min)</h2>
 <ol>
 <li>Add to CLAUDE.md:
    ```markdown
@@ -254,7 +234,7 @@ ls frontend/src/components/hr/   # Should show existing HR components
 <li><em>How would you customize the persona for your codebase?</em></li>
 </ol>
 <hr />
-<h2 id="success-criteria">Success Criteria<a class="anchor" href="#success-criteria">&#182;</a></h2>
+<h2 id="success-criteria">Success Criteria</h2>
 <ul>
 <li>[ ] <code>.claude/agents/component-reviewer.md</code> exists with critical review checklist</li>
 <li>[ ] Self-review found fewer issues than subagent review</li>
@@ -262,7 +242,7 @@ ls frontend/src/components/hr/   # Should show existing HR components
 <li>[ ] You can explain why fresh-context review beats self-review</li>
 </ul>
 <hr />
-<h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">&#182;</a></h2>
+<h2 id="key-takeaways">Key Takeaways</h2>
 <ol>
 <li><strong>Self-review is weak</strong> — Claude is lenient toward code it just wrote</li>
 <li><strong>Fresh context = fresh eyes</strong> — the reviewer subagent has no history with the code</li>

@@ -80,71 +80,36 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 </head>
 <body>
 <div class="page-wrap">
-<div class="page-header"><h1>Lab 03-skills-commands</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><nav class="toc">
-<div class="toc-header">Contents</div>
-  <a href="#lab-3-skills-amp-commands-reusable-knowledge-packs">Lab 3: Skills &amp; Commands — Reusable Knowledge Packs</a>
-    <a href="#learning-objective">Learning Objective</a>
-    <a href="#the-key-concepts">The Key Concepts</a>
-      <a href="#skills-claudeskills">Skills (<code>.claude/skills/</code>)</a>
-      <a href="#slash-commands-claudecommands">Slash Commands (<code>.claude/commands/</code>)</a>
-      <a href="#the-rule">The Rule</a>
-    <a href="#setup">Setup</a>
-    <a href="#exercise-1-the-manual-way-15-min">Exercise 1: The Manual Way (15 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-2-create-the-skill-20-min">Exercise 2: Create the Skill (20 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-3-use-the-skill-10-min">Exercise 3: Use the Skill (10 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-      <a href="#what-you-should-see">What You Should See</a>
-    <a href="#exercise-3b-wire-frontend-to-real-api-10-min">Exercise 3b: Wire Frontend to Real API (10 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#the-key-concept">The Key Concept</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-4-the-verification-agent-chain-15-min">Exercise 4: The Verification Agent Chain (15 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#the-concept">The Concept</a>
-      <a href="#instructions">Instructions</a>
-      <a href="#the-escalation-pattern">The Escalation Pattern</a>
-      <a href="#add-to-claudemd">Add to CLAUDE.md</a>
-    <a href="#exercise-5-create-a-slash-command-10-min">Exercise 5: Create a Slash Command (10 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-5-the-self-improvement-coda-5-min">Exercise 5: The Self-Improvement Coda (5 min)</a>
-    <a href="#success-criteria">Success Criteria</a>
-    <a href="#key-takeaways">Key Takeaways</a>
-</nav><h1 id="lab-3-skills-amp-commands-reusable-knowledge-packs">Lab 3: Skills &amp; Commands — Reusable Knowledge Packs<a class="anchor" href="#lab-3-skills-amp-commands-reusable-knowledge-packs">&#182;</a></h1>
+<div class="page-header"><h1>Lab 03-skills-commands</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><h1 id="lab-3-skills-amp-commands-reusable-knowledge-packs">Lab 3: Skills &amp; Commands — Reusable Knowledge Packs</h1>
 <p><strong>Duration:</strong> 60 minutes
 <strong>Day:</strong> 1 — Foundation
 <strong>Builds On:</strong> Lab 1 (CLAUDE.md), Lab 2 (Plan Mode)
 <strong>Produces:</strong> A <code>/scaffold-entity</code> skill and a <code>/run-tests</code> command</p>
 <hr />
-<h2 id="learning-objective">Learning Objective<a class="anchor" href="#learning-objective">&#182;</a></h2>
+<h2 id="learning-objective">Learning Objective</h2>
 <p>You will create a custom skill that encodes a repeatable pattern, then use it to scaffold an entity in a single prompt. You'll also create a slash command for a daily workflow. The contrast — 10 prompts manually vs 1 with a skill — demonstrates why encoding patterns is the #1 productivity multiplier.</p>
 <hr />
-<h2 id="the-key-concepts">The Key Concepts<a class="anchor" href="#the-key-concepts">&#182;</a></h2>
-<h3 id="skills-claudeskills">Skills (<code>.claude/skills/</code>)<a class="anchor" href="#skills-claudeskills">&#182;</a></h3>
+<h2 id="the-key-concepts">The Key Concepts</h2>
+<h3 id="skills-claudeskills">Skills (<code>.claude/skills/</code>)</h3>
 <ul>
 <li>Markdown files with YAML frontmatter that Claude discovers <strong>automatically</strong> when relevant</li>
 <li>Unlike CLAUDE.md (loaded every session), skills load <strong>on-demand</strong> — keeping context lean</li>
 <li>Can include templates, scripts, and reference files</li>
 <li>Can be invoked as slash commands with <code>user-invocable: true</code></li>
 </ul>
-<h3 id="slash-commands-claudecommands">Slash Commands (<code>.claude/commands/</code>)<a class="anchor" href="#slash-commands-claudecommands">&#182;</a></h3>
+<h3 id="slash-commands-claudecommands">Slash Commands (<code>.claude/commands/</code>)</h3>
 <ul>
 <li>Markdown files that create reusable <code>/command</code> shortcuts</li>
 <li>Checked into git — shared with the team</li>
 <li>Can include inline bash to pre-compute context</li>
 <li><code>$ARGUMENTS</code> placeholder for dynamic input</li>
 </ul>
-<h3 id="the-rule">The Rule<a class="anchor" href="#the-rule">&#182;</a></h3>
+<h3 id="the-rule">The Rule</h3>
 <blockquote>
 <p><em>"If you do something more than once a day, turn it into a skill or command."</em></p>
 </blockquote>
 <hr />
-<h2 id="setup">Setup<a class="anchor" href="#setup">&#182;</a></h2>
+<h2 id="setup">Setup</h2>
 <p>Continue from Labs 1–2. You should have CLAUDE.md with your naming, logging, database, API, security, and employee lifecycle rules in place.</p>
 <pre><code class="language-bash"># If you used the Lab 2 escape hatch, this is already your starting CLAUDE.md
 cp reference/CLAUDELAB02.md CLAUDE.md
@@ -153,10 +118,10 @@ cp reference/CLAUDELAB02.md CLAUDE.md
 <p><strong>Note:</strong> If you have your own built-up CLAUDE.md from Labs 1–2, use it. The escape hatch above is for students who started from a prior <code>claude init</code> or used a previous lab's escape hatch.</p>
 </blockquote>
 <hr />
-<h2 id="exercise-1-the-manual-way-15-min">Exercise 1: The Manual Way (15 min)<a class="anchor" href="#exercise-1-the-manual-way-15-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-1-the-manual-way-15-min">Exercise 1: The Manual Way (15 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Scaffold the <code>Country</code> entity manually to feel the pain of re-explaining patterns.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>Ask Claude to scaffold Country:
    ```
@@ -191,10 +156,10 @@ cp reference/CLAUDELAB02.md CLAUDE.md
 <p>Now imagine doing this for 8 entities. That's 16–32 prompts of mostly-repeated instructions.</p>
 </blockquote>
 <hr />
-<h2 id="exercise-2-create-the-skill-20-min">Exercise 2: Create the Skill (20 min)<a class="anchor" href="#exercise-2-create-the-skill-20-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-2-create-the-skill-20-min">Exercise 2: Create the Skill (20 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Package the scaffolding pattern into a reusable skill.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p>Create the skill directory:
@@ -240,10 +205,10 @@ cp reference/CLAUDELAB02.md CLAUDE.md
    ```</li>
 </ol>
 <hr />
-<h2 id="exercise-3-use-the-skill-10-min">Exercise 3: Use the Skill (10 min)<a class="anchor" href="#exercise-3-use-the-skill-10-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-3-use-the-skill-10-min">Exercise 3: Use the Skill (10 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Scaffold a genuinely new entity using the skill — proving it works on something no one has built before.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p><strong>Start a fresh context:</strong>
@@ -291,15 +256,15 @@ Run <code>mvn clean compile</code> (not just <code>mvn compile</code>). Lombok's
 <ol>
 <li><strong>Why this matters:</strong> Notification is a real entity your HR app will need. You didn't build it yet — the skill just delivered all 7 layers in one prompt. Compare that with Exercise 1 where you needed multiple prompts for Country and still had gaps.</li>
 </ol>
-<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<h3 id="what-you-should-see">What You Should See</h3>
 <p>One prompt → all 7 layers → compiles clean → all conventions followed. The skill eliminated the need to re-explain the pattern and delivered a production-ready entity you actually need.</p>
 <hr />
-<h2 id="exercise-3b-wire-frontend-to-real-api-10-min">Exercise 3b: Wire Frontend to Real API (10 min)<a class="anchor" href="#exercise-3b-wire-frontend-to-real-api-10-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-3b-wire-frontend-to-real-api-10-min">Exercise 3b: Wire Frontend to Real API (10 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>You just built the Notification backend (Exercise 2). But the NotificationsPage at <code>/hr/notifications</code> currently uses hardcoded mock data. Wire it to call the real <code>/app/hr/api/v1/notifications</code> API you just scaffolded.</p>
-<h3 id="the-key-concept">The Key Concept<a class="anchor" href="#the-key-concept">&#182;</a></h3>
+<h3 id="the-key-concept">The Key Concept</h3>
 <p>Frontend development often starts against mock data when the backend API isn't ready yet. This is the most common enterprise workflow — build the UI first, wire it to the real API when the backend exists.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p>Navigate to the NotificationsPage in your running frontend (<code>/hr/notifications</code>). It currently shows 5 hardcoded notifications.</p>
@@ -345,12 +310,12 @@ Run <code>mvn clean compile</code> (not just <code>mvn compile</code>). Lombok's
 <li><strong>What you just learned:</strong> This is the standard enterprise workflow — mock data for rapid UI prototyping, then wire to the real API when the backend is ready. The skill gave you the backend in one prompt; wiring it is a single command on the frontend.</li>
 </ol>
 <hr />
-<h2 id="exercise-4-the-verification-agent-chain-15-min">Exercise 4: The Verification Agent Chain (15 min)<a class="anchor" href="#exercise-4-the-verification-agent-chain-15-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-4-the-verification-agent-chain-15-min">Exercise 4: The Verification Agent Chain (15 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Build a <strong>verification chain</strong> — a sequence of agent calls that progressively
 increases the quality bar on your output. Learn the pattern that separates
 "it compiles" from "it ships."</p>
-<h3 id="the-concept">The Concept<a class="anchor" href="#the-concept">&#182;</a></h3>
+<h3 id="the-concept">The Concept</h3>
 <p>The professional workflow is not:</p>
 <pre><code>Build → Ship it
 </code></pre>
@@ -363,7 +328,7 @@ increases the quality bar on your output. Learn the pattern that separates
 | <strong>Agent review</strong> | Edge cases, accessibility gaps, type safety, consistency |
 | <strong>/run-tests</strong> | Runtime bugs, incorrect logic, broken contracts |
 | <strong>Playwright</strong> | Visual regressions, broken renders, missing elements |</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li><strong>Review</strong> — Send the NotificationsPage you wired in Exercise 3b
    to the component-reviewer agent:</li>
@@ -389,23 +354,23 @@ increases the quality bar on your output. Learn the pattern that separates
    Check for loading state, data state, and empty state.</code>
    If Playwright isn't available yet, manually verify the page loads
    and note what you'd automate in Lab 9.</p>
-<h3 id="the-escalation-pattern">The Escalation Pattern<a class="anchor" href="#the-escalation-pattern">&#182;</a></h3>
+<h3 id="the-escalation-pattern">The Escalation Pattern</h3>
 <p>As you gain confidence, add links to the chain:</p>
 <pre><code>Level 1 (beginner):  Build it. Check it compiles.
 Level 2 (intermediate): Build → Review (agent) → Fix → Compile
 Level 3 (advanced):   Build → Review → Fix → Test → Visual verify
 </code></pre>
 <p>Most juniors stop at Level 1. Seniors operate at Level 3 minimum.</p>
-<h3 id="add-to-claudemd">Add to CLAUDE.md<a class="anchor" href="#add-to-claudemd">&#182;</a></h3>
+<h3 id="add-to-claudemd">Add to CLAUDE.md</h3>
 <pre><code class="language-markdown">## Verification Chain
 - After building a feature: run component-reviewer agent, fix findings, run tests
 - For frontend: also verify with Playwright MCP (screenshot + element check)
 </code></pre>
 <hr />
-<h2 id="exercise-5-create-a-slash-command-10-min">Exercise 5: Create a Slash Command (10 min)<a class="anchor" href="#exercise-5-create-a-slash-command-10-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-5-create-a-slash-command-10-min">Exercise 5: Create a Slash Command (10 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Create a <code>/run-tests</code> command for daily use.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p>Create the commands directory:
@@ -435,7 +400,7 @@ Level 3 (advanced):   Build → Review → Fix → Test → Visual verify
 <p><strong>Note:</strong> You will see <code>hireEmployee</code> test failures if you haven't implemented it yet in Lab 2. That's expected — the test suite covers the full service contract. If you completed Lab 2, those tests should pass. Either way, the command itself is working correctly if it runs and reports results.</p>
 </blockquote>
 <hr />
-<h2 id="exercise-5-the-self-improvement-coda-5-min">Exercise 5: The Self-Improvement Coda (5 min)<a class="anchor" href="#exercise-5-the-self-improvement-coda-5-min">&#182;</a></h2>
+<h2 id="exercise-5-the-self-improvement-coda-5-min">Exercise 5: The Self-Improvement Coda (5 min)</h2>
 <ol>
 <li>Add to CLAUDE.md:
    ```markdown
@@ -450,7 +415,7 @@ Level 3 (advanced):   Build → Review → Fix → Test → Visual verify
 </li>
 </ol>
 <hr />
-<h2 id="success-criteria">Success Criteria<a class="anchor" href="#success-criteria">&#182;</a></h2>
+<h2 id="success-criteria">Success Criteria</h2>
 <ul>
 <li>[ ] <code>/scaffold-entity</code> skill exists in <code>.claude/skills/scaffold-entity/SKILL.md</code></li>
 <li>[ ] Notification entity scaffolded with one prompt, zero corrections</li>
@@ -461,7 +426,7 @@ Level 3 (advanced):   Build → Review → Fix → Test → Visual verify
 <li>[ ] CLAUDE.md updated with skill/command references and verification chain rules</li>
 </ul>
 <hr />
-<h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">&#182;</a></h2>
+<h2 id="key-takeaways">Key Takeaways</h2>
 <ol>
 <li><strong>Skills compound engineering</strong> — define the pattern once, reuse it N times without context drift</li>
 <li><strong>Skills are on-demand, CLAUDE.md is always-on</strong> — use skills for large patterns that would bloat CLAUDE.md</li>

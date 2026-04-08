@@ -80,40 +80,16 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 </head>
 <body>
 <div class="page-wrap">
-<div class="page-header"><h1>Lab 02-plan-mode</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><nav class="toc">
-<div class="toc-header">Contents</div>
-  <a href="#lab-2-plan-mode-think-before-you-build">Lab 2: Plan Mode — Think Before You Build</a>
-    <a href="#learning-objective">Learning Objective</a>
-    <a href="#the-key-concept">The Key Concept</a>
-    <a href="#setup">Setup</a>
-      <a href="#after-exercise-3-add-employee-lifecycle-rules">After Exercise 3: Add Employee Lifecycle Rules</a>
-    <a href="#exercise-1-the-bad-path-skip-the-plan-15-min">Exercise 1: The Bad Path — Skip the Plan (15 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-2-the-good-path-plan-first-30-min">Exercise 2: The Good Path — Plan First (30 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-      <a href="#what-you-should-see">What You Should See</a>
-    <a href="#exercise-3-compare-and-encode-15-min">Exercise 3: Compare and Encode (15 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-4-prompt-enhancement-via-agent-15-min">Exercise 4: Prompt Enhancement via Agent (15 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#the-problem">The Problem</a>
-      <a href="#instructions">Instructions</a>
-      <a href="#why-this-matters">Why This Matters</a>
-    <a href="#success-criteria">Success Criteria</a>
-    <a href="#key-takeaways">Key Takeaways</a>
-</nav><h1 id="lab-2-plan-mode-think-before-you-build">Lab 2: Plan Mode — Think Before You Build<a class="anchor" href="#lab-2-plan-mode-think-before-you-build">&#182;</a></h1>
+<div class="page-header"><h1>Lab 02-plan-mode</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><h1 id="lab-2-plan-mode-think-before-you-build">Lab 2: Plan Mode — Think Before You Build</h1>
 <p><strong>Duration:</strong> 60 minutes
 <strong>Day:</strong> 1 — Foundation
 <strong>Builds On:</strong> Lab 1 (CLAUDE.md in place)
 <strong>Produces:</strong> A fully designed and implemented <code>hireEmployee()</code> method</p>
 <hr />
-<h2 id="learning-objective">Learning Objective<a class="anchor" href="#learning-objective">&#182;</a></h2>
+<h2 id="learning-objective">Learning Objective</h2>
 <p>You will design a complex service method using Plan Mode, observe how planning surfaces hidden requirements, and implement from the plan. You'll also see what happens when you skip planning — and why it costs more time than it saves.</p>
 <hr />
-<h2 id="the-key-concept">The Key Concept<a class="anchor" href="#the-key-concept">&#182;</a></h2>
+<h2 id="the-key-concept">The Key Concept</h2>
 <p>Plan Mode is activated via <code>Shift+Tab</code> twice (or <code>/plan</code>). In Plan Mode, Claude researches and proposes an implementation plan <strong>without writing any code</strong>. You iterate on the plan until it's solid, then switch to normal mode and implement.</p>
 <p><strong>The 4-Phase Workflow:</strong></p>
 <pre><code>Explore → Plan → Implement → Commit
@@ -127,7 +103,7 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 - You could describe the diff in one sentence
 - Simple renames, typo fixes, single-file changes</p>
 <hr />
-<h2 id="setup">Setup<a class="anchor" href="#setup">&#182;</a></h2>
+<h2 id="setup">Setup</h2>
 <p>Continue from Lab 1. You should have a working CLAUDE.md with naming, logging, database, and API response rules. If you used the Lab 1 escape hatch or got stuck, use it to get your starting CLAUDE.md — it's a fresh copy each time this lab runs.</p>
 <pre><code class="language-bash"># Copy the Lab 1 escape-hatch version (contains naming, database, logging, API, security rules)
 cp reference/CLAUDELAB01.md CLAUDE.md
@@ -136,7 +112,7 @@ cp reference/CLAUDELAB01.md CLAUDE.md
 <p><strong>Note:</strong> If you started from a prior <code>claude init</code> or have your own <code>CLAUDE.md.complete</code> backed up, use <code>cp your-backup-of-claude.md CLAUDE.md</code> to restore your prior version before applying the Lab 2 escape hatch. The Lab 2 escape hatch below builds on the Lab 1 state.</p>
 </blockquote>
 <hr />
-<h3 id="after-exercise-3-add-employee-lifecycle-rules">After Exercise 3: Add Employee Lifecycle Rules<a class="anchor" href="#after-exercise-3-add-employee-lifecycle-rules">&#182;</a></h3>
+<h3 id="after-exercise-3-add-employee-lifecycle-rules">After Exercise 3: Add Employee Lifecycle Rules</h3>
 <p>After completing Exercise 3, your CLAUDE.md should include the Employee Lifecycle Rules from the exercise. If you used the escape hatch for Lab 1, apply the Lab 2 escape hatch.</p>
 <blockquote>
 <p><strong>Use it exactly as written.</strong> Copy the file below.</p>
@@ -153,10 +129,10 @@ Copy the fully built Lab 2 CLAUDE.md from the reference directory. This includes
 </details>
 
 <hr />
-<h2 id="exercise-1-the-bad-path-skip-the-plan-15-min">Exercise 1: The Bad Path — Skip the Plan (15 min)<a class="anchor" href="#exercise-1-the-bad-path-skip-the-plan-15-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-1-the-bad-path-skip-the-plan-15-min">Exercise 1: The Bad Path — Skip the Plan (15 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Implement <code>hireEmployee()</code> WITHOUT planning. Observe what's missing.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p>Ask Claude to implement directly (do NOT use Plan Mode):
@@ -186,10 +162,10 @@ Copy the fully built Lab 2 CLAUDE.md from the reference directory. This includes
    <code>Undo all changes from the last implementation. We're going to redo this properly.</code></li>
 </ol>
 <hr />
-<h2 id="exercise-2-the-good-path-plan-first-30-min">Exercise 2: The Good Path — Plan First (30 min)<a class="anchor" href="#exercise-2-the-good-path-plan-first-30-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-2-the-good-path-plan-first-30-min">Exercise 2: The Good Path — Plan First (30 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Design <code>hireEmployee()</code> in Plan Mode, iterate until the plan is complete, then implement.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p>Enter Plan Mode:
@@ -247,13 +223,13 @@ Run <code>mvn clean compile</code> (not just <code>mvn compile</code>). Lombok's
 </details></p>
 <p><strong>Reference:</strong> If you get stuck, compare with <code>reference/backend/hrapp-service/src/main/java/com/company/hr/service/HrEmployeeService.java</code> — the full working version is there.</p>
 </blockquote>
-<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<h3 id="what-you-should-see">What You Should See</h3>
 <p>The planned implementation should include all 7 steps, proper error handling, and the transaction boundary — everything that was missing in Exercise 1. The plan surfaced the implicit requirements before a single line of code was written.</p>
 <hr />
-<h2 id="exercise-3-compare-and-encode-15-min">Exercise 3: Compare and Encode (15 min)<a class="anchor" href="#exercise-3-compare-and-encode-15-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-3-compare-and-encode-15-min">Exercise 3: Compare and Encode (15 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Compare the two approaches and encode the lesson.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p>Compare Exercise 1 vs Exercise 2:
@@ -283,18 +259,18 @@ Run <code>mvn clean compile</code> (not just <code>mvn compile</code>). Lombok's
 </li>
 </ol>
 <hr />
-<h2 id="exercise-4-prompt-enhancement-via-agent-15-min">Exercise 4: Prompt Enhancement via Agent (15 min)<a class="anchor" href="#exercise-4-prompt-enhancement-via-agent-15-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-4-prompt-enhancement-via-agent-15-min">Exercise 4: Prompt Enhancement via Agent (15 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Use a subagent to transform a vague, under-specified prompt into a detailed,
 actionable implementation brief before you give it to your main Claude session.</p>
-<h3 id="the-problem">The Problem<a class="anchor" href="#the-problem">&#182;</a></h3>
+<h3 id="the-problem">The Problem</h3>
 <p>Professional engineers rarely receive fully-specified requirements. A stakeholder
 says <em>"make a department manager page"</em> and expects you to know what that means.
 If you hand that vague prompt directly to Claude's main session, you get a thin,
 incomplete result that misses edge cases, conventions, and real-world needs.</p>
 <p><strong>The trick:</strong> use an agent to <em>research and enhance</em> the prompt first, before
 the main session ever touches it.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>Look at the following deliberately vague prompt a manager might type:</li>
 </ol>
@@ -362,7 +338,7 @@ the main session ever touches it.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="why-this-matters">Why This Matters<a class="anchor" href="#why-this-matters">&#182;</a></h3>
+<h3 id="why-this-matters">Why This Matters</h3>
 <ul>
 <li><strong>Agents are research assistants, not builders.</strong> They read the codebase,
   understand patterns, and synthesize a spec — without polluting your main
@@ -374,7 +350,7 @@ the main session ever touches it.</p>
   <code>Main session (build)</code> → <code>Agent (review)</code> → <code>Command (test)</code>.</li>
 </ul>
 <hr />
-<h2 id="success-criteria">Success Criteria<a class="anchor" href="#success-criteria">&#182;</a></h2>
+<h2 id="success-criteria">Success Criteria</h2>
 <ul>
 <li>[ ] Exercise 1 is missing at least 2 requirements (job_history, idempotency, etc.)</li>
 <li>[ ] Exercise 2 plan includes all 7 steps before implementation starts</li>
@@ -384,7 +360,7 @@ the main session ever touches it.</p>
 <li>[ ] Used an agent to enhance a vague prompt before building</li>
 </ul>
 <hr />
-<h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">&#182;</a></h2>
+<h2 id="key-takeaways">Key Takeaways</h2>
 <ol>
 <li><strong>"Create X" prompts produce only X.</strong> Audit trails, idempotency, and masking need explicit mention — or a plan that surfaces them.</li>
 <li><strong>Planning is cheaper than debugging.</strong> 5 minutes of planning saved 20 minutes of rework.</li>

@@ -80,36 +80,16 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 </head>
 <body>
 <div class="page-wrap">
-<div class="page-header"><h1>Lab 09-mcp-playwright</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><nav class="toc">
-<div class="toc-header">Contents</div>
-  <a href="#lab-9-mcp-servers-playwright-amp-browser-verification">Lab 9: MCP Servers — Playwright &amp; Browser Verification</a>
-    <a href="#learning-objective">Learning Objective</a>
-    <a href="#the-key-concept">The Key Concept</a>
-    <a href="#setup">Setup</a>
-    <a href="#exercise-1-study-the-existing-playwright-mcp-setup-15-min">Exercise 1: Study the Existing Playwright MCP Setup (15 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-      <a href="#what-you-should-see">What You Should See</a>
-    <a href="#exercise-2-dashboard-verification-25-min">Exercise 2: Dashboard Verification (25 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-      <a href="#what-you-should-see">What You Should See</a>
-    <a href="#exercise-3-form-verification-25-min">Exercise 3: Form Verification (25 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-4-the-self-improvement-coda-10-min">Exercise 4: The Self-Improvement Coda (10 min)</a>
-    <a href="#success-criteria">Success Criteria</a>
-    <a href="#key-takeaways">Key Takeaways</a>
-</nav><h1 id="lab-9-mcp-servers-playwright-amp-browser-verification">Lab 9: MCP Servers — Playwright &amp; Browser Verification<a class="anchor" href="#lab-9-mcp-servers-playwright-amp-browser-verification">&#182;</a></h1>
+<div class="page-header"><h1>Lab 09-mcp-playwright</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><h1 id="lab-9-mcp-servers-playwright-amp-browser-verification">Lab 9: MCP Servers — Playwright &amp; Browser Verification</h1>
 <p><strong>Duration:</strong> 75 minutes
 <strong>Day:</strong> 3 — Integration
 <strong>Builds On:</strong> Lab 8 (verification loops)
 <strong>Produces:</strong> Playwright MCP configured, 2 browser-driven verifications completed</p>
 <hr />
-<h2 id="learning-objective">Learning Objective<a class="anchor" href="#learning-objective">&#182;</a></h2>
+<h2 id="learning-objective">Learning Objective</h2>
 <p>You will connect Claude Code to a real browser via the Playwright MCP server. Claude will navigate your running HR app, take screenshots, inspect elements, and verify that the UI matches expectations — all from the terminal. This transforms Claude from a code-only tool into a full-stack verifier.</p>
 <hr />
-<h2 id="the-key-concept">The Key Concept<a class="anchor" href="#the-key-concept">&#182;</a></h2>
+<h2 id="the-key-concept">The Key Concept</h2>
 <p><strong>MCP (Model Context Protocol)</strong> is a standardized way to connect Claude Code to external tools and data sources.</p>
 <p><strong>Playwright MCP</strong> gives Claude these tools:
 | Tool | What It Does |
@@ -126,7 +106,7 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 - End-to-end verification: Claude writes code → deploys → verifies in browser → iterates</p>
 <p><strong>Configuration:</strong> MCP servers are declared in <code>.mcp.json</code> at the project root, committed to git so the whole team shares them.</p>
 <hr />
-<h2 id="setup">Setup<a class="anchor" href="#setup">&#182;</a></h2>
+<h2 id="setup">Setup</h2>
 <pre><code class="language-bash"># Install Playwright browsers (if not done in pre-workshop)
 cd frontend &amp;&amp; npx playwright install chromium
 
@@ -141,10 +121,10 @@ curl -s http://localhost:5173 | head -5    # Frontend
 curl -s http://localhost:8080/app/hr/api/v1/regions | head -5  # Backend
 </code></pre>
 <hr />
-<h2 id="exercise-1-study-the-existing-playwright-mcp-setup-15-min">Exercise 1: Study the Existing Playwright MCP Setup (15 min)<a class="anchor" href="#exercise-1-study-the-existing-playwright-mcp-setup-15-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-1-study-the-existing-playwright-mcp-setup-15-min">Exercise 1: Study the Existing Playwright MCP Setup (15 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Understand how MCP server configuration works and verify Playwright is connected.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p><strong>Read <code>.mcp.json</code> at the project root:</strong>
@@ -186,13 +166,13 @@ curl -s http://localhost:8080/app/hr/api/v1/regions | head -5  # Backend
 <p><strong>Understand the pattern:</strong> MCP configuration is team-shared — <code>.mcp.json</code> is committed to git so every developer gets the same tools. This is why enterprise projects use MCP: one config, everyone benefits.</p>
 </li>
 </ol>
-<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<h3 id="what-you-should-see">What You Should See</h3>
 <p>Claude navigates to the app, takes a screenshot, and describes the login page (or dashboard, depending on auth state). This confirms the MCP connection works.</p>
 <hr />
-<h2 id="exercise-2-dashboard-verification-25-min">Exercise 2: Dashboard Verification (25 min)<a class="anchor" href="#exercise-2-dashboard-verification-25-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-2-dashboard-verification-25-min">Exercise 2: Dashboard Verification (25 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Use Playwright MCP to verify the dashboard page renders correctly.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p><strong>Navigate and log in</strong> (if auth is required):
@@ -231,13 +211,13 @@ curl -s http://localhost:8080/app/hr/api/v1/regions | head -5  # Backend
    to verify the fix is visible in the browser.</code></p>
 </li>
 </ol>
-<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<h3 id="what-you-should-see">What You Should See</h3>
 <p>Claude iterates: screenshot → find issue → fix code → screenshot → verify. This is the visual verification loop from Lab 8, now automated with MCP.</p>
 <hr />
-<h2 id="exercise-3-form-verification-25-min">Exercise 3: Form Verification (25 min)<a class="anchor" href="#exercise-3-form-verification-25-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-3-form-verification-25-min">Exercise 3: Form Verification (25 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Use Playwright MCP to test an interactive form workflow.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p><strong>Navigate to the Hire Wizard:</strong>
@@ -278,7 +258,7 @@ curl -s http://localhost:8080/app/hr/api/v1/regions | head -5  # Backend
    ```</li>
 </ol>
 <hr />
-<h2 id="exercise-4-the-self-improvement-coda-10-min">Exercise 4: The Self-Improvement Coda (10 min)<a class="anchor" href="#exercise-4-the-self-improvement-coda-10-min">&#182;</a></h2>
+<h2 id="exercise-4-the-self-improvement-coda-10-min">Exercise 4: The Self-Improvement Coda (10 min)</h2>
 <ol>
 <li>Add to CLAUDE.md:
    ```markdown
@@ -308,7 +288,7 @@ curl -s http://localhost:8080/app/hr/api/v1/regions | head -5  # Backend
 <li>BigQuery/analytics MCP — query production metrics</li>
 </ol>
 <hr />
-<h2 id="success-criteria">Success Criteria<a class="anchor" href="#success-criteria">&#182;</a></h2>
+<h2 id="success-criteria">Success Criteria</h2>
 <ul>
 <li>[ ] <code>.mcp.json</code> configured with Playwright MCP</li>
 <li>[ ] Claude successfully navigated to the app and took a screenshot</li>
@@ -317,7 +297,7 @@ curl -s http://localhost:8080/app/hr/api/v1/regions | head -5  # Backend
 <li>[ ] CLAUDE.md updated with MCP Playwright patterns</li>
 </ul>
 <hr />
-<h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">&#182;</a></h2>
+<h2 id="key-takeaways">Key Takeaways</h2>
 <ol>
 <li><strong>MCP turns Claude into a full-stack verifier</strong> — not just code, but running applications</li>
 <li><strong>Screenshots enable visual loops</strong> — Claude sees what users see</li>

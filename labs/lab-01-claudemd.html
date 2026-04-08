@@ -80,43 +80,16 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 </head>
 <body>
 <div class="page-wrap">
-<div class="page-header"><h1>Lab 01-claudemd</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><nav class="toc">
-<div class="toc-header">Contents</div>
-  <a href="#lab-1-claudemd-your-enterprise-constitution">Lab 1: CLAUDE.md — Your Enterprise Constitution</a>
-    <a href="#learning-objective">Learning Objective</a>
-    <a href="#the-key-concept">The Key Concept</a>
-    <a href="#setup">Setup</a>
-    <a href="#exercise-1-observe-the-failure-15-min">Exercise 1: Observe the Failure (15 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-      <a href="#what-you-should-see">What You Should See</a>
-    <a href="#exercise-2-write-the-rules-20-min">Exercise 2: Write the Rules (20 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-3-verify-the-rules-work-15-min">Exercise 3: Verify the Rules Work (15 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-      <a href="#what-you-should-see">What You Should See</a>
-    <a href="#exercise-4-subdirectory-claudemd-hierarchy-15-min">Exercise 4: Subdirectory CLAUDE.md Hierarchy (15 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#the-concept">The Concept</a>
-      <a href="#instructions">Instructions</a>
-      <a href="#what-you-should-see">What You Should See</a>
-    <a href="#exercise-5-the-self-improvement-coda-10-min">Exercise 5: The Self-Improvement Coda (10 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#success-criteria">Success Criteria</a>
-    <a href="#key-takeaways">Key Takeaways</a>
-</nav><h1 id="lab-1-claudemd-your-enterprise-constitution">Lab 1: CLAUDE.md — Your Enterprise Constitution<a class="anchor" href="#lab-1-claudemd-your-enterprise-constitution">&#182;</a></h1>
+<div class="page-header"><h1>Lab 01-claudemd</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><h1 id="lab-1-claudemd-your-enterprise-constitution">Lab 1: CLAUDE.md — Your Enterprise Constitution</h1>
 <p><strong>Duration:</strong> 60 minutes
 <strong>Day:</strong> 1 — Foundation
 <strong>Builds On:</strong> Mindset Shift lecture
 <strong>Produces:</strong> A working CLAUDE.md that prevents convention violations</p>
 <hr />
-<h2 id="learning-objective">Learning Objective<a class="anchor" href="#learning-objective">&#182;</a></h2>
+<h2 id="learning-objective">Learning Objective</h2>
 <p>You will experience how Claude Code behaves <strong>without</strong> project conventions, observe it make predictable mistakes, and then fix those mistakes by writing CLAUDE.md rules. By the end, you'll understand why CLAUDE.md is the single most important file in any Claude Code project.</p>
 <hr />
-<h2 id="the-key-concept">The Key Concept<a class="anchor" href="#the-key-concept">&#182;</a></h2>
+<h2 id="the-key-concept">The Key Concept</h2>
 <p>CLAUDE.md is a markdown file in the project root that Claude reads automatically at the start of every session. It acts as a permanent instruction manual — your team's conventions, standards, and hard-won lessons.</p>
 <p><strong>What makes it powerful:</strong>
 - Loaded every session — Claude never "forgets" what's in it
@@ -155,7 +128,7 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 </tbody>
 </table>
 <hr />
-<h2 id="setup">Setup<a class="anchor" href="#setup">&#182;</a></h2>
+<h2 id="setup">Setup</h2>
 <p>This lab teaches you to build CLAUDE.md from scratch by observing failures. You might already have a <code>CLAUDE.md</code> — from a prior <code>claude init</code>, a previous session, or a previous run of these labs. Preserve it first, then start fresh with the provided minimal template.</p>
 <pre><code class="language-bash">cd /scratch/trng/claude-code-workshop
 
@@ -181,10 +154,10 @@ ls backend/             # Maven project structure
 <p><strong>After this lab:</strong> Run <code>cp reference/CLAUDE.md CLAUDE.md</code> to restore the full reference version if you want to compare your work against the completed version. Or compare against your own <code>CLAUDE.md.complete</code> if you backed one up.</p>
 </blockquote>
 <hr />
-<h2 id="exercise-1-observe-the-failure-15-min">Exercise 1: Observe the Failure (15 min)<a class="anchor" href="#exercise-1-observe-the-failure-15-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-1-observe-the-failure-15-min">Exercise 1: Observe the Failure (15 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Ask Claude to scaffold a backend entity <strong>without</strong> the missing CLAUDE.md rules. Observe what goes wrong.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p>Open a Claude Code session in the project root:
@@ -213,7 +186,7 @@ ls backend/             # Maven project structure
 <p><strong>Write down every mistake you find.</strong> You'll fix them in Exercise 2.</p>
 </li>
 </ol>
-<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<h3 id="what-you-should-see">What You Should See</h3>
 <p>Claude will likely make 2–4 of these mistakes because it has no project-specific guidance. Common ones:
 - Uses <code>@Where</code> instead of <code>@SQLRestriction</code> (deprecated in Hibernate 6.2)
 - Returns raw entity or DTO instead of wrapping in <code>HrApiResponse&lt;T&gt;</code>
@@ -223,10 +196,10 @@ ls backend/             # Maven project structure
 <p><strong>This is the teaching moment.</strong> Claude is capable but ignorant of YOUR conventions. Without CLAUDE.md, every session is a blank slate.</p>
 </blockquote>
 <hr />
-<h2 id="exercise-2-write-the-rules-20-min">Exercise 2: Write the Rules (20 min)<a class="anchor" href="#exercise-2-write-the-rules-20-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-2-write-the-rules-20-min">Exercise 2: Write the Rules (20 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Update CLAUDE.md with rules that prevent every mistake you observed in Exercise 1.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p>Open the existing CLAUDE.md:
@@ -272,10 +245,10 @@ ls backend/             # Maven project structure
    Keep it concise — every line should prevent a specific mistake.</code></li>
 </ol>
 <hr />
-<h2 id="exercise-3-verify-the-rules-work-15-min">Exercise 3: Verify the Rules Work (15 min)<a class="anchor" href="#exercise-3-verify-the-rules-work-15-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-3-verify-the-rules-work-15-min">Exercise 3: Verify the Rules Work (15 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Redo the same scaffolding task and confirm Claude now follows your rules.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p><strong>Start a fresh session</strong> — this is critical. CLAUDE.md is read at session start.
@@ -303,23 +276,23 @@ ls backend/             # Maven project structure
 <p>If any mistakes remain, add another rule to CLAUDE.md and repeat.</p>
 </li>
 </ol>
-<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<h3 id="what-you-should-see">What You Should See</h3>
 <p>Claude should now produce convention-compliant code on the <strong>first try</strong> — no corrections needed. The CLAUDE.md rules prevented every mistake from Exercise 1.</p>
 <hr />
-<h2 id="exercise-4-subdirectory-claudemd-hierarchy-15-min">Exercise 4: Subdirectory CLAUDE.md Hierarchy (15 min)<a class="anchor" href="#exercise-4-subdirectory-claudemd-hierarchy-15-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-4-subdirectory-claudemd-hierarchy-15-min">Exercise 4: Subdirectory CLAUDE.md Hierarchy (15 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Split the root CLAUDE.md into three focused files using Claude Code's directory-level hierarchy. This is essential in monorepos where Java rules shouldn't clutter the frontend context and vice versa.</p>
 <blockquote>
 <p><strong>Note:</strong> Reference versions are at <code>reference/backend/CLAUDE.md</code> and <code>reference/frontend/CLAUDE.md</code>. Build your own first — compare with the reference at the end.</p>
 </blockquote>
-<h3 id="the-concept">The Concept<a class="anchor" href="#the-concept">&#182;</a></h3>
+<h3 id="the-concept">The Concept</h3>
 <p>Claude Code automatically merges CLAUDE.md files from the project root down to the directory where Claude is running:</p>
 <pre><code>CLAUDE.md              ← always loaded (project-wide rules)
 backend/CLAUDE.md      ← loaded when working in backend/
 frontend/CLAUDE.md     ← loaded when working in frontend/
 </code></pre>
 <p>This means you can scope rules to where they apply — Java rules stay in <code>backend/CLAUDE.md</code>, React rules in <code>frontend/CLAUDE.md</code>, and only cross-cutting concerns (auth, idempotency, RBAC) live in the root.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>Ask Claude to create <code>backend/CLAUDE.md</code> with Java/Spring-specific rules extracted from the root:
    ```
@@ -367,16 +340,16 @@ frontend/CLAUDE.md     ← loaded when working in frontend/
 <p><strong>Compare with the reference.</strong> How does your build compare with <code>reference/backend/CLAUDE.md</code> and <code>reference/frontend/CLAUDE.md</code>? Use <code>diff</code> or just visually inspect. Copy the reference if you got stuck or make incremental improvements to yours.</p>
 </li>
 </ol>
-<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<h3 id="what-you-should-see">What You Should See</h3>
 <p>Running from <code>backend/</code> gives Claude the complete Java context without React noise. Running from <code>frontend/</code> gives the React context without Spring specifics. The root file now contains only what both sides need — keeping every file under ~100 lines.</p>
 <blockquote>
 <p><strong>Key insight:</strong> Subdirectory CLAUDE.md files compound on top of the root — they don't replace it. Claude always sees the full chain from root to working directory.</p>
 </blockquote>
 <hr />
-<h2 id="exercise-5-the-self-improvement-coda-10-min">Exercise 5: The Self-Improvement Coda (10 min)<a class="anchor" href="#exercise-5-the-self-improvement-coda-10-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-5-the-self-improvement-coda-10-min">Exercise 5: The Self-Improvement Coda (10 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Practice the compounding loop that you'll use at the end of every lab.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>Review your CLAUDE.md. Ask yourself:</li>
 <li>Is every rule specific and actionable? (Not vague like "write clean code")</li>
@@ -404,7 +377,7 @@ frontend/CLAUDE.md     ← loaded when working in frontend/
 <p><strong>This is the compounding loop:</strong> mistake → rule → verify → refine. By the end of this workshop, your CLAUDE.md will be a living document that makes Claude dramatically better at your specific project.</p>
 </blockquote>
 <hr />
-<h2 id="success-criteria">Success Criteria<a class="anchor" href="#success-criteria">&#182;</a></h2>
+<h2 id="success-criteria">Success Criteria</h2>
 <ul>
 <li>[ ] CLAUDE.md contains at least 5 project-specific rules</li>
 <li>[ ] Exercise 1 produces 2+ convention violations</li>
@@ -414,7 +387,7 @@ frontend/CLAUDE.md     ← loaded when working in frontend/
 <li>[ ] You can describe the merge order: root → subdirectory</li>
 </ul>
 <hr />
-<h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">&#182;</a></h2>
+<h2 id="key-takeaways">Key Takeaways</h2>
 <ol>
 <li><strong>CLAUDE.md is production infrastructure</strong> — iterate on it like prompts, not like documentation</li>
 <li><strong>Every correction should become a rule</strong> — if you corrected Claude, encode it so it never repeats</li>

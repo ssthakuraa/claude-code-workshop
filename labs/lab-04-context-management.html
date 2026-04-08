@@ -80,38 +80,16 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 </head>
 <body>
 <div class="page-wrap">
-<div class="page-header"><h1>Lab 04-context-management</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><nav class="toc">
-<div class="toc-header">Contents</div>
-  <a href="#lab-4-context-management-the-1-performance-lever">Lab 4: Context Management — The #1 Performance Lever</a>
-    <a href="#learning-objective">Learning Objective</a>
-    <a href="#the-key-concept">The Key Concept</a>
-    <a href="#setup">Setup</a>
-    <a href="#exercise-1-review-with-fresh-context-15-min">Exercise 1: Review with Fresh Context (15 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#the-professional-mindset">The Professional Mindset</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-2-session-2-plan-the-next-entity-with-clean-context-15-min">Exercise 2: Session 2 — Plan the Next Entity with Clean Context (15 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-      <a href="#what-you-should-see">What You Should See</a>
-    <a href="#exercise-3-using-compact-for-long-tasks-10-min">Exercise 3: Using /compact for Long Tasks (10 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#when-to-use-compact">When to Use /compact</a>
-      <a href="#instructions">Instructions</a>
-      <a href="#what-you-should-see">What You Should See</a>
-    <a href="#exercise-4-context-habits-checklist-5-min">Exercise 4: Context Habits Checklist (5 min)</a>
-    <a href="#success-criteria">Success Criteria</a>
-    <a href="#key-takeaways">Key Takeaways</a>
-</nav><h1 id="lab-4-context-management-the-1-performance-lever">Lab 4: Context Management — The #1 Performance Lever<a class="anchor" href="#lab-4-context-management-the-1-performance-lever">&#182;</a></h1>
+<div class="page-header"><h1>Lab 04-context-management</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><h1 id="lab-4-context-management-the-1-performance-lever">Lab 4: Context Management — The #1 Performance Lever</h1>
 <p><strong>Duration:</strong> 45 minutes
 <strong>Day:</strong> 1 — Foundation
 <strong>Builds On:</strong> All Day 1 labs
 <strong>Produces:</strong> Practical context discipline habits</p>
 <hr />
-<h2 id="learning-objective">Learning Objective<a class="anchor" href="#learning-objective">&#182;</a></h2>
+<h2 id="learning-objective">Learning Objective</h2>
 <p>You will experience context window degradation firsthand — watching Claude's quality drop as context fills up — then redo the same work with proper context hygiene. This lab teaches the single most important operational discipline for Claude Code.</p>
 <hr />
-<h2 id="the-key-concept">The Key Concept<a class="anchor" href="#the-key-concept">&#182;</a></h2>
+<h2 id="the-key-concept">The Key Concept</h2>
 <p>Claude's context window is finite. Everything — files read, command outputs, messages, tool results — consumes tokens.</p>
 <p><strong>The degradation curve:</strong>
 - <strong>0–60% full:</strong> Claude is sharp, follows all rules, produces quality code
@@ -127,15 +105,15 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 | Fresh session | New task entirely — cheapest way to get clean context |
 | <code>/status</code> | Check current context usage |</p>
 <hr />
-<h2 id="setup">Setup<a class="anchor" href="#setup">&#182;</a></h2>
+<h2 id="setup">Setup</h2>
 <p>Continue from Labs 1–3. You should have CLAUDE.md, Region (or PayGrade), Country, Location, and the Notification entity you scaffolded in Lab 3 using <code>/scaffold-entity</code>.</p>
 <hr />
-<h2 id="exercise-1-review-with-fresh-context-15-min">Exercise 1: Review with Fresh Context (15 min)<a class="anchor" href="#exercise-1-review-with-fresh-context-15-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-1-review-with-fresh-context-15-min">Exercise 1: Review with Fresh Context (15 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Experience the difference between "accumulated context" and "clean context" by reviewing the Notification entity you built in Lab 3.</p>
-<h3 id="the-professional-mindset">The Professional Mindset<a class="anchor" href="#the-professional-mindset">&#182;</a></h3>
+<h3 id="the-professional-mindset">The Professional Mindset</h3>
 <p>Rather than asking "why does context degrade," ask "how would I plan this work so I never get there?" That's how experienced Claude Code users operate. The degradation curve exists — but professionals design around it, not into it.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p><strong>Check your current session state.</strong> If you've been running Claude since Lab 3, your context is polluted with prior work:
@@ -164,10 +142,10 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 <p>You've just experienced context degradation firsthand. Session 1 was polluted with accumulated state from labs past. Session 2 was clean — Claude focused only on what you asked about.</p>
 </blockquote>
 <hr />
-<h2 id="exercise-2-session-2-plan-the-next-entity-with-clean-context-15-min">Exercise 2: Session 2 — Plan the Next Entity with Clean Context (15 min)<a class="anchor" href="#exercise-2-session-2-plan-the-next-entity-with-clean-context-15-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-2-session-2-plan-the-next-entity-with-clean-context-15-min">Exercise 2: Session 2 — Plan the Next Entity with Clean Context (15 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Execute the next session cleanly, observing context usage before and after <code>/clear</code>.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p><strong>Check <code>/status</code>:</strong>
@@ -187,19 +165,19 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 <p><strong>Check <code>/status</code> again.</strong> Notice how much context the design consumed. This is your baseline for one focused task.</p>
 </li>
 </ol>
-<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<h3 id="what-you-should-see">What You Should See</h3>
 <p>A focused session — one focused question, no accumulated reads from prior tasks — stays well under 30% context. Claude follows conventions precisely because it isn't sifting through a history of prior work.</p>
 <hr />
-<h2 id="exercise-3-using-compact-for-long-tasks-10-min">Exercise 3: Using /compact for Long Tasks (10 min)<a class="anchor" href="#exercise-3-using-compact-for-long-tasks-10-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-3-using-compact-for-long-tasks-10-min">Exercise 3: Using /compact for Long Tasks (10 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Use <code>/compact</code> to compress a long session without losing the key implementation context you need to continue working.</p>
-<h3 id="when-to-use-compact">When to Use /compact<a class="anchor" href="#when-to-use-compact">&#182;</a></h3>
+<h3 id="when-to-use-compact">When to Use /compact</h3>
 <p><code>/compact</code> is for situations where:
 - You're mid-task and can't start fresh (too much context built up)
 - You want to shed accumulated file reads and tool outputs
 - You need to continue the same task but context is getting large</p>
 <p>Unlike <code>/clear</code> (which wipes everything), <code>/compact</code> summarizes history while preserving what you tell it to keep.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p>Continue from Exercise 2. You have a session with the HrJob scaffold. Check <code>/status</code> to note the current percentage.</p>
@@ -228,13 +206,13 @@ input[type="checkbox"] { margin-right: 0.3rem; }
    It should answer correctly from the compacted summary.</p>
 </li>
 </ol>
-<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<h3 id="what-you-should-see">What You Should See</h3>
 <p><code>/compact</code> compresses prior history while keeping the context you directed it to preserve. The percentage drops. Claude still knows your session's key decisions and the code it produced.</p>
 <blockquote>
 <p><strong>Comparison:</strong> <code>/clear</code> = full reset. <code>/compact</code> = summarize and continue. Use <code>/clear</code> between tasks. Use <code>/compact</code> within a long task that isn't done yet.</p>
 </blockquote>
 <hr />
-<h2 id="exercise-4-context-habits-checklist-5-min">Exercise 4: Context Habits Checklist (5 min)<a class="anchor" href="#exercise-4-context-habits-checklist-5-min">&#182;</a></h2>
+<h2 id="exercise-4-context-habits-checklist-5-min">Exercise 4: Context Habits Checklist (5 min)</h2>
 <p>Review and internalize these habits:</p>
 <ul>
 <li>[ ] <strong>Design sessions before starting</strong> — one entity per session, explicit <code>/clear</code> between them</li>
@@ -253,7 +231,7 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 - Check /status periodically — context is your most precious resource
 </code></pre>
 <hr />
-<h2 id="success-criteria">Success Criteria<a class="anchor" href="#success-criteria">&#182;</a></h2>
+<h2 id="success-criteria">Success Criteria</h2>
 <ul>
 <li>[ ] Experienced context degradation by reviewing Notification in polluted vs fresh context</li>
 <li>[ ] Used <code>/clear</code> between Exercise 1 and Exercise 2</li>
@@ -263,7 +241,7 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 <li>[ ] CLAUDE.md updated with session discipline rules</li>
 </ul>
 <hr />
-<h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">&#182;</a></h2>
+<h2 id="key-takeaways">Key Takeaways</h2>
 <ol>
 <li><strong>Design sessions before you start</strong> — one focused task per session is a professional habit, not a workaround</li>
 <li><strong><code>/clear</code> is free, debugging isn't</strong> — clearing context takes 0 seconds; fixing a context-poisoned generation takes 10 minutes</li>

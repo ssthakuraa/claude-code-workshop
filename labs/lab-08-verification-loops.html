@@ -80,36 +80,16 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 </head>
 <body>
 <div class="page-wrap">
-<div class="page-header"><h1>Lab 08-verification-loops</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><nav class="toc">
-<div class="toc-header">Contents</div>
-  <a href="#lab-8-verification-loops-the-quality-multiplier">Lab 8: Verification Loops — The Quality Multiplier</a>
-    <a href="#learning-objective">Learning Objective</a>
-    <a href="#the-key-concept">The Key Concept</a>
-    <a href="#setup">Setup</a>
-    <a href="#exercise-1-test-driven-backend-feature-25-min">Exercise 1: Test-Driven Backend Feature (25 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-      <a href="#what-you-should-see">What You Should See</a>
-    <a href="#exercise-2-visual-verification-20-min">Exercise 2: Visual Verification (20 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-      <a href="#what-you-should-see">What You Should See</a>
-    <a href="#exercise-3-combining-strategies-10-min">Exercise 3: Combining Strategies (10 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-4-the-self-improvement-coda-5-min">Exercise 4: The Self-Improvement Coda (5 min)</a>
-    <a href="#success-criteria">Success Criteria</a>
-    <a href="#key-takeaways">Key Takeaways</a>
-</nav><h1 id="lab-8-verification-loops-the-quality-multiplier">Lab 8: Verification Loops — The Quality Multiplier<a class="anchor" href="#lab-8-verification-loops-the-quality-multiplier">&#182;</a></h1>
+<div class="page-header"><h1>Lab 08-verification-loops</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><h1 id="lab-8-verification-loops-the-quality-multiplier">Lab 8: Verification Loops — The Quality Multiplier</h1>
 <p><strong>Duration:</strong> 60 minutes
 <strong>Day:</strong> 2 — Productivity
 <strong>Builds On:</strong> Labs 5 (hooks), 6 (subagents), 7 (parallel sessions)
 <strong>Produces:</strong> A feature built with test-driven verification and a visual check</p>
 <hr />
-<h2 id="learning-objective">Learning Objective<a class="anchor" href="#learning-objective">&#182;</a></h2>
+<h2 id="learning-objective">Learning Objective</h2>
 <p>You will implement a feature using a verification-driven workflow: write the test first, implement to pass it, then verify visually. Boris Cherny calls verification <strong>"probably the most important thing to get great results out of Claude Code"</strong> — it 2–3x the quality of final output.</p>
 <hr />
-<h2 id="the-key-concept">The Key Concept<a class="anchor" href="#the-key-concept">&#182;</a></h2>
+<h2 id="the-key-concept">The Key Concept</h2>
 <p>Without verification, Claude produces "looks right" code. With verification, Claude produces <strong>proven-correct</strong> code. The difference is dramatic.</p>
 <p><strong>Three verification strategies:</strong></p>
 <table>
@@ -143,15 +123,15 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 </code></pre>
 <p>Usually 2–3 iterations to reach quality.</p>
 <hr />
-<h2 id="setup">Setup<a class="anchor" href="#setup">&#182;</a></h2>
+<h2 id="setup">Setup</h2>
 <pre><code class="language-bash"># Verify tests pass
 cd backend &amp;&amp; mvn test -pl hrapp-service -q &amp;&amp; echo &quot;Tests: OK&quot;
 </code></pre>
 <hr />
-<h2 id="exercise-1-test-driven-backend-feature-25-min">Exercise 1: Test-Driven Backend Feature (25 min)<a class="anchor" href="#exercise-1-test-driven-backend-feature-25-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-1-test-driven-backend-feature-25-min">Exercise 1: Test-Driven Backend Feature (25 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Build the <code>promoteEmployee()</code> method test-first — write the test, then implement until it passes.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li><strong>Write the test first:</strong>
    ```
@@ -191,13 +171,13 @@ cd backend &amp;&amp; mvn test -pl hrapp-service -q &amp;&amp; echo &quot;Tests:
    All tests should pass.</p>
 </li>
 </ol>
-<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<h3 id="what-you-should-see">What You Should See</h3>
 <p>Claude iterates until tests are green. The test acted as a specification — Claude didn't need detailed instructions because the test defined the expected behavior.</p>
 <hr />
-<h2 id="exercise-2-visual-verification-20-min">Exercise 2: Visual Verification (20 min)<a class="anchor" href="#exercise-2-visual-verification-20-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-2-visual-verification-20-min">Exercise 2: Visual Verification (20 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Build a frontend component, verify it visually against a spec, and iterate.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li><strong>Define the visual spec:</strong>
    ```
@@ -237,13 +217,13 @@ cd backend &amp;&amp; mvn test -pl hrapp-service -q &amp;&amp; echo &quot;Tests:
 <p><strong>Second visual check.</strong> Repeat until the component matches the spec.</p>
 </li>
 </ol>
-<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<h3 id="what-you-should-see">What You Should See</h3>
 <p>First attempt: 70–80% match. After 1–2 rounds of visual feedback: 95%+ match. The visual loop is what turns "close enough" into "production ready."</p>
 <hr />
-<h2 id="exercise-3-combining-strategies-10-min">Exercise 3: Combining Strategies (10 min)<a class="anchor" href="#exercise-3-combining-strategies-10-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-3-combining-strategies-10-min">Exercise 3: Combining Strategies (10 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>See how test-driven and visual verification work together.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>Reflect on what you just did:</li>
 <li><strong>Backend (Exercise 1):</strong> Test-driven — test defined behavior, implementation followed</li>
@@ -274,7 +254,7 @@ cd backend &amp;&amp; mvn test -pl hrapp-service -q &amp;&amp; echo &quot;Tests:
    ```</li>
 </ol>
 <hr />
-<h2 id="exercise-4-the-self-improvement-coda-5-min">Exercise 4: The Self-Improvement Coda (5 min)<a class="anchor" href="#exercise-4-the-self-improvement-coda-5-min">&#182;</a></h2>
+<h2 id="exercise-4-the-self-improvement-coda-5-min">Exercise 4: The Self-Improvement Coda (5 min)</h2>
 <ol>
 <li>Count iterations:</li>
 <li>Backend: _____ iterations to pass all tests</li>
@@ -289,7 +269,7 @@ cd backend &amp;&amp; mvn test -pl hrapp-service -q &amp;&amp; echo &quot;Tests:
 </li>
 </ol>
 <hr />
-<h2 id="success-criteria">Success Criteria<a class="anchor" href="#success-criteria">&#182;</a></h2>
+<h2 id="success-criteria">Success Criteria</h2>
 <ul>
 <li>[ ] <code>promoteEmployee()</code> tests written before implementation</li>
 <li>[ ] All tests pass after implementation</li>
@@ -298,7 +278,7 @@ cd backend &amp;&amp; mvn test -pl hrapp-service -q &amp;&amp; echo &quot;Tests:
 <li>[ ] You can explain the test-driven vs visual verification difference</li>
 </ul>
 <hr />
-<h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">&#182;</a></h2>
+<h2 id="key-takeaways">Key Takeaways</h2>
 <ol>
 <li><strong>Tests are specs, not afterthoughts</strong> — write them first and Claude knows exactly what to build</li>
 <li><strong>Visual verification catches what tests can't</strong> — spacing, alignment, visual hierarchy</li>

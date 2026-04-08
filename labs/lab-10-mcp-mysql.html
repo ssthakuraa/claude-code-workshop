@@ -80,37 +80,16 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 </head>
 <body>
 <div class="page-wrap">
-<div class="page-header"><h1>Lab 10-mcp-mysql</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><nav class="toc">
-<div class="toc-header">Contents</div>
-  <a href="#lab-10-mcp-servers-mysql-amp-data-verification">Lab 10: MCP Servers — MySQL &amp; Data Verification</a>
-    <a href="#learning-objective">Learning Objective</a>
-    <a href="#the-key-concept">The Key Concept</a>
-    <a href="#setup">Setup</a>
-    <a href="#exercise-1-study-the-existing-mysql-mcp-setup-15-min">Exercise 1: Study the Existing MySQL MCP Setup (15 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-      <a href="#what-you-should-see">What You Should See</a>
-    <a href="#exercise-2-data-exploration-15-min">Exercise 2: Data Exploration (15 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-      <a href="#what-you-should-see">What You Should See</a>
-    <a href="#exercise-3-operation-verification-30-min">Exercise 3: Operation Verification (30 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-      <a href="#what-you-should-see">What You Should See</a>
-    <a href="#exercise-4-the-self-improvement-coda-15-min">Exercise 4: The Self-Improvement Coda (15 min)</a>
-    <a href="#success-criteria">Success Criteria</a>
-    <a href="#key-takeaways">Key Takeaways</a>
-</nav><h1 id="lab-10-mcp-servers-mysql-amp-data-verification">Lab 10: MCP Servers — MySQL &amp; Data Verification<a class="anchor" href="#lab-10-mcp-servers-mysql-amp-data-verification">&#182;</a></h1>
+<div class="page-header"><h1>Lab 10-mcp-mysql</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><h1 id="lab-10-mcp-servers-mysql-amp-data-verification">Lab 10: MCP Servers — MySQL &amp; Data Verification</h1>
 <p><strong>Duration:</strong> 75 minutes
 <strong>Day:</strong> 3 — Integration
 <strong>Builds On:</strong> Lab 9 (Playwright MCP)
 <strong>Produces:</strong> MySQL MCP configured, data verification workflow demonstrated</p>
 <hr />
-<h2 id="learning-objective">Learning Objective<a class="anchor" href="#learning-objective">&#182;</a></h2>
+<h2 id="learning-objective">Learning Objective</h2>
 <p>You will connect Claude Code to your MySQL database via MCP, then use it to verify that backend operations write correct data. Combined with Playwright MCP from Lab 9, this creates a <strong>full verification loop</strong>: browser → API → database.</p>
 <hr />
-<h2 id="the-key-concept">The Key Concept<a class="anchor" href="#the-key-concept">&#182;</a></h2>
+<h2 id="the-key-concept">The Key Concept</h2>
 <p><strong>MySQL MCP</strong> gives Claude direct SQL query access (read-only) to your database. This lets Claude:
 - Verify that an API operation wrote correct data
 - Investigate bugs by checking actual database state
@@ -127,7 +106,7 @@ MySQL MCP (Database) → sees actual stored data
 Compare all three → any mismatch = bug
 </code></pre>
 <hr />
-<h2 id="setup">Setup<a class="anchor" href="#setup">&#182;</a></h2>
+<h2 id="setup">Setup</h2>
 <pre><code class="language-bash"># Verify MySQL is running
 mysql -h 127.0.0.1 -u root -proot123 -e &quot;SELECT COUNT(*) FROM hr_db.employees;&quot;
 
@@ -140,10 +119,10 @@ mysql -h 127.0.0.1 -u hr_readonly -preadonly_pass hr_db -e &quot;SELECT 1;&quot;
 # Ensure backend + frontend are running from Lab 9
 </code></pre>
 <hr />
-<h2 id="exercise-1-study-the-existing-mysql-mcp-setup-15-min">Exercise 1: Study the Existing MySQL MCP Setup (15 min)<a class="anchor" href="#exercise-1-study-the-existing-mysql-mcp-setup-15-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-1-study-the-existing-mysql-mcp-setup-15-min">Exercise 1: Study the Existing MySQL MCP Setup (15 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Understand how MySQL MCP is configured and verify the connection works.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p><strong>Read <code>.mcp.json</code> at the project root:</strong>
@@ -161,13 +140,13 @@ mysql -h 127.0.0.1 -u hr_readonly -preadonly_pass hr_db -e &quot;SELECT 1;&quot;
    How many departments? How many jobs?</code></p>
 </li>
 </ol>
-<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<h3 id="what-you-should-see">What You Should See</h3>
 <p>Claude runs SQL queries and returns results directly in the conversation. The MySQL MCP uses the read-only user (<code>hr_readonly</code>), so Claude can SELECT but cannot mutate data. No need to open a separate MySQL client.</p>
 <hr />
-<h2 id="exercise-2-data-exploration-15-min">Exercise 2: Data Exploration (15 min)<a class="anchor" href="#exercise-2-data-exploration-15-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-2-data-exploration-15-min">Exercise 2: Data Exploration (15 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Use MySQL MCP to understand the data landscape before verification.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p><strong>Explore the schema:</strong>
@@ -197,13 +176,13 @@ mysql -h 127.0.0.1 -u hr_readonly -preadonly_pass hr_db -e &quot;SELECT 1;&quot;
 <li>Orphaned records in any table?
    ```</li>
 </ol>
-<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<h3 id="what-you-should-see">What You Should See</h3>
 <p>Claude runs precise SQL queries and reports findings. This is how you'd investigate a production data issue — Claude as your SQL co-pilot.</p>
 <hr />
-<h2 id="exercise-3-operation-verification-30-min">Exercise 3: Operation Verification (30 min)<a class="anchor" href="#exercise-3-operation-verification-30-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-3-operation-verification-30-min">Exercise 3: Operation Verification (30 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Verify that a backend operation writes correct data across all relevant tables.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li><strong>Before the operation — capture baseline:</strong>
    ```
@@ -266,13 +245,13 @@ mysql -h 127.0.0.1 -u hr_readonly -preadonly_pass hr_db -e &quot;SELECT 1;&quot;
    and department between the UI and the database query.</code></p>
 </li>
 </ol>
-<h3 id="what-you-should-see">What You Should See<a class="anchor" href="#what-you-should-see">&#182;</a></h3>
+<h3 id="what-you-should-see">What You Should See</h3>
 <p>The full loop:
 - <strong>Database confirms</strong> the hire wrote to 3 tables correctly
 - <strong>Browser confirms</strong> the new employee appears in the UI
 - <strong>Any mismatch</strong> between DB and UI = a bug to investigate</p>
 <hr />
-<h2 id="exercise-4-the-self-improvement-coda-15-min">Exercise 4: The Self-Improvement Coda (15 min)<a class="anchor" href="#exercise-4-the-self-improvement-coda-15-min">&#182;</a></h2>
+<h2 id="exercise-4-the-self-improvement-coda-15-min">Exercise 4: The Self-Improvement Coda (15 min)</h2>
 <ol>
 <li>Add to CLAUDE.md:
    ```markdown
@@ -344,7 +323,7 @@ mysql -h 127.0.0.1 -u hr_readonly -preadonly_pass hr_db -e &quot;SELECT 1;&quot;
 </table>
 <p>The pattern is always the same: add to <code>.mcp.json</code>, restart session, Claude has new tools.</p>
 <hr />
-<h2 id="success-criteria">Success Criteria<a class="anchor" href="#success-criteria">&#182;</a></h2>
+<h2 id="success-criteria">Success Criteria</h2>
 <ul>
 <li>[ ] MySQL MCP configured in <code>.mcp.json</code> with read-only user</li>
 <li>[ ] Claude can query tables and return results</li>
@@ -353,7 +332,7 @@ mysql -h 127.0.0.1 -u hr_readonly -preadonly_pass hr_db -e &quot;SELECT 1;&quot;
 <li>[ ] CLAUDE.md updated with MySQL MCP patterns and verification loop</li>
 </ul>
 <hr />
-<h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">&#182;</a></h2>
+<h2 id="key-takeaways">Key Takeaways</h2>
 <ol>
 <li><strong>Read-only MCP for safety</strong> — verification should never mutate data</li>
 <li><strong>The full verification loop</strong> — Browser + API + Database = complete confidence</li>

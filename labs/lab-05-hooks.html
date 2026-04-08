@@ -80,42 +80,16 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 </head>
 <body>
 <div class="page-wrap">
-<div class="page-header"><h1>Lab 05-hooks</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><nav class="toc">
-<div class="toc-header">Contents</div>
-  <a href="#lab-5-hooks-deterministic-quality-gates">Lab 5: Hooks — Deterministic Quality Gates</a>
-    <a href="#learning-objective">Learning Objective</a>
-    <a href="#the-key-concept">The Key Concept</a>
-    <a href="#setup">Setup</a>
-    <a href="#exercise-1-the-read-only-file-guard-15-min">Exercise 1: The Read-Only File Guard (15 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#why-this-matters">Why This Matters</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-2-the-naming-convention-guard-15-min">Exercise 2: The Naming Convention Guard (15 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#why-this-matters">Why This Matters</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-3-the-pii-leak-detector-15-min">Exercise 3: The PII Leak Detector (15 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#why-this-matters">Why This Matters</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-4-review-your-hooks-10-min">Exercise 4: Review Your Hooks (10 min)</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-4b-bonus-hooks-optional-15-min">Exercise 4b: Bonus Hooks (optional — 15 min)</a>
-      <a href="#goal">Goal</a>
-      <a href="#instructions">Instructions</a>
-    <a href="#exercise-5-the-self-improvement-coda-5-min">Exercise 5: The Self-Improvement Coda (5 min)</a>
-    <a href="#success-criteria">Success Criteria</a>
-    <a href="#key-takeaways">Key Takeaways</a>
-</nav><h1 id="lab-5-hooks-deterministic-quality-gates">Lab 5: Hooks — Deterministic Quality Gates<a class="anchor" href="#lab-5-hooks-deterministic-quality-gates">&#182;</a></h1>
+<div class="page-header"><h1>Lab 05-hooks</h1><div class="subtitle">Read the corresponding markdown in the labs/ directory</div></div><h1 id="lab-5-hooks-deterministic-quality-gates">Lab 5: Hooks — Deterministic Quality Gates</h1>
 <p><strong>Duration:</strong> 60 minutes
 <strong>Day:</strong> 2 — Productivity
 <strong>Builds On:</strong> Lab 1 (CLAUDE.md — rules), Lab 4 (context discipline)
 <strong>Produces:</strong> 3 hooks in <code>.claude/settings.json</code> enforcing enterprise standards</p>
 <hr />
-<h2 id="learning-objective">Learning Objective<a class="anchor" href="#learning-objective">&#182;</a></h2>
+<h2 id="learning-objective">Learning Objective</h2>
 <p>You will see the difference between <strong>advisory rules</strong> (CLAUDE.md — Claude might ignore them) and <strong>structural enforcement</strong> (hooks — Claude physically cannot override them). By the end, you'll understand why hooks are the enterprise governance feature of Claude Code.</p>
 <hr />
-<h2 id="the-key-concept">The Key Concept<a class="anchor" href="#the-key-concept">&#182;</a></h2>
+<h2 id="the-key-concept">The Key Concept</h2>
 <p>Hooks are shell commands that execute automatically at specific lifecycle events. Unlike CLAUDE.md instructions (which Claude might forget at high context), hooks are <strong>guaranteed to execute</strong> every time.</p>
 <p><strong>Two critical events:</strong></p>
 <table>
@@ -152,18 +126,18 @@ input[type="checkbox"] { margin-right: 0.3rem; }
 </code></pre>
 <p><strong>The key insight:</strong> CLAUDE.md states the rules. Hooks <strong>enforce</strong> them.</p>
 <hr />
-<h2 id="setup">Setup<a class="anchor" href="#setup">&#182;</a></h2>
+<h2 id="setup">Setup</h2>
 <pre><code class="language-bash"># Verify the backend compiles cleanly
 cd backend &amp;&amp; mvn compile -q &amp;&amp; echo &quot;Backend: OK&quot;
 </code></pre>
 <p>You should have CLAUDE.md with your rules from Day 1 and the Region/Country/Location entities built.</p>
 <hr />
-<h2 id="exercise-1-the-read-only-file-guard-15-min">Exercise 1: The Read-Only File Guard (15 min)<a class="anchor" href="#exercise-1-the-read-only-file-guard-15-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-1-the-read-only-file-guard-15-min">Exercise 1: The Read-Only File Guard (15 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Create a PreToolUse hook that blocks any edit to <code>database/schema.sql</code>.</p>
-<h3 id="why-this-matters">Why This Matters<a class="anchor" href="#why-this-matters">&#182;</a></h3>
+<h3 id="why-this-matters">Why This Matters</h3>
 <p><code>schema.sql</code> is the reference DDL. Schema changes must go through Flyway migrations. But Claude might try to edit it directly when asked to "update the database schema." A CLAUDE.md rule says "don't edit it" — a hook makes it <strong>impossible</strong>.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <blockquote>
 <p><strong>Reference:</strong> A reference version of <code>.claude/settings.json</code> exists at <code>reference/.claude/settings.json</code>. Create your own with 3 hooks first, then compare at the end. The reference includes 3 additional bonus hooks not covered in this lab — frontend TypeScript check (<code>tsc --noEmit</code>), Flyway migration naming validator, and <code>.env</code> file guard. These are optional real-world extras; your 3 hooks are complete for this exercise.</p>
 </blockquote>
@@ -196,12 +170,12 @@ cd backend &amp;&amp; mvn compile -q &amp;&amp; echo &quot;Backend: OK&quot;
 </li>
 </ol>
 <hr />
-<h2 id="exercise-2-the-naming-convention-guard-15-min">Exercise 2: The Naming Convention Guard (15 min)<a class="anchor" href="#exercise-2-the-naming-convention-guard-15-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-2-the-naming-convention-guard-15-min">Exercise 2: The Naming Convention Guard (15 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Create a PostToolUse hook that rejects Java classes without the <code>Hr</code> prefix.</p>
-<h3 id="why-this-matters">Why This Matters<a class="anchor" href="#why-this-matters">&#182;</a></h3>
+<h3 id="why-this-matters">Why This Matters</h3>
 <p>In a 50-developer enterprise team, naming conventions drift. One developer's <code>EmployeeValidator</code> breaks the pattern. Hooks enforce the convention automatically — every Claude session, every developer.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p>Add the hook:
@@ -222,12 +196,12 @@ cd backend &amp;&amp; mvn compile -q &amp;&amp; echo &quot;Backend: OK&quot;
 <li>Claude self-corrects to <code>HrEmployeeValidator.java</code> without you saying anything</li>
 </ol>
 <hr />
-<h2 id="exercise-3-the-pii-leak-detector-15-min">Exercise 3: The PII Leak Detector (15 min)<a class="anchor" href="#exercise-3-the-pii-leak-detector-15-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-3-the-pii-leak-detector-15-min">Exercise 3: The PII Leak Detector (15 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Create a PostToolUse hook that scans service file changes for sensitive field names in logger statements.</p>
-<h3 id="why-this-matters">Why This Matters<a class="anchor" href="#why-this-matters">&#182;</a></h3>
+<h3 id="why-this-matters">Why This Matters</h3>
 <p>PII in logs is a compliance violation. Code review catches it sometimes; a hook catches it every time. In regulated industries (healthcare, finance), this is a regulatory requirement.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p>Add the hook:
@@ -260,8 +234,8 @@ not "no violations period." For comprehensive scanning, use a separate audit scr
 (<code>grep -r</code> across the whole codebase) as a CI step rather than relying on hooks alone.</p>
 </blockquote>
 <hr />
-<h2 id="exercise-4-review-your-hooks-10-min">Exercise 4: Review Your Hooks (10 min)<a class="anchor" href="#exercise-4-review-your-hooks-10-min">&#182;</a></h2>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h2 id="exercise-4-review-your-hooks-10-min">Exercise 4: Review Your Hooks (10 min)</h2>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p>View the final settings:
@@ -312,10 +286,10 @@ not "no violations period." For comprehensive scanning, use a separate audit scr
    ```</li>
 </ol>
 <hr />
-<h2 id="exercise-4b-bonus-hooks-optional-15-min">Exercise 4b: Bonus Hooks (optional — 15 min)<a class="anchor" href="#exercise-4b-bonus-hooks-optional-15-min">&#182;</a></h2>
-<h3 id="goal">Goal<a class="anchor" href="#goal">&#182;</a></h3>
+<h2 id="exercise-4b-bonus-hooks-optional-15-min">Exercise 4b: Bonus Hooks (optional — 15 min)</h2>
+<h3 id="goal">Goal</h3>
 <p>Add three enterprise-grade bonus hooks that go beyond the core three.</p>
-<h3 id="instructions">Instructions<a class="anchor" href="#instructions">&#182;</a></h3>
+<h3 id="instructions">Instructions</h3>
 <ol>
 <li>
 <p><strong><code>.env</code> file guard</strong> (PreToolUse) — prevents accidentally putting real secrets in <code>.env</code>:
@@ -344,7 +318,7 @@ not "no violations period." For comprehensive scanning, use a separate audit scr
 <p><strong>Note:</strong> The reference <code>.claude/settings.json</code> at <code>reference/.claude/settings.json</code> contains all 6 hooks. Compare yours against it when you're done.</p>
 </blockquote>
 <hr />
-<h2 id="exercise-5-the-self-improvement-coda-5-min">Exercise 5: The Self-Improvement Coda (5 min)<a class="anchor" href="#exercise-5-the-self-improvement-coda-5-min">&#182;</a></h2>
+<h2 id="exercise-5-the-self-improvement-coda-5-min">Exercise 5: The Self-Improvement Coda (5 min)</h2>
 <p>Reflect on the difference:</p>
 <table>
 <thead>
@@ -381,7 +355,7 @@ not "no violations period." For comprehensive scanning, use a separate audit scr
 <p><strong>Think about your codebase:</strong> What rules are currently advisory (code review catches them sometimes) that should be structural (hooks catch them always)?</p>
 </blockquote>
 <hr />
-<h2 id="success-criteria">Success Criteria<a class="anchor" href="#success-criteria">&#182;</a></h2>
+<h2 id="success-criteria">Success Criteria</h2>
 <ul>
 <li>[ ] <code>.claude/settings.json</code> contains at least 3 hooks (schema guard, naming, PII)</li>
 <li>[ ] schema.sql edit attempt is blocked with clear error message</li>
@@ -391,7 +365,7 @@ not "no violations period." For comprehensive scanning, use a separate audit scr
 <li>[ ] (Bonus) All 6 hooks configured — core + bonus</li>
 </ul>
 <hr />
-<h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">&#182;</a></h2>
+<h2 id="key-takeaways">Key Takeaways</h2>
 <ol>
 <li><strong>CLAUDE.md = advisory, Hooks = structural</strong> — use both, for different things</li>
 <li><strong>Hooks run as you, not as Claude</strong> — Claude cannot override or disable them</li>
