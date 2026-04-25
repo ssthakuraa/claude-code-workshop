@@ -2,7 +2,7 @@
 
 This repository contains a 2-day hands-on workshop for mastering Claude Code in enterprise development environments.
 Here is the screen shot of the App so you know you are working in a enviroment that is build enterprise grade.
-
+![Dashboard](hrapp.png)
 ## Repository Structure
 
 - **main branch** - All workshop materials: labs, source code, frontend, database, scripts, and configs
