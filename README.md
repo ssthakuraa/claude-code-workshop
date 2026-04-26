@@ -29,12 +29,10 @@ Here is the screen shot of the App so you know you are working in a enviroment t
 
 ## Workshop Overview
 
-This 4-day workshop teaches enterprise-grade Claude Code usage through hands-on labs:
+This 2-day workshop teaches enterprise-grade Claude Code usage through hands-on labs:
 
-**Day 1 - Foundation**: CLAUDE.md, Plan Mode, Skills & Commands, Context Management
-**Day 2 - Productivity**: Hooks, Subagents, Parallel Sessions & Git Worktrees, Verification Loops
-**Day 3 - Integration**: Playwright MCP, MySQL MCP
-**Day 4 - Mastery**: CI/CD & Permissions, Capstone Project
+**Day 1 - Foundation & Productivity**: CLAUDE.md, Plan Mode, Skills & Commands, Context Management, Hooks, Subagents, Parallel Sessions & Git Worktrees, Verification Loops
+**Day 2 - Integration**: Playwright MCP, MySQL MCP, CI/CD & Permissions, Capstone Project
 
 Each lab builds on the previous ones, progressively teaching Claude Code features while building an HR Enterprise Platform (Spring Boot + React).
 
