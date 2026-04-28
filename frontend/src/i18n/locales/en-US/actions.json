@@ -1,0 +1,157 @@
+{
+  "hire": {
+    "eyebrow": "Workforce action",
+    "title": "Hire Employee",
+    "subtitle": "Complete the onboarding workflow to add a new employee record, assign organization context, and provision an initial account.",
+    "submit": "Hire Employee",
+    "steps": {
+      "personal": { "label": "Personal", "description": "Basic info" },
+      "job": { "label": "Job", "description": "Role & location" },
+      "compensation": { "label": "Compensation", "description": "Salary & type" },
+      "review": { "label": "Review", "description": "Confirm & hire" }
+    },
+    "sections": {
+      "personalEyebrow": "Personal information",
+      "personalTitle": "Start the employee record",
+      "jobEyebrow": "Role assignment",
+      "jobTitle": "Place the hire in the organization",
+      "compensationEyebrow": "Employment terms",
+      "compensationTitle": "Set pay and contract details",
+      "reviewEyebrow": "Review details",
+      "reviewTitle": "Confirm the new hire record"
+    },
+    "fields": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phone": "Phone",
+      "hireDate": "Hire Date",
+      "initialPassword": "Initial Password",
+      "jobTitle": "Job Title",
+      "department": "Department",
+      "manager": "Manager",
+      "annualSalary": "Annual Salary",
+      "commissionPct": "Commission %",
+      "employmentType": "Employment Type",
+      "contractEndDate": "Contract End Date"
+    },
+    "placeholders": {
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "email": "jane.smith@company.com",
+      "phone": "+1 555-0100",
+      "initialPassword": "Min 8 characters",
+      "selectJob": "Select job...",
+      "selectDepartment": "Select department...",
+      "noManager": "No manager"
+    },
+    "salaryBand": "Salary band: {{min}} - {{max}}",
+    "reviewLabels": {
+      "name": "Name",
+      "job": "Job",
+      "department": "Department",
+      "manager": "Manager",
+      "salary": "Salary",
+      "employmentType": "Employment Type",
+      "contractEndDate": "Contract End Date"
+    },
+    "validation": {
+      "required": "Required",
+      "invalidEmail": "Invalid email",
+      "passwordMin": "Min 8 characters"
+    },
+    "toasts": {
+      "success": "{{name}} has been hired successfully!",
+      "error": "Failed to hire employee. Please try again."
+    }
+  },
+  "promote": {
+    "eyebrow": "Workforce action",
+    "title": "Promote Employee",
+    "subtitle": "Current assignment: {{jobTitle}} · {{departmentName}}",
+    "meta": {
+      "employee": "Employee",
+      "availableRoles": "Available roles",
+      "effective": "Effective"
+    },
+    "sectionEyebrow": "Role change",
+    "sectionTitle": "Select the destination assignment",
+    "fields": {
+      "newJobTitle": "New Job Title",
+      "newSalary": "New Salary",
+      "effectiveDate": "Effective Date"
+    },
+    "placeholders": {
+      "selectNewJob": "Select new job..."
+    },
+    "salaryBand": "New salary band: {{min}} - {{max}}",
+    "buttons": {
+      "confirm": "Confirm Promotion"
+    },
+    "toasts": {
+      "success": "{{name}} promoted to {{jobTitle}}!",
+      "error": "Promotion failed. Please try again."
+    }
+  },
+  "transfer": {
+    "eyebrow": "Workforce action",
+    "title": "Transfer Employee",
+    "subtitle": "Current department: {{departmentName}}",
+    "meta": {
+      "employee": "Employee",
+      "departments": "Departments",
+      "effective": "Effective"
+    },
+    "sectionEyebrow": "Organization change",
+    "sectionTitle": "Assign a new reporting context",
+    "fields": {
+      "newDepartment": "New Department",
+      "newManager": "New Manager",
+      "effectiveDate": "Effective Date"
+    },
+    "placeholders": {
+      "selectDepartment": "Select department...",
+      "noChange": "No change"
+    },
+    "buttons": {
+      "confirm": "Confirm Transfer"
+    },
+    "toasts": {
+      "success": "{{name}} transferred to {{department}}!",
+      "error": "Transfer failed. Please try again.",
+      "fallbackDepartment": "new department"
+    }
+  },
+  "terminate": {
+    "eyebrow": "Workforce action",
+    "title": "Terminate Employee",
+    "subtitle": "This action will soft-delete the employee record and deactivate the associated account.",
+    "meta": {
+      "employee": "Employee",
+      "currentStatus": "Current status",
+      "effective": "Effective"
+    },
+    "sectionEyebrow": "Termination details",
+    "sectionTitle": "Capture the exit information",
+    "fields": {
+      "effectiveDate": "Effective Date",
+      "reason": "Reason / Notes"
+    },
+    "placeholders": {
+      "reason": "Voluntary resignation, contract end, performance..."
+    },
+    "hint": "Use release-ready wording. The note becomes part of the employee audit trail.",
+    "buttons": {
+      "terminate": "Terminate Employee",
+      "confirm": "Yes, Terminate"
+    },
+    "dialog": {
+      "title": "Confirm Termination",
+      "description": "Are you sure you want to terminate {{name}}? This will deactivate their account and mark them as terminated."
+    },
+    "toasts": {
+      "success": "{{name}} has been terminated.",
+      "error": "Termination failed. Please try again."
+    }
+  }
+}

@@ -1,0 +1,25 @@
+public Integer promoteEmployee(HrPromoteRequest request) {
+    try (Connection connection = getConnection()) {
+        connection.setAutoCommit(false);
+        try {
+            checkIdempotency(connection, request.getIdempotencyKey(), "POST /employees/promote");
+            EmployeeState employee = loadEmployeeState(connection, request.getEmployeeId());
+            JobInfo newJob = loadJob(connection, request.getNewJobId());
+            validateSalaryForJob(request.getNewSalary(), newJob);
+
+            LocalDate effectiveDate = request.getEffectiveDate() != null ? request.getEffectiveDate() : LocalDate.now();
+            insertCurrentAssignmentHistory(connection, employee, effectiveDate.minusDays(1));
+            updatePromotion(connection, employee.employeeId(), newJob.jobId(), request.getNewSalary());
+            recordIdempotency(connection, request.getIdempotencyKey(), "POST /employees/promote", 200);
+            connection.commit();
+            return employee.employeeId();
+        } catch (Exception ex) {
+            rollbackQuietly(connection, ex);
+            throw ex;
+        }
+    } catch (HrConflictException | HrBusinessRuleViolationException | HrResourceNotFoundException ex) {
+        throw ex;
+    } catch (SQLException ex) {
+        throw new IllegalStateException("DB_ACCESS_ERROR", ex);
+    }
+}

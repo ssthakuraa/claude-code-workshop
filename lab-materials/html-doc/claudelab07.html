@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Lab 07: Parallel Sessions &amp; Isolated Workspaces</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="doc-shell">
+    <header class="doc-header">
+      <div class="doc-header-meta">
+        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-divider"></span>
+        <span class="doc-page-label">Lab 07</span>
+      </div>
+      <div class="doc-header-title">Lab 07: Parallel Sessions & Isolated Workspaces</div>
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <a class="doc-nav-link doc-nav-prev" href="codexlab06.html">← Lab 06</a>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <a class="doc-nav-link doc-nav-next" href="codexlab08.html">Lab 08 →</a>
+      </nav>
+    </header>
+    <main class="doc-content">
+<section id="lab-07-parallel-sessions--isolated-workspaces"
+class="level1">
+<h1>Lab 07: Parallel Sessions &amp; Isolated Workspaces</h1>
+<p><strong>Duration:</strong> 60 minutes</p>
+<blockquote>
+<p>Recommended Day 2 order: <strong>Lab 09 -&gt; Lab 08 -&gt; Lab 07
+-&gt; Lab 10 -&gt; Lab 11 -&gt; optional Lab 12</strong>.</p>
+</blockquote>
+<section id="learning-objective" class="level2">
+<h2>Learning Objective</h2>
+<p>You will run multiple Codex sessions at once, each in its own
+isolated <code>git worktree</code>. The goal is to see how parallel work
+compresses multi-slice delivery time without causing file
+collisions.</p>
+<hr />
+</section>
+<section id="the-key-concept" class="level2">
+<h2>The Key Concept</h2>
+<p>One session can usually make progress on one main slice at a time.
+Multiple independent slices go faster when each session gets its own
+isolated working directory.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /absolute/path/to/codex-workshop</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ../codex-workshop-parallel</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> ../codex-workshop-parallel/workspace-a ../codex-workshop-parallel/workspace-b ../codex-workshop-parallel/workspace-c</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree add ../codex-workshop-parallel/workspace-a</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree add ../codex-workshop-parallel/workspace-b</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree add ../codex-workshop-parallel/workspace-c</span></code></pre></div>
+<p>Each worktree carries the same <code>AGENTS.md</code>, docs, and
+code, but the edits stay isolated until you choose what to bring
+back.</p>
+<p>If your current learner workspace came from a GitHub zip instead of
+<code>git clone</code>, make a normal Git clone of the repo before this
+lab. <code>git worktree</code> needs a real Git repository.</p>
+<hr />
+</section>
+<section id="exercise-1-create-isolated-workspaces-10-min"
+class="level2">
+<h2>Exercise 1: Create Isolated Workspaces (10 min)</h2>
+<section id="goal" class="level3">
+<h3>Goal</h3>
+<p>Set up two or three parallel working directories.</p>
+</section>
+<section id="instructions" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Confirm the worktrees exist:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> ../codex-workshop-parallel/workspace-a</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> ../codex-workshop-parallel/workspace-b</span></code></pre></div></li>
+<li><p>Verify they started from the same root guidance:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span> <span class="at">-q</span> AGENTS.md ../codex-workshop-parallel/workspace-a/AGENTS.md</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span> <span class="at">-q</span> AGENTS.md ../codex-workshop-parallel/workspace-b/AGENTS.md</span></code></pre></div></li>
+<li><p>Open separate terminals:</p>
+<ul>
+<li>Terminal A -&gt;
+<code>../codex-workshop-parallel/workspace-a</code></li>
+<li>Terminal B -&gt;
+<code>../codex-workshop-parallel/workspace-b</code></li>
+<li>optional Terminal C -&gt;
+<code>../codex-workshop-parallel/workspace-c</code></li>
+</ul></li>
+<li><p>Start a Codex session in each workspace.</p></li>
+</ol>
+<hr />
+</section>
+</section>
+<section id="exercise-2-run-two-independent-slices-in-parallel-30-min"
+class="level2">
+<h2>Exercise 2: Run Two Independent Slices In Parallel (30 min)</h2>
+<section id="goal-1" class="level3">
+<h3>Goal</h3>
+<p>Give each workspace a bounded, independent task.</p>
+</section>
+<section id="instructions-1" class="level3">
+<h3>Instructions</h3>
+<p><strong>Workspace A: Departments page</strong></p>
+<pre class="text"><code>This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use `reference/` unless this chapter explicitly allows it or you need rescue help.
+
+Build the Departments page for the HR app.
+
+Requirements:
+- create `frontend/src/pages/organization/DepartmentsPage.tsx`
+- follow existing list/detail layout patterns already present in the repo
+- left side: department tree
+- right side: selected department details
+- admin and HR specialist actions only where existing role patterns support them
+- use the live `/app/hr/api/v1/departments` contract</code></pre>
+<p><strong>Workspace B: Jobs page</strong></p>
+<pre class="text"><code>This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use `reference/` unless this chapter explicitly allows it or you need rescue help.
+
+Build the Jobs page for the HR app.
+
+Requirements:
+- create `frontend/src/pages/organization/JobsPage.tsx`
+- follow existing list/table/filter page patterns already present in the repo
+- show job id, title, minimum salary, and maximum salary
+- support create/edit validation for min &lt; max
+- use the live `/app/hr/api/v1/jobs` contract</code></pre>
+<p>Switch between the sessions while they work. The point is not to
+babysit one session to completion before the other starts.</p>
+<hr />
+</section>
+</section>
+<section id="exercise-3-validate-and-copy-back-15-min" class="level2">
+<h2>Exercise 3: Validate And Copy Back (15 min)</h2>
+<section id="goal-2" class="level3">
+<h3>Goal</h3>
+<p>Verify each isolated workspace, then copy back only the intended
+files.</p>
+</section>
+<section id="instructions-2" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask each workspace to verify its own frontend slice:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../codex-workshop-parallel/workspace-a/frontend <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> run build</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../codex-workshop-parallel/workspace-b/frontend <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> run build</span></code></pre></div></li>
+<li><p>Compare each worktree with the main workspace:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span> <span class="at">-rq</span> . ../codex-workshop-parallel/workspace-a <span class="kw">|</span> <span class="fu">head</span> <span class="at">-50</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span> <span class="at">-rq</span> . ../codex-workshop-parallel/workspace-b <span class="kw">|</span> <span class="fu">head</span> <span class="at">-50</span></span></code></pre></div></li>
+<li><p>Copy back only the intended feature files with an exact Codex
+prompt:</p>
+<pre class="text"><code>Compare the completed frontend changes in:
+- `../codex-workshop-parallel/workspace-a`
+- `../codex-workshop-parallel/workspace-b`
+
+Restore only the intended Lab 07 feature files into my main workspace.
+Inspect only these candidate paths before copying anything:
+- `frontend/src/pages/organization/DepartmentsPage.tsx`
+- `frontend/src/pages/organization/JobsPage.tsx`
+- `frontend/src/routes/router.tsx`
+- `frontend/src/components/hr/layout/HrSidebar.tsx`
+- `frontend/src/components/hr/layout/HrCommandPalette.tsx`
+- `frontend/src/utils/hrWorkspaceChrome.ts`
+- `frontend/src/utils/hrGlobalSearch.ts`
+
+Copy back only the minimal intended files.
+Do not replace the whole workspace.
+Then tell me exactly which files were copied back.</code></pre></li>
+<li><p>Rebuild in the main workspace:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> frontend <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> run build</span></code></pre></div></li>
+<li><p>Clean up the temporary worktrees when finished:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree remove ../codex-workshop-parallel/workspace-a</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree remove ../codex-workshop-parallel/workspace-b</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree remove ../codex-workshop-parallel/workspace-c</span></code></pre></div></li>
+</ol>
+<hr />
+</section>
+</section>
+<section id="exercise-4-capture-the-rule-5-min" class="level2">
+<h2>Exercise 4: Capture The Rule (5 min)</h2>
+<ol type="1">
+<li><p>Add a short rule block to <code>AGENTS.md</code>:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Parallel Development</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>For independent slices, use isolated <span class="in">`git worktree`</span> workspaces instead of sharing one working tree</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Validate each worktree before bringing files back to the main workspace</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Merge back only the intended files, not the whole temporary workspace</span></code></pre></div></li>
+<li><p>Reflect:</p>
+<ul>
+<li>Which backlog items in your real project could be split safely into
+isolated workspace copies?</li>
+<li>What made these two slices safe to parallelize?</li>
+</ul></li>
+</ol>
+<hr />
+</section>
+<section id="success-criteria" class="level2">
+<h2>Success Criteria</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />At least two isolated worktrees were
+created</label></li>
+<li><label><input type="checkbox" />Two Codex sessions ran against
+different worktrees</label></li>
+<li><label><input type="checkbox" />Each worktree was validated before
+merge-back</label></li>
+<li><label><input type="checkbox" />Only the intended files were copied
+into the main workspace</label></li>
+<li><label><input type="checkbox" />The main frontend still built after
+the copy-back</label></li>
+</ul>
+<hr />
+</section>
+<section id="key-takeaways" class="level2">
+<h2>Key Takeaways</h2>
+<ol type="1">
+<li>Parallel sessions need isolated worktrees, not shared edits in one
+tree.</li>
+<li>Validation belongs in each temporary worktree before
+merge-back.</li>
+<li>Merge back only the finished files you actually want.</li>
+<li>Parallelism helps most when the slices are independent and
+bounded.</li>
+</ol>
+</section>
+</section>
+    </main>
+    <footer class="doc-footer">
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <a class="doc-nav-link doc-nav-prev" href="codexlab06.html">← Lab 06</a>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <a class="doc-nav-link doc-nav-next" href="codexlab08.html">Lab 08 →</a>
+      </nav>
+    </footer>
+  </div>
+<script>
+  (function () {
+    const copyIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<rect x="9" y="7" width="10" height="12" rx="2"></rect>',
+      '<rect x="5" y="3" width="10" height="12" rx="2"></rect>',
+      '</svg>'
+    ].join('');
+    const copiedIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<path d="M6 12.5l4 4 8-9"></path>',
+      '</svg>'
+    ].join('');
+
+    const blocks = document.querySelectorAll('pre > code');
+    for (const code of blocks) {
+      const pre = code.parentElement;
+      if (!pre || pre.dataset.copyReady === 'true') continue;
+      pre.dataset.copyReady = 'true';
+
+      const shell = document.createElement('div');
+      shell.className = 'code-block-shell';
+      const footer = document.createElement('div');
+      footer.className = 'code-block-footer';
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code-button';
+      button.innerHTML = copyIcon;
+      button.setAttribute('aria-label', 'Copy code block');
+      button.setAttribute('title', 'Copy code block');
+
+      button.addEventListener('click', async function () {
+        const text = code.innerText;
+        try {
+          await navigator.clipboard.writeText(text);
+          button.innerHTML = copiedIcon;
+          button.setAttribute('aria-label', 'Copied');
+          button.setAttribute('title', 'Copied');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1400);
+        } catch (error) {
+          button.innerHTML = copyIcon;
+          button.setAttribute('aria-label', 'Copy failed');
+          button.setAttribute('title', 'Copy failed');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1800);
+        }
+      });
+
+      pre.parentNode.insertBefore(shell, pre);
+      shell.appendChild(pre);
+      footer.appendChild(button);
+      shell.appendChild(footer);
+    }
+  }());
+</script>
+</body>
+</html>

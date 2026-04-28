@@ -1,0 +1,31 @@
+{
+  "directory": {
+    "navLabel": "आकलन निर्देशिका",
+    "eyebrow": "समीक्षक कार्यक्षेत्र",
+    "title": "आकलन निर्देशिका",
+    "subtitle": "एचआर विशेषज्ञों और प्रबंधकों के लिए बैकएंड-नियंत्रित पहुंच के साथ अपने दायरे की आकलन गतिविधि देखें।",
+    "searchEmployeePlaceholder": "कर्मचारी नाम से खोजें...",
+    "activeEmployeeSearch": "कर्मचारी: {{query}}",
+    "emptyTitle": "वर्तमान फ़िल्टर से कोई आकलन मेल नहीं खाता",
+    "emptyDescription": "परिणाम बढ़ाने के लिए खोज या फ़िल्टर बदलें।",
+    "unassignedReviewer": "समीक्षक असाइन नहीं है",
+    "employeeMeta": "कर्मचारी आईडी {{id}}",
+    "filters": {
+      "cycle": "चक्र",
+      "cycleSearch": "चक्र खोजें"
+    },
+    "columns": {
+      "employee": "कर्मचारी",
+      "department": "विभाग",
+      "cycle": "चक्र",
+      "status": "स्थिति",
+      "reviewer": "समीक्षक",
+      "goalCompletionPct": "लक्ष्य",
+      "competencyScore": "क्षमता",
+      "updatedAt": "अपडेट"
+    },
+    "csvHeaders": {
+      "employeeId": "कर्मचारी आईडी"
+    }
+  }
+}

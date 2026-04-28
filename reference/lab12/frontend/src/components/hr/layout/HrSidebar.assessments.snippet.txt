@@ -1,0 +1,8 @@
+Add this item inside the existing `Workflows` group in `localizedSections`:
+
+            {
+              label: t('directory.navLabel', { ns: 'assessments' }),
+              href: '/hr/assessments',
+              icon: <FileText size={14} />,
+              roles: ['ADMIN', 'HR_SPECIALIST', 'MANAGER'],
+            },

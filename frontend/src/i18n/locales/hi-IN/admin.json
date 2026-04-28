@@ -1,0 +1,150 @@
+{
+  "notifications": {
+    "eyebrow": "इनबॉक्स",
+    "title": "सूचनाएँ",
+    "subtitle": "एचआर गतिविधि से जुड़ी वर्कफ़्लो चेतावनियाँ, संचालन संबंधी अनुस्मारक और सिस्टम-जनित संदेश देखें।",
+    "markAllRead": "सभी को पढ़ा हुआ चिह्नित करें",
+    "loadFailed": "सूचनाएँ लोड नहीं हो सकीं।",
+    "empty": "कोई सूचना नहीं मिली।"
+  },
+  "audit": {
+    "eyebrow": "शासन",
+    "title": "ऑडिट लॉग",
+    "subtitle": "लाइव एचआर एप्लिकेशन में सिस्टम परिवर्तन और डेटा बदलावों की समीक्षा करें।",
+    "tabs": {
+      "all": "सभी तालिकाएँ",
+      "employees": "कर्मचारी",
+      "departments": "विभाग",
+      "jobs": "पद",
+      "users": "उपयोगकर्ता",
+      "jobHistory": "जॉब इतिहास"
+    },
+    "columns": {
+      "action": "कार्रवाई",
+      "entity": "इकाई",
+      "record": "रिकॉर्ड",
+      "changedAt": "परिवर्तन समय"
+    },
+    "meta": {
+      "rows": "पंक्तियाँ",
+      "filter": "फ़िल्टर",
+      "matched": "मिले"
+    },
+    "states": {
+      "loadFailed": "ऑडिट लॉग लोड नहीं हो सका।",
+      "before": "पहले",
+      "after": "बाद में",
+      "showingFirst": "{{total}} में से पहले {{limit}} मिलते ऑडिट इवेंट दिखाए जा रहे हैं",
+      "showingMatched": "{{count}} मिलते ऑडिट इवेंट दिखाए जा रहे हैं",
+      "refineFilter": "ऑडिट स्ट्रीम को सीमित करने के लिए तालिका फ़िल्टर परिष्कृत करें।",
+      "expandRow": "पहले और बाद के पेलोड विवरण देखने के लिए पंक्ति खोलें।",
+      "emptyTitle": "कोई ऑडिट लॉग प्रविष्टि नहीं मिली",
+      "emptyDescription": "दूसरा तालिका फ़िल्टर आज़माएँ या अधिक सिस्टम गतिविधि के बाद फिर देखें।"
+    }
+  },
+  "assessmentCycles": {
+    "navLabel": "असेसमेंट साइकिल",
+    "eyebrow": "असेसमेंट सेटअप",
+    "title": "असेसमेंट साइकिल",
+    "subtitle": "रिव्यू विंडो, सक्रिय स्थिति और अनुवादित लेबल सेट करें जिनका उपयोग आगे कर्मचारी असेसमेंट करेंगे।",
+    "meta": {
+      "currentLocale": "वर्तमान लोकेल",
+      "previewLabel": "पूर्वावलोकन लेबल"
+    },
+    "actions": {
+      "newCycle": "नया साइकिल",
+      "saveChanges": "परिवर्तन सहेजें",
+      "activate": "सक्रिय करें",
+      "deactivate": "निष्क्रिय करें"
+    },
+    "toasts": {
+      "createSuccess": "{{code}} बनाया गया।",
+      "updateSuccess": "{{code}} अपडेट किया गया।"
+    },
+    "statuses": {
+      "PLANNED": "योजनाबद्ध",
+      "OPEN": "खुला",
+      "CLOSED": "बंद"
+    },
+    "states": {
+      "active": "सक्रिय",
+      "inactive": "निष्क्रिय",
+      "none": "कोई नहीं"
+    },
+    "periodTypes": {
+      "ANNUAL": "वार्षिक",
+      "HALF": "अर्धवार्षिक",
+      "QUARTER": "त्रैमासिक"
+    },
+    "stats": {
+      "totalTitle": "साइकिल सूची",
+      "totalValue": "{{count}} साइकिल",
+      "totalDetail": "मुख्य स्कीमा आधाररेखा सक्रिय PostgreSQL ऐप में सीड की गई है।",
+      "openTitle": "वर्तमान खुला साइकिल",
+      "openDetailFallback": "चुनें कि कौन सा साइकिल मैनेजर और HR के लिए उपलब्ध होना चाहिए।",
+      "activeTitle": "सक्रिय पंक्तियां",
+      "activeValue": "{{count}} सक्रिय",
+      "activeDetail": "निष्क्रिय पंक्तियां इतिहास के लिए दिखती रहेंगी लेकिन आगे चयन योग्य नहीं होंगी।",
+      "translationTitle": "अनुवाद कवरेज",
+      "translationDetail": "दिखाता है कि हर साइकिल वर्तमान MLS/NLS आधाररेखा के लिए तैयार है या नहीं।"
+    },
+    "list": {
+      "title": "साइकिल सूची",
+      "subtitle": "एक ही स्थान पर हर असेसमेंट साइकिल की समीक्षा और प्रबंधन करें।",
+      "filteredCount": "{{total}} में से {{count}} दिख रहे हैं",
+      "activeCount": "{{count}} सक्रिय",
+      "openCycle": "खुला: {{value}}",
+      "translationCoverage": "अनुवाद {{value}}",
+      "emptyState": "मौजूदा खोज या स्थिति फ़िल्टर से कोई साइकिल मेल नहीं खाता।",
+      "order": "प्रदर्शन क्रम {{value}}",
+      "localePreview": "लेबल: {{value}}",
+      "columns": {
+        "cycleCode": "कोड",
+        "label": "लेबल",
+        "status": "स्थिति",
+        "periodType": "अवधि",
+        "dateRange": "तिथि सीमा",
+        "active": "सक्रिय",
+        "displayOrder": "क्रम"
+      }
+    },
+    "filters": {
+      "status": "स्थिति",
+      "searchPlaceholder": "साइकिल कोड या अनुवादित लेबल से खोजें..."
+    },
+    "form": {
+      "title": "सेटअप पैनल",
+      "subtitle": "चुने गए साइकिल के विवरण और उपलब्धता को अपडेट करें।",
+      "cycleCode": "साइकिल कोड",
+      "displayOrder": "प्रदर्शन क्रम",
+      "defaultLabel": "डिफॉल्ट लेबल",
+      "periodType": "अवधि प्रकार",
+      "status": "साइकिल स्थिति",
+      "startDate": "प्रारंभ तिथि",
+      "endDate": "समाप्ति तिथि"
+    },
+    "translations": {
+      "title": "अनुवाद कवरेज",
+      "subtitle": "समर्थित भाषाओं के लिए स्थानीयकृत लेबल की समीक्षा करें।",
+      "complete": "पूर्ण",
+      "missing": "अनुपस्थित",
+      "placeholder": "{{locale}} के लिए स्थानीयकृत लेबल"
+    },
+    "guidance": {
+      "title": "सेटअप नियम",
+      "subtitle": "यही संचालन नियम इस पेज और स्कीमा परिवर्तन के पीछे हैं।",
+      "ruleOneTitle": "एकल स्रोत",
+      "ruleOneText": "मुख्य ऐप `aihr_assessment_cycles` का स्वामी है; Lab 12 को इसे संदर्भित करना चाहिए, दोबारा परिभाषित नहीं।",
+      "ruleTwoTitle": "MLS/NLS तैयार",
+      "ruleTwoText": "साइकिल लेबल `default_label` और अनुवाद ओवरराइड से आने चाहिए, हार्डकोडेड UI स्ट्रिंग से नहीं।",
+      "ruleThreeTitle": "Lab 12 अनुकूलता",
+      "ruleThreeText": "वैकल्पिक कैपस्टोन तालिका `aihr_employee_assessments` होनी चाहिए और `cycle_code` का उपयोग करे।"
+    },
+    "footer": {
+      "auditLogLabel": "ऑडिट लॉग",
+      "auditLogDescription": "देखें कि भविष्य के सेटअप परिवर्तन गवर्नेंस इतिहास में कैसे दिखने चाहिए।",
+      "settingsLabel": "उपयोगकर्ता सेटिंग्स",
+      "settingsDescription": "स्थानीयकृत साइकिल लेबल के साथ भाषा वरीयताओं की जांच करें।"
+    }
+  }
+}

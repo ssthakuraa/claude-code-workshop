@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Codex Lab Reference Card — Best Practices Summary</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="doc-shell">
+    <header class="doc-header">
+      <div class="doc-header-meta">
+        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-divider"></span>
+        <span class="doc-page-label">Reference Card</span>
+      </div>
+      <div class="doc-header-title">Codex Lab Reference Card — Best Practices Summary</div>
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <a class="doc-nav-link doc-nav-prev" href="codexlab12.html">← Lab 12</a>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <span class="doc-nav-link is-disabled doc-nav-next">Next →</span>
+      </nav>
+    </header>
+    <main class="doc-content">
+<section id="codex-lab-reference-card--best-practices-summary"
+class="level1">
+<h1>Codex Lab Reference Card — Best Practices Summary</h1>
+<p><strong>Duration:</strong> 10 to 15 minutes</p>
+<p>This final reference is intentionally compact. It should feel like a
+durable operating card, not leftover notes. The goal is to leave the
+learner with something short enough to revisit under delivery pressure
+and specific enough to prevent expensive mistakes.</p>
+<section id="learning-objective" class="level2">
+<h2>Learning Objective</h2>
+<p>You will distill the course into a short, reusable self-check that
+helps you start and finish real work without re-reading the full lab
+set.</p>
+</section>
+<section id="the-key-concept" class="level2">
+<h2>The Key Concept</h2>
+<p>The best reference cards are short enough to use and concrete enough
+to change behavior. If the card reads like a chapter summary, it is too
+broad. If it reads like slogans, it is too vague.</p>
+</section>
+<section id="suggested-exercise" class="level2">
+<h2>Suggested Exercise</h2>
+<p>After reading the table below, pick:</p>
+<ol type="1">
+<li>the five rules most likely to prevent expensive mistakes in this
+repo</li>
+<li>the three rules that protect quality most strongly</li>
+<li>the two rules you are most likely to forget under delivery
+pressure</li>
+</ol>
+<p>Then rewrite those ten items in your own words if needed, as long as
+the meaning stays intact.</p>
+</section>
+<section id="best-practices-reference-card" class="level2">
+<h2>Best Practices Reference Card</h2>
+<table>
+<thead>
+<tr>
+<th>Do</th>
+<th>Don't</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Start with the prerequisite bring-up lab and align the workspace to
+the learner VM and database.</td>
+<td>Treat every learner machine as if it has identical host, browser,
+and database setup.</td>
+</tr>
+<tr>
+<td>Read <code>AGENTS.md</code>, the learner workspace guide, and the
+relevant docs before coding.</td>
+<td>Start by asking Codex to build a large feature from memory.</td>
+</tr>
+<tr>
+<td>Ask for a repo-grounded plan before multi-file or high-risk
+work.</td>
+<td>Skip directly to implementation when scope or constraints are still
+fuzzy.</td>
+</tr>
+<tr>
+<td>Improve the task brief before asking Codex to solve it.</td>
+<td>Accept a vague feature request as implementation-ready.</td>
+</tr>
+<tr>
+<td>Read examples before generation and docs before code.</td>
+<td>Invent patterns without checking how the repo already works.</td>
+</tr>
+<tr>
+<td>Keep the learner starter substantial and only remove surgical
+exercise-specific slices.</td>
+<td>Turn the starter workspace into a thin scaffold that no longer feels
+real.</td>
+</tr>
+<tr>
+<td>Promote repeated corrections into the right mechanism:
+<code>AGENTS.md</code>, skills, workflows, repo config, or reference
+material.</td>
+<td>Keep fixing the same mistake manually in every new
+conversation.</td>
+</tr>
+<tr>
+<td>Keep <code>AGENTS.md</code> lean, durable, and repo-specific.</td>
+<td>Turn <code>AGENTS.md</code> into a giant procedural dump.</td>
+</tr>
+<tr>
+<td>Use skills and reusable workflow artifacts for repeatable middle
+sections of work.</td>
+<td>Put every repeated process directly into
+<code>AGENTS.md</code>.</td>
+</tr>
+<tr>
+<td>Use browser, API, and database verification when a change spans
+layers.</td>
+<td>Stop after the UI "looks right" in one view.</td>
+</tr>
+<tr>
+<td>Treat PostgreSQL as the active local runtime direction in this
+workspace.</td>
+<td>Reintroduce legacy vendor-specific, MySQL-only, or other stale
+runtime assumptions.</td>
+</tr>
+<tr>
+<td>Use the repo's current browser-verification path and repo rules;
+record fallbacks explicitly when the host cannot launch the preferred
+browser.</td>
+<td>Invent bundled browser runtimes or switch browser/tooling
+assumptions silently.</td>
+</tr>
+<tr>
+<td>Start fresh sessions between unrelated tasks and summarize before
+continuing long ones.</td>
+<td>Let stale context accumulate until Codex starts guessing.</td>
+</tr>
+<tr>
+<td>Use worklists and resume prompts for tasks that may span sessions or
+days.</td>
+<td>Trust memory to carry long-running work forward cleanly.</td>
+</tr>
+<tr>
+<td>Require at least one explicit self-review before marking work
+complete.</td>
+<td>Treat the first workable output as finished.</td>
+</tr>
+<tr>
+<td>For high-stakes work, do a second review pass focused on learner
+impact and clarity.</td>
+<td>Assume technical correctness alone makes training material
+ready.</td>
+</tr>
+<tr>
+<td>Use a bounded pilot with named review roles and evidence before
+broader rollout.</td>
+<td>Announce broad adoption without stop conditions or evidence
+gates.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="what-good-looks-like" class="level2">
+<h2>What Good Looks Like</h2>
+<p>By the end of the course, this card should feel usable under time
+pressure. If you would not actually consult it before a real task,
+tighten it until you would.</p>
+</section>
+<section id="use-in-this-workspace" class="level2">
+<h2>Use In This Workspace</h2>
+<p>Keep this card close to:</p>
+<ul>
+<li>the learner workspace guide in
+<code>lab-materials/student-workspace-guide.md</code></li>
+<li>the Codex lab markdown set in <code>lab-materials/</code></li>
+</ul>
+</section>
+<section id="final-check" class="level2">
+<h2>Final Check</h2>
+<p>Before starting meaningful Codex-assisted work in this repo, ask:</p>
+<ol type="1">
+<li>Do I understand the real runtime direction and repo
+conventions?</li>
+<li>Do I need a plan, a skill, a workflow artifact, a repo-config
+change, or a reference file?</li>
+<li>How will I verify the result?</li>
+<li>What needs to be updated so the next session does not rediscover my
+work?</li>
+</ol>
+</section>
+</section>
+    </main>
+    <footer class="doc-footer">
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <a class="doc-nav-link doc-nav-prev" href="codexlab12.html">← Lab 12</a>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <span class="doc-nav-link is-disabled doc-nav-next">Next →</span>
+      </nav>
+    </footer>
+  </div>
+<script>
+  (function () {
+    const copyIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<rect x="9" y="7" width="10" height="12" rx="2"></rect>',
+      '<rect x="5" y="3" width="10" height="12" rx="2"></rect>',
+      '</svg>'
+    ].join('');
+    const copiedIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<path d="M6 12.5l4 4 8-9"></path>',
+      '</svg>'
+    ].join('');
+
+    const blocks = document.querySelectorAll('pre > code');
+    for (const code of blocks) {
+      const pre = code.parentElement;
+      if (!pre || pre.dataset.copyReady === 'true') continue;
+      pre.dataset.copyReady = 'true';
+
+      const shell = document.createElement('div');
+      shell.className = 'code-block-shell';
+      const footer = document.createElement('div');
+      footer.className = 'code-block-footer';
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code-button';
+      button.innerHTML = copyIcon;
+      button.setAttribute('aria-label', 'Copy code block');
+      button.setAttribute('title', 'Copy code block');
+
+      button.addEventListener('click', async function () {
+        const text = code.innerText;
+        try {
+          await navigator.clipboard.writeText(text);
+          button.innerHTML = copiedIcon;
+          button.setAttribute('aria-label', 'Copied');
+          button.setAttribute('title', 'Copied');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1400);
+        } catch (error) {
+          button.innerHTML = copyIcon;
+          button.setAttribute('aria-label', 'Copy failed');
+          button.setAttribute('title', 'Copy failed');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1800);
+        }
+      });
+
+      pre.parentNode.insertBefore(shell, pre);
+      shell.appendChild(pre);
+      footer.appendChild(button);
+      shell.appendChild(footer);
+    }
+  }());
+</script>
+</body>
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Lab 03: Skills &amp; Reusable Workflows — Repo Skills</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="doc-shell">
+    <header class="doc-header">
+      <div class="doc-header-meta">
+        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-divider"></span>
+        <span class="doc-page-label">Lab 03</span>
+      </div>
+      <div class="doc-header-title">Lab 03: Skills & Reusable Workflows — Repo Skills</div>
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <a class="doc-nav-link doc-nav-prev" href="codexlab02.html">← Lab 02</a>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <a class="doc-nav-link doc-nav-next" href="codexlab04.html">Lab 04 →</a>
+      </nav>
+    </header>
+    <main class="doc-content">
+<section id="lab-03-skills--reusable-workflows--repo-skills"
+class="level1">
+<h1>Lab 03: Skills &amp; Reusable Workflows — Repo Skills</h1>
+<p><strong>Duration:</strong> 60 minutes</p>
+<section id="learning-objective" class="level2">
+<h2>Learning Objective</h2>
+<p>You will create a custom skill that encodes a repeatable pattern,
+then use it to scaffold a backend module in a single prompt. You will
+also create a second skill for repeatable verification work. The
+contrast between manual restatement and a reusable skill demonstrates
+why encoding patterns is the #1 productivity multiplier.</p>
+<hr />
+</section>
+<section id="the-key-concepts" class="level2">
+<h2>The Key Concepts</h2>
+<section id="skills" class="level3">
+<h3>Skills</h3>
+<ul>
+<li>Skills are reusable, scoped instruction packs for Codex.</li>
+<li>Unlike AGENTS.md (loaded every session), skills are selective and
+task-specific — keeping context lean.</li>
+<li>They can include templates, scripts, and reference files.</li>
+<li>For this lab, repo-scoped skills live under
+<code>.agents/skills/</code>.</li>
+<li><code>SKILL.md</code> is required. Optional metadata can live under
+<code>agents/openai.yaml</code>.</li>
+</ul>
+</section>
+<section id="reusable-workflow-artifacts" class="level3">
+<h3>Reusable Workflow Artifacts</h3>
+<ul>
+<li>In Codex, a skill is the cleanest repo-native way to package a
+repeated workflow.</li>
+<li>That means this lab uses a second skill for verification instead of
+a loose markdown command note.</li>
+<li>The durable lesson is still the same: if a workflow repeats, package
+it.</li>
+</ul>
+</section>
+<section id="the-agent-concept" class="level3">
+<h3>The Agent Concept</h3>
+<ul>
+<li>Before Lab 06 introduces delegated reviewer/builder agents, treat
+your main Codex session as the primary agent.</li>
+<li>Skills help that agent stay consistent without bloating
+AGENTS.md.</li>
+</ul>
+</section>
+<section id="the-rule" class="level3">
+<h3>The Rule</h3>
+<blockquote>
+<p><em>"If you do something more than once a day, turn it into a
+skill."</em></p>
+</blockquote>
+<hr />
+</section>
+</section>
+<section id="exercise-1-the-manual-way-15-min" class="level2">
+<h2>Exercise 1: The Manual Way (15 min)</h2>
+<section id="goal" class="level3">
+<h3>Goal</h3>
+<p>Scaffold the <code>Country</code> backend module manually to feel the
+pain of re-explaining patterns.</p>
+</section>
+<section id="instructions" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Codex to scaffold the Country backend module manually:</p>
+<pre><code>First inspect the current HrDepartment/HrJob repository and resource files so the generated read shape matches the starter tree.
+Then inspect the promote or transfer flow in HrEmployeeResource and
+HrEmployeeCommandJdbcRepository so the generated write-path conventions match
+the current backend for validation, transaction handling, and response status.
+
+Scaffold the Country reference module for the HR app.
+- HrCountry request/response DTOs
+- HrCountryJdbcRepository following existing JDBC patterns
+- HrCountryResource at /app/hr/api/v1/countries
+- CRUD operations aligned to the current Jersey/JDBC backend
+Follow AGENTS.md conventions: Hr prefix, HrLogHelper, HrApiResponse envelope,
+PostgreSQL + AIHR_* runtime assumptions, and current backend architecture.</code></pre></li>
+<li><p><strong>Count the prompt length.</strong> You had to
+re-specify:</p>
+<ul>
+<li>Every backend layer this repo actually uses (DTOs/requests, JDBC
+repository, Jersey resource, and any wiring)</li>
+<li>Every convention (Hr prefix, logging, response envelope,
+PostgreSQL/Jersey runtime shape)</li>
+<li>The table mapping and field details</li>
+</ul></li>
+<li><p>If Codex missed anything, you'll need <strong>follow-up
+prompts</strong> to fix it. Count those too.</p></li>
+<li><p><strong>Total prompt count:</strong> _____ (likely 2–4 prompts to
+get it right)</p></li>
+</ol>
+<blockquote>
+<p>Now imagine doing this for 8 entities. That's 16–32 prompts of
+mostly-repeated instructions.</p>
+</blockquote>
+<hr />
+</section>
+</section>
+<section id="exercise-2-create-the-skill-20-min" class="level2">
+<h2>Exercise 2: Create the Skill (20 min)</h2>
+<section id="goal-1" class="level3">
+<h3>Goal</h3>
+<p>Package the scaffolding pattern into a reusable skill.</p>
+</section>
+<section id="instructions-1" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Codex to create a draft skill directory in the workspace:</p>
+<pre><code>Create the directory `.agents/skills/scaffold-reference-module`.</code></pre></li>
+<li><p>Ask Codex to create the skill based on the Region + Country
+patterns:</p>
+<pre><code>Create a skill at .agents/skills/scaffold-reference-module/SKILL.md
+that encodes our backend reference-module scaffolding pattern.
+The skill should:
+
+1. Accept parameters: module name, endpoint path, table/query shape, key fields
+2. Generate the current layers we use here:
+   DTO/request objects, JDBC repository, Jersey resource, and needed wiring
+3. Follow all AGENTS.md conventions automatically
+4. Include an out-of-scope section so it does not overreach
+
+Base it on the Region slice you already have plus the Country slice you just built,
+while keeping the repository/resource structure aligned to the current Department/Job examples.
+Include a section on common gotchas (PostgreSQL/AIHR_* assumptions, response envelopes,
+naming, and logging expectations).</code></pre></li>
+<li><p><strong>Review the generated SKILL.md.</strong> From another
+terminal, you can inspect it with:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> /absolute/path/to/codex-workshop/.agents/skills/scaffold-reference-module/SKILL.md</span></code></pre></div>
+<p>It should start with a metadata block like:
+<code>name: scaffold-reference-module</code> and
+<code>description: Scaffold an HR reference module following the current Jersey/JDBC project conventions</code>,
+followed by the pattern description, inputs, output shape, and
+gotchas.</p></li>
+<li><p><strong>Refine the skill</strong> if needed:</p>
+<pre><code>The skill should also mention:
+- runtime code targets AIHR_* tables only
+- follow existing *JdbcRepository and *Resource examples before generating
+- do not invent Spring Boot/JPA layers that do not exist in this repo
+Update the skill.</code></pre></li>
+</ol>
+<hr />
+</section>
+</section>
+<section id="exercise-3-use-the-skill-10-min" class="level2">
+<h2>Exercise 3: Use the Skill (10 min)</h2>
+<section id="goal-2" class="level3">
+<h3>Goal</h3>
+<p>Scaffold a new entity using the skill — one prompt, zero
+corrections.</p>
+</section>
+<section id="instructions-2" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p><strong>Start a fresh context</strong> by opening a new Codex
+session or resetting the current one if your client supports
+that.</p></li>
+<li><p>Use the skill to scaffold Location:</p>
+<pre><code>Use the scaffold-reference-module skill to scaffold the Location reference module.
+Endpoint: /app/hr/api/v1/locations
+Core fields:
+- locationId
+- streetAddress
+- postalCode
+- city
+- stateProvince
+- countryId / country details</code></pre></li>
+<li><p><strong>Compare with Exercise 1:</strong></p>
+<ul>
+<li>Prompts needed in Exercise 1: _____ (2–4)</li>
+<li>Prompts needed with skill: <strong>1</strong></li>
+<li>Did Codex follow all conventions? (Hr prefix, logging, response
+envelope, etc.)</li>
+</ul></li>
+<li><p>To verify, ask Codex:</p>
+<pre><code>Run `cd backend &amp;&amp; ./build-jersey-service.sh compile` and tell me whether the
+Location module compiles cleanly.
+Use the backend wrapper, not raw `mvn`.</code></pre></li>
+</ol>
+</section>
+<section id="what-you-should-see" class="level3">
+<h3>What You Should See</h3>
+<p>One prompt → the correct module layers → compiles clean → all
+conventions followed. The skill eliminated the need to re-explain the
+pattern.</p>
+<hr />
+</section>
+</section>
+<section id="exercise-4-create-a-verification-skill-10-min"
+class="level2">
+<h2>Exercise 4: Create a Verification Skill (10 min)</h2>
+<section id="goal-3" class="level3">
+<h3>Goal</h3>
+<p>Create a reusable verification skill for daily use.</p>
+</section>
+<section id="instructions-3" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Codex to create the second skill directory:</p>
+<pre><code>Create the directory `.agents/skills/run-tests`.</code></pre></li>
+<li><p>Ask Codex to create the verification skill:</p>
+<pre><code>Create .agents/skills/run-tests/SKILL.md that standardizes how we ask Codex
+to run and summarize verification in this repo.
+The skill should:
+1. Run backend unit tests via `cd backend &amp;&amp; ./build-jersey-service.sh test`
+2. Summarize failures only
+3. Report pass/fail counts
+4. If frontend scope is involved, include frontend lint/build verification
+5. Explicitly avoid raw `mvn` so the repo-owned backend wrapper remains the
+   standard learner path
+6. If a user-visible flow changed, add a short smoke-test note</code></pre></li>
+<li><p>Test it:</p>
+<pre><code>Use the `run-tests` skill to run the backend test loop and summarize the result.</code></pre></li>
+</ol>
+<hr />
+</section>
+</section>
+<section id="exercise-5-capture-the-rule-5-min" class="level2">
+<h2>Exercise 5: Capture the Rule (5 min)</h2>
+<ol type="1">
+<li><p>Ask Codex to update <code>AGENTS.md</code> in the project root of
+your local workspace by adding:</p>
+<pre><code>## Skills &amp; Commands
+- Repeated backend scaffolding belongs in a repo skill under `.agents/skills/`, not in AGENTS.md
+- Repeated verification belongs in a reusable skill such as `run-tests`</code></pre></li>
+<li><p>After Codex updates <code>AGENTS.md</code>, exit Codex and use
+the printed resume command so the updated rules are loaded in the next
+session.</p></li>
+<li><p>Reflect: <em>What other patterns in your real codebase could
+become skills?</em></p></li>
+</ol>
+<hr />
+</section>
+<section id="success-criteria" class="level2">
+<h2>Success Criteria</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />The scaffold skill exists in
+<code>.agents/skills/scaffold-reference-module/SKILL.md</code></label></li>
+<li><label><input type="checkbox" />Location module scaffolded with one
+prompt, zero corrections</label></li>
+<li><label><input type="checkbox" />A reusable run-tests skill exists
+and is usable</label></li>
+<li><label><input type="checkbox" />Manual scaffolding (Exercise 1)
+required 2+ prompts; skill required 1</label></li>
+<li><label><input type="checkbox" />AGENTS.md updated with skill/command
+references</label></li>
+</ul>
+<hr />
+</section>
+<section id="key-takeaways" class="level2">
+<h2>Key Takeaways</h2>
+<ol type="1">
+<li><strong>Skills compound engineering</strong> — define the pattern
+once, reuse it N times without context drift</li>
+<li><strong>Skills are on-demand, AGENTS.md is always-on</strong> — use
+skills for large patterns that would bloat AGENTS.md</li>
+<li><strong>Reusable workflows belong in skills</strong> — if you do it
+more than once a day, package it as a repo skill</li>
+<li><strong>Team-shared in the repo</strong> — checked-in skill sources
+let the whole team benefit.</li>
+</ol>
+<hr />
+<details>
+<summary><strong>Recovery Path</strong> — Use this if the skill drafting gets noisy</summary>
+
+<p>Stay inside the current lab. Do not scan ahead or use
+<code>reference/</code> unless this recovery path explicitly tells you
+to.</p>
+<p>If the skill draft wanders, reset to the smallest safe request:</p>
+<pre class="text"><code>Read only these current files first:
+- `AGENTS.md`
+- `lab-materials/codexlab03.md`
+- the existing `HrDepartment*` and `HrJob*` backend files you need for examples
+
+Then create:
+- `.agents/skills/scaffold-reference-module/SKILL.md`
+- `.agents/skills/run-tests/SKILL.md`
+
+Do not edit unrelated files.
+Keep the skill instructions short, concrete, and repo-specific.</code></pre>
+<p>Once the skill files exist, rerun Exercise 5 and add the rule block
+to <code>AGENTS.md</code>.</p>
+</details>
+
+</section>
+</section>
+    </main>
+    <footer class="doc-footer">
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <a class="doc-nav-link doc-nav-prev" href="codexlab02.html">← Lab 02</a>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <a class="doc-nav-link doc-nav-next" href="codexlab04.html">Lab 04 →</a>
+      </nav>
+    </footer>
+  </div>
+<script>
+  (function () {
+    const copyIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<rect x="9" y="7" width="10" height="12" rx="2"></rect>',
+      '<rect x="5" y="3" width="10" height="12" rx="2"></rect>',
+      '</svg>'
+    ].join('');
+    const copiedIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<path d="M6 12.5l4 4 8-9"></path>',
+      '</svg>'
+    ].join('');
+
+    const blocks = document.querySelectorAll('pre > code');
+    for (const code of blocks) {
+      const pre = code.parentElement;
+      if (!pre || pre.dataset.copyReady === 'true') continue;
+      pre.dataset.copyReady = 'true';
+
+      const shell = document.createElement('div');
+      shell.className = 'code-block-shell';
+      const footer = document.createElement('div');
+      footer.className = 'code-block-footer';
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code-button';
+      button.innerHTML = copyIcon;
+      button.setAttribute('aria-label', 'Copy code block');
+      button.setAttribute('title', 'Copy code block');
+
+      button.addEventListener('click', async function () {
+        const text = code.innerText;
+        try {
+          await navigator.clipboard.writeText(text);
+          button.innerHTML = copiedIcon;
+          button.setAttribute('aria-label', 'Copied');
+          button.setAttribute('title', 'Copied');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1400);
+        } catch (error) {
+          button.innerHTML = copyIcon;
+          button.setAttribute('aria-label', 'Copy failed');
+          button.setAttribute('title', 'Copy failed');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1800);
+        }
+      });
+
+      pre.parentNode.insertBefore(shell, pre);
+      shell.appendChild(pre);
+      footer.appendChild(button);
+      shell.appendChild(footer);
+    }
+  }());
+</script>
+</body>
+</html>

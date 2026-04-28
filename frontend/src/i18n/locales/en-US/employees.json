@@ -1,0 +1,107 @@
+{
+  "directory": {
+    "eyebrow": "Workforce records",
+    "title": "Employees",
+    "subtitle": "Search, filter, and review the live workforce directory.",
+    "searchPlaceholder": "Search by name, ID, or title...",
+    "activeSearch": "Searching for “{{query}}”",
+    "activeSearchCount": "{{count}} matching employees",
+    "filters": {
+      "status": "Status",
+      "department": "Department",
+      "departmentSearch": "Search departments",
+      "employmentType": "Employment Type"
+    },
+    "columns": {
+      "employee": "Employee",
+      "department": "Department",
+      "jobTitle": "Job Title",
+      "status": "Status",
+      "type": "Type",
+      "hireDate": "Hire Date"
+    },
+    "summaryLimited": "Refine search or filters to narrow the result set.",
+    "summaryTotal": "Live dataset total: {{count}}",
+    "emptyTitle": "No employees match the current filters",
+    "emptyDescription": "Adjust the search or filter criteria to broaden the employee result set.",
+    "csvHeaders": {
+      "employeeId": "Employee ID",
+      "fullName": "Full Name",
+      "email": "Email",
+      "department": "Department",
+      "jobTitle": "Job Title",
+      "status": "Status",
+      "type": "Type",
+      "manager": "Manager",
+      "hireDate": "Hire Date"
+    },
+    "footerTitle": "Related pages",
+    "footerSubtitle": "Related pages stay at the bottom so the directory keeps more room for the live result set.",
+    "links": {
+      "hireEmployee": {
+        "label": "Hire Employee",
+        "description": "Launch the hiring workflow and add a new employee record."
+      },
+      "orgChart": {
+        "label": "Org Chart",
+        "description": "Review reporting lines and navigate the organization tree."
+      },
+      "departments": {
+        "label": "Departments",
+        "description": "Open department summaries and compare team footprint."
+      }
+    },
+    "employeeMeta": "ID: {{id}}",
+    "managerMeta": "Manager: {{name}}"
+  },
+  "detail": {
+    "eyebrow": "Employee record",
+    "notFound": "Employee not found.",
+    "backToDirectory": "Back to Directory",
+    "tabs": {
+      "profile": "Profile",
+      "timeline": "Timeline",
+      "compensation": "Compensation"
+    },
+    "sections": {
+      "contact": "Contact",
+      "employment": "Employment",
+      "directReports": "Direct Reports ({{count}})",
+      "compensation": "Compensation"
+    },
+    "fields": {
+      "email": "Email",
+      "phone": "Phone",
+      "hireDate": "Hire Date",
+      "manager": "Manager",
+      "location": "Location",
+      "department": "Department",
+      "annualSalary": "Annual Salary",
+      "commissionPct": "Commission %",
+      "employee": "Employee"
+    },
+    "salaryHidden": "You do not have permission to view salary information.",
+    "footerTitle": "Related actions",
+    "footerSubtitle": "Workflow entry points now live below the employee content area.",
+    "relatedActions": {
+      "promote": {
+        "label": "Promote Employee",
+        "description": "Open the promotion workflow for this employee."
+      },
+      "transfer": {
+        "label": "Transfer Employee",
+        "description": "Open the transfer workflow and update assignment details."
+      },
+      "terminate": {
+        "label": "Terminate Employee",
+        "description": "Open the termination workflow for this employee."
+      }
+    },
+    "timeline": {
+      "hiredAs": "Hired as {{jobTitle}}",
+      "joined": "Joined {{departmentName}}",
+      "movedTo": "Moved to {{jobTitle}}",
+      "employmentEnded": "Employment ended"
+    }
+  }
+}

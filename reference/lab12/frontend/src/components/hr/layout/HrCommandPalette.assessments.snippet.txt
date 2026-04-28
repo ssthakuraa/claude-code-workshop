@@ -1,0 +1,11 @@
+Add this item with the other `items` entries in `HrCommandPalette.tsx`:
+
+    {
+      id: 'assessments-directory',
+      title: t('directory.navLabel', { ns: 'assessments' }),
+      description: t('commandPaletteDescriptions.assessmentsDirectory', { ns: 'navigation' }),
+      href: '/hr/assessments',
+      icon: <FileText size={16} />,
+      roles: ['ADMIN', 'HR_SPECIALIST', 'MANAGER'],
+      keywords: ['reviewer', 'manager review', 'performance directory'],
+    },

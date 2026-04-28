@@ -1,0 +1,157 @@
+{
+  "hire": {
+    "eyebrow": "Action sur les effectifs",
+    "title": "Embaucher un employé",
+    "subtitle": "Terminez le flux d’intégration pour ajouter un nouvel employé, définir son contexte organisationnel et provisionner un compte initial.",
+    "submit": "Embaucher un employé",
+    "steps": {
+      "personal": { "label": "Personnel", "description": "Infos de base" },
+      "job": { "label": "Poste", "description": "Rôle et site" },
+      "compensation": { "label": "Rémunération", "description": "Salaire et type" },
+      "review": { "label": "Vérification", "description": "Confirmer et embaucher" }
+    },
+    "sections": {
+      "personalEyebrow": "Informations personnelles",
+      "personalTitle": "Commencez le dossier employé",
+      "jobEyebrow": "Affectation du poste",
+      "jobTitle": "Placez l’embauche dans l’organisation",
+      "compensationEyebrow": "Conditions d’emploi",
+      "compensationTitle": "Définissez la rémunération et les détails du contrat",
+      "reviewEyebrow": "Vérifier les détails",
+      "reviewTitle": "Confirmer le dossier du nouvel employé"
+    },
+    "fields": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "hireDate": "Date d’embauche",
+      "initialPassword": "Mot de passe initial",
+      "jobTitle": "Poste",
+      "department": "Département",
+      "manager": "Manager",
+      "annualSalary": "Salaire annuel",
+      "commissionPct": "% de commission",
+      "employmentType": "Type d’emploi",
+      "contractEndDate": "Fin de contrat"
+    },
+    "placeholders": {
+      "firstName": "Jeanne",
+      "lastName": "Martin",
+      "email": "jeanne.martin@company.com",
+      "phone": "+33 1 55-0100",
+      "initialPassword": "8 caractères min.",
+      "selectJob": "Sélectionner un poste...",
+      "selectDepartment": "Sélectionner un département...",
+      "noManager": "Aucun manager"
+    },
+    "salaryBand": "Fourchette salariale : {{min}} - {{max}}",
+    "reviewLabels": {
+      "name": "Nom",
+      "job": "Poste",
+      "department": "Département",
+      "manager": "Manager",
+      "salary": "Salaire",
+      "employmentType": "Type d’emploi",
+      "contractEndDate": "Fin de contrat"
+    },
+    "validation": {
+      "required": "Obligatoire",
+      "invalidEmail": "E-mail invalide",
+      "passwordMin": "8 caractères minimum"
+    },
+    "toasts": {
+      "success": "{{name}} a été embauché avec succès !",
+      "error": "Échec de l’embauche. Réessayez."
+    }
+  },
+  "promote": {
+    "eyebrow": "Action sur les effectifs",
+    "title": "Promouvoir l’employé",
+    "subtitle": "Affectation actuelle : {{jobTitle}} · {{departmentName}}",
+    "meta": {
+      "employee": "Employé",
+      "availableRoles": "Rôles disponibles",
+      "effective": "Prise d’effet"
+    },
+    "sectionEyebrow": "Changement de rôle",
+    "sectionTitle": "Sélectionnez l’affectation cible",
+    "fields": {
+      "newJobTitle": "Nouveau poste",
+      "newSalary": "Nouveau salaire",
+      "effectiveDate": "Date de prise d’effet"
+    },
+    "placeholders": {
+      "selectNewJob": "Sélectionner un nouveau poste..."
+    },
+    "salaryBand": "Nouvelle fourchette salariale : {{min}} - {{max}}",
+    "buttons": {
+      "confirm": "Confirmer la promotion"
+    },
+    "toasts": {
+      "success": "{{name}} a été promu au poste {{jobTitle}} !",
+      "error": "La promotion a échoué. Réessayez."
+    }
+  },
+  "transfer": {
+    "eyebrow": "Action sur les effectifs",
+    "title": "Transférer l’employé",
+    "subtitle": "Département actuel : {{departmentName}}",
+    "meta": {
+      "employee": "Employé",
+      "departments": "Départements",
+      "effective": "Prise d’effet"
+    },
+    "sectionEyebrow": "Changement organisationnel",
+    "sectionTitle": "Attribuez un nouveau contexte hiérarchique",
+    "fields": {
+      "newDepartment": "Nouveau département",
+      "newManager": "Nouveau manager",
+      "effectiveDate": "Date de prise d’effet"
+    },
+    "placeholders": {
+      "selectDepartment": "Sélectionner un département...",
+      "noChange": "Aucun changement"
+    },
+    "buttons": {
+      "confirm": "Confirmer le transfert"
+    },
+    "toasts": {
+      "success": "{{name}} a été transféré vers {{department}} !",
+      "error": "Le transfert a échoué. Réessayez.",
+      "fallbackDepartment": "nouveau département"
+    }
+  },
+  "terminate": {
+    "eyebrow": "Action sur les effectifs",
+    "title": "Mettre fin au contrat",
+    "subtitle": "Cette action supprimera logiquement le dossier employé et désactivera le compte associé.",
+    "meta": {
+      "employee": "Employé",
+      "currentStatus": "Statut actuel",
+      "effective": "Prise d’effet"
+    },
+    "sectionEyebrow": "Détails de sortie",
+    "sectionTitle": "Capturez les informations de départ",
+    "fields": {
+      "effectiveDate": "Date de prise d’effet",
+      "reason": "Motif / Notes"
+    },
+    "placeholders": {
+      "reason": "Démission volontaire, fin de contrat, performance..."
+    },
+    "hint": "Utilisez un libellé prêt pour la mise en production. La note sera ajoutée à la piste d’audit de l’employé.",
+    "buttons": {
+      "terminate": "Mettre fin au contrat",
+      "confirm": "Oui, confirmer"
+    },
+    "dialog": {
+      "title": "Confirmer la fin de contrat",
+      "description": "Voulez-vous vraiment mettre fin au contrat de {{name}} ? Son compte sera désactivé et son statut passera à terminé."
+    },
+    "toasts": {
+      "success": "Le contrat de {{name}} a été résilié.",
+      "error": "La résiliation a échoué. Réessayez."
+    }
+  }
+}

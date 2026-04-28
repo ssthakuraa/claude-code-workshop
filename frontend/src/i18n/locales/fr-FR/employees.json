@@ -1,0 +1,105 @@
+{
+  "directory": {
+    "eyebrow": "Dossiers des effectifs",
+    "title": "Employés",
+    "subtitle": "Recherchez, filtrez et consultez le répertoire actif des effectifs.",
+    "searchPlaceholder": "Rechercher par nom, ID ou poste...",
+    "filters": {
+      "status": "Statut",
+      "department": "Département",
+      "departmentSearch": "Rechercher des départements",
+      "employmentType": "Type d’emploi"
+    },
+    "columns": {
+      "employee": "Employé",
+      "department": "Département",
+      "jobTitle": "Poste",
+      "status": "Statut",
+      "type": "Type",
+      "hireDate": "Date d’embauche"
+    },
+    "summaryLimited": "Affinez la recherche ou les filtres pour réduire le jeu de résultats.",
+    "summaryTotal": "Total du jeu en direct : {{count}}",
+    "emptyTitle": "Aucun employé ne correspond aux filtres actuels",
+    "emptyDescription": "Ajustez la recherche ou les filtres pour élargir le jeu de résultats.",
+    "csvHeaders": {
+      "employeeId": "ID employé",
+      "fullName": "Nom complet",
+      "email": "E-mail",
+      "department": "Département",
+      "jobTitle": "Poste",
+      "status": "Statut",
+      "type": "Type",
+      "manager": "Manager",
+      "hireDate": "Date d’embauche"
+    },
+    "footerTitle": "Pages associées",
+    "footerSubtitle": "Les pages associées restent en bas pour laisser plus d’espace aux résultats en direct.",
+    "links": {
+      "hireEmployee": {
+        "label": "Embaucher un employé",
+        "description": "Lancer le flux d’embauche et ajouter un nouvel employé."
+      },
+      "orgChart": {
+        "label": "Organigramme",
+        "description": "Consultez les lignes hiérarchiques et naviguez dans l’arbre de l’organisation."
+      },
+      "departments": {
+        "label": "Départements",
+        "description": "Ouvrez les synthèses de départements et comparez l’empreinte des équipes."
+      }
+    },
+    "employeeMeta": "ID : {{id}}",
+    "managerMeta": "Manager : {{name}}"
+  },
+  "detail": {
+    "eyebrow": "Dossier employé",
+    "notFound": "Employé introuvable.",
+    "backToDirectory": "Retour au répertoire",
+    "tabs": {
+      "profile": "Profil",
+      "timeline": "Chronologie",
+      "compensation": "Rémunération"
+    },
+    "sections": {
+      "contact": "Contact",
+      "employment": "Emploi",
+      "directReports": "Collaborateurs directs ({{count}})",
+      "compensation": "Rémunération"
+    },
+    "fields": {
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "hireDate": "Date d’embauche",
+      "manager": "Manager",
+      "location": "Site",
+      "department": "Département",
+      "annualSalary": "Salaire annuel",
+      "commissionPct": "% de commission",
+      "employee": "Employé"
+    },
+    "salaryHidden": "Vous n’êtes pas autorisé à consulter les informations salariales.",
+    "footerTitle": "Actions associées",
+    "footerSubtitle": "Les points d’entrée du flux apparaissent désormais sous le contenu de l’employé.",
+    "relatedActions": {
+      "promote": {
+        "label": "Promouvoir l’employé",
+        "description": "Ouvrir le flux de promotion pour cet employé."
+      },
+      "transfer": {
+        "label": "Transférer l’employé",
+        "description": "Ouvrir le flux de transfert et mettre à jour les détails d’affectation."
+      },
+      "terminate": {
+        "label": "Mettre fin au contrat",
+        "description": "Ouvrir le flux de fin de contrat pour cet employé."
+      }
+    },
+    "timeline": {
+      "hiredAs": "Embauché en tant que {{jobTitle}}",
+      "joined": "A rejoint {{departmentName}}",
+      "movedTo": "Muté vers {{jobTitle}}",
+      "employmentEnded": "Emploi terminé"
+    }
+  }
+}

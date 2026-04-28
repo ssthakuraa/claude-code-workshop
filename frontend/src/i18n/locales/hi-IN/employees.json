@@ -1,0 +1,105 @@
+{
+  "directory": {
+    "eyebrow": "वर्कफ़ोर्स रिकॉर्ड",
+    "title": "कर्मचारी",
+    "subtitle": "लाइव वर्कफ़ोर्स डायरेक्टरी खोजें, फ़िल्टर करें और समीक्षा करें।",
+    "searchPlaceholder": "नाम, आईडी या पद से खोजें...",
+    "filters": {
+      "status": "स्थिति",
+      "department": "विभाग",
+      "departmentSearch": "विभाग खोजें",
+      "employmentType": "रोज़गार प्रकार"
+    },
+    "columns": {
+      "employee": "कर्मचारी",
+      "department": "विभाग",
+      "jobTitle": "पद",
+      "status": "स्थिति",
+      "type": "प्रकार",
+      "hireDate": "नियुक्ति तिथि"
+    },
+    "summaryLimited": "परिणाम कम करने के लिए खोज या फ़िल्टर परिष्कृत करें।",
+    "summaryTotal": "लाइव डेटासेट कुल: {{count}}",
+    "emptyTitle": "वर्तमान फ़िल्टर से कोई कर्मचारी मेल नहीं खाता",
+    "emptyDescription": "कर्मचारी परिणाम बढ़ाने के लिए खोज या फ़िल्टर मानदंड बदलें।",
+    "csvHeaders": {
+      "employeeId": "कर्मचारी आईडी",
+      "fullName": "पूरा नाम",
+      "email": "ईमेल",
+      "department": "विभाग",
+      "jobTitle": "पद",
+      "status": "स्थिति",
+      "type": "प्रकार",
+      "manager": "प्रबंधक",
+      "hireDate": "नियुक्ति तिथि"
+    },
+    "footerTitle": "संबंधित पृष्ठ",
+    "footerSubtitle": "संबंधित पृष्ठ नीचे रहते हैं ताकि डायरेक्टरी में लाइव परिणामों के लिए अधिक जगह रहे।",
+    "links": {
+      "hireEmployee": {
+        "label": "कर्मचारी नियुक्त करें",
+        "description": "नियुक्ति वर्कफ़्लो शुरू करें और नया कर्मचारी रिकॉर्ड जोड़ें।"
+      },
+      "orgChart": {
+        "label": "ऑर्ग चार्ट",
+        "description": "रिपोर्टिंग लाइनों की समीक्षा करें और संगठन वृक्ष में जाएँ।"
+      },
+      "departments": {
+        "label": "विभाग",
+        "description": "विभाग सारांश खोलें और टीम संरचना की तुलना करें।"
+      }
+    },
+    "employeeMeta": "आईडी: {{id}}",
+    "managerMeta": "प्रबंधक: {{name}}"
+  },
+  "detail": {
+    "eyebrow": "कर्मचारी रिकॉर्ड",
+    "notFound": "कर्मचारी नहीं मिला।",
+    "backToDirectory": "डायरेक्टरी पर वापस जाएँ",
+    "tabs": {
+      "profile": "प्रोफ़ाइल",
+      "timeline": "समयरेखा",
+      "compensation": "प्रतिफल"
+    },
+    "sections": {
+      "contact": "संपर्क",
+      "employment": "रोज़गार",
+      "directReports": "प्रत्यक्ष रिपोर्ट ({{count}})",
+      "compensation": "प्रतिफल"
+    },
+    "fields": {
+      "email": "ईमेल",
+      "phone": "फ़ोन",
+      "hireDate": "नियुक्ति तिथि",
+      "manager": "प्रबंधक",
+      "location": "स्थान",
+      "department": "विभाग",
+      "annualSalary": "वार्षिक वेतन",
+      "commissionPct": "कमीशन %",
+      "employee": "कर्मचारी"
+    },
+    "salaryHidden": "आपको वेतन जानकारी देखने की अनुमति नहीं है।",
+    "footerTitle": "संबंधित कार्रवाइयाँ",
+    "footerSubtitle": "वर्कफ़्लो प्रवेश-बिंदु अब कर्मचारी सामग्री के नीचे हैं।",
+    "relatedActions": {
+      "promote": {
+        "label": "कर्मचारी को प्रोमोट करें",
+        "description": "इस कर्मचारी के लिए प्रोमोशन वर्कफ़्लो खोलें।"
+      },
+      "transfer": {
+        "label": "कर्मचारी स्थानांतरित करें",
+        "description": "ट्रांसफ़र वर्कफ़्लो खोलें और असाइनमेंट विवरण अपडेट करें।"
+      },
+      "terminate": {
+        "label": "कर्मचारी समाप्त करें",
+        "description": "इस कर्मचारी के लिए समाप्ति वर्कफ़्लो खोलें।"
+      }
+    },
+    "timeline": {
+      "hiredAs": "{{jobTitle}} के रूप में नियुक्त",
+      "joined": "{{departmentName}} में शामिल हुए",
+      "movedTo": "{{jobTitle}} में स्थानांतरित हुए",
+      "employmentEnded": "रोज़गार समाप्त"
+    }
+  }
+}

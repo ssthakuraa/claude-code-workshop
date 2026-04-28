@@ -1,0 +1,150 @@
+{
+  "notifications": {
+    "eyebrow": "Inbox",
+    "title": "Notifications",
+    "subtitle": "Review workflow alerts, operational reminders, and system-generated messages tied to HR activity.",
+    "markAllRead": "Mark all as read",
+    "loadFailed": "Failed to load notifications.",
+    "empty": "No notifications found."
+  },
+  "audit": {
+    "eyebrow": "Governance",
+    "title": "Audit Log",
+    "subtitle": "Review system changes and data mutations across the live HR application.",
+    "tabs": {
+      "all": "All tables",
+      "employees": "Employee",
+      "departments": "Department",
+      "jobs": "Job",
+      "users": "User",
+      "jobHistory": "Job History"
+    },
+    "columns": {
+      "action": "Action",
+      "entity": "Entity",
+      "record": "Record",
+      "changedAt": "Changed At"
+    },
+    "meta": {
+      "rows": "Rows",
+      "filter": "Filter",
+      "matched": "Matched"
+    },
+    "states": {
+      "loadFailed": "Failed to load audit logs.",
+      "before": "Before",
+      "after": "After",
+      "showingFirst": "Showing first {{limit}} of {{total}} matching audit events",
+      "showingMatched": "Showing {{count}} matching audit events",
+      "refineFilter": "Refine the table filter to narrow the audit stream.",
+      "expandRow": "Expand a row to inspect before-and-after payload details.",
+      "emptyTitle": "No audit log entries found",
+      "emptyDescription": "Try another table filter or check again after more system activity."
+    }
+  },
+  "assessmentCycles": {
+    "navLabel": "Assessment Cycles",
+    "eyebrow": "Assessment Setup",
+    "title": "Assessment Cycles",
+    "subtitle": "Set up the review windows, activation state, and translated labels that future employee assessments will use.",
+    "meta": {
+      "currentLocale": "Current locale",
+      "previewLabel": "Preview label"
+    },
+    "actions": {
+      "newCycle": "New cycle",
+      "saveChanges": "Save changes",
+      "activate": "Activate",
+      "deactivate": "Deactivate"
+    },
+    "toasts": {
+      "createSuccess": "Created {{code}}.",
+      "updateSuccess": "Updated {{code}}."
+    },
+    "statuses": {
+      "PLANNED": "Planned",
+      "OPEN": "Open",
+      "CLOSED": "Closed"
+    },
+    "states": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "none": "None"
+    },
+    "periodTypes": {
+      "ANNUAL": "Annual",
+      "HALF": "Half-year",
+      "QUARTER": "Quarter"
+    },
+    "stats": {
+      "totalTitle": "Cycle inventory",
+      "totalValue": "{{count}} cycles",
+      "totalDetail": "Main schema baseline seeded into the active PostgreSQL app.",
+      "openTitle": "Current open cycle",
+      "openDetailFallback": "Select which cycle should be available to managers and HR.",
+      "activeTitle": "Active setup rows",
+      "activeValue": "{{count}} active",
+      "activeDetail": "Inactive rows stay visible for history but should not be selectable downstream.",
+      "translationTitle": "Translation coverage",
+      "translationDetail": "Shows whether each cycle is ready for the current MLS/NLS baseline."
+    },
+    "list": {
+      "title": "Cycle roster",
+      "subtitle": "Review and manage each assessment cycle in one place.",
+      "filteredCount": "{{count}} shown of {{total}}",
+      "activeCount": "{{count}} active",
+      "openCycle": "Open: {{value}}",
+      "translationCoverage": "Translations {{value}}",
+      "emptyState": "No cycles match the current search or status filter.",
+      "order": "Display order {{value}}",
+      "localePreview": "Label: {{value}}",
+      "columns": {
+        "cycleCode": "Cycle code",
+        "label": "Label",
+        "status": "Status",
+        "periodType": "Period type",
+        "dateRange": "Date range",
+        "active": "Active",
+        "displayOrder": "Order"
+      }
+    },
+    "filters": {
+      "status": "Status",
+      "searchPlaceholder": "Search by cycle code or translated label..."
+    },
+    "form": {
+      "title": "Setup panel",
+      "subtitle": "Update the selected cycle details and availability.",
+      "cycleCode": "Cycle code",
+      "displayOrder": "Display order",
+      "defaultLabel": "Default label",
+      "periodType": "Period type",
+      "status": "Cycle status",
+      "startDate": "Start date",
+      "endDate": "End date"
+    },
+    "translations": {
+      "title": "Translation coverage",
+      "subtitle": "Review localized labels for the supported languages.",
+      "complete": "Complete",
+      "missing": "Missing",
+      "placeholder": "Localized label for {{locale}}"
+    },
+    "guidance": {
+      "title": "Setup rules",
+      "subtitle": "These are the operating rules behind the setup page and the schema update.",
+      "ruleOneTitle": "Single source",
+      "ruleOneText": "The main app owns `aihr_assessment_cycles`; Lab 12 should reference it instead of redefining cycle labels.",
+      "ruleTwoTitle": "MLS/NLS ready",
+      "ruleTwoText": "Cycle labels should come from `default_label` plus translation overrides, not from hardcoded UI strings.",
+      "ruleThreeTitle": "Lab 12 fit",
+      "ruleThreeText": "The optional capstone table should be `aihr_employee_assessments` keyed by `cycle_code`."
+    },
+    "footer": {
+      "auditLogLabel": "Audit log",
+      "auditLogDescription": "Review how future setup edits should appear in governance history.",
+      "settingsLabel": "User settings",
+      "settingsDescription": "Check locale preferences against the translated cycle labels."
+    }
+  }
+}

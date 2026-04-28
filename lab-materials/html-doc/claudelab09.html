@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Lab 09: MCP Servers — Playwright &amp; Browser
+Verification</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="doc-shell">
+    <header class="doc-header">
+      <div class="doc-header-meta">
+        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-divider"></span>
+        <span class="doc-page-label">Lab 09</span>
+      </div>
+      <div class="doc-header-title">Lab 09: MCP Servers — Playwright & Browser Verification</div>
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <a class="doc-nav-link doc-nav-prev" href="codexlab08.html">← Lab 08</a>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <a class="doc-nav-link doc-nav-next" href="codexlab10.html">Lab 10 →</a>
+      </nav>
+    </header>
+    <main class="doc-content">
+<section id="lab-09-mcp-servers--playwright--browser-verification"
+class="level1">
+<h1>Lab 09: MCP Servers — Playwright &amp; Browser Verification</h1>
+<p><strong>Duration:</strong> 75 minutes</p>
+<blockquote>
+<p>Recommended Day 2 order: <strong>Lab 09 → Lab 08 → Lab 07 → Lab 10 →
+Lab 11 → optional Lab 12</strong>. Start Day 2 here. Once browser
+verification is in place, the later verification and parallel-work
+chapters become much more realistic and valuable.</p>
+</blockquote>
+<section id="learning-objective" class="level2">
+<h2>Learning Objective</h2>
+<p>You will connect Codex to a real browser through the repo's current
+Playwright MCP path. Codex will navigate the running HR app, inspect
+page state, take screenshots, and verify that the UI matches
+expectations from the terminal.</p>
+</section>
+<section id="the-key-concept" class="level2">
+<h2>The Key Concept</h2>
+<p><strong>MCP (Model Context Protocol)</strong> is the standardized way
+to connect Codex to external tools and data sources.</p>
+<p><strong>Playwright MCP</strong> gives Codex browser tools such
+as:</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What It Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>browser_navigate</code></td>
+<td>Go to a URL</td>
+</tr>
+<tr>
+<td><code>browser_snapshot</code></td>
+<td>Get page accessibility tree</td>
+</tr>
+<tr>
+<td><code>browser_take_screenshot</code></td>
+<td>Capture a visual screenshot</td>
+</tr>
+<tr>
+<td><code>browser_click</code></td>
+<td>Click an element</td>
+</tr>
+<tr>
+<td><code>browser_fill_form</code></td>
+<td>Fill in form fields</td>
+</tr>
+<tr>
+<td><code>browser_console_messages</code></td>
+<td>Read browser console output</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why this matters for enterprise work:</strong></p>
+<ul>
+<li>visual regression testing without a separate tool handoff</li>
+<li>Codex can verify its own frontend changes against a running app</li>
+<li>end-to-end verification: write code, run app, verify in browser,
+iterate</li>
+</ul>
+<p><strong>Configuration note:</strong> MCP config surfaces can vary by
+Codex client and repo. In this workspace, do not guess. Inspect the repo
+rules first. If the repo already uses <code>.mcp.json</code>, extend
+that. If the active client uses another project config surface, draft
+the exact content for that surface instead of inventing
+<code>runtime/</code> assets or home-directory paths.</p>
+<p>Fresh-session validation still matters. Edit the project config,
+restart Codex if required by your client, then prove that the tools are
+actually visible.</p>
+<hr />
+</section>
+<section id="setup" class="level2">
+<h2>Setup</h2>
+<p>Ask Codex to bring up the backend and frontend for you before you
+configure MCP:</p>
+<pre class="text"><code>This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use hidden completed examples or old conversion notes.
+
+Start the backend and frontend for this workspace using the current repo
+commands from AGENTS.md and the active docs.
+
+Requirements:
+- backend on port 18082
+- frontend on port 5182
+- frontend API proxy target http://127.0.0.1:18082
+- verify the backend health endpoint
+- verify the frontend responds
+- create repo-local browser state directories if needed under `.playwright-mcp/`
+
+If port 18082 or 5182 is already in use, treat a stale repo-owned process as
+the first suspect and restart cleanly on the reserved ports.
+For backend cleanup, use `cd backend &amp;&amp; ./stop-jersey-service.sh`.
+Keep any local port overrides in `backend/.env.local` and `frontend/.env.local`.
+
+Tell me when both services are ready and when I should wait before moving to
+the next step.</code></pre>
+<p>Wait for Codex to confirm that both services are ready before moving
+on. Later in this chapter, after project MCP config changes, exit Codex
+and use the printed resume command if your client requires a fresh
+session for MCP changes to take effect.</p>
+<p>Important control-plane note:</p>
+<ul>
+<li>inspect <code>AGENTS.md</code> first for repo MCP rules</li>
+<li>if a repo MCP file already exists, preserve it</li>
+<li>do not use <code>runtime/</code>-bundled browser, Node, or MCP
+assets</li>
+<li>keep browser user-data and output directories repo-local under
+<code>.playwright-mcp/</code></li>
+<li>avoid absolute paths into your home directory when repo-local or
+installed-tool paths are available</li>
+<li>if <code>AGENTS.md</code> does not yet define a browser preference,
+use Chrome/Chromium-first and record any fallback explicitly</li>
+</ul>
+<hr />
+</section>
+<section id="exercise-1-configure-playwright-mcp-15-min" class="level2">
+<h2>Exercise 1: Configure Playwright MCP (15 min)</h2>
+<section id="goal" class="level3">
+<h3>Goal</h3>
+<p>Add a Playwright MCP server using the current repo/client config
+surface.</p>
+</section>
+<section id="instructions" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Codex to inspect the active config surface before editing
+anything:</p>
+<pre class="text"><code>This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use hidden completed examples or old conversion notes.
+
+Read `AGENTS.md` first.
+Then inspect any existing project MCP/config files that already exist in the
+repo root, including `.mcp.json` or `.codex/` config if present.
+
+Tell me which file is the active project MCP/config surface for this
+workspace before you make any edits.</code></pre></li>
+<li><p>Ask Codex to draft or apply the MCP configuration:</p>
+<pre class="text"><code>Update the active project MCP config for this repo.
+Preserve any existing sections already present.
+
+Requirements:
+- use repo-local or installed-tool paths only
+- do not use `runtime/`
+- do not use paths from my home directory unless there is no repo-local alternative
+- store browser profile and output under:
+  - `.playwright-mcp/profile`
+  - `.playwright-mcp/output`
+- prefer the repo browser policy from `AGENTS.md`; if it is not defined yet, use Chrome/Chromium-first and record any fallback explicitly
+- if the preferred browser cannot be launched on this host, record the fallback explicitly instead of guessing
+
+If my client cannot edit the active config file directly, draft the exact
+content for me and tell me where it belongs.</code></pre></li>
+<li><p><strong>Verify the configuration.</strong> Open the active config
+file and confirm it:</p>
+<ul>
+<li>contains a Playwright MCP entry for this project</li>
+<li>preserves any earlier project config sections</li>
+<li>uses repo-local profile/output paths under
+<code>.playwright-mcp/</code></li>
+<li>does not reference <code>runtime/</code></li>
+<li>does not rely on stale <code>/scratch/training/...</code> paths</li>
+</ul></li>
+<li><p><strong>Restart Codex if needed</strong> to load the
+project-scoped MCP server.</p>
+<p>Exit the current Codex session and restart it from the repo root
+after editing the project config if your client requires that for MCP
+discovery. If Codex prints a <code>codex resume ...</code> command when
+it exits, use that exact command.</p></li>
+<li><p><strong>Ask Codex to verify that MCP is working.</strong> In the
+fresh Codex session, ask:</p>
+<pre class="text"><code>Before you navigate anywhere, tell me which Playwright/browser MCP tools you can see.
+Then navigate to the HR dashboard and take a screenshot.
+Describe what you see.</code></pre></li>
+<li><p><strong>If MCP Playwright is not working:</strong> Keep this as a
+browser-verification lab, not an argument about config surfaces. Record
+the environment limitation explicitly and continue with the fallback
+helper or manual browser path below.</p></li>
+</ol>
+</section>
+</section>
+<section id="troubleshooting-path" class="level2">
+<h2>Troubleshooting Path</h2>
+<p>Use this section only if you want to debug MCP itself instead of
+moving on with the fallback browser verification path.</p>
+<p>Ask Codex:</p>
+<pre class="text"><code>The Playwright MCP configuration is present but the tools are still unavailable.
+Inspect the active project config file, then walk me through the smallest next
+debug steps one at a time.
+First tell me whether the issue looks like:
+1. wrong config surface
+2. wrong executable path
+3. browser launch problem
+4. client restart/trust issue</code></pre>
+<p>Treat this as a debugging path, not as the main learner path for the
+chapter.</p>
+<hr />
+</section>
+<section id="exercise-2-dashboard-verification-5-min" class="level2">
+<h2>Exercise 2: Dashboard Verification (5 min)</h2>
+<section id="goal-1" class="level3">
+<h3>Goal</h3>
+<p>Use Playwright MCP to verify the dashboard page renders
+correctly.</p>
+</section>
+<section id="instructions-1" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p><strong>Navigate and log in</strong> if auth is required:</p>
+<pre class="text"><code>Navigate to http://127.0.0.1:5182/hr/login.
+Log in with username &quot;steven.king&quot; and password &quot;password123&quot;.
+Then navigate to the dashboard page.
+Take a screenshot and describe which KPI cards are showing.</code></pre></li>
+<li><p><strong>Verify KPI data against the page state:</strong></p>
+<pre class="text"><code>The dashboard should show:
+- total employees
+- active vs terminated breakdown
+- departments count
+- average salary
+
+Take a snapshot of the page and check if these KPI cards exist.
+Are they showing data or are they empty?</code></pre></li>
+<li><p><strong>Find and report issues:</strong></p>
+<pre class="text"><code>Check the dashboard for:
+1. are all charts rendering, not just empty boxes?
+2. is the main navigation present?
+3. are there any console errors?
+Report what you find.</code></pre></li>
+<li><p><strong>If issues are found, fix and verify in a
+loop:</strong></p>
+<pre class="text"><code>Fix the issue you just identified, then take another screenshot
+to verify the fix is visible in the browser.</code></pre></li>
+</ol>
+</section>
+</section>
+<section id="fallback-path" class="level2">
+<h2>Fallback Path</h2>
+<p>If MCP tools are unavailable in your current client, use one of these
+fallback paths and record which one you used:</p>
+<ul>
+<li>repo browser helper scripts under <code>frontend/</code></li>
+<li>another repo-supported browser tool path already available in your
+Codex client</li>
+<li>a manual browser check using the running app URL</li>
+</ul>
+<p>The fallback is acceptable for this lab. What matters is that browser
+evidence becomes part of the workflow.</p>
+</section>
+<section id="success-criteria" class="level2">
+<h2>Success Criteria</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />The active project config contains a
+Playwright/browser MCP entry or a clearly documented
+equivalent</label></li>
+<li><label><input type="checkbox" />Any prior project config already in
+that file was preserved</label></li>
+<li><label><input type="checkbox" />A fresh Codex session either named
+or successfully used the browser MCP tools</label></li>
+<li><label><input type="checkbox" />Codex completed at least one real
+browser screenshot step through MCP, or the environment limitation was
+recorded explicitly</label></li>
+<li><label><input type="checkbox" />Dashboard verification was completed
+through MCP or a documented fallback path</label></li>
+</ul>
+<hr />
+</section>
+<section id="key-takeaways" class="level2">
+<h2>Key Takeaways</h2>
+<ol type="1">
+<li>Browser tooling must follow the repo's current config surface, not a
+copied old recipe</li>
+<li>Fresh-session validation matters; do not assume MCP loaded just
+because the file exists</li>
+<li>Repo-local profile/output state keeps browser work isolated from
+other repos</li>
+<li>Fallback browser helpers are useful, but they are not proof that MCP
+itself is wired in</li>
+</ol>
+<hr />
+<details>
+<summary><strong>Recovery Path</strong> — Use this if config work gets noisy</summary>
+
+<p>Stay inside the current lab. Do not scan ahead or use
+<code>reference/</code> unless this recovery path explicitly tells you
+to.</p>
+<p>If the config surface becomes confusing, reset to the smallest safe
+task:</p>
+<pre class="text"><code>Read `AGENTS.md` and inspect only the existing project MCP/config files in the
+repo root.
+Tell me which file is authoritative for browser/MCP setup in this workspace.
+Do not edit anything yet.
+Then draft the smallest valid Playwright/browser entry for that file using
+repo-local browser state under `.playwright-mcp/`.</code></pre>
+<p>Review the draft before applying it, then restart Codex if your
+client requires that for project MCP discovery.</p>
+</details>
+
+</section>
+</section>
+    </main>
+    <footer class="doc-footer">
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <a class="doc-nav-link doc-nav-prev" href="codexlab08.html">← Lab 08</a>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <a class="doc-nav-link doc-nav-next" href="codexlab10.html">Lab 10 →</a>
+      </nav>
+    </footer>
+  </div>
+<script>
+  (function () {
+    const copyIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<rect x="9" y="7" width="10" height="12" rx="2"></rect>',
+      '<rect x="5" y="3" width="10" height="12" rx="2"></rect>',
+      '</svg>'
+    ].join('');
+    const copiedIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<path d="M6 12.5l4 4 8-9"></path>',
+      '</svg>'
+    ].join('');
+
+    const blocks = document.querySelectorAll('pre > code');
+    for (const code of blocks) {
+      const pre = code.parentElement;
+      if (!pre || pre.dataset.copyReady === 'true') continue;
+      pre.dataset.copyReady = 'true';
+
+      const shell = document.createElement('div');
+      shell.className = 'code-block-shell';
+      const footer = document.createElement('div');
+      footer.className = 'code-block-footer';
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code-button';
+      button.innerHTML = copyIcon;
+      button.setAttribute('aria-label', 'Copy code block');
+      button.setAttribute('title', 'Copy code block');
+
+      button.addEventListener('click', async function () {
+        const text = code.innerText;
+        try {
+          await navigator.clipboard.writeText(text);
+          button.innerHTML = copiedIcon;
+          button.setAttribute('aria-label', 'Copied');
+          button.setAttribute('title', 'Copied');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1400);
+        } catch (error) {
+          button.innerHTML = copyIcon;
+          button.setAttribute('aria-label', 'Copy failed');
+          button.setAttribute('title', 'Copy failed');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1800);
+        }
+      });
+
+      pre.parentNode.insertBefore(shell, pre);
+      shell.appendChild(pre);
+      footer.appendChild(button);
+      shell.appendChild(footer);
+    }
+  }());
+</script>
+</body>
+</html>

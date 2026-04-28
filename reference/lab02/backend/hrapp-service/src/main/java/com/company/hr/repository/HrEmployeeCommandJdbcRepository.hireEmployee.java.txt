@@ -1,0 +1,37 @@
+public Integer hireEmployee(HrEmployeeCreateRequest request) {
+    try (Connection connection = getConnection()) {
+        connection.setAutoCommit(false);
+        try {
+            checkIdempotency(connection, request.getIdempotencyKey(), "POST /employees");
+
+            if (emailExists(connection, request.getEmail())) {
+                throw new HrConflictException("EMAIL_EXISTS");
+            }
+
+            JobInfo job = loadJob(connection, request.getJobId());
+            validateSalaryForJob(request.getSalary(), job);
+            if (request.getDepartmentId() != null) {
+                requireDepartment(connection, request.getDepartmentId());
+            }
+            if (request.getManagerId() != null) {
+                requireEmployee(connection, request.getManagerId());
+            }
+
+            Integer employeeId = insertEmployee(connection, request);
+            String username = resolveUsername(connection, request, employeeId);
+            Integer userId = insertUser(connection, employeeId, username, request.getInitialPassword());
+            Integer roleId = loadRoleId(connection, "ROLE_EMPLOYEE");
+            insertUserRole(connection, userId, roleId);
+            recordIdempotency(connection, request.getIdempotencyKey(), "POST /employees", 201);
+            connection.commit();
+            return employeeId;
+        } catch (Exception ex) {
+            rollbackQuietly(connection, ex);
+            throw ex;
+        }
+    } catch (HrConflictException | HrBusinessRuleViolationException | HrResourceNotFoundException ex) {
+        throw ex;
+    } catch (SQLException ex) {
+        throw new IllegalStateException("DB_ACCESS_ERROR", ex);
+    }
+}

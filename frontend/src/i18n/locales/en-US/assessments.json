@@ -1,0 +1,88 @@
+{
+  "navLabel": "My Assessments",
+  "eyebrow": "Employee self-service",
+  "title": "My Assessments",
+  "subtitle": "Track draft, submitted, and finalized assessments for your review cycles.",
+  "meta": {
+    "drafts": "Drafts",
+    "submitted": "Submitted",
+    "finalized": "Finalized",
+    "availableCycles": "Open cycles"
+  },
+  "statuses": {
+    "DRAFT": "Draft",
+    "SUBMITTED": "Submitted",
+    "FINAL": "Final"
+  },
+  "periodTypes": {
+    "QUARTER": "Quarterly",
+    "HALF": "Half-year",
+    "ANNUAL": "Annual"
+  },
+  "actions": {
+    "newAssessment": "New Assessment",
+    "continueDraft": "Continue Draft",
+    "viewAssessment": "View Assessment",
+    "backToList": "Back to My Assessments",
+    "saveDraft": "Save Draft",
+    "submitAssessment": "Submit Assessment"
+  },
+  "availableCycles": {
+    "title": "Available Cycles",
+    "subtitle": "Start a new assessment only for currently open cycles you have not used yet.",
+    "empty": "There are no open assessment cycles available to start right now.",
+    "window": "{{start}} to {{end}}"
+  },
+  "history": {
+    "title": "Assessment History",
+    "subtitle": "Open a draft to continue editing or review previously submitted cycles.",
+    "reviewer": "Reviewer: {{name}}",
+    "updated": "Updated: {{value}}",
+    "submitted": "Submitted: {{value}}",
+    "notSubmitted": "Not submitted yet"
+  },
+  "states": {
+    "loadError": "Failed to load your assessments.",
+    "emptyTitle": "No assessments yet",
+    "emptyBody": "Start a draft when an open cycle becomes available.",
+    "reviewerPending": "Reviewer assignment pending",
+    "reviewerPendingBody": "Reviewer details will appear after assignment.",
+    "detailNotFound": "Assessment not found."
+  },
+  "entry": {
+    "eyebrow": "Assessment workspace",
+    "newTitle": "New Assessment",
+    "newSubtitle": "Capture your progress and reflection for the selected cycle.",
+    "editTitle": "Assessment Entry",
+    "editSubtitle": "Review your assessment details and complete the submission when ready.",
+    "noCycleTitle": "No open cycles available",
+    "noCycleBody": "You have already used the current open cycle or no cycle is open yet.",
+    "readOnlyBanner": "This assessment has already been submitted or finalized and is now read-only.",
+    "meta": {
+      "window": "Cycle window",
+      "status": "Status"
+    },
+    "sections": {
+      "overview": "Cycle Overview",
+      "overviewBody": "Choose the cycle and capture the quantitative parts of the assessment.",
+      "reflection": "Employee Reflection",
+      "reflectionBody": "Summarize what you delivered and where you want to focus next.",
+      "reviewer": "Reviewer Context",
+      "reviewerBody": "Reviewer assignment and feedback are shown here when available."
+    },
+    "managerFeedbackPending": "Manager feedback will appear after the review is completed."
+  },
+  "fields": {
+    "cycle": "Assessment cycle",
+    "goalCompletionPct": "Goal completion %",
+    "competencyScore": "Competency score",
+    "employeeReflection": "Employee reflection",
+    "nextCyclePlan": "Next cycle plan",
+    "reviewer": "Reviewer",
+    "managerFeedback": "Manager feedback"
+  },
+  "toasts": {
+    "saveSuccess": "Assessment draft saved.",
+    "submitSuccess": "Assessment submitted."
+  }
+}

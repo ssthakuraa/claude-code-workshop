@@ -1,0 +1,83 @@
+{
+  "eyebrow": "Centro de mando de la fuerza laboral",
+  "title": "Bienvenido de nuevo, {{name}}",
+  "titleFallback": "Bienvenido de nuevo, Usuario",
+  "subtitle": "Supervise la salud de la organización, controle el movimiento del personal y entre directamente en las acciones de RR. HH. más frecuentes desde un solo espacio compartido.",
+  "cards": {
+    "totalHeadcount": {
+      "eyebrow": "Fuerza laboral",
+      "title": "Plantilla total",
+      "subtitle": "Todos los empleados",
+      "trend": "+{{count}} este mes",
+      "detail": "Total en vivo",
+      "statusStable": "Plantilla estable",
+      "statusExits": "{{count}} salidas este mes"
+    },
+    "newHires": {
+      "eyebrow": "Movimiento",
+      "title": "Nuevas contrataciones (mes)",
+      "subtitle": "Este mes",
+      "trend": "Mes actual",
+      "detail": "Periodo actual",
+      "statusActive": "Contratación activa",
+      "statusIdle": "Aún sin contrataciones"
+    },
+    "activeEmployees": {
+      "eyebrow": "Estado",
+      "title": "Empleados activos",
+      "subtitle": "Actualmente activos",
+      "detail": "Disponibles",
+      "statusCoverage": "Cobertura completa",
+      "statusUnavailable": "{{count}} no disponibles"
+    },
+    "onLeave": {
+      "eyebrow": "Estado",
+      "title": "Con permiso",
+      "subtitle": "Actualmente ausentes",
+      "detail": "Atención",
+      "statusWatch": "Vigilar cobertura",
+      "statusClear": "Sin casos de ausencia"
+    },
+    "probation": {
+      "eyebrow": "Estado",
+      "title": "En prueba",
+      "subtitle": "Requiere revisión",
+      "detail": "Seguimiento",
+      "trend": "Se requiere acción",
+      "statusReview": "Necesita revisión",
+      "statusClear": "En curso"
+    }
+  },
+  "panels": {
+    "headcountByCountry": {
+      "eyebrow": "Distribución",
+      "title": "Plantilla por país",
+      "subtitle": "Distribución geográfica de la fuerza laboral actual.",
+      "centerLabel": "{{count}} total"
+    },
+    "topDepartments": {
+      "eyebrow": "Composición",
+      "title": "Principales departamentos",
+      "subtitle": "Mayores concentraciones de personal por departamento."
+    },
+    "quickActions": {
+      "eyebrow": "Flujo",
+      "title": "Acciones rápidas",
+      "subtitle": "Flujos de RR. HH. de alta frecuencia desde un solo lugar.",
+      "hireEmployee": "Contratar empleado",
+      "transferEmployee": "Transferir empleado",
+      "viewOrgChart": "Ver organigrama"
+    },
+    "attritionTrend": {
+      "eyebrow": "Tendencia",
+      "title": "Tendencia de rotación (12 meses)",
+      "subtitle": "Actividad de bajas en el último año."
+    },
+    "recentActivity": {
+      "eyebrow": "Actividad",
+      "title": "Actividad reciente",
+      "subtitle": "Últimos cambios de personal y eventos del sistema.",
+      "empty": "No se encontró actividad reciente."
+    }
+  }
+}

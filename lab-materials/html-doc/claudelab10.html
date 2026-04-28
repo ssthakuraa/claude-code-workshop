@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Lab 10: Data Verification — Runtime Data Checks</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="doc-shell">
+    <header class="doc-header">
+      <div class="doc-header-meta">
+        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-divider"></span>
+        <span class="doc-page-label">Lab 10</span>
+      </div>
+      <div class="doc-header-title">Lab 10: Data Verification — Runtime Data Checks</div>
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <a class="doc-nav-link doc-nav-prev" href="codexlab09.html">← Lab 09</a>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <a class="doc-nav-link doc-nav-next" href="codexlab11.html">Lab 11 →</a>
+      </nav>
+    </header>
+    <main class="doc-content">
+<section id="lab-10-data-verification--runtime-data-checks"
+class="level1">
+<h1>Lab 10: Data Verification — Runtime Data Checks</h1>
+<p><strong>Duration:</strong> 75 minutes</p>
+<blockquote>
+<p>Recommended Day 2 order: <strong>Lab 09 → Lab 08 → Lab 07 → Lab 10 →
+Lab 11 → optional Lab 12</strong>. This file is the fourth stop in that
+sequence, after browser verification and the earlier implementation
+loops are already in place.</p>
+</blockquote>
+<section id="learning-objective" class="level2">
+<h2>Learning Objective</h2>
+<p>You will use Codex with the repo's current PostgreSQL workflow to
+verify that backend operations write correct data. Combined with browser
+verification, this creates a full verification loop: browser → API →
+database.</p>
+</section>
+<section id="the-key-concept" class="level2">
+<h2>The Key Concept</h2>
+<p>The point of this lab is simple: Codex should be able to inspect real
+database state in a read-oriented way so you can verify that the UI,
+API, and stored data all agree.</p>
+<p>Database verification lets Codex:</p>
+<ul>
+<li>verify that an API operation wrote correct data</li>
+<li>investigate bugs by checking actual database state</li>
+<li>generate reports from live data</li>
+<li>validate data integrity across tables</li>
+</ul>
+<p><strong>Security:</strong> Verification access should remain
+read-oriented. The learner should use the current PostgreSQL connection
+metadata and <code>psql</code>, not ad hoc mutation scripts or legacy
+SQLcl helpers. Verification should never become an excuse for direct
+production-style writes.</p>
+<p><strong>The full verification loop:</strong> browser sees UI state,
+API calls see the live response, and <code>psql</code> sees actual
+stored data. Compare all three: any mismatch = bug.</p>
+<hr />
+</section>
+<section id="setup" class="level2">
+<h2>Setup</h2>
+<p>Ask Codex to do the repo reads and runtime checks in this section
+unless you need to inspect a value yourself.</p>
+<pre class="text"><code>This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use hidden completed examples or old conversion notes.
+
+Read `dbdetails.md` and summarize the current non-secret database connection
+metadata for this learner workspace.
+Then confirm whether the backend and frontend are already running on the lab
+ports:
+- backend `18082`
+- frontend `5182`</code></pre>
+<p>Keep the database verification path strict for this lab:</p>
+<ul>
+<li>use <code>psql</code> with the values from <code>dbdetails.md</code>
+for read-oriented database work</li>
+<li>keep the learner path on direct <code>psql</code> verification plus
+the live API write flow</li>
+<li>do not assume repo-bundled SQL tooling under
+<code>runtime/</code></li>
+<li>do not download or install alternate SQL tools during the lab</li>
+<li>if <code>18082</code> or <code>5182</code> are already in use when
+you verify the app state, treat stale repo-owned backend/frontend
+processes as the first suspect and restart them cleanly on the reserved
+ports</li>
+<li>for backend cleanup, use
+<code>cd backend &amp;&amp; ./stop-jersey-service.sh</code></li>
+<li>keep any local port overrides in <code>backend/.env.local</code> and
+<code>frontend/.env.local</code></li>
+</ul>
+<hr />
+</section>
+<section
+id="exercise-1-prepare-the-database-verification-workflow-15-min"
+class="level2">
+<h2>Exercise 1: Prepare The Database Verification Workflow (15 min)</h2>
+<section id="goal" class="level3">
+<h3>Goal</h3>
+<p>Prepare a repeatable database verification workflow using the repo's
+active PostgreSQL path.</p>
+</section>
+<section id="instructions" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Codex to explain the current database verification path:</p>
+<pre class="text"><code>This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use hidden completed examples or old conversion notes.
+
+Read `dbdetails.md`, `backend/OFFLINE-JERSEY-BUILD.md`, and `AGENTS.md`.
+Explain the intended database verification workflow for this repo.
+Then give me the safest repeatable way to run read-only verification queries
+against the HR dataset in this learner workspace.</code></pre></li>
+<li><p><strong>Smoke test:</strong></p>
+<pre class="text"><code>Run read-only verification queries and tell me:
+- how many rows exist in AIHR_EMPLOYEES
+- how many rows exist in AIHR_DEPARTMENTS
+- how many rows exist in AIHR_JOBS</code></pre></li>
+</ol>
+</section>
+<section id="what-you-should-see" class="level3">
+<h3>What You Should See</h3>
+<p>Codex helps run read-oriented <code>psql</code> queries and returns
+the results directly in the conversation.</p>
+<hr />
+</section>
+</section>
+<section id="exercise-2-data-exploration-15-min" class="level2">
+<h2>Exercise 2: Data Exploration (15 min)</h2>
+<section id="goal-1" class="level3">
+<h3>Goal</h3>
+<p>Use database verification queries to understand the data landscape
+before verification.</p>
+</section>
+<section id="instructions-1" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p><strong>Explore the schema:</strong></p>
+<pre class="text"><code>Show me the main AIHR tables with their row counts.
+Then show the columns and types for the AIHR employees table.</code></pre></li>
+<li><p><strong>Run business queries:</strong></p>
+<pre class="text"><code>Show me:
+1. Employee count by department
+2. Average salary by job title
+3. Employees hired in the last 30 days
+4. The management hierarchy for the top 3 levels</code></pre></li>
+<li><p><strong>Check data integrity:</strong></p>
+<pre class="text"><code>Are there any data integrity issues?
+- Employees without a job assignment?
+- Departments without a manager?
+- Job history records without matching employees?
+- Orphaned records in any table?</code></pre></li>
+</ol>
+</section>
+<section id="what-you-should-see-1" class="level3">
+<h3>What You Should See</h3>
+<p>Codex runs precise SQL queries and reports findings. This is how you
+would investigate a real data issue: Codex as a SQL copilot, not as a
+guesser.</p>
+<hr />
+</section>
+</section>
+<section id="exercise-3-operation-verification-30-min" class="level2">
+<h2>Exercise 3: Operation Verification (30 min)</h2>
+<section id="goal-2" class="level3">
+<h3>Goal</h3>
+<p>Verify that a backend operation writes correct data across the
+relevant tables.</p>
+</section>
+<section id="instructions-2" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p><strong>Before the operation — capture baseline:</strong></p>
+<pre class="text"><code>Query the database and tell me:
+1. current AIHR_EMPLOYEES row count
+2. current AIHR_USERS row count
+3. current AIHR_JOB_HISTORY row count
+Save these numbers so we can compare after the hire.</code></pre></li>
+<li><p><strong>Obtain a real access token through the live API.</strong>
+You may run this yourself or ask Codex to prepare and execute it:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-sS</span> <span class="at">-X</span> POST http://127.0.0.1:18082/app/hr/api/v1/auth/login <span class="dt">\</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;Content-Type: application/json&quot;</span> <span class="dt">\</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-d</span> <span class="st">&#39;{</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;username&quot;: &quot;steven.king&quot;,</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;password&quot;: &quot;password123&quot;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="st">  }&#39;</span></span></code></pre></div>
+<p>Save the returned access token. Do not paste a refresh token into
+later commands by accident.</p></li>
+<li><p><strong>Perform a hire operation via the API:</strong></p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="va">RUN_TAG</span><span class="op">=</span><span class="st">&quot;sv001&quot;</span>  <span class="co"># Example only. Replace with your own short unique tag.</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="va">HIRE_EMAIL</span><span class="op">=</span><span class="st">&quot;lab.testhire.</span><span class="va">${RUN_TAG}</span><span class="st">@example.com&quot;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="va">HIRE_LAST_NAME</span><span class="op">=</span><span class="st">&quot;TestHire</span><span class="va">${RUN_TAG}</span><span class="st">&quot;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="va">ACCESS_TOKEN</span><span class="op">=</span><span class="st">&quot;YOUR_REAL_ACCESS_TOKEN_HERE&quot;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-sS</span> <span class="at">-X</span> POST http://127.0.0.1:18082/app/hr/api/v1/employees <span class="dt">\</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;Content-Type: application/json&quot;</span> <span class="dt">\</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;Authorization: Bearer </span><span class="va">${ACCESS_TOKEN}</span><span class="st">&quot;</span> <span class="dt">\</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">-d</span> <span class="st">&quot;{</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="dt">\&quot;</span><span class="st">idempotencyKey</span><span class="dt">\&quot;</span><span class="st">: </span><span class="dt">\&quot;</span><span class="st">lab10-</span><span class="va">${RUN_TAG}</span><span class="dt">\&quot;</span><span class="st">,</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="dt">\&quot;</span><span class="st">firstName</span><span class="dt">\&quot;</span><span class="st">: </span><span class="dt">\&quot;</span><span class="st">Lab</span><span class="dt">\&quot;</span><span class="st">,</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="dt">\&quot;</span><span class="st">lastName</span><span class="dt">\&quot;</span><span class="st">: </span><span class="dt">\&quot;</span><span class="va">${HIRE_LAST_NAME}</span><span class="dt">\&quot;</span><span class="st">,</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="dt">\&quot;</span><span class="st">email</span><span class="dt">\&quot;</span><span class="st">: </span><span class="dt">\&quot;</span><span class="va">${HIRE_EMAIL}</span><span class="dt">\&quot;</span><span class="st">,</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="dt">\&quot;</span><span class="st">jobId</span><span class="dt">\&quot;</span><span class="st">: </span><span class="dt">\&quot;</span><span class="st">IT_PROG</span><span class="dt">\&quot;</span><span class="st">,</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="dt">\&quot;</span><span class="st">salary</span><span class="dt">\&quot;</span><span class="st">: 80000,</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="dt">\&quot;</span><span class="st">hireDate</span><span class="dt">\&quot;</span><span class="st">: </span><span class="dt">\&quot;</span><span class="st">2026-03-31</span><span class="dt">\&quot;</span><span class="st">,</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="dt">\&quot;</span><span class="st">departmentId</span><span class="dt">\&quot;</span><span class="st">: 60,</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="dt">\&quot;</span><span class="st">initialPassword</span><span class="dt">\&quot;</span><span class="st">: </span><span class="dt">\&quot;</span><span class="st">password123</span><span class="dt">\&quot;</span><span class="st">,</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="dt">\&quot;</span><span class="st">username</span><span class="dt">\&quot;</span><span class="st">: </span><span class="dt">\&quot;</span><span class="st">lab.</span><span class="va">${RUN_TAG}</span><span class="dt">\&quot;</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="st">  }&quot;</span></span></code></pre></div>
+<p>Use a unique <code>RUN_TAG</code> every time you rerun this lab. That
+keeps the <code>idempotencyKey</code>, last name, email, and username
+unique in a shared training database.</p>
+<p>Preferred write path for this lab:</p>
+<ul>
+<li>use the documented API hire request above</li>
+<li>if auth is complex, ask Codex to help you obtain or apply the real
+token and then run the same API hire request</li>
+<li>if you need the app login flow, use it only to help complete the API
+write step</li>
+<li>do not substitute a generic UI helper or unrelated end-to-end script
+for this API write step</li>
+</ul></li>
+<li><p><strong>After the operation — verify the current runtime
+behavior:</strong></p>
+<pre class="text"><code>Use the exact values from the hire request I just ran.
+HIRE_EMAIL = &lt;paste exact value&gt;
+
+Now verify the hire operation wrote correctly:
+1. is there a new row in AIHR_EMPLOYEES with that HIRE_EMAIL?
+2. is there a matching AIHR_USERS record?
+3. does the employee count match baseline + 1?
+4. is the salary stored correctly (80000)?
+5. is the job_id `IT_PROG`?
+Show me the actual data for each check.</code></pre></li>
+<li><p><strong>Check related-table behavior as an observation, not an
+assumption:</strong></p>
+<pre class="text"><code>Check whether AIHR_JOB_HISTORY changed for this hire.
+If there is no new row, record that as the current runtime behavior rather
+than as a lab failure.</code></pre></li>
+<li><p><strong>Cross-reference with the UI:</strong></p>
+<pre class="text"><code>Use the exact last name from the hire request I just ran.
+HIRE_LAST_NAME = &lt;paste exact value&gt;
+
+Navigate to the employee directory in the browser.
+Search for that HIRE_LAST_NAME. Does the UI show the same data
+that&#39;s in the database? Compare the salary, job title,
+and department between the UI and the database query.</code></pre>
+<p>In this chapter, browser tooling verifies the result after the write.
+It does not replace the API write step from Exercise 3.</p>
+<p>If the direct employee detail page matches the database but the
+employee directory search does not show the new hire, record that as a
+runtime discrepancy to investigate. Do not rewrite the database
+conclusion to make the UI result fit.</p></li>
+</ol>
+</section>
+<section id="what-you-should-see-2" class="level3">
+<h3>What You Should See</h3>
+<p>The full loop:</p>
+<ul>
+<li><strong>database confirms</strong> the hire wrote the expected
+runtime rows</li>
+<li><strong>browser confirms</strong> the new employee appears in the
+UI</li>
+<li><strong>any mismatch</strong> between DB and UI is a bug to
+investigate</li>
+<li><strong>related-table observation matters</strong> even when it is
+not a success gate, because it tells you whether the current
+implementation is narrower than you expected</li>
+</ul>
+<hr />
+</section>
+</section>
+<section id="exercise-4-final-reflection-15-min" class="level2">
+<h2>Exercise 4: Final Reflection (15 min)</h2>
+<ol type="1">
+<li><p>Add to AGENTS.md:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Data Verification</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Use the repo&#39;s active PostgreSQL workflow for read-oriented verification</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Use it for data verification after operations, integrity checks, and reporting</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Never use verification access for ad hoc mutations</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Full verification loop: browser + API + database data checks</span></code></pre></div></li>
+<li><p><strong>The verification-loop concept:</strong></p>
+<pre class="text"><code>Run a full verification loop for the hire operation we just did:
+1. Browser: navigate to the employee detail page and capture evidence
+2. Database queries: inspect the AIHR_EMPLOYEES record, the AIHR_USERS row,
+   and any AIHR_JOB_HISTORY rows for that employee
+3. Compare: does the UI match the database?
+Report any discrepancies.</code></pre></li>
+<li><p><strong>MCP ecosystem awareness</strong> (optional
+extension):</p>
+<p>Other MCP servers available for enterprise use:</p>
+<table>
+<thead>
+<tr>
+<th>MCP Server</th>
+<th>What It Connects</th>
+<th>Enterprise Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Figma</td>
+<td>Design files</td>
+<td>Extract tokens, compare UI to designs</td>
+</tr>
+<tr>
+<td>Slack</td>
+<td>Team communication</td>
+<td>Read bug reports, post status updates</td>
+</tr>
+<tr>
+<td>Sentry</td>
+<td>Error monitoring</td>
+<td>Pull stack traces during debugging</td>
+</tr>
+<tr>
+<td>Jira / Linear</td>
+<td>Issue tracking</td>
+<td>Fetch ticket context for implementations</td>
+</tr>
+<tr>
+<td>BigQuery</td>
+<td>Analytics warehouse</td>
+<td>Query metrics during performance work</td>
+</tr>
+<tr>
+<td>SQL / DB runtime</td>
+<td>Database-backed systems</td>
+<td>Read-oriented verification and integrity checks</td>
+</tr>
+</tbody>
+</table>
+<p>The pattern is always the same: when an MCP server is part of your
+workflow, add it through the repo's current config surface, restart
+Codex from the repo root if needed, and then confirm the new tools are
+available.</p></li>
+</ol>
+<hr />
+</section>
+<section id="success-criteria" class="level2">
+<h2>Success Criteria</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />A repeatable database verification
+workflow is documented and usable</label></li>
+<li><label><input type="checkbox" />Codex can run the required
+read-oriented PostgreSQL verification queries</label></li>
+<li><label><input type="checkbox" />Hire operation verified across the
+tables the current runtime actually writes for this flow
+(<code>AIHR_EMPLOYEES</code> and <code>AIHR_USERS</code>)</label></li>
+<li><label><input type="checkbox" /><code>AIHR_JOB_HISTORY</code>
+behavior was checked and recorded as an observation</label></li>
+<li><label><input type="checkbox" />UI data matches database
+data</label></li>
+<li><label><input type="checkbox" />AGENTS.md updated with
+database-verification patterns and the verification loop</label></li>
+</ul>
+<hr />
+</section>
+<section id="key-takeaways" class="level2">
+<h2>Key Takeaways</h2>
+<ol type="1">
+<li><strong>Read-oriented database access for safety</strong> —
+verification should never mutate data directly</li>
+<li><strong>The full verification loop</strong> — browser + API +
+database = complete confidence</li>
+<li><strong>Cross-table verification catches expectation gaps</strong> —
+sometimes the runtime writes fewer related rows than you assumed, and
+the lab should reflect that reality</li>
+<li><strong>Use the repo's real runtime tooling</strong> — verify
+against actual stored data, not assumptions</li>
+<li><strong>The pattern transfers</strong> — database checks here,
+analytics or observability data sources tomorrow</li>
+</ol>
+</section>
+</section>
+    </main>
+    <footer class="doc-footer">
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <a class="doc-nav-link doc-nav-prev" href="codexlab09.html">← Lab 09</a>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <a class="doc-nav-link doc-nav-next" href="codexlab11.html">Lab 11 →</a>
+      </nav>
+    </footer>
+  </div>
+<script>
+  (function () {
+    const copyIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<rect x="9" y="7" width="10" height="12" rx="2"></rect>',
+      '<rect x="5" y="3" width="10" height="12" rx="2"></rect>',
+      '</svg>'
+    ].join('');
+    const copiedIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<path d="M6 12.5l4 4 8-9"></path>',
+      '</svg>'
+    ].join('');
+
+    const blocks = document.querySelectorAll('pre > code');
+    for (const code of blocks) {
+      const pre = code.parentElement;
+      if (!pre || pre.dataset.copyReady === 'true') continue;
+      pre.dataset.copyReady = 'true';
+
+      const shell = document.createElement('div');
+      shell.className = 'code-block-shell';
+      const footer = document.createElement('div');
+      footer.className = 'code-block-footer';
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code-button';
+      button.innerHTML = copyIcon;
+      button.setAttribute('aria-label', 'Copy code block');
+      button.setAttribute('title', 'Copy code block');
+
+      button.addEventListener('click', async function () {
+        const text = code.innerText;
+        try {
+          await navigator.clipboard.writeText(text);
+          button.innerHTML = copiedIcon;
+          button.setAttribute('aria-label', 'Copied');
+          button.setAttribute('title', 'Copied');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1400);
+        } catch (error) {
+          button.innerHTML = copyIcon;
+          button.setAttribute('aria-label', 'Copy failed');
+          button.setAttribute('title', 'Copy failed');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1800);
+        }
+      });
+
+      pre.parentNode.insertBefore(shell, pre);
+      shell.appendChild(pre);
+      footer.appendChild(button);
+      shell.appendChild(footer);
+    }
+  }());
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+Add these imports with the other repository/resource imports:
+
+import com.company.hr.repository.HrAssessmentDirectoryJdbcRepository;
+import com.company.hr.resource.HrAssessmentResource;
+
+Add this HK2 binding inside the existing `AbstractBinder`:
+
+bind(new HrAssessmentDirectoryJdbcRepository()).to(HrAssessmentDirectoryJdbcRepository.class);
+
+Add this resource registration with the other Jersey resource registrations:
+
+register(HrAssessmentResource.class);

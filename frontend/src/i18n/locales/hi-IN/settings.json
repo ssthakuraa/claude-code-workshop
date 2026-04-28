@@ -1,0 +1,41 @@
+{
+  "eyebrow": "व्यक्तिगत वर्कस्पेस",
+  "title": "सेटिंग्स",
+  "subtitle": "भाषा, क्षेत्रीय प्रारूप और व्यक्तिगत वर्कस्पेस प्राथमिकताओं को प्रबंधित करें जो लाइव एचआर अनुभव को आकार देती हैं।",
+  "dashboardCrumb": "डैशबोर्ड",
+  "options": {
+    "dateFormats": {
+      "short": "संक्षिप्त",
+      "medium": "मध्यम",
+      "long": "लंबा"
+    },
+    "timezones": {
+      "America_Los_Angeles": "पैसिफिक समय (लॉस एंजेलिस)",
+      "America_Chicago": "सेंट्रल समय (शिकागो)",
+      "America_New_York": "ईस्टर्न समय (न्यूयॉर्क)",
+      "America_Mexico_City": "मेक्सिको सिटी",
+      "America_Toronto": "टोरंटो",
+      "Europe_London": "लंदन",
+      "Europe_Dublin": "डबलिन",
+      "Europe_Paris": "पेरिस",
+      "Europe_Berlin": "बर्लिन",
+      "Europe_Amsterdam": "एम्स्टर्डम",
+      "Asia_Kolkata": "कोलकाता",
+      "Asia_Singapore": "सिंगापुर"
+    },
+    "currencies": {
+      "USD": "अमेरिकी डॉलर (USD)",
+      "EUR": "यूरो (EUR)",
+      "GBP": "ब्रिटिश पाउंड (GBP)",
+      "INR": "भारतीय रुपया (INR)",
+      "MXN": "मैक्सिकन पेसो (MXN)",
+      "CAD": "कनाडाई डॉलर (CAD)",
+      "AUD": "ऑस्ट्रेलियाई डॉलर (AUD)",
+      "BRL": "ब्राज़ीलियाई रियाल (BRL)",
+      "CHF": "स्विस फ्रैंक (CHF)",
+      "DKK": "डेनिश क्रोन (DKK)",
+      "JPY": "जापानी येन (JPY)",
+      "SGD": "सिंगापुर डॉलर (SGD)"
+    }
+  }
+}

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Lab 05: Hooks — Truthful Guardrails</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="doc-shell">
+    <header class="doc-header">
+      <div class="doc-header-meta">
+        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-divider"></span>
+        <span class="doc-page-label">Lab 05</span>
+      </div>
+      <div class="doc-header-title">Lab 05: Hooks — Truthful Guardrails</div>
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <a class="doc-nav-link doc-nav-prev" href="codexlab04.html">← Lab 04</a>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <a class="doc-nav-link doc-nav-next" href="codexlab06.html">Lab 06 →</a>
+      </nav>
+    </header>
+    <main class="doc-content">
+<section id="lab-05-hooks--truthful-guardrails" class="level1">
+<h1>Lab 05: Hooks — Truthful Guardrails</h1>
+<p><strong>Duration:</strong> 25 minutes</p>
+<section id="learning-objective" class="level2">
+<h2>Learning Objective</h2>
+<p>You will see the difference between <strong>advisory rules</strong>
+(<code>AGENTS.md</code>) and <strong>structural guardrails</strong>
+(hooks). By the end, you should understand one truthful hook example,
+the current runtime limitation, and why this course does not keep live
+hooks active after the demo.</p>
+<hr />
+</section>
+<section id="the-key-concept" class="level2">
+<h2>The Key Concept</h2>
+<p>Repo-managed Codex hooks have two parts:</p>
+<ul>
+<li><code>.codex/config.toml</code>
+<ul>
+<li>enables hooks for this repo</li>
+</ul></li>
+<li><code>.codex/hooks.json</code>
+<ul>
+<li>defines the hook events, matchers, and commands</li>
+</ul></li>
+</ul>
+<p>In the current training environment, repo-managed hooks should be
+treated as an evolving Codex feature, not as a fully mature production
+capability. This lab therefore stays intentionally light: <strong>one
+small <code>PreToolUse</code> example</strong> that teaches you how to
+configure and reason about a hook without pretending Codex is already
+ready for a broad hook policy.</p>
+<p>The goal is practical understanding, not over-promising maturity.
+Once a future Codex release makes this feature stable enough for wider
+use, confirm that in official OpenAI Codex release notes before you
+expand from this demo to a larger, repo-relevant hook set.</p>
+<p><strong>The key insight:</strong> <code>AGENTS.md</code> states the
+rules. Hooks enforce the subset of rules that the runtime can actually
+intercept.</p>
+<hr />
+</section>
+<section id="exercise-1-protect-java-backend-naming-10-min"
+class="level2">
+<h2>Exercise 1: Protect Java Backend Naming (10 min)</h2>
+<section id="goal" class="level3">
+<h3>Goal</h3>
+<p>Create a <code>PreToolUse</code> Bash hook that warns when a backend
+Java class path under <code>com/company/hr</code> does not start with
+<code>Hr</code>.</p>
+</section>
+<section id="why-this-matters" class="level3">
+<h3>Why This Matters</h3>
+<p>Lab 01 established the naming rule, but a real guardrail is useful
+once the repo starts growing. In the current runtime, this hook gives
+you a visible warning and a non-zero signal that the naming rule was
+violated.</p>
+</section>
+<section id="instructions" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Codex to add the hook:</p>
+<pre><code>Add a PreToolUse Bash hook in `.codex/hooks.json` that blocks Bash commands
+targeting backend Java files under
+`backend/hrapp-service/src/main/java/com/company/hr/`
+when the file name does not start with `Hr`.
+
+The hook should:
+- parse the Bash command from stdin with jq
+- inspect any matching Java file paths mentioned in the command
+- print a clear BLOCKED message naming the offending file
+- exit non-zero</code></pre></li>
+<li><p><strong>Restart Codex before the live demo.</strong> This is a
+manual learner action. Exit the current Codex session, restart Codex
+from the learner workspace root, and if Codex prints a
+<code>codex resume ...</code> command when it exits, use that.</p></li>
+<li><p><strong>Test it live.</strong> In the fresh session, ask
+Codex:</p>
+<pre><code>Create backend/hrapp-service/src/main/java/com/company/hr/EmployeeRatingResource.java</code></pre></li>
+<li><p><strong>What you should see:</strong></p>
+<ul>
+<li>The client shows the <code>PreToolUse</code> hook status lines on
+screen</li>
+<li>The Java naming hook surfaces a visible warning naming
+<code>EmployeeRatingResource.java</code></li>
+<li>In some clients the warning is informational only and the Bash
+command may still run</li>
+<li>If the file is created anyway, treat that as a runtime limitation,
+not as proof that your hook logic is wrong</li>
+</ul></li>
+<li><p><strong>Clean up the intentionally bad file.</strong> Ask
+Codex:</p>
+<pre><code>Remove backend/hrapp-service/src/main/java/com/company/hr/EmployeeRatingResource.java</code></pre></li>
+<li><p><strong>Return the workspace to a quiet state.</strong> Ask
+Codex:</p>
+<pre><code>Replace `.codex/hooks.json` with the empty starter file:
+
+{
+  &quot;hooks&quot;: {}
+}</code></pre></li>
+<li><p><strong>Restart Codex once the hook file is empty.</strong> This
+clears the warning flow before you continue to later labs. Exit the
+current Codex session, restart Codex from the learner workspace root,
+and if Codex prints a <code>codex resume ...</code> command when it
+exits, use that.</p></li>
+</ol>
+</section>
+</section>
+<section id="key-takeaways" class="level2">
+<h2>Key Takeaways</h2>
+<ol type="1">
+<li>The Hooks feature is evolving and experimental.</li>
+<li>Hooks use two repo files: <code>.codex/config.toml</code> enables
+them and <code>.codex/hooks.json</code> defines them.</li>
+<li>In this learner path, the hook lesson is one small Bash-governance
+demo, not a broad live-enforcement system.</li>
+<li><code>PreToolUse</code> plus a non-zero exit gives you a real
+signal, but not always a guaranteed live block in every client.</li>
+<li>One visible demo is enough to understand the feature without making
+the rest of the course noisy.</li>
+</ol>
+</section>
+</section>
+    </main>
+    <footer class="doc-footer">
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <a class="doc-nav-link doc-nav-prev" href="codexlab04.html">← Lab 04</a>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <a class="doc-nav-link doc-nav-next" href="codexlab06.html">Lab 06 →</a>
+      </nav>
+    </footer>
+  </div>
+<script>
+  (function () {
+    const copyIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<rect x="9" y="7" width="10" height="12" rx="2"></rect>',
+      '<rect x="5" y="3" width="10" height="12" rx="2"></rect>',
+      '</svg>'
+    ].join('');
+    const copiedIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<path d="M6 12.5l4 4 8-9"></path>',
+      '</svg>'
+    ].join('');
+
+    const blocks = document.querySelectorAll('pre > code');
+    for (const code of blocks) {
+      const pre = code.parentElement;
+      if (!pre || pre.dataset.copyReady === 'true') continue;
+      pre.dataset.copyReady = 'true';
+
+      const shell = document.createElement('div');
+      shell.className = 'code-block-shell';
+      const footer = document.createElement('div');
+      footer.className = 'code-block-footer';
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code-button';
+      button.innerHTML = copyIcon;
+      button.setAttribute('aria-label', 'Copy code block');
+      button.setAttribute('title', 'Copy code block');
+
+      button.addEventListener('click', async function () {
+        const text = code.innerText;
+        try {
+          await navigator.clipboard.writeText(text);
+          button.innerHTML = copiedIcon;
+          button.setAttribute('aria-label', 'Copied');
+          button.setAttribute('title', 'Copied');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1400);
+        } catch (error) {
+          button.innerHTML = copyIcon;
+          button.setAttribute('aria-label', 'Copy failed');
+          button.setAttribute('title', 'Copy failed');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1800);
+        }
+      });
+
+      pre.parentNode.insertBefore(shell, pre);
+      shell.appendChild(pre);
+      footer.appendChild(button);
+      shell.appendChild(footer);
+    }
+  }());
+</script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+{
+  "navLabel": "Mis evaluaciones",
+  "eyebrow": "Autoservicio del empleado",
+  "title": "Mis evaluaciones",
+  "subtitle": "Da seguimiento a tus evaluaciones en borrador, enviadas y finalizadas.",
+  "meta": {
+    "drafts": "Borradores",
+    "submitted": "Enviadas",
+    "finalized": "Finalizadas",
+    "availableCycles": "Ciclos abiertos"
+  },
+  "statuses": {
+    "DRAFT": "Borrador",
+    "SUBMITTED": "Enviada",
+    "FINAL": "Final"
+  },
+  "periodTypes": {
+    "QUARTER": "Trimestral",
+    "HALF": "Semestral",
+    "ANNUAL": "Anual"
+  },
+  "actions": {
+    "newAssessment": "Nueva evaluación",
+    "continueDraft": "Continuar borrador",
+    "viewAssessment": "Ver evaluación",
+    "backToList": "Volver a mis evaluaciones",
+    "saveDraft": "Guardar borrador",
+    "submitAssessment": "Enviar evaluación"
+  },
+  "availableCycles": {
+    "title": "Ciclos disponibles",
+    "subtitle": "Inicia una nueva evaluación solo para ciclos abiertos que aún no hayas usado.",
+    "empty": "No hay ciclos de evaluación abiertos disponibles en este momento.",
+    "window": "{{start}} a {{end}}"
+  },
+  "history": {
+    "title": "Historial de evaluaciones",
+    "subtitle": "Abre un borrador para continuar editando o revisa ciclos ya enviados.",
+    "reviewer": "Revisor: {{name}}",
+    "updated": "Actualizada: {{value}}",
+    "submitted": "Enviada: {{value}}",
+    "notSubmitted": "Aún no enviada"
+  },
+  "states": {
+    "loadError": "No se pudieron cargar tus evaluaciones.",
+    "emptyTitle": "Aún no tienes evaluaciones",
+    "emptyBody": "Inicia un borrador cuando haya un ciclo abierto disponible.",
+    "reviewerPending": "Asignación de revisor pendiente",
+    "reviewerPendingBody": "Los detalles del revisor aparecerán después de la asignación.",
+    "detailNotFound": "No se encontró la evaluación."
+  },
+  "entry": {
+    "eyebrow": "Espacio de evaluación",
+    "newTitle": "Nueva evaluación",
+    "newSubtitle": "Captura tu progreso y reflexión para el ciclo seleccionado.",
+    "editTitle": "Captura de evaluación",
+    "editSubtitle": "Revisa los detalles de tu evaluación y completa el envío cuando estés listo.",
+    "noCycleTitle": "No hay ciclos abiertos disponibles",
+    "noCycleBody": "Ya usaste el ciclo abierto actual o todavía no hay un ciclo abierto.",
+    "readOnlyBanner": "Esta evaluación ya fue enviada o finalizada y ahora es de solo lectura.",
+    "meta": {
+      "window": "Ventana del ciclo",
+      "status": "Estado"
+    },
+    "sections": {
+      "overview": "Resumen del ciclo",
+      "overviewBody": "Elige el ciclo y captura la parte cuantitativa de la evaluación.",
+      "reflection": "Reflexión del empleado",
+      "reflectionBody": "Resume lo que entregaste y dónde quieres enfocarte después.",
+      "reviewer": "Contexto del revisor",
+      "reviewerBody": "La asignación del revisor y su retroalimentación aparecerán aquí cuando estén disponibles."
+    },
+    "managerFeedbackPending": "La retroalimentación del gerente aparecerá cuando la revisión se complete."
+  },
+  "fields": {
+    "cycle": "Ciclo de evaluación",
+    "goalCompletionPct": "% de cumplimiento de objetivos",
+    "competencyScore": "Calificación de competencias",
+    "employeeReflection": "Reflexión del empleado",
+    "nextCyclePlan": "Plan para el siguiente ciclo",
+    "reviewer": "Revisor",
+    "managerFeedback": "Retroalimentación del gerente"
+  },
+  "toasts": {
+    "saveSuccess": "Se guardó el borrador de la evaluación.",
+    "submitSuccess": "Se envió la evaluación."
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "eyebrow": "वर्कफ़ोर्स कमांड सेंटर",
+  "title": "फिर से स्वागत है, {{name}}",
+  "titleFallback": "फिर से स्वागत है, उपयोगकर्ता",
+  "subtitle": "संगठन की स्थिति ट्रैक करें, वर्कफ़ोर्स मूवमेंट देखें, और एक साझा कार्यक्षेत्र से उच्च-आवृत्ति एचआर कार्रवाइयों पर सीधे जाएँ।",
+  "cards": {
+    "totalHeadcount": {
+      "eyebrow": "वर्कफ़ोर्स",
+      "title": "कुल हेडकाउंट",
+      "subtitle": "सभी कर्मचारी",
+      "trend": "+{{count}} इस महीने",
+      "detail": "लाइव कुल",
+      "statusStable": "स्थिर वर्कफ़ोर्स",
+      "statusExits": "{{count}} निकास इस महीने"
+    },
+    "newHires": {
+      "eyebrow": "मूवमेंट",
+      "title": "नई नियुक्तियाँ (महीना)",
+      "subtitle": "इस महीने",
+      "trend": "वर्तमान महीना",
+      "detail": "वर्तमान अवधि",
+      "statusActive": "भर्ती सक्रिय",
+      "statusIdle": "अभी तक कोई नियुक्ति नहीं"
+    },
+    "activeEmployees": {
+      "eyebrow": "स्थिति",
+      "title": "सक्रिय कर्मचारी",
+      "subtitle": "वर्तमान में सक्रिय",
+      "detail": "उपलब्ध",
+      "statusCoverage": "पूर्ण कवरेज",
+      "statusUnavailable": "{{count}} अनुपलब्ध"
+    },
+    "onLeave": {
+      "eyebrow": "स्थिति",
+      "title": "अवकाश पर",
+      "subtitle": "वर्तमान में अवकाश पर",
+      "detail": "ध्यान",
+      "statusWatch": "कवरेज पर नज़र",
+      "statusClear": "कोई अवकाश मामला नहीं"
+    },
+    "probation": {
+      "eyebrow": "स्थिति",
+      "title": "परीक्षण अवधि पर",
+      "subtitle": "समीक्षा आवश्यक",
+      "detail": "फ़ॉलो-अप",
+      "trend": "कार्रवाई आवश्यक",
+      "statusReview": "समीक्षा आवश्यक",
+      "statusClear": "सही मार्ग पर"
+    }
+  },
+  "panels": {
+    "headcountByCountry": {
+      "eyebrow": "वितरण",
+      "title": "देश अनुसार हेडकाउंट",
+      "subtitle": "वर्तमान वर्कफ़ोर्स का भौगोलिक वितरण।",
+      "centerLabel": "{{count}} कुल"
+    },
+    "topDepartments": {
+      "eyebrow": "संरचना",
+      "title": "शीर्ष विभाग",
+      "subtitle": "विभाग अनुसार सबसे बड़ी कर्मचारी सांद्रता।"
+    },
+    "quickActions": {
+      "eyebrow": "वर्कफ़्लो",
+      "title": "त्वरित कार्रवाइयाँ",
+      "subtitle": "एक ही स्थान से उच्च-आवृत्ति एचआर वर्कफ़्लो।",
+      "hireEmployee": "कर्मचारी नियुक्त करें",
+      "transferEmployee": "कर्मचारी स्थानांतरित करें",
+      "viewOrgChart": "ऑर्ग चार्ट देखें"
+    },
+    "attritionTrend": {
+      "eyebrow": "रुझान",
+      "title": "एट्रिशन रुझान (12 महीने)",
+      "subtitle": "पिछले वर्ष की समाप्ति गतिविधि।"
+    },
+    "recentActivity": {
+      "eyebrow": "फ़ीड",
+      "title": "हाल की गतिविधि",
+      "subtitle": "नवीनतम वर्कफ़ोर्स परिवर्तन और सिस्टम घटनाएँ।",
+      "empty": "कोई हाल की गतिविधि नहीं मिली।"
+    }
+  }
+}

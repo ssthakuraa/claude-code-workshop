@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Lab 06: Delegated Review — Fresh Context Beats
+Self-Review</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="doc-shell">
+    <header class="doc-header">
+      <div class="doc-header-meta">
+        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-divider"></span>
+        <span class="doc-page-label">Lab 06</span>
+      </div>
+      <div class="doc-header-title">Lab 06: Delegated Review — Fresh Context Beats Self-Review</div>
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <a class="doc-nav-link doc-nav-prev" href="codexlab05.html">← Lab 05</a>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <a class="doc-nav-link doc-nav-next" href="codexlab07.html">Lab 07 →</a>
+      </nav>
+    </header>
+    <main class="doc-content">
+<section id="lab-06-delegated-review--fresh-context-beats-self-review"
+class="level1">
+<h1>Lab 06: Delegated Review — Fresh Context Beats Self-Review</h1>
+<p><strong>Duration:</strong> 60 minutes</p>
+<section id="learning-objective" class="level2">
+<h2>Learning Objective</h2>
+<p>You will compare a same-session self-review with a fresh-context
+delegated review. The goal is to see why a separate reviewer catches
+more issues than the session that just wrote the code.</p>
+<hr />
+</section>
+<section id="the-key-concept" class="level2">
+<h2>The Key Concept</h2>
+<p>Delegated review works because the reviewer:</p>
+<ul>
+<li>did not write the code</li>
+<li>starts with a cleaner context window</li>
+<li>can be given a narrower, more critical brief</li>
+</ul>
+<p>In this repo, the durable lesson matters more than the exact product
+surface. If your Codex client supports reusable project agents, you can
+store reviewer and builder instructions under
+<code>.codex/agents/</code>. If it does not, use a fresh Codex session
+with the same instructions pasted in. The fresh-context pattern is the
+point of the lab.</p>
+<hr />
+</section>
+<section id="setup" class="level2">
+<h2>Setup</h2>
+<p>Ask Codex to check the current component surface:</p>
+<pre class="text"><code>Check the current frontend component workspace state.
+Read `frontend/src/components/` and tell me which component areas already exist.</code></pre>
+<hr />
+</section>
+<section id="exercise-1-same-session-self-review-15-min" class="level2">
+<h2>Exercise 1: Same-Session Self-Review (15 min)</h2>
+<section id="goal" class="level3">
+<h3>Goal</h3>
+<p>Build a component and then ask the same session to review it.</p>
+</section>
+<section id="instructions" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Codex to build a component:</p>
+<pre class="text"><code>Create `frontend/src/components/hr/HrEmployeeCard.tsx`.
+
+It should display:
+- employee avatar with initials fallback
+- employee name and job title
+- department and location
+- employment status badge using the existing status-badge pattern
+- hire date
+- click handler for navigation to the detail page
+
+Follow the existing HR component patterns and the current Vertex Agentics /
+Modern visual direction already present in the repo.</code></pre></li>
+<li><p>In the same session, ask for a review:</p>
+<pre class="text"><code>Review the `HrEmployeeCard` component you just created.
+Check accessibility, error states, edge cases, performance, and consistency
+with sibling components.</code></pre></li>
+<li><p>Record how many useful findings the same-session review surfaced:
+_____</p></li>
+</ol>
+<hr />
+</section>
+</section>
+<section id="exercise-2-create-reviewer-and-builder-instructions-15-min"
+class="level2">
+<h2>Exercise 2: Create Reviewer And Builder Instructions (15 min)</h2>
+<section id="goal-1" class="level3">
+<h3>Goal</h3>
+<p>Create two reusable instruction sets: one for building, one for
+review.</p>
+</section>
+<section id="instructions-1" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>If your client supports project-scoped custom agents, ask Codex
+to create:</p>
+<ul>
+<li><code>.codex/agents/component-builder.toml</code></li>
+<li><code>.codex/agents/component-reviewer.toml</code></li>
+</ul></li>
+<li><p>If your client does not support that surface cleanly, ask Codex
+to draft the two instruction sets in markdown so you can reuse them in
+fresh sessions.</p></li>
+<li><p>The builder instructions should require:</p>
+<ul>
+<li>existing repo patterns first</li>
+<li>TypeScript prop safety</li>
+<li>accessible states</li>
+<li>no invented design system</li>
+<li>AGENTS.md compliance</li>
+</ul></li>
+<li><p>The reviewer instructions should require:</p>
+<ul>
+<li>findings first, no fluff</li>
+<li>accessibility review</li>
+<li>loading/empty/error-state review</li>
+<li>long-string/null/edge-case review</li>
+<li>contract mismatch review</li>
+<li>consistency with the current Vertex Agentics / Modern UI
+direction</li>
+</ul></li>
+</ol>
+<p>Recommended prompt:</p>
+<pre class="text"><code>Create reusable builder and reviewer instructions for this repo.
+
+Builder scope:
+- React + TypeScript HR components
+- existing repo patterns first
+- AGENTS.md compliance
+- accessible states and sane defaults
+
+Reviewer scope:
+- findings-first review
+- accessibility
+- edge cases
+- error and loading states
+- contract mismatches
+- consistency with sibling components and the current Vertex Agentics / Modern UI direction
+
+If the repo/client supports `.codex/agents/`, create the files there.
+Otherwise draft the exact instruction text in markdown for later reuse.</code></pre>
+<hr />
+</section>
+</section>
+<section id="exercise-3-fresh-context-review-20-min" class="level2">
+<h2>Exercise 3: Fresh-Context Review (20 min)</h2>
+<section id="goal-2" class="level3">
+<h3>Goal</h3>
+<p>Run the same component through a separate reviewer context.</p>
+</section>
+<section id="instructions-2" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Start a fresh Codex session from your workspace root, or invoke
+the reviewer through your client’s delegated-agent surface if
+available.</p></li>
+<li><p>Ask the reviewer to inspect only the component:</p>
+<pre class="text"><code>Review `frontend/src/components/hr/HrEmployeeCard.tsx`.
+Focus on accessibility, error states, long-string handling, null safety, and
+consistency with existing HR components.
+Return findings only.</code></pre></li>
+<li><p>Record how many useful findings the fresh-context review
+surfaced: _____</p></li>
+<li><p>Compare:</p>
+<ul>
+<li>same-session review: _____ findings</li>
+<li>fresh-context review: _____ findings</li>
+</ul></li>
+<li><p>Apply the reviewer feedback in the original implementation
+session or in a separate builder session.</p></li>
+<li><p>Re-run the review once after fixes if you want to confirm the
+issues are actually resolved.</p></li>
+</ol>
+<hr />
+</section>
+</section>
+<section id="exercise-4-capture-the-rule-10-min" class="level2">
+<h2>Exercise 4: Capture The Rule (10 min)</h2>
+<ol type="1">
+<li><p>Add a short rule block to <code>AGENTS.md</code>:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Delegated Review</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>For meaningful UI or workflow changes, prefer a fresh-context review over same-session self-review</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Reviewer instructions should be findings-first and read-only in spirit</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Reusable reviewer/builder prompts or agent files belong in repo-local config, not in AGENTS.md</span></code></pre></div></li>
+<li><p>Reflect:</p>
+<ul>
+<li>What did the fresh-context reviewer catch that the writer
+missed?</li>
+<li>Which reviewer specializations would matter most in your real
+codebase: accessibility, API contract, security, performance, or release
+readiness?</li>
+</ul></li>
+</ol>
+<hr />
+</section>
+<section id="success-criteria" class="level2">
+<h2>Success Criteria</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" /><code>HrEmployeeCard</code> exists
+and follows current repo patterns</label></li>
+<li><label><input type="checkbox" />Reusable reviewer and builder
+instructions were created</label></li>
+<li><label><input type="checkbox" />Fresh-context review found more or
+better issues than self-review</label></li>
+<li><label><input type="checkbox" />Reviewer feedback was
+applied</label></li>
+<li><label><input type="checkbox" /><code>AGENTS.md</code> now captures
+the delegated-review rule</label></li>
+</ul>
+<hr />
+</section>
+<section id="key-takeaways" class="level2">
+<h2>Key Takeaways</h2>
+<ol type="1">
+<li>Same-session self-review is weak because the session is biased
+toward its own work.</li>
+<li>Fresh context usually improves review quality immediately.</li>
+<li>Reusable reviewer instructions compound just like
+<code>AGENTS.md</code> rules do.</li>
+<li>The exact custom-agent feature surface can vary; the fresh-context
+review pattern is the durable lesson.</li>
+</ol>
+</section>
+</section>
+    </main>
+    <footer class="doc-footer">
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <a class="doc-nav-link doc-nav-prev" href="codexlab05.html">← Lab 05</a>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <a class="doc-nav-link doc-nav-next" href="codexlab07.html">Lab 07 →</a>
+      </nav>
+    </footer>
+  </div>
+<script>
+  (function () {
+    const copyIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<rect x="9" y="7" width="10" height="12" rx="2"></rect>',
+      '<rect x="5" y="3" width="10" height="12" rx="2"></rect>',
+      '</svg>'
+    ].join('');
+    const copiedIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<path d="M6 12.5l4 4 8-9"></path>',
+      '</svg>'
+    ].join('');
+
+    const blocks = document.querySelectorAll('pre > code');
+    for (const code of blocks) {
+      const pre = code.parentElement;
+      if (!pre || pre.dataset.copyReady === 'true') continue;
+      pre.dataset.copyReady = 'true';
+
+      const shell = document.createElement('div');
+      shell.className = 'code-block-shell';
+      const footer = document.createElement('div');
+      footer.className = 'code-block-footer';
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code-button';
+      button.innerHTML = copyIcon;
+      button.setAttribute('aria-label', 'Copy code block');
+      button.setAttribute('title', 'Copy code block');
+
+      button.addEventListener('click', async function () {
+        const text = code.innerText;
+        try {
+          await navigator.clipboard.writeText(text);
+          button.innerHTML = copiedIcon;
+          button.setAttribute('aria-label', 'Copied');
+          button.setAttribute('title', 'Copied');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1400);
+        } catch (error) {
+          button.innerHTML = copyIcon;
+          button.setAttribute('aria-label', 'Copy failed');
+          button.setAttribute('title', 'Copy failed');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1800);
+        }
+      });
+
+      pre.parentNode.insertBefore(shell, pre);
+      shell.appendChild(pre);
+      footer.appendChild(button);
+      shell.appendChild(footer);
+    }
+  }());
+</script>
+</body>
+</html>

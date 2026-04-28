@@ -1,0 +1,37 @@
+{
+  "unauthorizedEyebrow": "Autorisation requise",
+  "unauthorizedTitle": "Accès refusé",
+  "unauthorizedBody": "Vous n’avez pas l’autorisation d’accéder à cette page avec votre rôle actuel.",
+  "notFoundEyebrow": "Problème de navigation",
+  "notFoundTitle": "Page introuvable",
+  "notFoundBody": "La page demandée n’existe pas ou ne fait plus partie de l’espace actif.",
+  "messages": {
+    "AUTH_REQUIRED": "Une authentification est requise pour effectuer cette action.",
+    "INVALID_CREDENTIALS": "Nom d’utilisateur ou mot de passe invalide.",
+    "REFRESH_TOKEN_INVALID": "Le jeton de rafraîchissement est invalide ou expiré.",
+    "ACCOUNT_DISABLED": "Votre compte a été désactivé. Contactez les RH.",
+    "ACCESS_DENIED": "Vous n’avez pas la permission d’effectuer cette action.",
+    "RESOURCE_NOT_FOUND": "La ressource demandée est introuvable.",
+    "DB_ACCESS_ERROR": "Une erreur d’accès aux données s’est produite. Veuillez réessayer.",
+    "INTERNAL_ERROR": "Une erreur inattendue s’est produite. Veuillez réessayer.",
+    "VALIDATION_FAILED": "La validation a échoué. Vérifiez les champs indiqués.",
+    "BAD_REQUEST": "La requête n’a pas pu être traitée."
+  },
+  "fields": {
+    "VALIDATION_REQUIRED": "Ce champ est obligatoire.",
+    "VALIDATION_UNSUPPORTED_LOCALE": "Cette langue n’est pas prise en charge.",
+    "VALIDATION_POSITIVE_NUMBER": "Saisissez un nombre positif.",
+    "VALIDATION_NON_NEGATIVE": "Saisissez zéro ou un nombre positif.",
+    "VALIDATION_MAX_VALUE_1": "Saisissez une valeur inférieure ou égale à 1,00.",
+    "VALIDATION_REQUIRED_FOR_CONTRACT": "Ce champ est obligatoire pour les employés contractuels.",
+    "VALIDATION_INVALID_DATE": "Utilisez le format ISO YYYY-MM-DD.",
+    "VALIDATION_DATE_RANGE": "La date de début doit être antérieure ou égale à la date de fin.",
+    "VALIDATION_MIN_LENGTH_8": "Utilisez au moins 8 caractères.",
+    "VALIDATION_PERCENT_RANGE": "Saisissez un pourcentage entre 0 et 100.",
+    "VALIDATION_SCORE_RANGE": "Saisissez une note entre 0 et 5.",
+    "VALIDATION_INVALID_PERIOD_TYPE": "Selectionnez un type de periode valide.",
+    "VALIDATION_INVALID_STATUS": "Selectionnez un etat de cycle valide.",
+    "VALIDATION_CODE_IMMUTABLE": "Creez un nouveau cycle si vous avez besoin d un autre code.",
+    "VALIDATION_READ_ONLY_STATUS": "Les evaluations soumises ou finalisees sont en lecture seule."
+  }
+}

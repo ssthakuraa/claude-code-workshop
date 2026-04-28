@@ -1,0 +1,31 @@
+{
+  "directory": {
+    "navLabel": "Assessments Directory",
+    "eyebrow": "Reviewer workspace",
+    "title": "Assessments Directory",
+    "subtitle": "Review assessment activity across your scope with backend-enforced access for HR specialists and managers.",
+    "searchEmployeePlaceholder": "Search by employee name...",
+    "activeEmployeeSearch": "Employee: {{query}}",
+    "emptyTitle": "No assessments match the current filters",
+    "emptyDescription": "Adjust the search text or filters to widen the directory results.",
+    "unassignedReviewer": "Reviewer not assigned",
+    "employeeMeta": "Employee ID {{id}}",
+    "filters": {
+      "cycle": "Cycle",
+      "cycleSearch": "Search cycles"
+    },
+    "columns": {
+      "employee": "Employee",
+      "department": "Department",
+      "cycle": "Cycle",
+      "status": "Status",
+      "reviewer": "Reviewer",
+      "goalCompletionPct": "Goals",
+      "competencyScore": "Competency",
+      "updatedAt": "Updated"
+    },
+    "csvHeaders": {
+      "employeeId": "Employee ID"
+    }
+  }
+}

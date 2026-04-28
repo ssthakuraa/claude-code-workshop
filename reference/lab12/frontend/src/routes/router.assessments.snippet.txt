@@ -1,0 +1,12 @@
+Add the lazy import with the other page imports:
+
+const AssessmentsPage = lazy(() => import('@/pages/assessments/AssessmentsPage').then(m => ({ default: m.AssessmentsPage })))
+
+Add a manager-visible protected route before the admin-only route block:
+
+          {
+            element: <ProtectedRoute roles={['ADMIN', 'HR_SPECIALIST', 'MANAGER']} />,
+            children: [
+              { path: 'assessments', element: <S><AssessmentsPage /></S> },
+            ],
+          },

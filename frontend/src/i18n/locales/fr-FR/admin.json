@@ -1,0 +1,150 @@
+{
+  "notifications": {
+    "eyebrow": "Boîte de réception",
+    "title": "Notifications",
+    "subtitle": "Consultez les alertes de flux, rappels opérationnels et messages générés par le système liés à l’activité RH.",
+    "markAllRead": "Tout marquer comme lu",
+    "loadFailed": "Échec du chargement des notifications.",
+    "empty": "Aucune notification trouvée."
+  },
+  "audit": {
+    "eyebrow": "Gouvernance",
+    "title": "Journal d’audit",
+    "subtitle": "Consultez les changements système et les mutations de données dans l’application RH active.",
+    "tabs": {
+      "all": "Toutes les tables",
+      "employees": "Employé",
+      "departments": "Département",
+      "jobs": "Poste",
+      "users": "Utilisateur",
+      "jobHistory": "Historique des postes"
+    },
+    "columns": {
+      "action": "Action",
+      "entity": "Entité",
+      "record": "Enregistrement",
+      "changedAt": "Modifié le"
+    },
+    "meta": {
+      "rows": "Lignes",
+      "filter": "Filtre",
+      "matched": "Correspondances"
+    },
+    "states": {
+      "loadFailed": "Impossible de charger les journaux d’audit.",
+      "before": "Avant",
+      "after": "Après",
+      "showingFirst": "Affichage des {{limit}} premiers événements sur {{total}} correspondants",
+      "showingMatched": "Affichage de {{count}} événements correspondants",
+      "refineFilter": "Affinez le filtre de table pour réduire le flux d’audit.",
+      "expandRow": "Développez une ligne pour inspecter les détails avant/après.",
+      "emptyTitle": "Aucune entrée d’audit trouvée",
+      "emptyDescription": "Essayez un autre filtre de table ou revenez après davantage d’activité système."
+    }
+  },
+  "assessmentCycles": {
+    "navLabel": "Cycles d evaluation",
+    "eyebrow": "Parametrage des evaluations",
+    "title": "Cycles d evaluation",
+    "subtitle": "Configurez les fenetres de revue, l etat d activation et les libelles traduits utilises par les futures evaluations collaborateurs.",
+    "meta": {
+      "currentLocale": "Locale active",
+      "previewLabel": "Libelle aperçu"
+    },
+    "actions": {
+      "newCycle": "Nouveau cycle",
+      "saveChanges": "Enregistrer",
+      "activate": "Activer",
+      "deactivate": "Desactiver"
+    },
+    "toasts": {
+      "createSuccess": "{{code}} a ete cree.",
+      "updateSuccess": "{{code}} a ete mis a jour."
+    },
+    "statuses": {
+      "PLANNED": "Planifie",
+      "OPEN": "Ouvert",
+      "CLOSED": "Cloture"
+    },
+    "states": {
+      "active": "Actif",
+      "inactive": "Inactif",
+      "none": "Aucun"
+    },
+    "periodTypes": {
+      "ANNUAL": "Annuel",
+      "HALF": "Semestriel",
+      "QUARTER": "Trimestriel"
+    },
+    "stats": {
+      "totalTitle": "Inventaire des cycles",
+      "totalValue": "{{count}} cycles",
+      "totalDetail": "Base principale du schema semee dans l application PostgreSQL active.",
+      "openTitle": "Cycle ouvert",
+      "openDetailFallback": "Choisissez le cycle disponible pour les managers et les RH.",
+      "activeTitle": "Lignes actives",
+      "activeValue": "{{count}} actives",
+      "activeDetail": "Les lignes inactives restent visibles pour l historique mais ne doivent plus etre selectionnables.",
+      "translationTitle": "Couverture des traductions",
+      "translationDetail": "Indique si chaque cycle est pret pour la base MLS/NLS actuelle."
+    },
+    "list": {
+      "title": "Liste des cycles",
+      "subtitle": "Consultez et gerez chaque cycle d evaluation depuis un seul ecran.",
+      "filteredCount": "{{count}} affiches sur {{total}}",
+      "activeCount": "{{count}} actifs",
+      "openCycle": "Ouvert : {{value}}",
+      "translationCoverage": "Traductions {{value}}",
+      "emptyState": "Aucun cycle ne correspond a la recherche ou au filtre d etat actuel.",
+      "order": "Ordre d affichage {{value}}",
+      "localePreview": "Libelle : {{value}}",
+      "columns": {
+        "cycleCode": "Code",
+        "label": "Libelle",
+        "status": "Etat",
+        "periodType": "Periode",
+        "dateRange": "Plage",
+        "active": "Actif",
+        "displayOrder": "Ordre"
+      }
+    },
+    "filters": {
+      "status": "Etat",
+      "searchPlaceholder": "Rechercher par code cycle ou libelle traduit..."
+    },
+    "form": {
+      "title": "Panneau de parametrage",
+      "subtitle": "Mettez a jour les details et la disponibilite du cycle selectionne.",
+      "cycleCode": "Code cycle",
+      "displayOrder": "Ordre d affichage",
+      "defaultLabel": "Libelle par defaut",
+      "periodType": "Type de periode",
+      "status": "Etat du cycle",
+      "startDate": "Date de debut",
+      "endDate": "Date de fin"
+    },
+    "translations": {
+      "title": "Couverture des traductions",
+      "subtitle": "Consultez les libelles localises pour les langues prises en charge.",
+      "complete": "Complet",
+      "missing": "Manquant",
+      "placeholder": "Libelle localise pour {{locale}}"
+    },
+    "guidance": {
+      "title": "Regles de parametrage",
+      "subtitle": "Voici les regles de fonctionnement derriere la page et la mise a jour du schema.",
+      "ruleOneTitle": "Source unique",
+      "ruleOneText": "L application principale possede `aihr_assessment_cycles` ; le Lab 12 doit s y raccorder au lieu de redefinir les cycles.",
+      "ruleTwoTitle": "Pret MLS/NLS",
+      "ruleTwoText": "Les libelles de cycle doivent venir de `default_label` plus les traductions, pas de chaines codees en dur dans l UI.",
+      "ruleThreeTitle": "Cible Lab 12",
+      "ruleThreeText": "La table optionnelle du capstone doit etre `aihr_employee_assessments` et utiliser `cycle_code`."
+    },
+    "footer": {
+      "auditLogLabel": "Journal d audit",
+      "auditLogDescription": "Verifiez comment les futures modifications de parametrage doivent apparaitre dans l historique de gouvernance.",
+      "settingsLabel": "Preferences utilisateur",
+      "settingsDescription": "Comparez les preferences de langue avec les libelles traduits des cycles."
+    }
+  }
+}

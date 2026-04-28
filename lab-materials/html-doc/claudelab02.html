@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Lab 02: Planning Discipline — Think Before You Build</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="doc-shell">
+    <header class="doc-header">
+      <div class="doc-header-meta">
+        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-divider"></span>
+        <span class="doc-page-label">Lab 02</span>
+      </div>
+      <div class="doc-header-title">Lab 02: Planning Discipline — Think Before You Build</div>
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <a class="doc-nav-link doc-nav-prev" href="codexlab01.html">← Lab 01</a>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <a class="doc-nav-link doc-nav-next" href="codexlab03.html">Lab 03 →</a>
+      </nav>
+    </header>
+    <main class="doc-content">
+<section id="lab-02-planning-discipline--think-before-you-build"
+class="level1">
+<h1>Lab 02: Planning Discipline — Think Before You Build</h1>
+<p><strong>Duration:</strong> 60 minutes</p>
+<section id="learning-objective" class="level2">
+<h2>Learning Objective</h2>
+<p>You will design a complex backend change using an explicit planning
+workflow, observe how planning surfaces hidden requirements, and
+implement from the plan. You'll also see what happens when you skip
+planning — and why it costs more time than it saves.</p>
+<hr />
+</section>
+<section id="key-terms" class="level2">
+<h2>Key Terms</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning in this lab</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>agent</code></td>
+<td>The Codex session doing the work in your repo</td>
+</tr>
+<tr>
+<td><code>plan</code></td>
+<td>A repo-grounded implementation approach produced before code is
+written</td>
+</tr>
+<tr>
+<td><code>verify</code></td>
+<td>Compile, test, or otherwise prove the implementation matches the
+plan</td>
+</tr>
+<tr>
+<td><code>worklist</code></td>
+<td>A durable checklist for multi-step or multi-session work</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="the-key-concept" class="level2">
+<h2>The Key Concept</h2>
+<p>In Codex, the important habit is not a specific UI mode. The
+important habit is to ask for a repo-grounded plan
+<strong>before</strong> implementation when the task is non-trivial. You
+iterate on that plan until it is solid, then you ask Codex to implement
+against it.</p>
+<p><strong>The 4-Phase Workflow:</strong></p>
+<pre><code>Explore → Plan → Implement → Verify</code></pre>
+<p><strong>When to plan first:</strong></p>
+<ul>
+<li>Any task that touches 3+ files</li>
+<li>Any task with business rules, validation, or side effects</li>
+<li>Any task where you're unsure of the approach</li>
+<li>When a mistake would be expensive to fix</li>
+</ul>
+<p><strong>When to skip it:</strong></p>
+<ul>
+<li>You could describe the diff in one sentence</li>
+<li>Simple renames, typo fixes, single-file changes</li>
+</ul>
+<hr />
+</section>
+<section id="setup" class="level2">
+<h2>Setup</h2>
+<p>You should have a working AGENTS.md from Lab 01. If not, ask Codex to
+restore it for you with this exact prompt:</p>
+<pre class="text"><code>Restore `AGENTS.md` from `reference/lab01/AGENTS.md`.
+Only replace that file.
+Do not inspect or modify anything else.
+Then tell me the restore is complete.</code></pre>
+<section id="starter-state-note" class="level3">
+<h3>Starter-State Note</h3>
+<p>In the staged training workspace, the hire-flow path is intentionally
+incomplete. That gap is part of the exercise design, not a repo
+accident. Before you rebuild it, it is acceptable for hire attempts to
+fail because the starter has been shaped to give you a real planning and
+implementation target.</p>
+<hr />
+</section>
+</section>
+<section id="exercise-1-the-bad-path--skip-the-plan-15-min"
+class="level2">
+<h2>Exercise 1: The Bad Path — Skip the Plan (15 min)</h2>
+<section id="goal" class="level3">
+<h3>Goal</h3>
+<p>Implement the hire flow WITHOUT planning. Observe what's missing.</p>
+</section>
+<section id="instructions" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Codex to implement directly (do NOT ask for a plan
+first):</p>
+<pre><code>Implement the backend hire flow for the HR app.
+Update the current Jersey/JDBC stack so a hire request:
+- creates a new employee record
+- returns the employee detail response
+- follows the existing employee resource and command-repository patterns
+This is the bad path on purpose.
+Do not stop to plan first.
+Do not add hidden business rules, side effects, or compensating logic unless they are explicitly requested here.</code></pre></li>
+<li><p><strong>Review the output.</strong> Check:</p>
+<ul class="task-list">
+<li><label><input type="checkbox" />Does it write a
+<code>job_history</code> record? (It should — every hire needs
+one)</label></li>
+<li><label><input type="checkbox" />Does it check idempotency?
+(Duplicate POST should not create two employees)</label></li>
+<li><label><input type="checkbox" />Does it validate salary against the
+job's min/max range?</label></li>
+<li><label><input type="checkbox" />Does it create an
+<code>AIHR_USERS</code> record for the new employee?</label></li>
+<li><label><input type="checkbox" />Does it mask PII in the response
+based on the caller's role?</label></li>
+</ul></li>
+<li><p><strong>Count the missing requirements.</strong> You'll likely
+find 2–4 gaps.</p></li>
+</ol>
+<blockquote>
+<p><strong>This is intentional.</strong> The learner prompt was
+deliberately too weak. If Codex still over-completes by inventing audit
+trail, idempotency, salary validation, user creation, or other implicit
+requirements, treat that as drift to record, not as success.</p>
+</blockquote>
+<ol start="4" type="1">
+<li><p><strong>Preserve the first attempt before undoing it.</strong>
+Ask Codex to capture a short note you can compare later:</p>
+<pre><code>Summarize the first attempt before we undo it.
+Show:
+1. which files changed
+2. which important requirements are still missing
+3. a short bullet list named &quot;bad path snapshot&quot; that I can reuse in Exercise 3
+Do not fix anything yet.</code></pre></li>
+<li><p>Ask Codex to restore the learner workspace to the
+pre-implementation state. For this training bundle, keep the learner
+recovery path on the checked-in <code>reference/</code> escape hatches
+and the repo starter state. Use a prompt like:</p>
+<pre><code>Restore only the files changed by the last implementation attempt.
+Inspect only the touched files and the specific checked-in `reference/`
+rescue material needed to restore them.
+Use the checked-in `reference/` escape hatches and the current repo starter
+state instead of assuming a separate learner zip.
+Copy back only the touched files.
+Do not perform broad repo discovery or modify anything else.
+We&#39;re going to redo this properly.</code></pre></li>
+</ol>
+<hr />
+</section>
+</section>
+<section id="exercise-2-the-good-path--plan-first-30-min"
+class="level2">
+<h2>Exercise 2: The Good Path — Plan First (30 min)</h2>
+<section id="goal-1" class="level3">
+<h3>Goal</h3>
+<p>Design the hire flow first, iterate until the plan is complete, then
+implement.</p>
+</section>
+<section id="instructions-1" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Codex for a plan first:</p>
+<pre><code>Design the backend hire flow for the current HR app.
+
+Requirements:
+- Entry point stays aligned with the current Jersey resource + JDBC repository patterns
+- Creates a new employee from HrEmployeeCreateRequest
+- Must validate salary against the job&#39;s min_salary/max_salary range
+- Must check idempotency using the current request/body contract
+- Must check email uniqueness (no duplicate employee emails)
+- Must create a job_history record (every hire = first job history entry)
+- Must create an `AIHR_USERS` record (username defaults to email prefix)
+- Must return HrEmployeeDetailDTO with PII masking based on caller&#39;s role
+- Must preserve the current frontend-used API contract
+
+Show me:
+1. the data flow
+2. which current classes/files will change
+3. what repository methods are needed
+4. the transaction boundary
+5. the verification plan
+Do not implement yet.</code></pre></li>
+<li><p><strong>Review the plan.</strong> Look for:</p>
+<ul>
+<li>Does it identify all 7 steps (idempotency → email check → load job →
+validate salary → save employee → create user → create job
+history)?</li>
+<li>Does it show the correct transaction boundary (explicit JDBC
+transaction handling in <code>HrEmployeeCommandJdbcRepository</code>,
+with <code>setAutoCommit(false)</code> / <code>commit()</code> /
+rollback)?</li>
+<li>Does it call out which repositories are needed?</li>
+<li>Does it mention error cases (job not found, department not found,
+salary out of range)?</li>
+</ul></li>
+<li><p><strong>Iterate on the plan.</strong> If anything is missing:</p>
+<pre><code>The plan is missing error handling for when the manager ID doesn&#39;t exist.
+Also, what happens if the username derived from email is already taken?
+Update the plan.</code></pre></li>
+<li><p>When the plan is solid, ask Codex to implement against it:</p>
+<pre><code>Implement hireEmployee() exactly as designed in the plan above.
+For backend verification, use `cd backend &amp;&amp; ./build-jersey-service.sh test`
+rather than a direct `mvn` command.</code></pre></li>
+<li><p><strong>Verify:</strong> Ask Codex:</p>
+<pre><code>Run `cd backend &amp;&amp; ./build-jersey-service.sh test` to compile and validate
+the current implementation.
+Then compare the implementation against the plan and tell me whether anything
+is still missing.
+Do not switch to raw `mvn`.</code></pre></li>
+</ol>
+</section>
+<section id="what-you-should-see" class="level3">
+<h3>What You Should See</h3>
+<p>The planned implementation should include all 7 steps, proper error
+handling, and the transaction boundary — everything that was missing in
+Exercise 1. The plan surfaced the implicit requirements before a single
+line of code was written.</p>
+<hr />
+</section>
+</section>
+<section id="exercise-3-compare-verify-and-encode-15-min"
+class="level2">
+<h2>Exercise 3: Compare, Verify, and Encode (15 min)</h2>
+<section id="goal-2" class="level3">
+<h3>Goal</h3>
+<p>Compare the two approaches and encode the lesson.</p>
+</section>
+<section id="instructions-2" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Compare Exercise 1 vs Exercise 2: Compare the actual "bad path
+snapshot" captured from Exercise 1 against the current implementation
+from the plan-first path. Use the captured snapshot from this run, even
+if the bad path drifted or over-completed. Do not rewrite the story into
+an idealized textbook bad path. Write down which requirements were
+missed, invented, or handled incorrectly in the first attempt, and how
+the planned version fixed them.</p></li>
+<li><p><strong>Add a rule to AGENTS.md:</strong></p>
+<pre><code>Update AGENTS.md by adding these rules:
+
+## Employee Lifecycle Rules
+- Every hire/promote/transfer/terminate MUST write a job_history record
+- Hire endpoint requires idempotency key; request validation happens in the resource layer and duplicate-request enforcement happens in the command repository
+- findById masks salary/PII based on HrSecurityUtil.canViewSalary()/canViewPii()</code></pre>
+<p>After Codex updates <code>AGENTS.md</code>, exit Codex and use the
+printed resume command so the updated rules are loaded in the next
+session.</p></li>
+<li><p>Ask Codex to self-critique:</p>
+<pre><code>Is there anything in the current hireEmployee() implementation
+that doesn&#39;t follow AGENTS.md conventions? Check logging, response format,
+security annotations, and error handling.</code></pre></li>
+<li><p>Ask Codex:</p>
+<pre><code>Fix any good issues you identified in the current hireEmployee()
+implementation.
+Keep the changes aligned to AGENTS.md and rerun the backend wrapper-based
+verification if needed.</code></pre></li>
+<li><p>Add an explicit verification step to your own workflow notes:</p>
+<ul>
+<li>plan</li>
+<li>implement</li>
+<li>verify</li>
+<li>only then mark complete</li>
+</ul></li>
+</ol>
+</section>
+</section>
+<section id="common-mistakes--fixes" class="level2">
+<h2>Common Mistakes &amp; Fixes</h2>
+<ul>
+<li>Mistake: asking Codex to "just implement it" on a multi-file
+workflow. Fix: ask for affected files, data flow, transaction boundary,
+and verification first.</li>
+<li>Mistake: treating the first plan as final. Fix: iterate on missing
+error cases and side effects before coding.</li>
+<li>Mistake: planning only the implementation and not the verification.
+Fix: require compile/test/manual verification in the plan itself.</li>
+</ul>
+<hr />
+</section>
+<section id="success-criteria" class="level2">
+<h2>Success Criteria</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />Exercise 1 is missing at least 2
+requirements (job_history, idempotency, etc.)</label></li>
+<li><label><input type="checkbox" />Exercise 2 plan includes all 7 steps
+before implementation starts</label></li>
+<li><label><input type="checkbox" />Final <code>hireEmployee()</code>
+compiles and follows all AGENTS.md conventions</label></li>
+<li><label><input type="checkbox" />AGENTS.md now contains Employee
+Lifecycle Rules</label></li>
+<li><label><input type="checkbox" />You can explain when to ask Codex
+for an explicit plan vs when to skip it</label></li>
+</ul>
+<hr />
+</section>
+<section id="key-takeaways" class="level2">
+<h2>Key Takeaways</h2>
+<ol type="1">
+<li><strong>"Create X" prompts produce only X.</strong> Audit trails,
+idempotency, and masking need explicit mention — or a plan that surfaces
+them.</li>
+<li><strong>Planning is cheaper than debugging.</strong> 5 minutes of
+planning saved 20 minutes of rework.</li>
+<li><strong>The plan output feeds AGENTS.md.</strong> Don't discard the
+plan — extract rules from it.</li>
+<li><strong>Iterate the plan, not the code.</strong> It's much cheaper
+to rewrite a plan bullet than refactor 50 lines of Java.</li>
+</ol>
+</section>
+</section>
+    </main>
+    <footer class="doc-footer">
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <a class="doc-nav-link doc-nav-prev" href="codexlab01.html">← Lab 01</a>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <a class="doc-nav-link doc-nav-next" href="codexlab03.html">Lab 03 →</a>
+      </nav>
+    </footer>
+  </div>
+<script>
+  (function () {
+    const copyIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<rect x="9" y="7" width="10" height="12" rx="2"></rect>',
+      '<rect x="5" y="3" width="10" height="12" rx="2"></rect>',
+      '</svg>'
+    ].join('');
+    const copiedIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<path d="M6 12.5l4 4 8-9"></path>',
+      '</svg>'
+    ].join('');
+
+    const blocks = document.querySelectorAll('pre > code');
+    for (const code of blocks) {
+      const pre = code.parentElement;
+      if (!pre || pre.dataset.copyReady === 'true') continue;
+      pre.dataset.copyReady = 'true';
+
+      const shell = document.createElement('div');
+      shell.className = 'code-block-shell';
+      const footer = document.createElement('div');
+      footer.className = 'code-block-footer';
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code-button';
+      button.innerHTML = copyIcon;
+      button.setAttribute('aria-label', 'Copy code block');
+      button.setAttribute('title', 'Copy code block');
+
+      button.addEventListener('click', async function () {
+        const text = code.innerText;
+        try {
+          await navigator.clipboard.writeText(text);
+          button.innerHTML = copiedIcon;
+          button.setAttribute('aria-label', 'Copied');
+          button.setAttribute('title', 'Copied');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1400);
+        } catch (error) {
+          button.innerHTML = copyIcon;
+          button.setAttribute('aria-label', 'Copy failed');
+          button.setAttribute('title', 'Copy failed');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1800);
+        }
+      });
+
+      pre.parentNode.insertBefore(shell, pre);
+      shell.appendChild(pre);
+      footer.appendChild(button);
+      shell.appendChild(footer);
+    }
+  }());
+</script>
+</body>
+</html>

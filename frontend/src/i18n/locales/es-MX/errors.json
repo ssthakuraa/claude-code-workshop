@@ -1,0 +1,37 @@
+{
+  "unauthorizedEyebrow": "Se requiere autorización",
+  "unauthorizedTitle": "Acceso denegado",
+  "unauthorizedBody": "No tienes permiso para acceder a esta página con el rol actual.",
+  "notFoundEyebrow": "Problema de navegación",
+  "notFoundTitle": "Página no encontrada",
+  "notFoundBody": "La página solicitada no existe o ya no forma parte del espacio activo.",
+  "messages": {
+    "AUTH_REQUIRED": "Se requiere autenticación para realizar esta acción.",
+    "INVALID_CREDENTIALS": "Usuario o contraseña no válidos.",
+    "REFRESH_TOKEN_INVALID": "El token de actualización no es válido o expiró.",
+    "ACCOUNT_DISABLED": "Tu cuenta ha sido deshabilitada. Contacta a RR. HH.",
+    "ACCESS_DENIED": "No tienes permiso para realizar esta acción.",
+    "RESOURCE_NOT_FOUND": "No se encontró el recurso solicitado.",
+    "DB_ACCESS_ERROR": "Ocurrió un error de acceso a datos. Inténtalo de nuevo.",
+    "INTERNAL_ERROR": "Ocurrió un error inesperado. Inténtalo de nuevo.",
+    "VALIDATION_FAILED": "La validación falló. Revisa los campos resaltados.",
+    "BAD_REQUEST": "No se pudo procesar la solicitud."
+  },
+  "fields": {
+    "VALIDATION_REQUIRED": "Este campo es obligatorio.",
+    "VALIDATION_UNSUPPORTED_LOCALE": "Este idioma no es compatible.",
+    "VALIDATION_POSITIVE_NUMBER": "Ingresa un número positivo.",
+    "VALIDATION_NON_NEGATIVE": "Ingresa cero o un número positivo.",
+    "VALIDATION_MAX_VALUE_1": "Ingresa un valor menor o igual a 1.00.",
+    "VALIDATION_REQUIRED_FOR_CONTRACT": "Este campo es obligatorio para empleados por contrato.",
+    "VALIDATION_INVALID_DATE": "Usa el formato ISO YYYY-MM-DD.",
+    "VALIDATION_DATE_RANGE": "La fecha inicial debe ser igual o anterior a la final.",
+    "VALIDATION_MIN_LENGTH_8": "Usa al menos 8 caracteres.",
+    "VALIDATION_PERCENT_RANGE": "Ingresa un porcentaje entre 0 y 100.",
+    "VALIDATION_SCORE_RANGE": "Ingresa una calificación entre 0 y 5.",
+    "VALIDATION_INVALID_PERIOD_TYPE": "Selecciona un tipo de periodo valido.",
+    "VALIDATION_INVALID_STATUS": "Selecciona un estado de ciclo valido.",
+    "VALIDATION_CODE_IMMUTABLE": "Crea un nuevo ciclo si necesitas otro codigo.",
+    "VALIDATION_READ_ONLY_STATUS": "Las evaluaciones enviadas o finalizadas son de solo lectura."
+  }
+}

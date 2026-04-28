@@ -1,0 +1,88 @@
+{
+  "navLabel": "Mes evaluations",
+  "eyebrow": "Libre-service employe",
+  "title": "Mes evaluations",
+  "subtitle": "Suivez vos evaluations en brouillon, soumises et finalisees.",
+  "meta": {
+    "drafts": "Brouillons",
+    "submitted": "Soumises",
+    "finalized": "Finalisees",
+    "availableCycles": "Cycles ouverts"
+  },
+  "statuses": {
+    "DRAFT": "Brouillon",
+    "SUBMITTED": "Soumise",
+    "FINAL": "Finale"
+  },
+  "periodTypes": {
+    "QUARTER": "Trimestriel",
+    "HALF": "Semestriel",
+    "ANNUAL": "Annuel"
+  },
+  "actions": {
+    "newAssessment": "Nouvelle evaluation",
+    "continueDraft": "Continuer le brouillon",
+    "viewAssessment": "Voir l evaluation",
+    "backToList": "Retour a mes evaluations",
+    "saveDraft": "Enregistrer le brouillon",
+    "submitAssessment": "Soumettre l evaluation"
+  },
+  "availableCycles": {
+    "title": "Cycles disponibles",
+    "subtitle": "Demarrez une nouvelle evaluation uniquement pour les cycles ouverts que vous n avez pas encore utilises.",
+    "empty": "Aucun cycle d evaluation ouvert n est disponible pour le moment.",
+    "window": "Du {{start}} au {{end}}"
+  },
+  "history": {
+    "title": "Historique des evaluations",
+    "subtitle": "Ouvrez un brouillon pour continuer ou consultez les cycles deja soumis.",
+    "reviewer": "Evaluateur : {{name}}",
+    "updated": "Mis a jour : {{value}}",
+    "submitted": "Soumis : {{value}}",
+    "notSubmitted": "Pas encore soumise"
+  },
+  "states": {
+    "loadError": "Impossible de charger vos evaluations.",
+    "emptyTitle": "Aucune evaluation pour le moment",
+    "emptyBody": "Commencez un brouillon lorsqu un cycle ouvert devient disponible.",
+    "reviewerPending": "Attribution de l evaluateur en attente",
+    "reviewerPendingBody": "Les details de l evaluateur apparaitront apres attribution.",
+    "detailNotFound": "Evaluation introuvable."
+  },
+  "entry": {
+    "eyebrow": "Espace evaluation",
+    "newTitle": "Nouvelle evaluation",
+    "newSubtitle": "Saisissez vos progres et votre retour pour le cycle selectionne.",
+    "editTitle": "Saisie de l evaluation",
+    "editSubtitle": "Revoyez les details de votre evaluation et soumettez-la quand elle est prete.",
+    "noCycleTitle": "Aucun cycle ouvert disponible",
+    "noCycleBody": "Vous avez deja utilise le cycle ouvert actuel ou aucun cycle n est encore ouvert.",
+    "readOnlyBanner": "Cette evaluation a deja ete soumise ou finalisee et est maintenant en lecture seule.",
+    "meta": {
+      "window": "Periode du cycle",
+      "status": "Statut"
+    },
+    "sections": {
+      "overview": "Vue d ensemble du cycle",
+      "overviewBody": "Choisissez le cycle et renseignez les elements quantitatifs de l evaluation.",
+      "reflection": "Retour de l employe",
+      "reflectionBody": "Resumez ce que vous avez livre et vos priorites pour la suite.",
+      "reviewer": "Contexte de l evaluateur",
+      "reviewerBody": "L evaluateur assigne et son retour apparaissent ici lorsqu ils sont disponibles."
+    },
+    "managerFeedbackPending": "Le retour du manager apparaitra une fois la revue terminee."
+  },
+  "fields": {
+    "cycle": "Cycle d evaluation",
+    "goalCompletionPct": "Realisation des objectifs %",
+    "competencyScore": "Note de competences",
+    "employeeReflection": "Retour de l employe",
+    "nextCyclePlan": "Plan pour le cycle suivant",
+    "reviewer": "Evaluateur",
+    "managerFeedback": "Retour du manager"
+  },
+  "toasts": {
+    "saveSuccess": "Le brouillon de l evaluation a ete enregistre.",
+    "submitSuccess": "L evaluation a ete soumise."
+  }
+}

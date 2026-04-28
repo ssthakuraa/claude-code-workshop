@@ -1,0 +1,41 @@
+{
+  "eyebrow": "Espace personnel",
+  "title": "Paramètres",
+  "subtitle": "Gérez la langue, les formats régionaux et les préférences personnelles qui façonnent l’expérience RH en direct.",
+  "dashboardCrumb": "Tableau de bord",
+  "options": {
+    "dateFormats": {
+      "short": "Court",
+      "medium": "Moyen",
+      "long": "Long"
+    },
+    "timezones": {
+      "America_Los_Angeles": "Heure du Pacifique (Los Angeles)",
+      "America_Chicago": "Heure centrale (Chicago)",
+      "America_New_York": "Heure de l’Est (New York)",
+      "America_Mexico_City": "Mexico",
+      "America_Toronto": "Toronto",
+      "Europe_London": "Londres",
+      "Europe_Dublin": "Dublin",
+      "Europe_Paris": "Paris",
+      "Europe_Berlin": "Berlin",
+      "Europe_Amsterdam": "Amsterdam",
+      "Asia_Kolkata": "Kolkata",
+      "Asia_Singapore": "Singapour"
+    },
+    "currencies": {
+      "USD": "Dollar américain (USD)",
+      "EUR": "Euro (EUR)",
+      "GBP": "Livre sterling (GBP)",
+      "INR": "Roupie indienne (INR)",
+      "MXN": "Peso mexicain (MXN)",
+      "CAD": "Dollar canadien (CAD)",
+      "AUD": "Dollar australien (AUD)",
+      "BRL": "Réal brésilien (BRL)",
+      "CHF": "Franc suisse (CHF)",
+      "DKK": "Couronne danoise (DKK)",
+      "JPY": "Yen japonais (JPY)",
+      "SGD": "Dollar de Singapour (SGD)"
+    }
+  }
+}

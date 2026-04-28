@@ -1,0 +1,37 @@
+{
+  "unauthorizedEyebrow": "Authorization required",
+  "unauthorizedTitle": "Access Denied",
+  "unauthorizedBody": "You do not have permission to access this page with the current role assignment.",
+  "notFoundEyebrow": "Navigation issue",
+  "notFoundTitle": "Page Not Found",
+  "notFoundBody": "The page you requested does not exist or is no longer part of the active workspace.",
+  "messages": {
+    "AUTH_REQUIRED": "Authentication is required to perform this action.",
+    "INVALID_CREDENTIALS": "Invalid username or password.",
+    "REFRESH_TOKEN_INVALID": "Invalid or expired refresh token.",
+    "ACCOUNT_DISABLED": "Your account has been disabled. Please contact HR.",
+    "ACCESS_DENIED": "You do not have permission to perform this action.",
+    "RESOURCE_NOT_FOUND": "The requested resource was not found.",
+    "DB_ACCESS_ERROR": "A data access error occurred. Please try again.",
+    "INTERNAL_ERROR": "An unexpected error occurred. Please try again.",
+    "VALIDATION_FAILED": "Validation failed. Please review the highlighted fields.",
+    "BAD_REQUEST": "The request could not be processed."
+  },
+  "fields": {
+    "VALIDATION_REQUIRED": "This field is required.",
+    "VALIDATION_UNSUPPORTED_LOCALE": "This language is not supported.",
+    "VALIDATION_POSITIVE_NUMBER": "Enter a positive number.",
+    "VALIDATION_NON_NEGATIVE": "Enter zero or a positive number.",
+    "VALIDATION_MAX_VALUE_1": "Enter a value less than or equal to 1.00.",
+    "VALIDATION_REQUIRED_FOR_CONTRACT": "This field is required for contract employees.",
+    "VALIDATION_INVALID_DATE": "Use the ISO date format YYYY-MM-DD.",
+    "VALIDATION_DATE_RANGE": "The start date must be on or before the end date.",
+    "VALIDATION_MIN_LENGTH_8": "Use at least 8 characters.",
+    "VALIDATION_PERCENT_RANGE": "Enter a percentage between 0 and 100.",
+    "VALIDATION_SCORE_RANGE": "Enter a score between 0 and 5.",
+    "VALIDATION_INVALID_PERIOD_TYPE": "Select a valid period type.",
+    "VALIDATION_INVALID_STATUS": "Select a valid cycle status.",
+    "VALIDATION_CODE_IMMUTABLE": "Create a new cycle if you need a different cycle code.",
+    "VALIDATION_READ_ONLY_STATUS": "Submitted or finalized assessments are read-only."
+  }
+}

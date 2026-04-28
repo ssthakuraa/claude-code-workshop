@@ -1,0 +1,31 @@
+{
+  "directory": {
+    "navLabel": "Annuaire des evaluations",
+    "eyebrow": "Espace evaluateur",
+    "title": "Annuaire des evaluations",
+    "subtitle": "Consultez l activite des evaluations dans votre perimetre avec un acces applique cote backend pour RH et managers.",
+    "searchEmployeePlaceholder": "Rechercher par nom d employe...",
+    "activeEmployeeSearch": "Employe : {{query}}",
+    "emptyTitle": "Aucune evaluation ne correspond aux filtres actuels",
+    "emptyDescription": "Ajustez la recherche ou les filtres pour elargir les resultats.",
+    "unassignedReviewer": "Evaluateur non assigne",
+    "employeeMeta": "Employe {{id}}",
+    "filters": {
+      "cycle": "Cycle",
+      "cycleSearch": "Rechercher des cycles"
+    },
+    "columns": {
+      "employee": "Employe",
+      "department": "Departement",
+      "cycle": "Cycle",
+      "status": "Statut",
+      "reviewer": "Evaluateur",
+      "goalCompletionPct": "Objectifs",
+      "competencyScore": "Competence",
+      "updatedAt": "Mis a jour"
+    },
+    "csvHeaders": {
+      "employeeId": "ID employe"
+    }
+  }
+}

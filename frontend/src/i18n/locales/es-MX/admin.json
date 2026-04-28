@@ -1,0 +1,150 @@
+{
+  "notifications": {
+    "eyebrow": "Bandeja",
+    "title": "Notificaciones",
+    "subtitle": "Revise alertas de flujo, recordatorios operativos y mensajes generados por el sistema vinculados con la actividad de RR. HH.",
+    "markAllRead": "Marcar todas como leídas",
+    "loadFailed": "No se pudieron cargar las notificaciones.",
+    "empty": "No se encontraron notificaciones."
+  },
+  "audit": {
+    "eyebrow": "Gobernanza",
+    "title": "Registro de auditoría",
+    "subtitle": "Revise cambios del sistema y mutaciones de datos en la aplicación activa de RR. HH.",
+    "tabs": {
+      "all": "Todas las tablas",
+      "employees": "Empleado",
+      "departments": "Departamento",
+      "jobs": "Puesto",
+      "users": "Usuario",
+      "jobHistory": "Historial laboral"
+    },
+    "columns": {
+      "action": "Acción",
+      "entity": "Entidad",
+      "record": "Registro",
+      "changedAt": "Fecha de cambio"
+    },
+    "meta": {
+      "rows": "Filas",
+      "filter": "Filtro",
+      "matched": "Coincidencias"
+    },
+    "states": {
+      "loadFailed": "No se pudieron cargar los registros de auditoría.",
+      "before": "Antes",
+      "after": "Después",
+      "showingFirst": "Mostrando los primeros {{limit}} de {{total}} eventos coincidentes",
+      "showingMatched": "Mostrando {{count}} eventos coincidentes",
+      "refineFilter": "Refine el filtro de tabla para reducir el flujo de auditoría.",
+      "expandRow": "Expanda una fila para inspeccionar los detalles antes y después.",
+      "emptyTitle": "No se encontraron registros de auditoría",
+      "emptyDescription": "Pruebe otro filtro de tabla o vuelva a revisar después de más actividad del sistema."
+    }
+  },
+  "assessmentCycles": {
+    "navLabel": "Ciclos de evaluacion",
+    "eyebrow": "Configuracion de evaluaciones",
+    "title": "Ciclos de evaluacion",
+    "subtitle": "Configure las ventanas de revision, el estado de activacion y las etiquetas traducidas que usaran las futuras evaluaciones de empleados.",
+    "meta": {
+      "currentLocale": "Configuracion regional actual",
+      "previewLabel": "Etiqueta vista previa"
+    },
+    "actions": {
+      "newCycle": "Nuevo ciclo",
+      "saveChanges": "Guardar cambios",
+      "activate": "Activar",
+      "deactivate": "Desactivar"
+    },
+    "toasts": {
+      "createSuccess": "Se creo {{code}}.",
+      "updateSuccess": "Se actualizo {{code}}."
+    },
+    "statuses": {
+      "PLANNED": "Planeado",
+      "OPEN": "Abierto",
+      "CLOSED": "Cerrado"
+    },
+    "states": {
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "none": "Ninguno"
+    },
+    "periodTypes": {
+      "ANNUAL": "Anual",
+      "HALF": "Semestral",
+      "QUARTER": "Trimestral"
+    },
+    "stats": {
+      "totalTitle": "Inventario de ciclos",
+      "totalValue": "{{count}} ciclos",
+      "totalDetail": "Linea base del esquema principal sembrada en la aplicacion PostgreSQL activa.",
+      "openTitle": "Ciclo abierto actual",
+      "openDetailFallback": "Seleccione que ciclo debe estar disponible para gerentes y RR. HH.",
+      "activeTitle": "Filas activas",
+      "activeValue": "{{count}} activos",
+      "activeDetail": "Las filas inactivas permanecen para historial pero no deben seleccionarse despues.",
+      "translationTitle": "Cobertura de traducciones",
+      "translationDetail": "Muestra si cada ciclo esta listo para la linea base MLS/NLS actual."
+    },
+    "list": {
+      "title": "Listado de ciclos",
+      "subtitle": "Revise y administre cada ciclo de evaluacion en un solo lugar.",
+      "filteredCount": "{{count}} visibles de {{total}}",
+      "activeCount": "{{count}} activos",
+      "openCycle": "Abierto: {{value}}",
+      "translationCoverage": "Traducciones {{value}}",
+      "emptyState": "Ningun ciclo coincide con la busqueda o el filtro de estado actual.",
+      "order": "Orden visual {{value}}",
+      "localePreview": "Etiqueta: {{value}}",
+      "columns": {
+        "cycleCode": "Codigo",
+        "label": "Etiqueta",
+        "status": "Estado",
+        "periodType": "Periodo",
+        "dateRange": "Rango",
+        "active": "Activo",
+        "displayOrder": "Orden"
+      }
+    },
+    "filters": {
+      "status": "Estado",
+      "searchPlaceholder": "Buscar por codigo de ciclo o etiqueta traducida..."
+    },
+    "form": {
+      "title": "Panel de configuracion",
+      "subtitle": "Actualice los detalles y la disponibilidad del ciclo seleccionado.",
+      "cycleCode": "Codigo de ciclo",
+      "displayOrder": "Orden visual",
+      "defaultLabel": "Etiqueta predeterminada",
+      "periodType": "Tipo de periodo",
+      "status": "Estado del ciclo",
+      "startDate": "Fecha inicial",
+      "endDate": "Fecha final"
+    },
+    "translations": {
+      "title": "Cobertura de traducciones",
+      "subtitle": "Revise las etiquetas localizadas para los idiomas soportados.",
+      "complete": "Completo",
+      "missing": "Falta",
+      "placeholder": "Etiqueta localizada para {{locale}}"
+    },
+    "guidance": {
+      "title": "Reglas de configuracion",
+      "subtitle": "Estas son las reglas operativas detras de la pagina y del cambio de esquema.",
+      "ruleOneTitle": "Fuente unica",
+      "ruleOneText": "La aplicacion principal es duenia de `aihr_assessment_cycles`; Lab 12 debe referenciarla en lugar de redefinir etiquetas.",
+      "ruleTwoTitle": "Listo para MLS/NLS",
+      "ruleTwoText": "Las etiquetas del ciclo deben salir de `default_label` mas las traducciones, no de cadenas fijas en la UI.",
+      "ruleThreeTitle": "Ajuste de Lab 12",
+      "ruleThreeText": "La tabla opcional del capstone debe ser `aihr_employee_assessments` y usar `cycle_code`."
+    },
+    "footer": {
+      "auditLogLabel": "Registro de auditoria",
+      "auditLogDescription": "Revise como deberian verse futuras ediciones de configuracion en el historial de gobierno.",
+      "settingsLabel": "Configuracion de usuario",
+      "settingsDescription": "Revise las preferencias regionales frente a las etiquetas traducidas."
+    }
+  }
+}

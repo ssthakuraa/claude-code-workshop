@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Lab 11: Enterprise Governance — Rollout Readiness, Safety
+Posture &amp; Evidence</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="doc-shell">
+    <header class="doc-header">
+      <div class="doc-header-meta">
+        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-divider"></span>
+        <span class="doc-page-label">Lab 11</span>
+      </div>
+      <div class="doc-header-title">Lab 11: Enterprise Governance — Rollout Readiness, Safety Posture & Evidence</div>
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <a class="doc-nav-link doc-nav-prev" href="codexlab10.html">← Lab 10</a>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <a class="doc-nav-link doc-nav-next" href="codexlab12.html">Lab 12 →</a>
+      </nav>
+    </header>
+    <main class="doc-content">
+<section
+id="lab-11-enterprise-governance--rollout-readiness-safety-posture--evidence"
+class="level1">
+<h1>Lab 11: Enterprise Governance — Rollout Readiness, Safety Posture
+&amp; Evidence</h1>
+<p><strong>Duration:</strong> 75 minutes</p>
+<blockquote>
+<p>Recommended Day 2 order: <strong>Lab 09 → Lab 08 → Lab 07 → Lab 10 →
+Lab 11 → optional Lab 12</strong>. This file is the fifth stop in that
+sequence, after you already have browser, API, and database verification
+evidence to govern.</p>
+</blockquote>
+<section id="learning-objective" class="level2">
+<h2>Learning Objective</h2>
+<p>You will translate individual Codex success into something a team,
+architect group, or enablement owner could trust at scale. The focus is
+not just building artifacts. The focus is evidence, review roles,
+bounded safety posture, and rollout discipline.</p>
+</section>
+<section id="the-key-concepts" class="level2">
+<h2>The Key Concepts</h2>
+<section id="rollout-readiness" class="level3">
+<h3>Rollout Readiness</h3>
+<p>Enterprise adoption usually fails from weak operating discipline, not
+lack of model capability. A team-ready workflow needs:</p>
+<ul>
+<li>safety posture</li>
+<li>review roles</li>
+<li>evidence quality</li>
+<li>expansion criteria</li>
+</ul>
+</section>
+<section id="repo-safety-posture" class="level3">
+<h3>Repo Safety Posture</h3>
+<p>In current Codex, the truthful repo-level control surfaces are:</p>
+<ul>
+<li><code>.codex/config.toml</code>
+<ul>
+<li>approval posture such as <code>approval_policy</code></li>
+<li>sandbox posture such as <code>sandbox_mode</code></li>
+<li>project-scoped integrations such as MCP</li>
+</ul></li>
+</ul>
+<p>This lab should not try to recreate the old
+<code>.codex/settings.json</code> command-allowlist story. The modern
+repo-level safety model is bounded sandboxing, approval policy, and
+explicit evidence.</p>
+</section>
+<section
+id="enterprise-governance--safety-posture--review-roles--expansion-gates"
+class="level3">
+<h3>Enterprise Governance = Safety Posture + Review Roles + Expansion
+Gates</h3>
+<p>Together, these create a governance layer:</p>
+<pre class="text"><code>Config: approval and sandbox posture for the repo
+Evidence + review: determine whether the workflow is safe to expand</code></pre>
+<hr />
+</section>
+</section>
+<section id="setup" class="level2">
+<h2>Setup</h2>
+<p>Ask Codex to run these compile/build checks for you:</p>
+<pre><code>This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use `reference/` unless this chapter explicitly allows it or you need rescue help.
+
+Run these verification checks and tell me whether both succeed:
+- `cd backend &amp;&amp; ./build-jersey-service.sh compile`
+- `cd frontend &amp;&amp; npm run build`</code></pre>
+<p>Client capability notes:</p>
+<ul>
+<li>repo-managed <code>.codex/config.toml</code> changes are often
+loaded at session start, not always hot-reloaded into an already-running
+Codex session</li>
+<li>for this lab, expect to save the config, then start a fresh Codex
+session from the repo root before you judge whether the safety posture
+is active</li>
+<li><code>.codex/</code> is a protected control-plane directory in some
+clients; if Codex cannot edit it directly, ask Codex to draft the exact
+content and then apply it yourself</li>
+<li>acceptable proof in a constrained client is: file state,
+smoke-helper output, and fresh-context verification where possible; do
+not pretend a missing live prompt means the repo config is absent</li>
+</ul>
+<hr />
+</section>
+<section id="exercise-1-write-the-rollout-recommendation-15-min"
+class="level2">
+<h2>Exercise 1: Write the Rollout Recommendation (15 min)</h2>
+<section id="goal" class="level3">
+<h3>Goal</h3>
+<p>Create a concise rollout recommendation for a skeptical enterprise
+audience.</p>
+</section>
+<section id="instructions" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Codex to generate a short rollout recommendation:</p>
+<pre><code>This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use `reference/` unless this chapter explicitly allows it or you need rescue help.
+
+Write a rollout recommendation for introducing Codex into this HR repo.
+It must answer:
+1. who should use it first
+2. what repo safety posture is safe enough for the first wave
+3. what review roles are mandatory
+4. what evidence is required before expansion
+5. what stop conditions should pause the rollout</code></pre></li>
+<li><p><strong>Review the recommendation.</strong> It should be
+practical, slightly conservative, and tied to real observed workflow
+risks from the course.</p></li>
+</ol>
+<hr />
+</section>
+</section>
+<section id="exercise-2-define-the-evidence-package-20-min"
+class="level2">
+<h2>Exercise 2: Define the Evidence Package (20 min)</h2>
+<section id="goal-1" class="level3">
+<h3>Goal</h3>
+<p>Define the evidence package a team lead would need before approving
+broader use.</p>
+</section>
+<section id="instructions-1" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Codex to produce an evidence checklist:</p>
+<pre><code>Create an enterprise evidence checklist for this repo.
+Include:
+- implementation evidence
+- test evidence
+- browser verification evidence
+- data verification evidence
+- code-review evidence
+- rollback or stop-condition evidence</code></pre></li>
+<li><p><strong>Review the checklist.</strong> Ask whether each evidence
+item reduces a real failure mode or just adds ceremony.</p></li>
+<li><p>Ask Codex one more question:</p>
+<pre><code>Which pieces of this evidence package are mandatory before expansion,
+and which are optional for a first bounded pilot?</code></pre></li>
+</ol>
+<hr />
+</section>
+</section>
+<section id="exercise-3-define-the-review-model-15-min" class="level2">
+<h2>Exercise 3: Define the Review Model (15 min)</h2>
+<section id="goal-2" class="level3">
+<h3>Goal</h3>
+<p>Define the review model and bounded pilot criteria.</p>
+</section>
+<section id="instructions-2" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Codex to define the review model:</p>
+<pre><code>Define the review model for a bounded Codex pilot in this repo.
+Name:
+- learner/self-review responsibilities
+- peer or senior colleague review responsibilities
+- tech lead / architect review responsibilities
+- the conditions required before expanding the pilot</code></pre></li>
+<li><p><strong>Review the model.</strong> Ask whether any role is
+overloaded or whether any important sign-off is missing.</p></li>
+<li><p><strong>Discussion:</strong> What reviewer roles already exist in
+your organization, and which of them would actually need evidence from
+this workflow?</p></li>
+</ol>
+<hr />
+</section>
+</section>
+<section id="exercise-4-define-the-repo-safety-posture-20-min"
+class="level2">
+<h2>Exercise 4: Define the Repo Safety Posture (20 min)</h2>
+<section id="goal-3" class="level3">
+<h3>Goal</h3>
+<p>Configure a bounded-pilot safety posture using the current Codex repo
+config surface.</p>
+</section>
+<section id="instructions-3" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Codex about the current repo safety posture:</p>
+<pre><code>Read `.codex/config.toml` if it exists and summarize the current repo safety posture.
+Tell me:
+- what approval policy is active
+- what sandbox mode is active
+- whether Playwright MCP is configured</code></pre></li>
+<li><p>Ask Codex to draft or apply a bounded-pilot config:</p>
+<pre><code>Update `.codex/config.toml` for a bounded pilot.
+Preserve any existing sections already present in `.codex/config.toml`.
+In this course, that most often means `[mcp_servers.playwright]` if Lab 09
+already created it.
+Do not invent unrelated sections such as `[features]` or `[agents]` unless
+they already exist in the file you are editing.
+
+Add or confirm:
+- approval_policy = &quot;on-request&quot;
+- sandbox_mode = &quot;workspace-write&quot;
+
+Explain what those settings mean in practice for this repo.
+
+If my client cannot edit `.codex/` directly, draft the exact TOML content for
+me and tell me where to place it.</code></pre>
+<p>The important point is not an old-style command allowlist. The
+important point is that the repo now has an explicit bounded-pilot
+approval and sandbox posture.</p></li>
+<li><p><strong>Reload Codex so the repo settings are active.</strong>
+This is a manual learner action in the client:</p>
+<pre><code>Exit the current Codex session.
+Restart Codex from the repo root.
+If Codex prints a `codex resume ...` command when it exits, use that.
+Ask Codex to read `.codex/config.toml` and summarize the active
+approval, sandbox, and MCP settings before you run the checks below.</code></pre></li>
+<li><p><strong>Test the posture with Codex:</strong></p>
+<pre><code>From the repo root, run these checks and tell me which ones prompted,
+which ones ran, and which ones were blocked:
+
+cd backend &amp;&amp; ./build-jersey-service.sh test
+rm -rf /tmp/some-test-folder
+cp AGENTS.md /tmp/lab11-agents-copy.md</code></pre>
+<p>Expected direction:</p>
+<ul>
+<li>the in-repo build command should usually run inside the bounded
+pilot posture</li>
+<li>destructive or out-of-repo operations should usually prompt or be
+blocked by the client posture</li>
+</ul>
+<p>If your environment still does not show prompts after the
+restart:</p>
+<ul>
+<li>read <code>.codex/config.toml</code> and confirm the safety posture
+is present</li>
+<li>record that live prompt enforcement was not observable in this
+client</li>
+<li>continue the lab using the configured repo safety posture as the
+governance artifact</li>
+</ul></li>
+</ol>
+</section>
+</section>
+<section id="exercise-5-final-reflection-5-min" class="level2">
+<h2>Exercise 5: Final Reflection (5 min)</h2>
+<ol type="1">
+<li><p>Add to <code>AGENTS.md</code>:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Enterprise Rollout</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Start with a bounded pilot, not broad rollout</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Require explicit evidence before expanding</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Name review roles and stop conditions</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">## Codex Safety Posture</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Use <span class="in">`.codex/config.toml`</span> for repo approval and sandbox posture</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Keep a bounded pilot on <span class="in">`workspace-write`</span> plus <span class="in">`on-request`</span> until the evidence is stronger</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Re-verify the repo posture from a fresh session before you trust it</span></code></pre></div></li>
+<li><p><strong>Reflect:</strong> The three governance layers are now in
+place:</p>
+<ul>
+<li><strong>Repo safety posture</strong> (this lab): approval policy and
+sandbox mode in <code>.codex/config.toml</code></li>
+<li><strong>Evidence + review</strong> (this lab): bounded rollout
+discipline</li>
+<li><strong>Verification stack</strong> (Labs 08-10): tests, browser
+checks, and data checks</li>
+</ul></li>
+</ol>
+<hr />
+</section>
+<section id="success-criteria" class="level2">
+<h2>Success Criteria</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />A bounded rollout recommendation
+exists</label></li>
+<li><label><input type="checkbox" />An evidence checklist
+exists</label></li>
+<li><label><input type="checkbox" />A named review model
+exists</label></li>
+<li><label><input type="checkbox" /><code>.codex/config.toml</code>
+expresses a bounded-pilot approval and sandbox posture without
+destroying any existing repo config sections, especially MCP config
+already added earlier</label></li>
+<li><label><input type="checkbox" />Live enforcement was either observed
+after restart or recorded as a client limitation</label></li>
+<li><label><input type="checkbox" />You can explain approval posture,
+sandbox posture, review roles, evidence, and stop
+conditions</label></li>
+</ul>
+<hr />
+</section>
+<section id="key-takeaways" class="level2">
+<h2>Key Takeaways</h2>
+<ol type="1">
+<li>Enterprise rollout needs bounded scope; start with a conservative
+pilot, not a broad mandate.</li>
+<li>Current Codex repo safety is expressed through
+<code>approval_policy</code>, <code>sandbox_mode</code>, and explicit
+verification, not the old <code>settings.json</code> command-allowlist
+story.</li>
+<li>Stop conditions matter; if you cannot say what pauses expansion, the
+rollout is not ready.</li>
+<li>Governance is architecture work, not admin overhead added after the
+fact.</li>
+</ol>
+<hr />
+</section>
+</section>
+    </main>
+    <footer class="doc-footer">
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <a class="doc-nav-link doc-nav-prev" href="codexlab10.html">← Lab 10</a>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <a class="doc-nav-link doc-nav-next" href="codexlab12.html">Lab 12 →</a>
+      </nav>
+    </footer>
+  </div>
+<script>
+  (function () {
+    const copyIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<rect x="9" y="7" width="10" height="12" rx="2"></rect>',
+      '<rect x="5" y="3" width="10" height="12" rx="2"></rect>',
+      '</svg>'
+    ].join('');
+    const copiedIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<path d="M6 12.5l4 4 8-9"></path>',
+      '</svg>'
+    ].join('');
+
+    const blocks = document.querySelectorAll('pre > code');
+    for (const code of blocks) {
+      const pre = code.parentElement;
+      if (!pre || pre.dataset.copyReady === 'true') continue;
+      pre.dataset.copyReady = 'true';
+
+      const shell = document.createElement('div');
+      shell.className = 'code-block-shell';
+      const footer = document.createElement('div');
+      footer.className = 'code-block-footer';
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code-button';
+      button.innerHTML = copyIcon;
+      button.setAttribute('aria-label', 'Copy code block');
+      button.setAttribute('title', 'Copy code block');
+
+      button.addEventListener('click', async function () {
+        const text = code.innerText;
+        try {
+          await navigator.clipboard.writeText(text);
+          button.innerHTML = copiedIcon;
+          button.setAttribute('aria-label', 'Copied');
+          button.setAttribute('title', 'Copied');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1400);
+        } catch (error) {
+          button.innerHTML = copyIcon;
+          button.setAttribute('aria-label', 'Copy failed');
+          button.setAttribute('title', 'Copy failed');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1800);
+        }
+      });
+
+      pre.parentNode.insertBefore(shell, pre);
+      shell.appendChild(pre);
+      footer.appendChild(button);
+      shell.appendChild(footer);
+    }
+  }());
+</script>
+</body>
+</html>

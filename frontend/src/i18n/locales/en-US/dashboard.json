@@ -1,0 +1,83 @@
+{
+  "eyebrow": "Workforce command center",
+  "title": "Welcome back, {{name}}",
+  "titleFallback": "Welcome back, User",
+  "subtitle": "Track organization health, monitor workforce movement, and jump directly into high-frequency HR actions from one shared workspace.",
+  "cards": {
+    "totalHeadcount": {
+      "eyebrow": "Workforce",
+      "title": "Total Headcount",
+      "subtitle": "All employees",
+      "trend": "+{{count}} this month",
+      "detail": "Live total",
+      "statusStable": "Stable workforce",
+      "statusExits": "{{count}} exits this month"
+    },
+    "newHires": {
+      "eyebrow": "Movement",
+      "title": "New Hires (Month)",
+      "subtitle": "This month",
+      "trend": "Current month",
+      "detail": "Current period",
+      "statusActive": "Hiring active",
+      "statusIdle": "No hires yet"
+    },
+    "activeEmployees": {
+      "eyebrow": "Status",
+      "title": "Active Employees",
+      "subtitle": "Currently active",
+      "detail": "Available",
+      "statusCoverage": "Full coverage",
+      "statusUnavailable": "{{count}} unavailable"
+    },
+    "onLeave": {
+      "eyebrow": "Status",
+      "title": "On Leave",
+      "subtitle": "Currently on leave",
+      "detail": "Attention",
+      "statusWatch": "Coverage watch",
+      "statusClear": "No leave cases"
+    },
+    "probation": {
+      "eyebrow": "Status",
+      "title": "On Probation",
+      "subtitle": "Need review",
+      "detail": "Follow-up",
+      "trend": "Action needed",
+      "statusReview": "Needs review",
+      "statusClear": "On track"
+    }
+  },
+  "panels": {
+    "headcountByCountry": {
+      "eyebrow": "Distribution",
+      "title": "Headcount by Country",
+      "subtitle": "Geographic distribution of the current workforce.",
+      "centerLabel": "{{count}} Total"
+    },
+    "topDepartments": {
+      "eyebrow": "Composition",
+      "title": "Top Departments",
+      "subtitle": "Largest workforce concentrations by department."
+    },
+    "quickActions": {
+      "eyebrow": "Workflow",
+      "title": "Quick Actions",
+      "subtitle": "High-frequency HR workflows from one place.",
+      "hireEmployee": "Hire Employee",
+      "transferEmployee": "Transfer Employee",
+      "viewOrgChart": "View Org Chart"
+    },
+    "attritionTrend": {
+      "eyebrow": "Trend",
+      "title": "Attrition Trend (12 months)",
+      "subtitle": "Termination activity over the trailing year."
+    },
+    "recentActivity": {
+      "eyebrow": "Feed",
+      "title": "Recent Activity",
+      "subtitle": "Latest workforce changes and system events.",
+      "empty": "No recent activity found."
+    }
+  }
+}

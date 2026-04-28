@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Lab 04: Context Management — The #1 Performance Lever</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="doc-shell">
+    <header class="doc-header">
+      <div class="doc-header-meta">
+        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-divider"></span>
+        <span class="doc-page-label">Lab 04</span>
+      </div>
+      <div class="doc-header-title">Lab 04: Context Management — The #1 Performance Lever</div>
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <a class="doc-nav-link doc-nav-prev" href="codexlab03.html">← Lab 03</a>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <a class="doc-nav-link doc-nav-next" href="codexlab05.html">Lab 05 →</a>
+      </nav>
+    </header>
+    <main class="doc-content">
+<section id="lab-04-context-management--the-1-performance-lever"
+class="level1">
+<h1>Lab 04: Context Management — The #1 Performance Lever</h1>
+<p><strong>Duration:</strong> 45 minutes</p>
+<section id="learning-objective" class="level2">
+<h2>Learning Objective</h2>
+<p>You will explore how overloaded context can reduce Codex quality,
+then redo the same work with better context hygiene. Modern LLM context
+windows are getting larger, so in this exercise you may not actually see
+the context fill up firsthand. The important habit is to watch context
+usage during development and notice when the agent starts to drift. As
+context fills and gets compacted, some details may be dropped, so if the
+agent starts deviating from the task or missing earlier constraints,
+treat that as a signal to steer it back in the right direction.</p>
+<hr />
+</section>
+<section id="the-key-concept" class="level2">
+<h2>The Key Concept</h2>
+<p>Codex's context window is finite. Everything — files read, command
+outputs, messages, tool results — consumes tokens.</p>
+<p><strong>The degradation curve:</strong></p>
+<ul>
+<li><strong>0–60% full:</strong> Codex is sharp, follows all rules,
+produces quality code</li>
+<li><strong>60–80% full:</strong> Subtle drift — may miss a convention,
+skip a step</li>
+<li><strong>80–90% full:</strong> Noticeable quality drop —
+hallucinations increase, AGENTS.md rules get ignored</li>
+<li><strong>90%+:</strong> Erratic — Codex may contradict itself or
+produce broken code</li>
+</ul>
+<p><strong>The tools and habits:</strong> | Tool | When to Use |
+|------|-------------| | Fresh session | Between different tasks —
+cheapest clean context | | Short context summary | Within a long task —
+preserve only the essentials | | Delegated research | For research-heavy
+work — keeps main context clean | | Read exemplars first | Larger
+codebases — lets Codex anchor on real patterns | | Status indicator if
+available | Check context usage when the client exposes it |</p>
+<hr />
+</section>
+<section id="setup" class="level2">
+<h2>Setup</h2>
+<p>Continue from Labs 1–3. You should have AGENTS.md, Region, Country,
+and Location patterns in place.</p>
+<p>Before starting, remember the large-codebase rule for this
+workspace:</p>
+<ul>
+<li>read examples before generation</li>
+<li>read docs before code</li>
+<li>avoid reading large files "just in case"</li>
+</ul>
+<hr />
+</section>
+<section id="exercise-1-fill-the-context-15-min" class="level2">
+<h2>Exercise 1: Fill the Context (15 min)</h2>
+<section id="goal" class="level3">
+<h3>Goal</h3>
+<p>Deliberately overload a single session to experience degradation.</p>
+</section>
+<section id="instructions" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p><strong>In a single session, without clearing</strong>, perform
+all of these tasks sequentially:</p>
+<p>a. Read the full requirements document:</p>
+<pre><code>Read lab-materials/docs/requirement.md and summarize the key entities.</code></pre>
+<p>b. Read the technical design:</p>
+<pre><code>Read lab-materials/docs/technical-design-jersey-rewrite.md and extract the HR API endpoints
+or API-capability list described there.</code></pre>
+<p>c. Read the schema:</p>
+<pre><code>Read database/hrschema.sql and list the key `AIHR_*` tables.</code></pre>
+<p>d. Ask Codex to draft the Department backend slice in chat only:</p>
+<pre><code>Draft the Department backend slice for the current repo, but do not edit any files.
+I only want the proposed shape in chat so I can evaluate output quality.
+request/response DTOs, JDBC repository methods, and Jersey resource.
+Departments have a tree structure and the read API should support nested children.
+Follow all AGENTS.md conventions.</code></pre></li>
+<li><p><strong>If your Codex client exposes a status/context indicator,
+check it.</strong> Otherwise, simply note that you have now loaded
+multiple large files plus multi-step instructions into one
+session.</p></li>
+<li><p>Now ask Codex to draft the Job backend slice in chat only:</p>
+<pre><code>Draft the Job backend slice, but do not edit any files.
+I only want the proposed shape in chat so I can evaluate output quality.
+request/response DTOs, JDBC repository methods, and Jersey resource.
+Include salary range validation and follow all AGENTS.md conventions.</code></pre></li>
+<li><p><strong>Review the Job output carefully:</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox" />Did Codex follow all AGENTS.md
+conventions?</label></li>
+<li><label><input type="checkbox" />Is the logging pattern
+correct?</label></li>
+<li><label><input type="checkbox" />Is the response-envelope and
+base-path pattern correct?</label></li>
+<li><label><input type="checkbox" />Did it validate min_salary &lt;
+max_salary?</label></li>
+<li><label><input type="checkbox" />Did it stay within the current
+Jersey/JDBC + PostgreSQL runtime shape?</label></li>
+</ul></li>
+<li><p><strong>Score the quality</strong> on a 1–5 scale: _____</p></li>
+</ol>
+<blockquote>
+<p>If context is above 70%, you'll likely see 1–2 convention violations
+that wouldn't have happened in a fresh session.</p>
+</blockquote>
+<hr />
+</section>
+</section>
+<section id="exercise-2-the-clean-way-15-min" class="level2">
+<h2>Exercise 2: The Clean Way (15 min)</h2>
+<section id="goal-1" class="level3">
+<h3>Goal</h3>
+<p>Redo the Job backend module with proper context management.</p>
+</section>
+<section id="instructions-1" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p><strong>Start a fresh Codex session.</strong> Exit the current
+session and start a new one for this exercise.</p></li>
+<li><p>Ask for the Job backend module with the <strong>same
+prompt</strong> as Exercise 1:</p>
+<pre><code>Draft the Job backend slice, but do not edit any files.
+I only want the proposed shape in chat so I can evaluate output quality.
+request/response DTOs, JDBC repository methods, and Jersey resource.
+Include salary range validation and follow all AGENTS.md conventions.</code></pre></li>
+<li><p><strong>Review the output.</strong> Score quality 1–5:
+_____</p></li>
+<li><p><strong>Compare:</strong></p>
+<ul>
+<li>Quality score with overloaded context: _____</li>
+<li>Quality score with clean context: _____</li>
+</ul></li>
+</ol>
+</section>
+<section id="what-you-should-see" class="level3">
+<h3>What You Should See</h3>
+<p>The clean-context version should score higher — conventions followed
+more precisely, fewer omissions, cleaner code structure.</p>
+<hr />
+</section>
+</section>
+<section id="exercise-3-delegated-research-10-min" class="level2">
+<h2>Exercise 3: Delegated Research (10 min)</h2>
+<section id="goal-2" class="level3">
+<h3>Goal</h3>
+<p>Use delegated research to do heavy reading without polluting your
+main context.</p>
+</section>
+<section id="instructions-2" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Instead of reading large files yourself, delegate or ask for a
+bounded research summary:</p>
+<pre><code>Read lab-materials/docs/requirement.md and extract only:
+1. All entity names and their relationships
+2. All RBAC rules
+3. All API endpoints
+Return a concise summary — not the full document.</code></pre></li>
+<li><p><strong>Notice what changed:</strong> only the summary should
+remain in your working context, not the full document contents.</p></li>
+<li><p>Now use the summary to do work:</p>
+<pre><code>Based on that entity summary, which entities still need to be scaffolded?</code></pre></li>
+</ol>
+</section>
+<section id="what-you-should-see-1" class="level3">
+<h3>What You Should See</h3>
+<p>Your main context consumed only the summary (~50 lines), not the full
+document (~500+ lines). This is how you keep context clean during
+research-heavy work. Lab 06 will go deeper on dedicated reviewer/builder
+agents.</p>
+<hr />
+</section>
+</section>
+<section id="exercise-4-context-habits-checklist-5-min" class="level2">
+<h2>Exercise 4: Context Habits Checklist (5 min)</h2>
+<p>Review and internalize these habits:</p>
+<ul class="task-list">
+<li><label><input type="checkbox" /><strong>Start a fresh session
+between unrelated tasks</strong> — don't let Task A's context pollute
+Task B</label></li>
+<li><label><input type="checkbox" /><strong>Don't read files "just in
+case"</strong> — every file read costs tokens</label></li>
+<li><label><input type="checkbox" /><strong>Ask for bounded summaries
+during research</strong> — keep your main context for
+implementation</label></li>
+<li><label><input type="checkbox" /><strong>Use a short summary for long
+tasks</strong> — when you can't restart but context is
+growing</label></li>
+<li><label><input type="checkbox" /><strong>Start fresh sessions for new
+features</strong> — cheapest clean context</label></li>
+<li><label><input type="checkbox" /><strong>Check a status indicator if
+available</strong> — know your context level</label></li>
+</ul>
+<p>Add to AGENTS.md:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Session Discipline</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Start fresh sessions between unrelated tasks</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Delegate or summarize large file reads instead of carrying full file contents</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>If the session feels overloaded, summarize the task state and restart cleanly</span></code></pre></div>
+<hr />
+</section>
+<section id="success-criteria" class="level2">
+<h2>Success Criteria</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />Experienced measurable quality
+difference between overloaded and clean context</label></li>
+<li><label><input type="checkbox" />Used a fresh session to reset
+context between tasks</label></li>
+<li><label><input type="checkbox" />Used delegated research without
+polluting main context</label></li>
+<li><label><input type="checkbox" />Can explain the degradation curve
+(60% → 80% → 90%)</label></li>
+<li><label><input type="checkbox" />AGENTS.md updated with session
+discipline rules</label></li>
+</ul>
+<hr />
+</section>
+<section id="key-takeaways" class="level2">
+<h2>Key Takeaways</h2>
+<ol type="1">
+<li><strong>Context is your most precious resource</strong> — guard it
+jealously</li>
+<li><strong>A fresh session is free, debugging isn't</strong> —
+restarting cleanly is cheaper than fixing context-poisoned output</li>
+<li><strong>Delegated research is a context firewall</strong> — heavy
+reading stays bounded, only summaries cross into the implementation
+loop</li>
+<li><strong>In larger repos, read exemplars before generating</strong> —
+context quality matters as much as context size</li>
+</ol>
+<hr />
+</section>
+</section>
+    </main>
+    <footer class="doc-footer">
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <a class="doc-nav-link doc-nav-prev" href="codexlab03.html">← Lab 03</a>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <a class="doc-nav-link doc-nav-next" href="codexlab05.html">Lab 05 →</a>
+      </nav>
+    </footer>
+  </div>
+<script>
+  (function () {
+    const copyIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<rect x="9" y="7" width="10" height="12" rx="2"></rect>',
+      '<rect x="5" y="3" width="10" height="12" rx="2"></rect>',
+      '</svg>'
+    ].join('');
+    const copiedIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<path d="M6 12.5l4 4 8-9"></path>',
+      '</svg>'
+    ].join('');
+
+    const blocks = document.querySelectorAll('pre > code');
+    for (const code of blocks) {
+      const pre = code.parentElement;
+      if (!pre || pre.dataset.copyReady === 'true') continue;
+      pre.dataset.copyReady = 'true';
+
+      const shell = document.createElement('div');
+      shell.className = 'code-block-shell';
+      const footer = document.createElement('div');
+      footer.className = 'code-block-footer';
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code-button';
+      button.innerHTML = copyIcon;
+      button.setAttribute('aria-label', 'Copy code block');
+      button.setAttribute('title', 'Copy code block');
+
+      button.addEventListener('click', async function () {
+        const text = code.innerText;
+        try {
+          await navigator.clipboard.writeText(text);
+          button.innerHTML = copiedIcon;
+          button.setAttribute('aria-label', 'Copied');
+          button.setAttribute('title', 'Copied');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1400);
+        } catch (error) {
+          button.innerHTML = copyIcon;
+          button.setAttribute('aria-label', 'Copy failed');
+          button.setAttribute('title', 'Copy failed');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1800);
+        }
+      });
+
+      pre.parentNode.insertBefore(shell, pre);
+      shell.appendChild(pre);
+      footer.appendChild(button);
+      shell.appendChild(footer);
+    }
+  }());
+</script>
+</body>
+</html>

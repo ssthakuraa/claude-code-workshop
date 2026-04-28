@@ -1,0 +1,41 @@
+{
+  "eyebrow": "Espacio personal",
+  "title": "Configuración",
+  "subtitle": "Administra el idioma, el formato regional y las preferencias personales que dan forma a la experiencia activa de RR. HH.",
+  "dashboardCrumb": "Panel",
+  "options": {
+    "dateFormats": {
+      "short": "Corto",
+      "medium": "Medio",
+      "long": "Largo"
+    },
+    "timezones": {
+      "America_Los_Angeles": "Hora del Pacífico (Los Ángeles)",
+      "America_Chicago": "Hora central (Chicago)",
+      "America_New_York": "Hora del Este (Nueva York)",
+      "America_Mexico_City": "Ciudad de México",
+      "America_Toronto": "Toronto",
+      "Europe_London": "Londres",
+      "Europe_Dublin": "Dublín",
+      "Europe_Paris": "París",
+      "Europe_Berlin": "Berlín",
+      "Europe_Amsterdam": "Ámsterdam",
+      "Asia_Kolkata": "Calcuta",
+      "Asia_Singapore": "Singapur"
+    },
+    "currencies": {
+      "USD": "Dólar estadounidense (USD)",
+      "EUR": "Euro (EUR)",
+      "GBP": "Libra esterlina (GBP)",
+      "INR": "Rupia india (INR)",
+      "MXN": "Peso mexicano (MXN)",
+      "CAD": "Dólar canadiense (CAD)",
+      "AUD": "Dólar australiano (AUD)",
+      "BRL": "Real brasileño (BRL)",
+      "CHF": "Franco suizo (CHF)",
+      "DKK": "Corona danesa (DKK)",
+      "JPY": "Yen japonés (JPY)",
+      "SGD": "Dólar de Singapur (SGD)"
+    }
+  }
+}

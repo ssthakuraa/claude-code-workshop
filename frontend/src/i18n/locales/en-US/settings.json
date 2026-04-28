@@ -1,0 +1,41 @@
+{
+  "eyebrow": "Personal workspace",
+  "title": "Settings",
+  "subtitle": "Manage language, regional formatting, and personal workspace preferences that shape the live HR experience.",
+  "dashboardCrumb": "Dashboard",
+  "options": {
+    "dateFormats": {
+      "short": "Short",
+      "medium": "Medium",
+      "long": "Long"
+    },
+    "timezones": {
+      "America_Los_Angeles": "Pacific Time (Los Angeles)",
+      "America_Chicago": "Central Time (Chicago)",
+      "America_New_York": "Eastern Time (New York)",
+      "America_Mexico_City": "Mexico City",
+      "America_Toronto": "Toronto",
+      "Europe_London": "London",
+      "Europe_Dublin": "Dublin",
+      "Europe_Paris": "Paris",
+      "Europe_Berlin": "Berlin",
+      "Europe_Amsterdam": "Amsterdam",
+      "Asia_Kolkata": "Kolkata",
+      "Asia_Singapore": "Singapore"
+    },
+    "currencies": {
+      "USD": "US Dollar (USD)",
+      "EUR": "Euro (EUR)",
+      "GBP": "British Pound (GBP)",
+      "INR": "Indian Rupee (INR)",
+      "MXN": "Mexican Peso (MXN)",
+      "CAD": "Canadian Dollar (CAD)",
+      "AUD": "Australian Dollar (AUD)",
+      "BRL": "Brazilian Real (BRL)",
+      "CHF": "Swiss Franc (CHF)",
+      "DKK": "Danish Krone (DKK)",
+      "JPY": "Japanese Yen (JPY)",
+      "SGD": "Singapore Dollar (SGD)"
+    }
+  }
+}

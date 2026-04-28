@@ -1,0 +1,157 @@
+{
+  "hire": {
+    "eyebrow": "Acción de personal",
+    "title": "Contratar empleado",
+    "subtitle": "Complete el flujo de incorporación para agregar un nuevo registro, asignar contexto organizacional y aprovisionar una cuenta inicial.",
+    "submit": "Contratar empleado",
+    "steps": {
+      "personal": { "label": "Personal", "description": "Información básica" },
+      "job": { "label": "Puesto", "description": "Rol y ubicación" },
+      "compensation": { "label": "Compensación", "description": "Salario y tipo" },
+      "review": { "label": "Revisión", "description": "Confirmar y contratar" }
+    },
+    "sections": {
+      "personalEyebrow": "Información personal",
+      "personalTitle": "Inicie el registro del empleado",
+      "jobEyebrow": "Asignación del rol",
+      "jobTitle": "Ubique la contratación en la organización",
+      "compensationEyebrow": "Condiciones de empleo",
+      "compensationTitle": "Defina pago y detalles contractuales",
+      "reviewEyebrow": "Revisar detalles",
+      "reviewTitle": "Confirme el registro de la nueva contratación"
+    },
+    "fields": {
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "email": "Correo electrónico",
+      "phone": "Teléfono",
+      "hireDate": "Fecha de contratación",
+      "initialPassword": "Contraseña inicial",
+      "jobTitle": "Puesto",
+      "department": "Departamento",
+      "manager": "Gerente",
+      "annualSalary": "Salario anual",
+      "commissionPct": "% de comisión",
+      "employmentType": "Tipo de empleo",
+      "contractEndDate": "Fin del contrato"
+    },
+    "placeholders": {
+      "firstName": "Juana",
+      "lastName": "Pérez",
+      "email": "juana.perez@company.com",
+      "phone": "+52 55-0100",
+      "initialPassword": "Mínimo 8 caracteres",
+      "selectJob": "Seleccione un puesto...",
+      "selectDepartment": "Seleccione un departamento...",
+      "noManager": "Sin gerente"
+    },
+    "salaryBand": "Rango salarial: {{min}} - {{max}}",
+    "reviewLabels": {
+      "name": "Nombre",
+      "job": "Puesto",
+      "department": "Departamento",
+      "manager": "Gerente",
+      "salary": "Salario",
+      "employmentType": "Tipo de empleo",
+      "contractEndDate": "Fin del contrato"
+    },
+    "validation": {
+      "required": "Obligatorio",
+      "invalidEmail": "Correo no válido",
+      "passwordMin": "Mínimo 8 caracteres"
+    },
+    "toasts": {
+      "success": "¡{{name}} fue contratado correctamente!",
+      "error": "No se pudo contratar al empleado. Inténtelo de nuevo."
+    }
+  },
+  "promote": {
+    "eyebrow": "Acción de personal",
+    "title": "Promover empleado",
+    "subtitle": "Asignación actual: {{jobTitle}} · {{departmentName}}",
+    "meta": {
+      "employee": "Empleado",
+      "availableRoles": "Roles disponibles",
+      "effective": "Vigencia"
+    },
+    "sectionEyebrow": "Cambio de rol",
+    "sectionTitle": "Seleccione la asignación de destino",
+    "fields": {
+      "newJobTitle": "Nuevo puesto",
+      "newSalary": "Nuevo salario",
+      "effectiveDate": "Fecha de vigencia"
+    },
+    "placeholders": {
+      "selectNewJob": "Seleccione un nuevo puesto..."
+    },
+    "salaryBand": "Nuevo rango salarial: {{min}} - {{max}}",
+    "buttons": {
+      "confirm": "Confirmar promoción"
+    },
+    "toasts": {
+      "success": "¡{{name}} fue promovido a {{jobTitle}}!",
+      "error": "La promoción falló. Inténtelo de nuevo."
+    }
+  },
+  "transfer": {
+    "eyebrow": "Acción de personal",
+    "title": "Transferir empleado",
+    "subtitle": "Departamento actual: {{departmentName}}",
+    "meta": {
+      "employee": "Empleado",
+      "departments": "Departamentos",
+      "effective": "Vigencia"
+    },
+    "sectionEyebrow": "Cambio organizacional",
+    "sectionTitle": "Asigne un nuevo contexto de reporte",
+    "fields": {
+      "newDepartment": "Nuevo departamento",
+      "newManager": "Nuevo gerente",
+      "effectiveDate": "Fecha de vigencia"
+    },
+    "placeholders": {
+      "selectDepartment": "Seleccione un departamento...",
+      "noChange": "Sin cambio"
+    },
+    "buttons": {
+      "confirm": "Confirmar transferencia"
+    },
+    "toasts": {
+      "success": "¡{{name}} fue transferido a {{department}}!",
+      "error": "La transferencia falló. Inténtelo de nuevo.",
+      "fallbackDepartment": "nuevo departamento"
+    }
+  },
+  "terminate": {
+    "eyebrow": "Acción de personal",
+    "title": "Terminar empleado",
+    "subtitle": "Esta acción eliminará lógicamente el registro del empleado y desactivará la cuenta asociada.",
+    "meta": {
+      "employee": "Empleado",
+      "currentStatus": "Estado actual",
+      "effective": "Vigencia"
+    },
+    "sectionEyebrow": "Detalles de la baja",
+    "sectionTitle": "Capture la información de salida",
+    "fields": {
+      "effectiveDate": "Fecha de vigencia",
+      "reason": "Motivo / Notas"
+    },
+    "placeholders": {
+      "reason": "Renuncia voluntaria, fin de contrato, desempeño..."
+    },
+    "hint": "Use un texto apto para producción. La nota pasa a formar parte del historial de auditoría del empleado.",
+    "buttons": {
+      "terminate": "Terminar empleado",
+      "confirm": "Sí, terminar"
+    },
+    "dialog": {
+      "title": "Confirmar baja",
+      "description": "¿Seguro que desea terminar a {{name}}? Esto desactivará su cuenta y lo marcará como terminado."
+    },
+    "toasts": {
+      "success": "{{name}} ha sido terminado.",
+      "error": "La baja falló. Inténtelo de nuevo."
+    }
+  }
+}

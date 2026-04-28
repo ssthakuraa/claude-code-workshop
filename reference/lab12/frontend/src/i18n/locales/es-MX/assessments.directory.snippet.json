@@ -1,0 +1,31 @@
+{
+  "directory": {
+    "navLabel": "Directorio de evaluaciones",
+    "eyebrow": "Espacio del revisor",
+    "title": "Directorio de evaluaciones",
+    "subtitle": "Revisa la actividad de evaluaciones dentro de tu alcance con acceso aplicado desde el backend para especialistas de RR. HH. y gerentes.",
+    "searchEmployeePlaceholder": "Buscar por nombre del empleado...",
+    "activeEmployeeSearch": "Empleado: {{query}}",
+    "emptyTitle": "Ninguna evaluación coincide con los filtros actuales",
+    "emptyDescription": "Ajusta la búsqueda o los filtros para ampliar los resultados.",
+    "unassignedReviewer": "Revisor sin asignar",
+    "employeeMeta": "ID de empleado {{id}}",
+    "filters": {
+      "cycle": "Ciclo",
+      "cycleSearch": "Buscar ciclos"
+    },
+    "columns": {
+      "employee": "Empleado",
+      "department": "Departamento",
+      "cycle": "Ciclo",
+      "status": "Estado",
+      "reviewer": "Revisor",
+      "goalCompletionPct": "Objetivos",
+      "competencyScore": "Competencia",
+      "updatedAt": "Actualizada"
+    },
+    "csvHeaders": {
+      "employeeId": "ID de empleado"
+    }
+  }
+}

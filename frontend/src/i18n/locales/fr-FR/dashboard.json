@@ -1,0 +1,83 @@
+{
+  "eyebrow": "Centre de pilotage des effectifs",
+  "title": "Bon retour, {{name}}",
+  "titleFallback": "Bon retour, Utilisateur",
+  "subtitle": "Suivez la santé de l’organisation, surveillez les mouvements d’effectifs et accédez directement aux actions RH fréquentes depuis un espace partagé.",
+  "cards": {
+    "totalHeadcount": {
+      "eyebrow": "Effectif",
+      "title": "Effectif total",
+      "subtitle": "Tous les employés",
+      "trend": "+{{count}} ce mois-ci",
+      "detail": "Total en direct",
+      "statusStable": "Effectif stable",
+      "statusExits": "{{count}} départs ce mois-ci"
+    },
+    "newHires": {
+      "eyebrow": "Mouvement",
+      "title": "Nouvelles embauches (mois)",
+      "subtitle": "Ce mois-ci",
+      "trend": "Mois en cours",
+      "detail": "Période actuelle",
+      "statusActive": "Recrutement actif",
+      "statusIdle": "Aucune embauche pour l’instant"
+    },
+    "activeEmployees": {
+      "eyebrow": "Statut",
+      "title": "Employés actifs",
+      "subtitle": "Actuellement actifs",
+      "detail": "Disponibles",
+      "statusCoverage": "Couverture complète",
+      "statusUnavailable": "{{count}} indisponibles"
+    },
+    "onLeave": {
+      "eyebrow": "Statut",
+      "title": "En congé",
+      "subtitle": "Actuellement absents",
+      "detail": "Attention",
+      "statusWatch": "Surveillance de couverture",
+      "statusClear": "Aucun cas de congé"
+    },
+    "probation": {
+      "eyebrow": "Statut",
+      "title": "En période d’essai",
+      "subtitle": "À examiner",
+      "detail": "Suivi",
+      "trend": "Action requise",
+      "statusReview": "À revoir",
+      "statusClear": "Sur la bonne voie"
+    }
+  },
+  "panels": {
+    "headcountByCountry": {
+      "eyebrow": "Répartition",
+      "title": "Effectif par pays",
+      "subtitle": "Répartition géographique de l’effectif actuel.",
+      "centerLabel": "{{count}} total"
+    },
+    "topDepartments": {
+      "eyebrow": "Composition",
+      "title": "Principaux départements",
+      "subtitle": "Plus fortes concentrations d’effectifs par département."
+    },
+    "quickActions": {
+      "eyebrow": "Flux",
+      "title": "Actions rapides",
+      "subtitle": "Flux RH à forte fréquence depuis un seul endroit.",
+      "hireEmployee": "Embaucher un employé",
+      "transferEmployee": "Transférer un employé",
+      "viewOrgChart": "Voir l’organigramme"
+    },
+    "attritionTrend": {
+      "eyebrow": "Tendance",
+      "title": "Tendance d’attrition (12 mois)",
+      "subtitle": "Activité des départs sur les douze derniers mois."
+    },
+    "recentActivity": {
+      "eyebrow": "Flux",
+      "title": "Activité récente",
+      "subtitle": "Derniers changements d’effectifs et événements système.",
+      "empty": "Aucune activité récente trouvée."
+    }
+  }
+}

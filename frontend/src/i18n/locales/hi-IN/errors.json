@@ -1,0 +1,37 @@
+{
+  "unauthorizedEyebrow": "अनुमति आवश्यक",
+  "unauthorizedTitle": "पहुँच अस्वीकृत",
+  "unauthorizedBody": "वर्तमान भूमिका असाइनमेंट के साथ आपको इस पृष्ठ तक पहुँचने की अनुमति नहीं है।",
+  "notFoundEyebrow": "नेविगेशन समस्या",
+  "notFoundTitle": "पृष्ठ नहीं मिला",
+  "notFoundBody": "आपके द्वारा माँगा गया पृष्ठ मौजूद नहीं है या अब सक्रिय वर्कस्पेस का हिस्सा नहीं है।",
+  "messages": {
+    "AUTH_REQUIRED": "इस कार्य के लिए प्रमाणीकरण आवश्यक है।",
+    "INVALID_CREDENTIALS": "उपयोगकर्ता नाम या पासवर्ड अमान्य है।",
+    "REFRESH_TOKEN_INVALID": "रिफ्रेश टोकन अमान्य है या समाप्त हो चुका है।",
+    "ACCOUNT_DISABLED": "आपका खाता निष्क्रिय कर दिया गया है। कृपया एचआर से संपर्क करें।",
+    "ACCESS_DENIED": "आपको यह कार्य करने की अनुमति नहीं है।",
+    "RESOURCE_NOT_FOUND": "माँगा गया संसाधन नहीं मिला।",
+    "DB_ACCESS_ERROR": "डेटा एक्सेस त्रुटि हुई। कृपया फिर से प्रयास करें।",
+    "INTERNAL_ERROR": "एक अनपेक्षित त्रुटि हुई। कृपया फिर से प्रयास करें।",
+    "VALIDATION_FAILED": "मान्यता विफल रही। कृपया हाइलाइट किए गए फ़ील्ड जाँचें।",
+    "BAD_REQUEST": "अनुरोध को संसाधित नहीं किया जा सका।"
+  },
+  "fields": {
+    "VALIDATION_REQUIRED": "यह फ़ील्ड आवश्यक है।",
+    "VALIDATION_UNSUPPORTED_LOCALE": "यह भाषा समर्थित नहीं है।",
+    "VALIDATION_POSITIVE_NUMBER": "कृपया धनात्मक संख्या दर्ज करें।",
+    "VALIDATION_NON_NEGATIVE": "कृपया शून्य या धनात्मक संख्या दर्ज करें।",
+    "VALIDATION_MAX_VALUE_1": "कृपया 1.00 या उससे कम मान दर्ज करें।",
+    "VALIDATION_REQUIRED_FOR_CONTRACT": "यह फ़ील्ड कॉन्ट्रैक्ट कर्मचारियों के लिए आवश्यक है।",
+    "VALIDATION_INVALID_DATE": "कृपया ISO तिथि प्रारूप YYYY-MM-DD उपयोग करें।",
+    "VALIDATION_DATE_RANGE": "प्रारंभ तिथि अंतिम तिथि से पहले या समान होनी चाहिए।",
+    "VALIDATION_MIN_LENGTH_8": "कम से कम 8 अक्षर दर्ज करें।",
+    "VALIDATION_PERCENT_RANGE": "0 से 100 के बीच प्रतिशत दर्ज करें।",
+    "VALIDATION_SCORE_RANGE": "0 से 5 के बीच स्कोर दर्ज करें।",
+    "VALIDATION_INVALID_PERIOD_TYPE": "मान्य अवधि प्रकार चुनें।",
+    "VALIDATION_INVALID_STATUS": "मान्य साइकिल स्थिति चुनें।",
+    "VALIDATION_CODE_IMMUTABLE": "यदि अलग कोड चाहिए तो नया साइकिल बनाएं।",
+    "VALIDATION_READ_ONLY_STATUS": "जमा या अंतिम आकलन केवल पढ़ने के लिए हैं।"
+  }
+}

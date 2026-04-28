@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Start Here: Learner Workspace Guide</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="doc-shell">
+    <header class="doc-header">
+      <div class="doc-header-meta">
+        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-divider"></span>
+        <span class="doc-page-label">Start Here</span>
+      </div>
+      <div class="doc-header-title">Start Here: Learner Workspace Guide</div>
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <span class="doc-nav-link is-disabled doc-nav-prev">← Previous</span>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <a class="doc-nav-link doc-nav-next" href="codexlabsetup.html">Setup →</a>
+      </nav>
+    </header>
+    <main class="doc-content">
+<section id="start-here-learner-workspace-guide" class="level1">
+<h1>Start Here: Learner Workspace Guide</h1>
+<p>Read this first.</p>
+<p>This guide is the short orientation for the learner workspace. It
+tells you what this training is, how to move through it, and which repo
+rules stay true across the whole lab sequence.</p>
+<p>Use <a href="./codexlabsetup.html">Setup</a> for the actual machine
+bring-up steps. Use the numbered labs for the hands-on exercises.</p>
+<hr />
+<section id="what-this-training-is" class="level2">
+<h2>What This Training Is</h2>
+<p>This training is a hands-on introduction to using Codex in a
+realistic enterprise-style repository. Your learner workspace is the
+repo root: the directory that contains <code>AGENTS.md</code>,
+<code>backend/</code>, <code>frontend/</code>, <code>database/</code>,
+and <code>lab-materials/</code>.</p>
+<p>This workspace is a learner starter, not a fully completed
+application. Some lab-taught slices are intentionally incomplete. Use
+<code>lab-materials/</code> for learner-facing instructions and use
+<code>reference/</code> only when a lab explicitly tells you to.</p>
+<p>The training focuses on three themes that make collaboration with AI
+coding agents effective in real project work.</p>
+<ol type="1">
+<li><p><strong>Context engineering</strong> Agentic tools are broadly
+capable, but they do not start with your enterprise standards,
+architecture, or domain knowledge. This training shows how to provide
+that context through prompts, <code>AGENTS.md</code>, skills, and
+supporting documentation so the agent can produce better
+results.</p></li>
+<li><p><strong>Structured engineering workflows with agents</strong>
+Effective use of AI agents depends on disciplined, repeatable workflows.
+The labs introduce patterns for planning, design, iterative prompting,
+coding, review, testing, and refinement so the work stays consistent and
+verifiable.</p></li>
+<li><p><strong>Mindset shift: agent as a peer programmer</strong>
+Agentic coding tools are not just IDE features or simple code
+generators. This training treats the agent as a collaborative engineer
+that must be onboarded with context, guided through tradeoffs, and used
+as a partner for exploration, implementation, and refinement.</p></li>
+</ol>
+<hr />
+</section>
+<section id="chapter-map" class="level2">
+<h2>Chapter Map</h2>
+<table>
+<thead>
+<tr>
+<th>Chapter</th>
+<th>Main Focus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="./codexlabsetup.html">Setup</a></td>
+<td>Prepares the learner machine, aligns the database settings, and
+proves the learner workspace can build, run, and open correctly before
+the real labs begin.</td>
+</tr>
+<tr>
+<td><a href="./codexlab01.html">AGENTS.md — Your Enterprise
+Constitution</a></td>
+<td>Shows why project-specific guidance matters by letting you observe
+Codex without enough conventions, then turning those corrections into
+durable <code>AGENTS.md</code> rules.</td>
+</tr>
+<tr>
+<td><a href="./codexlab02.html">Planning Discipline — Think Before You
+Build</a></td>
+<td>Teaches the habit of planning before implementation so Codex work
+starts from a repo-grounded design instead of jumping straight into
+code.</td>
+</tr>
+<tr>
+<td><a href="./codexlab03.html">Skills &amp; Reusable Workflows — Repo
+Skills</a></td>
+<td>Demonstrates how to capture repeatable patterns as skills so you
+stop restating the same scaffolding and verification instructions by
+hand.</td>
+</tr>
+<tr>
+<td><a href="./codexlab04.html">Context Management — The #1 Performance
+Lever</a></td>
+<td>Teaches how context quality drives output quality and how to keep
+Codex focused by choosing the right files, summaries, and session
+boundaries.</td>
+</tr>
+<tr>
+<td><a href="./codexlab05.html">Hooks — Truthful Guardrails</a></td>
+<td>Explains the difference between advisory instructions and
+repo-managed guardrails by showing one visible hook warning, its current
+runtime limit, and the cleanup path that keeps later labs quiet.</td>
+</tr>
+<tr>
+<td><a href="./codexlab06.html">Subagents — Isolated Specialist
+Workers</a></td>
+<td>Introduces delegated builder and reviewer agents so you can compare
+same-context work with fresh-context review.</td>
+</tr>
+<tr>
+<td><a href="./codexlab07.html">Parallel Sessions &amp; Isolated
+Workspaces</a></td>
+<td>Shows how to run multiple workstreams safely in parallel by
+separating workspace copies, responsibilities, and verification.</td>
+</tr>
+<tr>
+<td><a href="./codexlab08.html">Verification Loops — The Quality
+Multiplier</a></td>
+<td>Teaches the habit of proving work through tests, runtime checks, and
+visual verification instead of stopping at “the code looks done.”</td>
+</tr>
+<tr>
+<td><a href="./codexlab09.html">MCP Servers — Playwright &amp; Browser
+Verification</a></td>
+<td>Shows how to extend Codex with browser tooling so it can inspect the
+running app and verify behavior visually, not just through static code
+review.</td>
+</tr>
+<tr>
+<td><a href="./codexlab10.html">Data Verification — Runtime Data
+Checks</a></td>
+<td>Connects UI and API behavior back to the database so you can confirm
+that application actions produced the expected runtime data
+changes.</td>
+</tr>
+<tr>
+<td><a href="./codexlab11.html">Enterprise Governance — Rollout Readiness,
+Safety Posture &amp; Evidence</a></td>
+<td>Focuses on bounded rollout, safety posture, and evidence gathering
+so agentic work is ready for enterprise review and controlled
+adoption.</td>
+</tr>
+<tr>
+<td><a href="./codexlab12.html">Optional Capstone — End-to-End Feature
+Build</a></td>
+<td>Combines the full workflow into one feature exercise so you can
+practice planning, context, implementation, review, and verification
+together.</td>
+</tr>
+<tr>
+<td><a href="./codexlab-reference.html">Codex Lab Reference Card — Best
+Practices Summary</a></td>
+<td>Condenses the full training into a short operating card you can
+reuse later without rereading the whole course.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</section>
+<section id="what-to-expect" class="level2">
+<h2>What To Expect</h2>
+<ul>
+<li>You may clone the repo with Git or download it as a GitHub zip and
+extract it anywhere you have normal developer access. The labs should
+not assume <code>/scratch</code>, <code>/tmp</code>, or any
+company-internal staging path.</li>
+<li>Some labs are intentionally incomplete so you can observe how Codex
+behaves before adding better guidance.</li>
+<li>The root workspace is intentionally incomplete in a few places so
+the labs have real work to do. Do not treat a missing file or disabled
+route as accidental drift until you check the current lab and
+<code>reference/</code>.</li>
+<li>This is a teaching lab for Codex features and workflow discipline.
+Avoid diluting that by having Codex mine <code>frontend/</code> or
+<code>backend/</code> for example implementations unless the current lab
+explicitly tells it to inspect those files.</li>
+<li>Read <code>AGENTS.md</code> before treating any imported lab
+instruction as authoritative. If a lab chapter conflicts with
+<code>AGENTS.md</code> or the current shared docs under
+<code>lab-materials/docs/</code>, the repo rules win.</li>
+<li>When a lab says "workspace root" or "project root", use your actual
+local repo path, for example
+<code>/home/you/projects/codex-workshop</code> or
+<code>/scratch/training/codex-workshop</code>.</li>
+<li>Use current repo commands and environment prerequisites. Do not
+resurrect bundled Java, Maven, Node, browser, or SQL tooling under
+<code>runtime/</code>.</li>
+<li>For backend work on this host, explicitly use JDK 21:
+<ul>
+<li><code>JAVA_HOME=/usr/lib/jvm/java-21-openjdk</code></li>
+<li><code>PATH=/usr/lib/jvm/java-21-openjdk/bin:$PATH</code></li>
+</ul></li>
+<li>For database setup and verification, prefer PostgreSQL-oriented
+flows that target <code>database/hrschema.sql</code> and
+<code>database/hrdemo.sql</code>.</li>
+<li>Before running the repo-local bootstrap or loading schema/demo data,
+make sure PostgreSQL server is installed locally and that the
+database/user from <code>dbdetails.md</code> already exist.</li>
+<li>For a normal local PostgreSQL install, port <code>5432</code> is the
+usual default. If your machine already uses a different PostgreSQL port,
+update <code>dbdetails.md</code> first so the learner setup steps match
+your real local environment.</li>
+<li>If the app-user connection command does not work yet, stop and
+finish local PostgreSQL setup first. Do not continue until a command
+like
+<code>PGPASSWORD=hrapp psql -h localhost -U hrapp -d hrdb -c "select current_user, current_database();"</code>
+works cleanly.</li>
+<li>For learner bring-up, do the database path sequentially:
+<ul>
+<li>verify connection first</li>
+<li>then run <code>./lab-materials/setup-local-config.sh</code></li>
+<li>then load <code>database/hrschema.sql</code></li>
+<li>then load <code>database/hrdemo.sql</code></li>
+<li>then run a verification query</li>
+</ul></li>
+<li>For local bring-up in this repo, prefer frontend <code>5182</code>
+and backend <code>18082</code> unless a chapter explicitly says
+otherwise.</li>
+<li>If those default ports work on your machine, do not change them.
+Continue with the lab as written.</li>
+<li>If those default ports conflict with something already running,
+change only your local config files:
+<ul>
+<li>backend: <code>backend/.env.local</code></li>
+<li>frontend: <code>frontend/.env.local</code></li>
+</ul></li>
+<li>Keep frontend and backend aligned when you change ports:
+<ul>
+<li>backend port: <code>HR_APP_PORT</code></li>
+<li>frontend dev port: <code>HR_DEV_SERVER_PORT</code></li>
+<li>frontend API proxy target: <code>HR_API_PROXY_TARGET</code></li>
+</ul></li>
+<li>For local config bootstrap and validation, use
+<code>./lab-materials/setup-local-config.sh</code>.</li>
+<li>On a fresh GitHub clone or extracted zip, expect to install frontend
+dependencies before the first frontend build or dev-server run.</li>
+<li>Playwright default in this lab is Chrome/Chromium-first. Use Firefox
+only when a task explicitly calls for it and the host can launch it
+cleanly.</li>
+<li>Some commands take time. Wait for build, startup, and verification
+steps to finish before moving on.</li>
+<li>If a chapter offers a <code>reference/</code> escape hatch, use it
+only when that chapter tells you to. The copies under
+<code>reference/labXX/</code> are rescue material, not the main
+workspace.</li>
+</ul>
+</section>
+</section>
+    </main>
+    <footer class="doc-footer">
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <span class="doc-nav-link is-disabled doc-nav-prev">← Previous</span>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <a class="doc-nav-link doc-nav-next" href="codexlabsetup.html">Setup →</a>
+      </nav>
+    </footer>
+  </div>
+<script>
+  (function () {
+    const copyIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<rect x="9" y="7" width="10" height="12" rx="2"></rect>',
+      '<rect x="5" y="3" width="10" height="12" rx="2"></rect>',
+      '</svg>'
+    ].join('');
+    const copiedIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<path d="M6 12.5l4 4 8-9"></path>',
+      '</svg>'
+    ].join('');
+
+    const blocks = document.querySelectorAll('pre > code');
+    for (const code of blocks) {
+      const pre = code.parentElement;
+      if (!pre || pre.dataset.copyReady === 'true') continue;
+      pre.dataset.copyReady = 'true';
+
+      const shell = document.createElement('div');
+      shell.className = 'code-block-shell';
+      const footer = document.createElement('div');
+      footer.className = 'code-block-footer';
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code-button';
+      button.innerHTML = copyIcon;
+      button.setAttribute('aria-label', 'Copy code block');
+      button.setAttribute('title', 'Copy code block');
+
+      button.addEventListener('click', async function () {
+        const text = code.innerText;
+        try {
+          await navigator.clipboard.writeText(text);
+          button.innerHTML = copiedIcon;
+          button.setAttribute('aria-label', 'Copied');
+          button.setAttribute('title', 'Copied');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1400);
+        } catch (error) {
+          button.innerHTML = copyIcon;
+          button.setAttribute('aria-label', 'Copy failed');
+          button.setAttribute('title', 'Copy failed');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1800);
+        }
+      });
+
+      pre.parentNode.insertBefore(shell, pre);
+      shell.appendChild(pre);
+      footer.appendChild(button);
+      shell.appendChild(footer);
+    }
+  }());
+</script>
+</body>
+</html>

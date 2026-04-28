@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Lab 08: Verification Loops — The Quality Multiplier</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="doc-shell">
+    <header class="doc-header">
+      <div class="doc-header-meta">
+        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-divider"></span>
+        <span class="doc-page-label">Lab 08</span>
+      </div>
+      <div class="doc-header-title">Lab 08: Verification Loops — The Quality Multiplier</div>
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <a class="doc-nav-link doc-nav-prev" href="codexlab07.html">← Lab 07</a>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <a class="doc-nav-link doc-nav-next" href="codexlab09.html">Lab 09 →</a>
+      </nav>
+    </header>
+    <main class="doc-content">
+<section id="lab-08-verification-loops--the-quality-multiplier"
+class="level1">
+<h1>Lab 08: Verification Loops — The Quality Multiplier</h1>
+<p><strong>Duration:</strong> 60 minutes</p>
+<blockquote>
+<p>Recommended Day 2 order: <strong>Lab 09 -&gt; Lab 08 -&gt; Lab 07
+-&gt; Lab 10 -&gt; Lab 11 -&gt; optional Lab 12</strong>.</p>
+</blockquote>
+<section id="learning-objective" class="level2">
+<h2>Learning Objective</h2>
+<p>You will use a verification-driven workflow: define the expected
+behavior, implement to that expectation, then verify in tests and in the
+browser. The lab uses the current learner repo surface: Jersey backend,
+PostgreSQL data, and the repo’s current frontend/browser workflow.</p>
+<hr />
+</section>
+<section id="the-key-concept" class="level2">
+<h2>The Key Concept</h2>
+<p>Without verification, Codex often gets you to "looks right." With
+verification, you can get to "proved correct."</p>
+<p>Use three kinds of checks:</p>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>How</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Test-driven</td>
+<td>Write or tighten a backend test first</td>
+<td>business logic and API rules</td>
+</tr>
+<tr>
+<td>Visual</td>
+<td>Compare browser output to a concrete UI expectation</td>
+<td>components and page behavior</td>
+</tr>
+<tr>
+<td>Data-driven</td>
+<td>Verify the stored result in PostgreSQL</td>
+<td>writes and state changes</td>
+</tr>
+</tbody>
+</table>
+<p>The repeatable loop is:</p>
+<ol type="1">
+<li>define expected behavior</li>
+<li>implement</li>
+<li>verify</li>
+<li>fix</li>
+<li>verify again</li>
+</ol>
+<hr />
+</section>
+<section id="setup" class="level2">
+<h2>Setup</h2>
+<p>Ask Codex to run a backend preflight check:</p>
+<pre class="text"><code>Run `cd backend &amp;&amp; ./build-jersey-service.sh test` as a backend preflight check.
+Tell me whether it passes before we start the exercise.</code></pre>
+<p>If you later need the live app for a visual loop, use the repo-local
+ports:</p>
+<ul>
+<li>backend <code>18082</code></li>
+<li>frontend <code>5182</code></li>
+</ul>
+<p>If those ports are already busy, treat stale repo-owned processes as
+the first suspect before calling it a feature defect. For backend
+cleanup, use
+<code>cd backend &amp;&amp; ./stop-jersey-service.sh</code>. Keep any
+local port overrides in <code>backend/.env.local</code> and
+<code>frontend/.env.local</code>.</p>
+<hr />
+</section>
+<section id="exercise-1-test-driven-backend-slice-25-min"
+class="level2">
+<h2>Exercise 1: Test-Driven Backend Slice (25 min)</h2>
+<section id="goal" class="level3">
+<h3>Goal</h3>
+<p>Write or tighten backend tests before touching the
+implementation.</p>
+</section>
+<section id="instructions" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Codex to write tests for the promote flow:</p>
+<pre class="text"><code>This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use `reference/` unless this chapter explicitly allows it or you need rescue help.
+
+Write backend tests for the current promote flow implementation.
+Cover:
+1. duplicate idempotency key -&gt; conflict
+2. employee not found
+3. salary above the new job&#39;s maximum
+4. happy path -&gt; employee update plus job-history write
+
+Use the current backend testing patterns.
+Do not implement the feature changes yet.</code></pre></li>
+<li><p>Run the tests:</p>
+<pre class="text"><code>Run `cd backend &amp;&amp; ./build-jersey-service.sh test`.
+Summarize the failure briefly if the intended starter gap is still present.</code></pre></li>
+<li><p>Ask Codex to implement to the test:</p>
+<pre class="text"><code>Implement the promote-flow behavior so the tests pass.
+Re-run `cd backend &amp;&amp; ./build-jersey-service.sh test` after each meaningful change.</code></pre></li>
+<li><p>Keep iterating until the backend test result is green.</p></li>
+</ol>
+<hr />
+</section>
+</section>
+<section id="exercise-2-visual-verification-20-min" class="level2">
+<h2>Exercise 2: Visual Verification (20 min)</h2>
+<section id="goal-1" class="level3">
+<h3>Goal</h3>
+<p>Verify a UI slice against an explicit expectation instead of trusting
+the first implementation.</p>
+</section>
+<section id="instructions-1" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Use a concrete UI target:</p>
+<pre class="text"><code>Build or refine `frontend/src/components/hr/HrEmployeeCard.tsx` so it shows:
+- avatar with initials fallback
+- employee name and job title
+- department and location
+- hire date
+- status badge
+- click-through to detail page
+
+Keep the implementation consistent with the current Vertex Agentics / Modern UI direction already present in the repo.</code></pre></li>
+<li><p>Bring up the app if needed on:</p>
+<ul>
+<li>backend <code>18082</code></li>
+<li>frontend <code>5182</code></li>
+</ul></li>
+<li><p>Run a browser verification loop:</p>
+<pre class="text"><code>Open the page that renders `HrEmployeeCard`.
+Compare what you see against the expected structure.
+Tell me what is missing or visibly wrong.</code></pre></li>
+<li><p>Feed the differences back into Codex and verify again.</p></li>
+</ol>
+<hr />
+</section>
+</section>
+<section id="exercise-3-combine-the-loop-10-min" class="level2">
+<h2>Exercise 3: Combine The Loop (10 min)</h2>
+<section id="goal-2" class="level3">
+<h3>Goal</h3>
+<p>Connect test-driven backend work with browser verification and
+database truth.</p>
+</section>
+<section id="instructions-2" class="level3">
+<h3>Instructions</h3>
+<p>Ask Codex to summarize the correct feature loop for this repo:</p>
+<pre class="text"><code>Summarize the best verification loop for this repo when a feature changes
+backend behavior, frontend rendering, and stored data.
+Keep it to one short numbered list.</code></pre>
+<p>The expected answer should look roughly like:</p>
+<ol type="1">
+<li>tighten backend tests</li>
+<li>implement until tests pass</li>
+<li>verify the UI in the browser</li>
+<li>verify stored data with PostgreSQL queries when writes are
+involved</li>
+<li>only then mark the task done</li>
+</ol>
+<hr />
+</section>
+</section>
+<section id="exercise-4-capture-the-rule-5-min" class="level2">
+<h2>Exercise 4: Capture The Rule (5 min)</h2>
+<p>Ask Codex to update <code>AGENTS.md</code> with a short rule
+block:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Verification</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Backend changes: prefer tests first, then implement to green</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>UI changes: verify in the browser, not only in code review</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Write paths: verify stored PostgreSQL data when behavior depends on persistence</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Do not mark work complete without verification evidence</span></code></pre></div>
+<p>Then restart or resume Codex if you want the updated rules loaded in
+a fresh session.</p>
+<hr />
+</section>
+<section id="success-criteria" class="level2">
+<h2>Success Criteria</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />Backend tests were written or
+tightened before implementation</label></li>
+<li><label><input
+type="checkbox" /><code>./build-jersey-service.sh test</code> passed
+after the backend fix</label></li>
+<li><label><input type="checkbox" />A browser verification loop was run
+for the UI slice</label></li>
+<li><label><input type="checkbox" />The repo-specific verification order
+is now clear</label></li>
+<li><label><input type="checkbox" /><code>AGENTS.md</code> captures the
+verification rule</label></li>
+</ul>
+<hr />
+</section>
+<section id="key-takeaways" class="level2">
+<h2>Key Takeaways</h2>
+<ol type="1">
+<li>Tests are executable specifications.</li>
+<li>Browser verification catches issues code review alone will
+miss.</li>
+<li>PostgreSQL verification closes the loop for write-heavy
+behavior.</li>
+<li>Verification is what turns an okay first draft into a reliable
+change.</li>
+</ol>
+<hr />
+<details>
+<summary><strong>Recovery Path</strong> — Use this if the promote test loop gets stuck</summary>
+
+<p>Use this only after you have tried the student path first.</p>
+<p>For this recovery step only, review
+<code>reference/lab08/README.md</code>. That rescue path restores only
+the completed <code>promoteEmployee()</code> method snippet for
+<code>HrEmployeeCommandJdbcRepository.java</code>.</p>
+<p>Do not replace the whole repository file. Earlier and later labs
+share that file, so a full-file copy would overwrite unrelated learner
+work.</p>
+<p>After applying the rescue snippet, rerun:</p>
+<pre class="text"><code>cd backend &amp;&amp; ./build-jersey-service.sh test</code></pre>
+<p>Then continue the normal verification loop from this chapter.</p>
+</details>
+
+</section>
+</section>
+    </main>
+    <footer class="doc-footer">
+      <nav class="doc-nav" aria-label="Lab navigation">
+  <a class="doc-nav-link doc-nav-prev" href="codexlab07.html">← Lab 07</a>
+  <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
+  <a class="doc-nav-link doc-nav-next" href="codexlab09.html">Lab 09 →</a>
+      </nav>
+    </footer>
+  </div>
+<script>
+  (function () {
+    const copyIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<rect x="9" y="7" width="10" height="12" rx="2"></rect>',
+      '<rect x="5" y="3" width="10" height="12" rx="2"></rect>',
+      '</svg>'
+    ].join('');
+    const copiedIcon = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',
+      '<path d="M6 12.5l4 4 8-9"></path>',
+      '</svg>'
+    ].join('');
+
+    const blocks = document.querySelectorAll('pre > code');
+    for (const code of blocks) {
+      const pre = code.parentElement;
+      if (!pre || pre.dataset.copyReady === 'true') continue;
+      pre.dataset.copyReady = 'true';
+
+      const shell = document.createElement('div');
+      shell.className = 'code-block-shell';
+      const footer = document.createElement('div');
+      footer.className = 'code-block-footer';
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code-button';
+      button.innerHTML = copyIcon;
+      button.setAttribute('aria-label', 'Copy code block');
+      button.setAttribute('title', 'Copy code block');
+
+      button.addEventListener('click', async function () {
+        const text = code.innerText;
+        try {
+          await navigator.clipboard.writeText(text);
+          button.innerHTML = copiedIcon;
+          button.setAttribute('aria-label', 'Copied');
+          button.setAttribute('title', 'Copied');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1400);
+        } catch (error) {
+          button.innerHTML = copyIcon;
+          button.setAttribute('aria-label', 'Copy failed');
+          button.setAttribute('title', 'Copy failed');
+          window.setTimeout(function () {
+            button.innerHTML = copyIcon;
+            button.setAttribute('aria-label', 'Copy code block');
+            button.setAttribute('title', 'Copy code block');
+          }, 1800);
+        }
+      });
+
+      pre.parentNode.insertBefore(shell, pre);
+      shell.appendChild(pre);
+      footer.appendChild(button);
+      shell.appendChild(footer);
+    }
+  }());
+</script>
+</body>
+</html>

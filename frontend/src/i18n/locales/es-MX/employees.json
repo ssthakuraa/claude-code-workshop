@@ -1,0 +1,105 @@
+{
+  "directory": {
+    "eyebrow": "Registros de personal",
+    "title": "Empleados",
+    "subtitle": "Busque, filtre y revise el directorio activo de la fuerza laboral.",
+    "searchPlaceholder": "Buscar por nombre, ID o puesto...",
+    "filters": {
+      "status": "Estado",
+      "department": "Departamento",
+      "departmentSearch": "Buscar departamentos",
+      "employmentType": "Tipo de empleo"
+    },
+    "columns": {
+      "employee": "Empleado",
+      "department": "Departamento",
+      "jobTitle": "Puesto",
+      "status": "Estado",
+      "type": "Tipo",
+      "hireDate": "Fecha de contratación"
+    },
+    "summaryLimited": "Refine la búsqueda o los filtros para reducir el conjunto de resultados.",
+    "summaryTotal": "Total del conjunto activo: {{count}}",
+    "emptyTitle": "Ningún empleado coincide con los filtros actuales",
+    "emptyDescription": "Ajuste la búsqueda o los criterios de filtro para ampliar el conjunto de resultados.",
+    "csvHeaders": {
+      "employeeId": "ID de empleado",
+      "fullName": "Nombre completo",
+      "email": "Correo electrónico",
+      "department": "Departamento",
+      "jobTitle": "Puesto",
+      "status": "Estado",
+      "type": "Tipo",
+      "manager": "Gerente",
+      "hireDate": "Fecha de contratación"
+    },
+    "footerTitle": "Páginas relacionadas",
+    "footerSubtitle": "Las páginas relacionadas permanecen abajo para que el directorio conserve más espacio para el conjunto activo.",
+    "links": {
+      "hireEmployee": {
+        "label": "Contratar empleado",
+        "description": "Inicie el flujo de contratación y agregue un nuevo registro."
+      },
+      "orgChart": {
+        "label": "Organigrama",
+        "description": "Revise las líneas de reporte y navegue por el árbol organizacional."
+      },
+      "departments": {
+        "label": "Departamentos",
+        "description": "Abra resúmenes de departamentos y compare la huella de los equipos."
+      }
+    },
+    "employeeMeta": "ID: {{id}}",
+    "managerMeta": "Gerente: {{name}}"
+  },
+  "detail": {
+    "eyebrow": "Registro del empleado",
+    "notFound": "No se encontró al empleado.",
+    "backToDirectory": "Volver al directorio",
+    "tabs": {
+      "profile": "Perfil",
+      "timeline": "Cronología",
+      "compensation": "Compensación"
+    },
+    "sections": {
+      "contact": "Contacto",
+      "employment": "Empleo",
+      "directReports": "Reportes directos ({{count}})",
+      "compensation": "Compensación"
+    },
+    "fields": {
+      "email": "Correo electrónico",
+      "phone": "Teléfono",
+      "hireDate": "Fecha de contratación",
+      "manager": "Gerente",
+      "location": "Ubicación",
+      "department": "Departamento",
+      "annualSalary": "Salario anual",
+      "commissionPct": "% de comisión",
+      "employee": "Empleado"
+    },
+    "salaryHidden": "No tiene permiso para ver la información salarial.",
+    "footerTitle": "Acciones relacionadas",
+    "footerSubtitle": "Los accesos de flujo ahora aparecen debajo del contenido del empleado.",
+    "relatedActions": {
+      "promote": {
+        "label": "Promover empleado",
+        "description": "Abra el flujo de promoción para este empleado."
+      },
+      "transfer": {
+        "label": "Transferir empleado",
+        "description": "Abra el flujo de transferencia y actualice los detalles de la asignación."
+      },
+      "terminate": {
+        "label": "Terminar empleado",
+        "description": "Abra el flujo de terminación para este empleado."
+      }
+    },
+    "timeline": {
+      "hiredAs": "Contratado como {{jobTitle}}",
+      "joined": "Se incorporó a {{departmentName}}",
+      "movedTo": "Se trasladó a {{jobTitle}}",
+      "employmentEnded": "Empleo finalizado"
+    }
+  }
+}
