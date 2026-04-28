@@ -8,6 +8,8 @@ Here is the screen shot of the App so you know you are working in a enviroment t
 - **main branch** - All workshop materials: labs, source code, frontend, database, scripts, and configs
 
 ## Getting Started
+Self-paced overview of the workshop — the mental model (how LLMs work, LLM + tools, three core truths), the plan/execute/review loop, and the 2-day curriculum. Read this first, then start the labs.
+in docs filder: claude-code-workshop-overview.pptx
 
 ### For Students
 
