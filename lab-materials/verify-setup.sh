@@ -101,8 +101,8 @@ fi
 header "Environment Config"
 
 if [[ -f "${REPO_ROOT}/backend/.env.local" ]]; then
-  java_home_val=$(grep "^JAVA_HOME=" "${REPO_ROOT}/backend/.env.local" | cut -d= -f2-)
-  port_val=$(grep "^HR_APP_PORT=" "${REPO_ROOT}/backend/.env.local" | cut -d= -f2-)
+  java_home_val=$(grep "^JAVA_HOME=" "${REPO_ROOT}/backend/.env.local" | head -1 | cut -d= -f2- | tr -d '[:space:]')
+  port_val=$(grep "^HR_APP_PORT=" "${REPO_ROOT}/backend/.env.local" | head -1 | cut -d= -f2- | tr -d '[:space:]')
   pass "backend/.env.local exists"
   printf "         JAVA_HOME = %s\n" "${java_home_val:-not set}"
   printf "         HR_APP_PORT = %s\n" "${port_val:-not set}"
@@ -116,8 +116,8 @@ else
 fi
 
 if [[ -f "${REPO_ROOT}/frontend/.env.local" ]]; then
-  dev_port=$(grep "^HR_DEV_SERVER_PORT=" "${REPO_ROOT}/frontend/.env.local" | cut -d= -f2-)
-  proxy=$(grep "^HR_API_PROXY_TARGET=" "${REPO_ROOT}/frontend/.env.local" | cut -d= -f2-)
+  dev_port=$(grep "^HR_DEV_SERVER_PORT=" "${REPO_ROOT}/frontend/.env.local" | head -1 | cut -d= -f2- | tr -d '[:space:]')
+  proxy=$(grep "^HR_API_PROXY_TARGET=" "${REPO_ROOT}/frontend/.env.local" | head -1 | cut -d= -f2- | tr -d '[:space:]')
   pass "frontend/.env.local exists"
   printf "         HR_DEV_SERVER_PORT = %s\n" "${dev_port:-not set}"
   printf "         HR_API_PROXY_TARGET = %s\n" "${proxy:-not set}"
@@ -180,7 +180,7 @@ else
 fi
 
 dist_path="${REPO_ROOT}/frontend/dist"
-if [[ -d "${dist_path}" ]]; then
+if [[ -d "${dist_path}" ]] && [[ -n "$(ls -A "${dist_path}" 2>/dev/null)" ]]; then
   asset_count=$(find "${dist_path}" -type f | wc -l | tr -d ' ')
   pass "Frontend dist  ${asset_count} files built"
 else
