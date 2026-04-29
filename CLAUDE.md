@@ -22,13 +22,9 @@ You will expand it as the exercises progress.
 
 ## Source of truth
 - Use the current lab chapter and `lab-materials/student-workspace-guide.md` as the learner path.
-- For backend work, also read:
-  - `lab-materials/docs/technical-design-jersey-rewrite.md`
-  - `backend/OFFLINE-JERSEY-BUILD.md`
 
 ## Runtime rules
 - Treat `database/hrschema.sql` and `database/hrdemo.sql` as the active local schema/demo path.
-- Use JDK 21 for backend builds and runs.
 - Do not assume repo-bundled tooling under `runtime/`.
 - Default repo-local ports are frontend `5182` and backend `18082`.
 - Keep local runtime overrides in local config files, not source edits:
