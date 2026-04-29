@@ -1,0 +1,36 @@
+# Claude Code local settings
+.claude/
+
+# Vim swap files
+*.swp
+*.swo
+
+# Environment files (keep .example files)
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+**/target/
+**/build/
+**/dist/
+**/out/
+
+# Dependencies
+**/node_modules/
+
+# Compiled Java
+**/*.class
+**/*.jar
+
+# Logs
+**/*.log
+
+# IDE files
+**/.idea/
+**/.vscode/
+**/*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
