@@ -44,6 +44,12 @@ Set up two or three parallel working directories.
 
 ### Instructions
 
+0. **Commit any pending CLAUDE.md changes before creating worktrees.** Worktrees branch from the current HEAD commit, so any uncommitted changes to `CLAUDE.md` will not be visible in them. If you have updated `CLAUDE.md` during earlier labs without committing, do this first:
+   ```bash
+   git add CLAUDE.md && git commit -m "Update CLAUDE.md rules from labs 01-06"
+   ```
+   Then create the worktrees.
+
 1. Confirm the worktrees exist:
    ```bash
    ls ../claude-workshop-parallel/workspace-a
@@ -129,7 +135,14 @@ Verify each isolated workspace, then copy back only the intended files.
    diff -rq . ../claude-workshop-parallel/workspace-b | head -50
    ```
 
-3. Copy back only the intended feature files with an exact Claude Code prompt:
+3. Before copying back, **identify shared integration files** — files that both workspaces may have changed independently:
+   ```bash
+   diff ../claude-workshop-parallel/workspace-a/frontend/src/routes/router.tsx \
+        ../claude-workshop-parallel/workspace-b/frontend/src/routes/router.tsx
+   ```
+   `router.tsx` (and sometimes `HrSidebar.tsx`) is touched by every new page — both workspaces likely added their own route. If they differ, you must **merge both changes**, not copy one file over the other. Ask Claude Code to apply both workspace's route additions to the main workspace router rather than replacing it wholesale.
+
+4. Copy back only the intended feature files with an exact Claude Code prompt:
    ```text
    Compare the completed frontend changes in:
    - `../claude-workshop-parallel/workspace-a`
@@ -145,17 +158,19 @@ Verify each isolated workspace, then copy back only the intended files.
    - `frontend/src/utils/hrWorkspaceChrome.ts`
    - `frontend/src/utils/hrGlobalSearch.ts`
 
-   Copy back only the minimal intended files.
-   Do not replace the whole workspace.
-   Then tell me exactly which files were copied back.
+   IMPORTANT: both workspaces may have edited router.tsx independently.
+   For any file edited by both workspaces, merge both sets of changes into
+   the main workspace — do not copy one workspace's version over the other.
+   Copy-paste new page files directly; merge shared wiring files surgically.
+   Then tell me exactly which files were copied or merged.
    ```
 
-4. Rebuild in the main workspace:
+5. Rebuild in the main workspace:
    ```bash
    cd frontend && npm run build
    ```
 
-5. Clean up the temporary worktrees when finished:
+6. Clean up the temporary worktrees when finished:
    ```bash
    git worktree remove ../claude-workshop-parallel/workspace-a
    git worktree remove ../claude-workshop-parallel/workspace-b

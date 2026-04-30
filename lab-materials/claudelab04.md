@@ -6,6 +6,8 @@
 
 You will explore how overloaded context can reduce Claude Code quality, then redo the same work with better context hygiene. Modern LLM context windows are getting larger, so in this exercise you may not actually see the context fill up firsthand. The important habit is to watch context usage during development and notice when the agent starts to drift. As context fills and gets compacted, some details may be dropped, so if the agent starts deviating from the task or missing earlier constraints, treat that as a signal to steer it back in the right direction.
 
+> **This lab requires a live interactive Claude Code session.** The degradation effect only appears when a real, continuous session accumulates context over many turns. Automated testing and scripted sub-agents always start fresh, so the contrast between overloaded and clean sessions is invisible to them. Run Exercises 1 and 2 in a single interactive session without using `/clear` — that is the whole point.
+
 ---
 
 ## The Key Concept

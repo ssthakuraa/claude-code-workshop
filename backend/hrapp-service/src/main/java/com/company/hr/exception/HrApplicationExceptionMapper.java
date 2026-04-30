@@ -2,6 +2,7 @@ package com.company.hr.exception;
 
 import com.company.hr.common.exception.HrAccessDeniedException;
 import com.company.hr.common.exception.HrApplicationException;
+import com.company.hr.common.exception.HrBusinessRuleViolationException;
 import com.company.hr.common.exception.HrConflictException;
 import com.company.hr.common.exception.HrResourceNotFoundException;
 import com.company.hr.common.exception.HrUnauthorizedException;
@@ -56,6 +57,16 @@ public class HrApplicationExceptionMapper implements ExceptionMapper<Throwable> 
         if (exception instanceof HrConflictException conflictException) {
             LOGGER.warn("Conflict: {}", conflictException.getErrorCode());
             return error(Response.Status.CONFLICT, conflictException);
+        }
+
+        if (exception instanceof HrBusinessRuleViolationException businessRuleException) {
+            LOGGER.warn("Business rule violation: {}", businessRuleException.getErrorCode());
+            return Response.status(422)
+                    .entity(HrApiResponse.error(
+                            422,
+                            resolveErrorMessage(Response.Status.BAD_REQUEST, businessRuleException),
+                            businessRuleException.getErrorCode()))
+                    .build();
         }
 
         if (exception instanceof HrApplicationException applicationException) {

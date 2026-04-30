@@ -60,23 +60,29 @@ give you a real planning and implementation target.
 
 ---
 
-## Exercise 1: The Bad Path — Skip the Plan (15 min)
+## Exercise 1: The Bad Path — No Plan, Observe the Gaps (15 min)
 
 ### Goal
-Implement the hire flow WITHOUT planning. Observe what's missing.
+Audit the existing hire flow WITHOUT planning — observe what the starter code is missing.
+
+> **Note:** The starter workspace already has a partial `hireEmployee()` implementation — it compiles and returns a hired employee, but it is intentionally incomplete. Your job is to **observe and document the gaps**, not to implement from scratch.
 
 ### Instructions
 
-1. Ask Claude Code to implement directly (do NOT ask for a plan first):
+1. Ask Claude Code to audit the existing hire flow (do NOT ask for a plan first):
    ```
-   Implement the backend hire flow for the HR app.
-   Update the current Jersey/JDBC stack so a hire request:
-   - creates a new employee record
-   - returns the employee detail response
-   - follows the existing employee resource and command-repository patterns
+   Audit the existing backend hire flow for the HR app.
+   Read the current hireEmployee() method in HrEmployeeCommandJdbcRepository
+   and the hire() endpoint in HrEmployeeResource.
+   Do not modify any files yet.
+   Report which of these requirements are currently missing from the implementation:
+   - writes a job_history record (every hire = first job history entry)
+   - checks idempotency (duplicate POST should not create two employees)
+   - validates salary against the job's min/max range
+   - creates an AIHR_USERS record for the new employee
+   - masks PII in the response based on the caller's role
    This is the bad path on purpose.
-   Do not stop to plan first.
-   Do not add hidden business rules, side effects, or compensating logic unless they are explicitly requested here.
+   Do not add or fix anything yet.
    ```
 
 2. **Review the output.** Check:
@@ -86,9 +92,9 @@ Implement the hire flow WITHOUT planning. Observe what's missing.
    - [ ] Does it create an `AIHR_USERS` record for the new employee?
    - [ ] Does it mask PII in the response based on the caller's role?
 
-3. **Count the missing requirements.** You'll likely find 2–4 gaps.
+3. **Count the missing requirements.** You should find at least 2–4 gaps.
 
-> **This is intentional.** The learner prompt was deliberately too weak. If Claude Code still over-completes by inventing audit trail, idempotency, salary validation, user creation, or other implicit requirements, treat that as drift to record, not as success.
+> **This is intentional.** The starter `hireEmployee()` is deliberately incomplete. If Claude Code identifies requirements not listed above (audit trail, email uniqueness, etc.), treat those as good findings too — write them down. If the audit comes up empty, push harder: ask Claude Code to compare against `terminateEmployee()` or `transferEmployee()` as reference implementations of a complete lifecycle flow.
 
 4. **Preserve the first attempt before undoing it.** Ask Claude Code to capture a short note you can compare later:
    ```
