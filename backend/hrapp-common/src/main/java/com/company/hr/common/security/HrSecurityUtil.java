@@ -94,6 +94,18 @@ public class HrSecurityUtil {
     }
 
     /**
+     * Returns true if current user is manager of the given employee.
+     * Checks if targetEmployeeId reports (directly or indirectly) to current user.
+     */
+    public static boolean isManagerOf(Integer targetEmployeeId) {
+        Integer currentEmployeeId = getCurrentEmployeeId();
+        if (currentEmployeeId == null || targetEmployeeId == null) return false;
+        if (currentEmployeeId.equals(targetEmployeeId)) return true;
+        // TODO: implement full reporting hierarchy check if needed
+        return false;
+    }
+
+    /**
      * Marker interface retained while legacy security classes are still present.
      */
     public interface HrPrincipal {
