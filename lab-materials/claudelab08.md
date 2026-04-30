@@ -1,216 +1,215 @@
-# Lab 08: Verification Loops — The Quality Multiplier
+# Lab 08: Parallel Sessions & Isolated Workspaces
 
 **Duration:** 60 minutes
 
-> Recommended Day 2 order: **Lab 09 -> Lab 08 -> Lab 07 -> Lab 10 -> Lab 11 -> optional Lab 12**.
+> Recommended Day 2 order: **Lab 10 -> Lab 09 -> Lab 08 -> Lab 11 -> Lab 12 -> optional Lab 13**.
 
 ## Learning Objective
 
-You will use a verification-driven workflow: define the expected behavior,
-implement to that expectation, then verify in tests and in the browser. The lab
-uses the current learner repo surface: Jersey backend, PostgreSQL data, and the
-repo’s current frontend/browser workflow.
+You will run multiple Claude Code sessions at once, each in its own isolated
+`git worktree`. The goal is to see how parallel work compresses multi-slice
+delivery time without causing file collisions.
 
 ---
 
 ## The Key Concept
 
-Without verification, Claude Code often gets you to "looks right." With verification,
-you can get to "proved correct."
+One session can usually make progress on one main slice at a time. Multiple
+independent slices go faster when each session gets its own isolated working
+directory.
 
-Use three kinds of checks:
-
-| Strategy | How | Best For |
-|---|---|---|
-| Test-driven | Write or tighten a backend test first | business logic and API rules |
-| Visual | Compare browser output to a concrete UI expectation | components and page behavior |
-| Data-driven | Verify the stored result in PostgreSQL | writes and state changes |
-
-The repeatable loop is:
-
-1. define expected behavior
-2. implement
-3. verify
-4. fix
-5. verify again
-
----
-
-## Setup
-
-Ask Claude Code to run a backend preflight check:
-
-```text
-Run `cd backend && ./build-jersey-service.sh test` as a backend preflight check.
-Tell me whether it passes before we start the exercise.
+```bash
+cd /absolute/path/to/claude-workshop
+mkdir -p ../claude-workshop-parallel
+rm -rf ../claude-workshop-parallel/workspace-a ../claude-workshop-parallel/workspace-b ../claude-workshop-parallel/workspace-c
+git worktree add ../claude-workshop-parallel/workspace-a
+git worktree add ../claude-workshop-parallel/workspace-b
+git worktree add ../claude-workshop-parallel/workspace-c
 ```
 
-If you later need the live app for a visual loop, use the repo-local ports:
+Each worktree carries the same `CLAUDE.md`, docs, and code, but the edits stay
+isolated until you choose what to bring back.
 
-- backend `18082`
-- frontend `5182`
-
-If those ports are already busy, treat stale repo-owned processes as the first
-suspect before calling it a feature defect.
-For backend cleanup, use `cd backend && ./stop-jersey-service.sh`.
-Keep any local port overrides in `backend/.env.local` and `frontend/.env.local`.
+If your current learner workspace came from a GitHub zip instead of `git clone`,
+make a normal Git clone of the repo before this lab. `git worktree` needs a real
+Git repository.
 
 ---
 
-## Exercise 1: Test-Driven Backend Slice (25 min)
+## Exercise 1: Create Isolated Workspaces (10 min)
 
 ### Goal
 
-Write or tighten backend tests before touching the implementation.
+Set up two or three parallel working directories.
 
 ### Instructions
 
-1. Ask Claude Code to write tests for the promote flow:
-   ```text
-   This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use `reference/` unless this chapter explicitly allows it or you need rescue help.
+0. **Commit any pending CLAUDE.md changes before creating worktrees.** Worktrees branch from the current HEAD commit, so any uncommitted changes to `CLAUDE.md` will not be visible in them. If you have updated `CLAUDE.md` during earlier labs without committing, do this first:
+   ```bash
+   git add CLAUDE.md && git commit -m "Update CLAUDE.md rules from labs 01-06"
+   ```
+   Then create the worktrees.
 
-   Write backend tests for the current promote flow implementation.
-   Cover:
-   1. duplicate idempotency key -> conflict
-   2. employee not found
-   3. salary above the new job's maximum
-   4. happy path -> employee update plus job-history write
-
-   Use the current backend testing patterns.
-   Do not implement the feature changes yet.
+1. Confirm the worktrees exist:
+   ```bash
+   ls ../claude-workshop-parallel/workspace-a
+   ls ../claude-workshop-parallel/workspace-b
    ```
 
-2. Run the tests:
-   ```text
-   Run `cd backend && ./build-jersey-service.sh test`.
-   Summarize the failure briefly if the intended starter gap is still present.
+2. Verify they started from the same root guidance:
+   ```bash
+   diff -q CLAUDE.md ../claude-workshop-parallel/workspace-a/CLAUDE.md
+   diff -q CLAUDE.md ../claude-workshop-parallel/workspace-b/CLAUDE.md
    ```
 
-3. Ask Claude Code to implement to the test:
-   ```text
-   Implement the promote-flow behavior so the tests pass.
-   Re-run `cd backend && ./build-jersey-service.sh test` after each meaningful change.
-   ```
+3. Open separate terminals:
+   - Terminal A -> `../claude-workshop-parallel/workspace-a`
+   - Terminal B -> `../claude-workshop-parallel/workspace-b`
+   - optional Terminal C -> `../claude-workshop-parallel/workspace-c`
 
-4. Keep iterating until the backend test result is green.
+4. Start a Claude Code session in each workspace.
 
 ---
 
-## Exercise 2: Visual Verification (20 min)
+## Exercise 2: Run Two Independent Slices In Parallel (30 min)
 
 ### Goal
 
-Verify a UI slice against an explicit expectation instead of trusting the first implementation.
+Give each workspace a bounded, independent task.
 
 ### Instructions
 
-1. Use a concrete UI target:
-   ```text
-   Build or refine `frontend/src/components/hr/HrEmployeeCard.tsx` so it shows:
-   - avatar with initials fallback
-   - employee name and job title
-   - department and location
-   - hire date
-   - status badge
-   - click-through to detail page
-
-   Keep the implementation consistent with the current Vertex Agentics / Modern UI direction already present in the repo.
-   ```
-
-2. Bring up the app if needed on:
-   - backend `18082`
-   - frontend `5182`
-
-3. Run a browser verification loop:
-   ```text
-   Open the page that renders `HrEmployeeCard`.
-   Compare what you see against the expected structure.
-   Tell me what is missing or visibly wrong.
-   ```
-
-4. Feed the differences back into Claude Code and verify again.
-
----
-
-## Exercise 3: Combine The Loop (10 min)
-
-### Goal
-
-Connect test-driven backend work with browser verification and database truth.
-
-### Instructions
-
-Ask Claude Code to summarize the correct feature loop for this repo:
+**Workspace A: Departments page**
 
 ```text
-Summarize the best verification loop for this repo when a feature changes
-backend behavior, frontend rendering, and stored data.
-Keep it to one short numbered list.
+This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use `reference/` unless this chapter explicitly allows it or you need rescue help.
+
+Build the Departments page for the HR app.
+
+Requirements:
+- create `frontend/src/pages/organization/DepartmentsPage.tsx`
+- follow existing list/detail layout patterns already present in the repo
+- left side: department tree
+- right side: selected department details
+- admin and HR specialist actions only where existing role patterns support them
+- use the live `/app/hr/api/v1/departments` contract
 ```
 
-The expected answer should look roughly like:
+**Workspace B: Jobs page**
 
-1. tighten backend tests
-2. implement until tests pass
-3. verify the UI in the browser
-4. verify stored data with PostgreSQL queries when writes are involved
-5. only then mark the task done
+```text
+This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use `reference/` unless this chapter explicitly allows it or you need rescue help.
+
+Build the Jobs page for the HR app.
+
+Requirements:
+- create `frontend/src/pages/organization/JobsPage.tsx`
+- follow existing list/table/filter page patterns already present in the repo
+- show job id, title, minimum salary, and maximum salary
+- support create/edit validation for min < max
+- use the live `/app/hr/api/v1/jobs` contract
+```
+
+Switch between the sessions while they work. The point is not to babysit one
+session to completion before the other starts.
+
+---
+
+## Exercise 3: Validate And Copy Back (15 min)
+
+### Goal
+
+Verify each isolated workspace, then copy back only the intended files.
+
+### Instructions
+
+1. Ask each workspace to verify its own frontend slice:
+   ```bash
+   cd ../claude-workshop-parallel/workspace-a/frontend && npm run build
+   cd ../claude-workshop-parallel/workspace-b/frontend && npm run build
+   ```
+
+2. Compare each worktree with the main workspace:
+   ```bash
+   diff -rq . ../claude-workshop-parallel/workspace-a | head -50
+   diff -rq . ../claude-workshop-parallel/workspace-b | head -50
+   ```
+
+3. Before copying back, **identify shared integration files** — files that both workspaces may have changed independently:
+   ```bash
+   diff ../claude-workshop-parallel/workspace-a/frontend/src/routes/router.tsx \
+        ../claude-workshop-parallel/workspace-b/frontend/src/routes/router.tsx
+   ```
+   `router.tsx` (and sometimes `HrSidebar.tsx`) is touched by every new page — both workspaces likely added their own route. If they differ, you must **merge both changes**, not copy one file over the other. Ask Claude Code to apply both workspace's route additions to the main workspace router rather than replacing it wholesale.
+
+4. Copy back only the intended feature files with an exact Claude Code prompt:
+   ```text
+   Compare the completed frontend changes in:
+   - `../claude-workshop-parallel/workspace-a`
+   - `../claude-workshop-parallel/workspace-b`
+
+   Restore only the intended Lab 08 feature files into my main workspace.
+   Inspect only these candidate paths before copying anything:
+   - `frontend/src/pages/organization/DepartmentsPage.tsx`
+   - `frontend/src/pages/organization/JobsPage.tsx`
+   - `frontend/src/routes/router.tsx`
+   - `frontend/src/components/hr/layout/HrSidebar.tsx`
+   - `frontend/src/components/hr/layout/HrCommandPalette.tsx`
+   - `frontend/src/utils/hrWorkspaceChrome.ts`
+   - `frontend/src/utils/hrGlobalSearch.ts`
+
+   IMPORTANT: both workspaces may have edited router.tsx independently.
+   For any file edited by both workspaces, merge both sets of changes into
+   the main workspace — do not copy one workspace's version over the other.
+   Copy-paste new page files directly; merge shared wiring files surgically.
+   Then tell me exactly which files were copied or merged.
+   ```
+
+5. Rebuild in the main workspace:
+   ```bash
+   cd frontend && npm run build
+   ```
+
+6. Clean up the temporary worktrees when finished:
+   ```bash
+   git worktree remove ../claude-workshop-parallel/workspace-a
+   git worktree remove ../claude-workshop-parallel/workspace-b
+   git worktree remove ../claude-workshop-parallel/workspace-c
+   ```
 
 ---
 
 ## Exercise 4: Capture The Rule (5 min)
 
-Ask Claude Code to update `CLAUDE.md` with a short rule block:
+1. Add a short rule block to `CLAUDE.md`:
 
-```markdown
-## Verification
-- Backend changes: prefer tests first, then implement to green
-- UI changes: verify in the browser, not only in code review
-- Write paths: verify stored PostgreSQL data when behavior depends on persistence
-- Do not mark work complete without verification evidence
-```
+   ```markdown
+   ## Parallel Development
+   - For independent slices, use isolated `git worktree` workspaces instead of sharing one working tree
+   - Validate each worktree before bringing files back to the main workspace
+   - Merge back only the intended files, not the whole temporary workspace
+   ```
 
-Then restart or resume Claude Code if you want the updated rules loaded in a fresh
-session.
+2. Reflect:
+   - Which backlog items in your real project could be split safely into
+     isolated workspace copies?
+   - What made these two slices safe to parallelize?
 
 ---
 
 ## Success Criteria
 
-- [ ] Backend tests were written or tightened before implementation
-- [ ] `./build-jersey-service.sh test` passed after the backend fix
-- [ ] A browser verification loop was run for the UI slice
-- [ ] The repo-specific verification order is now clear
-- [ ] `CLAUDE.md` captures the verification rule
+- [ ] At least two isolated worktrees were created
+- [ ] Two Claude Code sessions ran against different worktrees
+- [ ] Each worktree was validated before merge-back
+- [ ] Only the intended files were copied into the main workspace
+- [ ] The main frontend still built after the copy-back
 
 ---
 
 ## Key Takeaways
 
-1. Tests are executable specifications.
-2. Browser verification catches issues code review alone will miss.
-3. PostgreSQL verification closes the loop for write-heavy behavior.
-4. Verification is what turns an okay first draft into a reliable change.
-
----
-
-<details>
-<summary><strong>Recovery Path</strong> — Use this if the promote test loop gets stuck</summary>
-
-Use this only after you have tried the student path first.
-
-For this recovery step only, review `reference/lab08/README.md`.
-That rescue path restores only the completed `promoteEmployee()` method snippet
-for `HrEmployeeCommandJdbcRepository.java`.
-
-Do not replace the whole repository file. Earlier and later labs share that
-file, so a full-file copy would overwrite unrelated learner work.
-
-After applying the rescue snippet, rerun:
-
-```text
-cd backend && ./build-jersey-service.sh test
-```
-
-Then continue the normal verification loop from this chapter.
-</details>
+1. Parallel sessions need isolated worktrees, not shared edits in one tree.
+2. Validation belongs in each temporary worktree before merge-back.
+3. Merge back only the finished files you actually want.
+4. Parallelism helps most when the slices are independent and bounded.

@@ -43,6 +43,8 @@ Then rewrite those ten items in your own words if needed, as long as the meaning
 | Require at least one explicit self-review before marking work complete. | Treat the first workable output as finished. |
 | For high-stakes work, do a second review pass focused on learner impact and clarity. | Assume technical correctness alone makes training material ready. |
 | Use a bounded pilot with named review roles and evidence before broader rollout. | Announce broad adoption without stop conditions or evidence gates. |
+| Read the agent's plan before it implements; restart fresh when the session is thrashed and redirect only when the drift is one localized invention. | Try to redirect a session whose context has already filled, or salvage by cherry-picking lines from a bad run. |
+| Use hooks for narrow, deterministic safety checks; keep `PreToolUse` for must-block, `PostToolUse` for should-clean-up. | Encode taste as a hook, inject paragraph-length context via `UserPromptSubmit`, or leave demo hooks active across labs. |
 
 ## What Good Looks Like
 

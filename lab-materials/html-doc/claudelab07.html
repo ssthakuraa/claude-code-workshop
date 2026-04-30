@@ -3,193 +3,203 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Lab 07: Parallel Sessions &amp; Isolated Workspaces</title>
+  <title>Lab 07: Delegated Review — Fresh Context Beats
+Self-Review</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="doc-shell">
     <header class="doc-header">
       <div class="doc-header-meta">
-        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-kicker">Claude Code HR Labs</span>
         <span class="doc-divider"></span>
         <span class="doc-page-label">Lab 07</span>
       </div>
-      <div class="doc-header-title">Lab 07: Parallel Sessions & Isolated Workspaces</div>
+      <div class="doc-header-title">Lab 07: Delegated Review — Fresh Context Beats Self-Review</div>
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlab06.html">← Lab 06</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelab06.html">← Lab 06</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab08.html">Lab 08 →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab08.html">Lab 08 →</a>
       </nav>
     </header>
     <main class="doc-content">
-<section id="lab-07-parallel-sessions--isolated-workspaces"
+<section id="lab-07-delegated-review--fresh-context-beats-self-review"
 class="level1">
-<h1>Lab 07: Parallel Sessions &amp; Isolated Workspaces</h1>
+<h1>Lab 07: Delegated Review — Fresh Context Beats Self-Review</h1>
 <p><strong>Duration:</strong> 60 minutes</p>
-<blockquote>
-<p>Recommended Day 2 order: <strong>Lab 09 -&gt; Lab 08 -&gt; Lab 07
--&gt; Lab 10 -&gt; Lab 11 -&gt; optional Lab 12</strong>.</p>
-</blockquote>
 <section id="learning-objective" class="level2">
 <h2>Learning Objective</h2>
-<p>You will run multiple Codex sessions at once, each in its own
-isolated <code>git worktree</code>. The goal is to see how parallel work
-compresses multi-slice delivery time without causing file
-collisions.</p>
+<p>You will compare a same-session self-review with a fresh-context
+delegated review. The goal is to see why a separate reviewer catches
+more issues than the session that just wrote the code.</p>
 <hr />
 </section>
 <section id="the-key-concept" class="level2">
 <h2>The Key Concept</h2>
-<p>One session can usually make progress on one main slice at a time.
-Multiple independent slices go faster when each session gets its own
-isolated working directory.</p>
-<div class="sourceCode" id="cb1"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /absolute/path/to/codex-workshop</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ../codex-workshop-parallel</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> ../codex-workshop-parallel/workspace-a ../codex-workshop-parallel/workspace-b ../codex-workshop-parallel/workspace-c</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree add ../codex-workshop-parallel/workspace-a</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree add ../codex-workshop-parallel/workspace-b</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree add ../codex-workshop-parallel/workspace-c</span></code></pre></div>
-<p>Each worktree carries the same <code>AGENTS.md</code>, docs, and
-code, but the edits stay isolated until you choose what to bring
-back.</p>
-<p>If your current learner workspace came from a GitHub zip instead of
-<code>git clone</code>, make a normal Git clone of the repo before this
-lab. <code>git worktree</code> needs a real Git repository.</p>
+<p>Delegated review works because the reviewer:</p>
+<ul>
+<li>did not write the code</li>
+<li>starts with a cleaner context window</li>
+<li>can be given a narrower, more critical brief</li>
+</ul>
+<p>In this repo, the durable lesson matters more than the exact product
+surface. If your Claude Code client supports reusable project agents,
+you can store reviewer and builder instructions under
+<code>.claude/agents/</code>. If it does not, use a fresh Claude Code
+session with the same instructions pasted in. The fresh-context pattern
+is the point of the lab.</p>
 <hr />
 </section>
-<section id="exercise-1-create-isolated-workspaces-10-min"
-class="level2">
-<h2>Exercise 1: Create Isolated Workspaces (10 min)</h2>
+<section id="setup" class="level2">
+<h2>Setup</h2>
+<p>Ask Claude Code to check the current component surface:</p>
+<pre class="text"><code>Check the current frontend component workspace state.
+Read `frontend/src/components/` and tell me which component areas already exist.</code></pre>
+<hr />
+</section>
+<section id="exercise-1-same-session-self-review-15-min" class="level2">
+<h2>Exercise 1: Same-Session Self-Review (15 min)</h2>
 <section id="goal" class="level3">
 <h3>Goal</h3>
-<p>Set up two or three parallel working directories.</p>
+<p>Build a component and then ask the same session to review it.</p>
 </section>
 <section id="instructions" class="level3">
 <h3>Instructions</h3>
 <ol type="1">
-<li><p>Confirm the worktrees exist:</p>
-<div class="sourceCode" id="cb2"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> ../codex-workshop-parallel/workspace-a</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> ../codex-workshop-parallel/workspace-b</span></code></pre></div></li>
-<li><p>Verify they started from the same root guidance:</p>
-<div class="sourceCode" id="cb3"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span> <span class="at">-q</span> AGENTS.md ../codex-workshop-parallel/workspace-a/AGENTS.md</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span> <span class="at">-q</span> AGENTS.md ../codex-workshop-parallel/workspace-b/AGENTS.md</span></code></pre></div></li>
-<li><p>Open separate terminals:</p>
-<ul>
-<li>Terminal A -&gt;
-<code>../codex-workshop-parallel/workspace-a</code></li>
-<li>Terminal B -&gt;
-<code>../codex-workshop-parallel/workspace-b</code></li>
-<li>optional Terminal C -&gt;
-<code>../codex-workshop-parallel/workspace-c</code></li>
-</ul></li>
-<li><p>Start a Codex session in each workspace.</p></li>
+<li><p>Ask Claude Code to build a component:</p>
+<pre class="text"><code>Create `frontend/src/components/hr/HrEmployeeCard.tsx`.
+
+It should display:
+- employee avatar with initials fallback
+- employee name and job title
+- department and location
+- employment status badge using the existing status-badge pattern
+- hire date
+- click handler for navigation to the detail page
+
+Follow the existing HR component patterns and the current Vertex Agentics /
+Modern visual direction already present in the repo.</code></pre></li>
+<li><p>In the same session, ask for a review:</p>
+<pre class="text"><code>Review the `HrEmployeeCard` component you just created.
+Check accessibility, error states, edge cases, performance, and consistency
+with sibling components.</code></pre></li>
+<li><p>Record how many useful findings the same-session review surfaced:
+_____</p></li>
 </ol>
 <hr />
 </section>
 </section>
-<section id="exercise-2-run-two-independent-slices-in-parallel-30-min"
+<section id="exercise-2-create-reviewer-and-builder-instructions-15-min"
 class="level2">
-<h2>Exercise 2: Run Two Independent Slices In Parallel (30 min)</h2>
+<h2>Exercise 2: Create Reviewer And Builder Instructions (15 min)</h2>
 <section id="goal-1" class="level3">
 <h3>Goal</h3>
-<p>Give each workspace a bounded, independent task.</p>
+<p>Create two reusable instruction sets: one for building, one for
+review.</p>
 </section>
 <section id="instructions-1" class="level3">
 <h3>Instructions</h3>
-<p><strong>Workspace A: Departments page</strong></p>
-<pre class="text"><code>This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use `reference/` unless this chapter explicitly allows it or you need rescue help.
+<ol type="1">
+<li><p>Ask Claude Code to create markdown instruction files in
+<code>.claude/</code>:</p>
+<ul>
+<li><code>.claude/component-builder.md</code></li>
+<li><code>.claude/component-reviewer.md</code></li>
+</ul>
+<p>Reference these files from <code>CLAUDE.md</code> so future sessions
+know they exist.</p></li>
+<li><p>If you prefer not to keep them as files, ask Claude Code to draft
+the two instruction sets in markdown so you can reuse them in fresh
+sessions.</p></li>
+<li><p>The builder instructions should require:</p>
+<ul>
+<li>existing repo patterns first</li>
+<li>TypeScript prop safety</li>
+<li>accessible states</li>
+<li>no invented design system</li>
+<li>CLAUDE.md compliance</li>
+</ul></li>
+<li><p>The reviewer instructions should require:</p>
+<ul>
+<li>findings first, no fluff</li>
+<li>accessibility review</li>
+<li>loading/empty/error-state review</li>
+<li>long-string/null/edge-case review</li>
+<li>contract mismatch review</li>
+<li>consistency with the current Vertex Agentics / Modern UI
+direction</li>
+</ul></li>
+</ol>
+<p>Recommended prompt:</p>
+<pre class="text"><code>Create reusable builder and reviewer instructions for this repo.
 
-Build the Departments page for the HR app.
+Builder scope:
+- React + TypeScript HR components
+- existing repo patterns first
+- CLAUDE.md compliance
+- accessible states and sane defaults
 
-Requirements:
-- create `frontend/src/pages/organization/DepartmentsPage.tsx`
-- follow existing list/detail layout patterns already present in the repo
-- left side: department tree
-- right side: selected department details
-- admin and HR specialist actions only where existing role patterns support them
-- use the live `/app/hr/api/v1/departments` contract</code></pre>
-<p><strong>Workspace B: Jobs page</strong></p>
-<pre class="text"><code>This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use `reference/` unless this chapter explicitly allows it or you need rescue help.
+Reviewer scope:
+- findings-first review
+- accessibility
+- edge cases
+- error and loading states
+- contract mismatches
+- consistency with sibling components and the current Vertex Agentics / Modern UI direction
 
-Build the Jobs page for the HR app.
-
-Requirements:
-- create `frontend/src/pages/organization/JobsPage.tsx`
-- follow existing list/table/filter page patterns already present in the repo
-- show job id, title, minimum salary, and maximum salary
-- support create/edit validation for min &lt; max
-- use the live `/app/hr/api/v1/jobs` contract</code></pre>
-<p>Switch between the sessions while they work. The point is not to
-babysit one session to completion before the other starts.</p>
+Store the files as `.claude/component-builder.md` and `.claude/component-reviewer.md`.
+Otherwise draft the exact instruction text in markdown for later reuse.</code></pre>
 <hr />
 </section>
 </section>
-<section id="exercise-3-validate-and-copy-back-15-min" class="level2">
-<h2>Exercise 3: Validate And Copy Back (15 min)</h2>
+<section id="exercise-3-fresh-context-review-20-min" class="level2">
+<h2>Exercise 3: Fresh-Context Review (20 min)</h2>
 <section id="goal-2" class="level3">
 <h3>Goal</h3>
-<p>Verify each isolated workspace, then copy back only the intended
-files.</p>
+<p>Run the same component through a separate reviewer context.</p>
 </section>
 <section id="instructions-2" class="level3">
 <h3>Instructions</h3>
 <ol type="1">
-<li><p>Ask each workspace to verify its own frontend slice:</p>
-<div class="sourceCode" id="cb6"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../codex-workshop-parallel/workspace-a/frontend <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> run build</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../codex-workshop-parallel/workspace-b/frontend <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> run build</span></code></pre></div></li>
-<li><p>Compare each worktree with the main workspace:</p>
-<div class="sourceCode" id="cb7"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span> <span class="at">-rq</span> . ../codex-workshop-parallel/workspace-a <span class="kw">|</span> <span class="fu">head</span> <span class="at">-50</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span> <span class="at">-rq</span> . ../codex-workshop-parallel/workspace-b <span class="kw">|</span> <span class="fu">head</span> <span class="at">-50</span></span></code></pre></div></li>
-<li><p>Copy back only the intended feature files with an exact Codex
-prompt:</p>
-<pre class="text"><code>Compare the completed frontend changes in:
-- `../codex-workshop-parallel/workspace-a`
-- `../codex-workshop-parallel/workspace-b`
-
-Restore only the intended Lab 07 feature files into my main workspace.
-Inspect only these candidate paths before copying anything:
-- `frontend/src/pages/organization/DepartmentsPage.tsx`
-- `frontend/src/pages/organization/JobsPage.tsx`
-- `frontend/src/routes/router.tsx`
-- `frontend/src/components/hr/layout/HrSidebar.tsx`
-- `frontend/src/components/hr/layout/HrCommandPalette.tsx`
-- `frontend/src/utils/hrWorkspaceChrome.ts`
-- `frontend/src/utils/hrGlobalSearch.ts`
-
-Copy back only the minimal intended files.
-Do not replace the whole workspace.
-Then tell me exactly which files were copied back.</code></pre></li>
-<li><p>Rebuild in the main workspace:</p>
-<div class="sourceCode" id="cb9"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> frontend <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> run build</span></code></pre></div></li>
-<li><p>Clean up the temporary worktrees when finished:</p>
-<div class="sourceCode" id="cb10"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree remove ../codex-workshop-parallel/workspace-a</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree remove ../codex-workshop-parallel/workspace-b</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree remove ../codex-workshop-parallel/workspace-c</span></code></pre></div></li>
+<li><p>Start a fresh Claude Code session from your workspace root, or
+invoke the reviewer through your client’s delegated-agent surface if
+available.</p></li>
+<li><p>Ask the reviewer to inspect only the component:</p>
+<pre class="text"><code>Review `frontend/src/components/hr/HrEmployeeCard.tsx`.
+Focus on accessibility, error states, long-string handling, null safety, and
+consistency with existing HR components.
+Return findings only.</code></pre></li>
+<li><p>Record how many useful findings the fresh-context review
+surfaced: _____</p></li>
+<li><p>Compare:</p>
+<ul>
+<li>same-session review: _____ findings</li>
+<li>fresh-context review: _____ findings</li>
+</ul></li>
+<li><p>Apply the reviewer feedback in the original implementation
+session or in a separate builder session.</p></li>
+<li><p>Re-run the review once after fixes if you want to confirm the
+issues are actually resolved.</p></li>
 </ol>
 <hr />
 </section>
 </section>
-<section id="exercise-4-capture-the-rule-5-min" class="level2">
-<h2>Exercise 4: Capture The Rule (5 min)</h2>
+<section id="exercise-4-capture-the-rule-10-min" class="level2">
+<h2>Exercise 4: Capture The Rule (10 min)</h2>
 <ol type="1">
-<li><p>Add a short rule block to <code>AGENTS.md</code>:</p>
-<div class="sourceCode" id="cb11"><pre
-class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Parallel Development</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>For independent slices, use isolated <span class="in">`git worktree`</span> workspaces instead of sharing one working tree</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Validate each worktree before bringing files back to the main workspace</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Merge back only the intended files, not the whole temporary workspace</span></code></pre></div></li>
+<li><p>Add a short rule block to <code>CLAUDE.md</code>:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Delegated Review</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>For meaningful UI or workflow changes, prefer a fresh-context review over same-session self-review</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Reviewer instructions should be findings-first and read-only in spirit</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Reusable reviewer/builder prompts or agent files belong in repo-local config, not in CLAUDE.md</span></code></pre></div></li>
 <li><p>Reflect:</p>
 <ul>
-<li>Which backlog items in your real project could be split safely into
-isolated workspace copies?</li>
-<li>What made these two slices safe to parallelize?</li>
+<li>What did the fresh-context reviewer catch that the writer
+missed?</li>
+<li>Which reviewer specializations would matter most in your real
+codebase: accessibility, API contract, security, performance, or release
+readiness?</li>
 </ul></li>
 </ol>
 <hr />
@@ -197,38 +207,38 @@ isolated workspace copies?</li>
 <section id="success-criteria" class="level2">
 <h2>Success Criteria</h2>
 <ul class="task-list">
-<li><label><input type="checkbox" />At least two isolated worktrees were
-created</label></li>
-<li><label><input type="checkbox" />Two Codex sessions ran against
-different worktrees</label></li>
-<li><label><input type="checkbox" />Each worktree was validated before
-merge-back</label></li>
-<li><label><input type="checkbox" />Only the intended files were copied
-into the main workspace</label></li>
-<li><label><input type="checkbox" />The main frontend still built after
-the copy-back</label></li>
+<li><label><input type="checkbox" /><code>HrEmployeeCard</code> exists
+and follows current repo patterns</label></li>
+<li><label><input type="checkbox" />Reusable reviewer and builder
+instructions were created</label></li>
+<li><label><input type="checkbox" />Fresh-context review found more or
+better issues than self-review</label></li>
+<li><label><input type="checkbox" />Reviewer feedback was
+applied</label></li>
+<li><label><input type="checkbox" /><code>CLAUDE.md</code> now captures
+the delegated-review rule</label></li>
 </ul>
 <hr />
 </section>
 <section id="key-takeaways" class="level2">
 <h2>Key Takeaways</h2>
 <ol type="1">
-<li>Parallel sessions need isolated worktrees, not shared edits in one
-tree.</li>
-<li>Validation belongs in each temporary worktree before
-merge-back.</li>
-<li>Merge back only the finished files you actually want.</li>
-<li>Parallelism helps most when the slices are independent and
-bounded.</li>
+<li>Same-session self-review is weak because the session is biased
+toward its own work.</li>
+<li>Fresh context usually improves review quality immediately.</li>
+<li>Reusable reviewer instructions compound just like
+<code>CLAUDE.md</code> rules do.</li>
+<li>The exact custom-agent feature surface can vary; the fresh-context
+review pattern is the durable lesson.</li>
 </ol>
 </section>
 </section>
     </main>
     <footer class="doc-footer">
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlab06.html">← Lab 06</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelab06.html">← Lab 06</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab08.html">Lab 08 →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab08.html">Lab 08 →</a>
       </nav>
     </footer>
   </div>

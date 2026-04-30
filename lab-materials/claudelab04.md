@@ -155,7 +155,7 @@ Use delegated research to do heavy reading without polluting your main context.
 
 ### What You Should See
 
-Your main context consumed only the summary (~50 lines), not the full document (~500+ lines). This is how you keep context clean during research-heavy work. Lab 06 will go deeper on dedicated reviewer/builder agents.
+Your main context consumed only the summary (~50 lines), not the full document (~500+ lines). This is how you keep context clean during research-heavy work. Lab 07 will go deeper on dedicated reviewer/builder agents.
 
 ---
 

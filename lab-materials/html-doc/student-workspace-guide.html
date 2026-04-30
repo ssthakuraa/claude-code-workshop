@@ -10,7 +10,7 @@
   <div class="doc-shell">
     <header class="doc-header">
       <div class="doc-header-meta">
-        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-kicker">Claude Code HR Labs</span>
         <span class="doc-divider"></span>
         <span class="doc-page-label">Start Here</span>
       </div>
@@ -18,7 +18,7 @@
       <nav class="doc-nav" aria-label="Lab navigation">
   <span class="doc-nav-link is-disabled doc-nav-prev">← Previous</span>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlabsetup.html">Setup →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelabsetup.html">Setup →</a>
       </nav>
     </header>
     <main class="doc-content">
@@ -28,14 +28,14 @@
 <p>This guide is the short orientation for the learner workspace. It
 tells you what this training is, how to move through it, and which repo
 rules stay true across the whole lab sequence.</p>
-<p>Use <a href="./codexlabsetup.html">Setup</a> for the actual machine
+<p>Use <a href="./claudelabsetup.html">Setup</a> for the actual machine
 bring-up steps. Use the numbered labs for the hands-on exercises.</p>
 <hr />
 <section id="what-this-training-is" class="level2">
 <h2>What This Training Is</h2>
-<p>This training is a hands-on introduction to using Codex in a
+<p>This training is a hands-on introduction to using Claude Code in a
 realistic enterprise-style repository. Your learner workspace is the
-repo root: the directory that contains <code>AGENTS.md</code>,
+repo root: the directory that contains <code>CLAUDE.md</code>,
 <code>backend/</code>, <code>frontend/</code>, <code>database/</code>,
 and <code>lab-materials/</code>.</p>
 <p>This workspace is a learner starter, not a fully completed
@@ -48,7 +48,7 @@ coding agents effective in real project work.</p>
 <li><p><strong>Context engineering</strong> Agentic tools are broadly
 capable, but they do not start with your enterprise standards,
 architecture, or domain knowledge. This training shows how to provide
-that context through prompts, <code>AGENTS.md</code>, skills, and
+that context through prompts, <code>CLAUDE.md</code>, skills, and
 supporting documentation so the agent can produce better
 results.</p></li>
 <li><p><strong>Structured engineering workflows with agents</strong>
@@ -68,101 +68,109 @@ as a partner for exploration, implementation, and refinement.</p></li>
 <h2>Chapter Map</h2>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>Chapter</th>
 <th>Main Focus</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td><a href="./codexlabsetup.html">Setup</a></td>
+<tr class="odd">
+<td><a href="./claudelabsetup.html">Setup</a></td>
 <td>Prepares the learner machine, aligns the database settings, and
 proves the learner workspace can build, run, and open correctly before
 the real labs begin.</td>
 </tr>
-<tr>
-<td><a href="./codexlab01.html">AGENTS.md — Your Enterprise
+<tr class="even">
+<td><a href="./claudelab01.html">CLAUDE.md — Your Enterprise
 Constitution</a></td>
 <td>Shows why project-specific guidance matters by letting you observe
-Codex without enough conventions, then turning those corrections into
-durable <code>AGENTS.md</code> rules.</td>
+Claude Code without enough conventions, then turning those corrections
+into durable <code>CLAUDE.md</code> rules.</td>
 </tr>
-<tr>
-<td><a href="./codexlab02.html">Planning Discipline — Think Before You
+<tr class="odd">
+<td><a href="./claudelab02.html">Planning Discipline — Think Before You
 Build</a></td>
-<td>Teaches the habit of planning before implementation so Codex work
-starts from a repo-grounded design instead of jumping straight into
+<td>Teaches the habit of planning before implementation so Claude Code
+work starts from a repo-grounded design instead of jumping straight into
 code.</td>
 </tr>
-<tr>
-<td><a href="./codexlab03.html">Skills &amp; Reusable Workflows — Repo
+<tr class="even">
+<td><a href="./claudelab03.html">Skills &amp; Reusable Workflows — Repo
 Skills</a></td>
 <td>Demonstrates how to capture repeatable patterns as skills so you
 stop restating the same scaffolding and verification instructions by
 hand.</td>
 </tr>
-<tr>
-<td><a href="./codexlab04.html">Context Management — The #1 Performance
+<tr class="odd">
+<td><a href="./claudelab04.html">Context Management — The #1 Performance
 Lever</a></td>
 <td>Teaches how context quality drives output quality and how to keep
-Codex focused by choosing the right files, summaries, and session
+Claude Code focused by choosing the right files, summaries, and session
 boundaries.</td>
 </tr>
-<tr>
-<td><a href="./codexlab05.html">Hooks — Truthful Guardrails</a></td>
-<td>Explains the difference between advisory instructions and
-repo-managed guardrails by showing one visible hook warning, its current
-runtime limit, and the cleanup path that keeps later labs quiet.</td>
+<tr class="even">
+<td><a href="./claudelab05.html">Hooks — Structural Guardrails</a></td>
+<td>Walks the full Claude Code hook surface — PreToolUse, PostToolUse,
+UserPromptSubmit, Stop, SubagentStop, Notification — so you know which
+hook is the right tool, when a hook is the wrong tool, and how to layer
+them without producing noise.</td>
 </tr>
-<tr>
-<td><a href="./codexlab06.html">Subagents — Isolated Specialist
-Workers</a></td>
+<tr class="odd">
+<td><a href="./claudelab06.html">Bad-Agent Recovery — Catching and
+Correcting Drift</a></td>
+<td>Teaches the moves that catch drift early, redirect surgically, and
+salvage usable work when an agent run goes off-track, using a pre-baked
+simulated transcript so the practice is concrete.</td>
+</tr>
+<tr class="even">
+<td><a href="./claudelab07.html">Delegated Review — Fresh Context Beats
+Self-Review</a></td>
 <td>Introduces delegated builder and reviewer agents so you can compare
 same-context work with fresh-context review.</td>
 </tr>
-<tr>
-<td><a href="./codexlab07.html">Parallel Sessions &amp; Isolated
+<tr class="odd">
+<td><a href="./claudelab08.html">Parallel Sessions &amp; Isolated
 Workspaces</a></td>
 <td>Shows how to run multiple workstreams safely in parallel by
 separating workspace copies, responsibilities, and verification.</td>
 </tr>
-<tr>
-<td><a href="./codexlab08.html">Verification Loops — The Quality
+<tr class="even">
+<td><a href="./claudelab09.html">Verification Loops — The Quality
 Multiplier</a></td>
 <td>Teaches the habit of proving work through tests, runtime checks, and
 visual verification instead of stopping at “the code looks done.”</td>
 </tr>
-<tr>
-<td><a href="./codexlab09.html">MCP Servers — Playwright &amp; Browser
+<tr class="odd">
+<td><a href="./claudelab10.html">MCP Servers — Playwright &amp; Browser
 Verification</a></td>
-<td>Shows how to extend Codex with browser tooling so it can inspect the
-running app and verify behavior visually, not just through static code
-review.</td>
+<td>Shows how to extend Claude Code with browser tooling so it can
+inspect the running app and verify behavior visually, not just through
+static code review.</td>
 </tr>
-<tr>
-<td><a href="./codexlab10.html">Data Verification — Runtime Data
+<tr class="even">
+<td><a href="./claudelab11.html">Data Verification — Runtime Data
 Checks</a></td>
 <td>Connects UI and API behavior back to the database so you can confirm
 that application actions produced the expected runtime data
 changes.</td>
 </tr>
-<tr>
-<td><a href="./codexlab11.html">Enterprise Governance — Rollout Readiness,
-Safety Posture &amp; Evidence</a></td>
+<tr class="odd">
+<td><a href="./claudelab12.html">Enterprise Governance — Rollout
+Readiness, Safety Posture &amp; Evidence</a></td>
 <td>Focuses on bounded rollout, safety posture, and evidence gathering
 so agentic work is ready for enterprise review and controlled
 adoption.</td>
 </tr>
-<tr>
-<td><a href="./codexlab12.html">Optional Capstone — End-to-End Feature
+<tr class="even">
+<td><a href="./claudelab13.html">Optional Capstone — End-to-End Feature
 Build</a></td>
 <td>Combines the full workflow into one feature exercise so you can
 practice planning, context, implementation, review, and verification
 together.</td>
 </tr>
-<tr>
-<td><a href="./codexlab-reference.html">Codex Lab Reference Card — Best
-Practices Summary</a></td>
+<tr class="odd">
+<td><a href="./claudelab-reference.html">Claude Code Lab Reference Card —
+Best Practices Summary</a></td>
 <td>Condenses the full training into a short operating card you can
 reuse later without rereading the whole course.</td>
 </tr>
@@ -177,24 +185,25 @@ reuse later without rereading the whole course.</td>
 extract it anywhere you have normal developer access. The labs should
 not assume <code>/scratch</code>, <code>/tmp</code>, or any
 company-internal staging path.</li>
-<li>Some labs are intentionally incomplete so you can observe how Codex
-behaves before adding better guidance.</li>
+<li>Some labs are intentionally incomplete so you can observe how Claude
+Code behaves before adding better guidance.</li>
 <li>The root workspace is intentionally incomplete in a few places so
 the labs have real work to do. Do not treat a missing file or disabled
 route as accidental drift until you check the current lab and
 <code>reference/</code>.</li>
-<li>This is a teaching lab for Codex features and workflow discipline.
-Avoid diluting that by having Codex mine <code>frontend/</code> or
-<code>backend/</code> for example implementations unless the current lab
-explicitly tells it to inspect those files.</li>
-<li>Read <code>AGENTS.md</code> before treating any imported lab
+<li>This is a teaching lab for Claude Code features and workflow
+discipline. Avoid diluting that by having Claude Code mine
+<code>frontend/</code> or <code>backend/</code> for example
+implementations unless the current lab explicitly tells it to inspect
+those files.</li>
+<li>Read <code>CLAUDE.md</code> before treating any imported lab
 instruction as authoritative. If a lab chapter conflicts with
-<code>AGENTS.md</code> or the current shared docs under
+<code>CLAUDE.md</code> or the current shared docs under
 <code>lab-materials/docs/</code>, the repo rules win.</li>
 <li>When a lab says "workspace root" or "project root", use your actual
 local repo path, for example
-<code>/home/you/projects/codex-workshop</code> or
-<code>/scratch/training/codex-workshop</code>.</li>
+<code>/home/you/projects/claude-workshop</code> or
+<code>/scratch/training/claude-workshop</code>.</li>
 <li>Use current repo commands and environment prerequisites. Do not
 resurrect bundled Java, Maven, Node, browser, or SQL tooling under
 <code>runtime/</code>.</li>
@@ -264,7 +273,7 @@ workspace.</li>
       <nav class="doc-nav" aria-label="Lab navigation">
   <span class="doc-nav-link is-disabled doc-nav-prev">← Previous</span>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlabsetup.html">Setup →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelabsetup.html">Setup →</a>
       </nav>
     </footer>
   </div>

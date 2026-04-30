@@ -3,240 +3,530 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Lab 06: Delegated Review — Fresh Context Beats
-Self-Review</title>
+  <title>Lab 06: Bad-Agent Recovery — Catching and Correcting
+Drift</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="doc-shell">
     <header class="doc-header">
       <div class="doc-header-meta">
-        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-kicker">Claude Code HR Labs</span>
         <span class="doc-divider"></span>
         <span class="doc-page-label">Lab 06</span>
       </div>
-      <div class="doc-header-title">Lab 06: Delegated Review — Fresh Context Beats Self-Review</div>
+      <div class="doc-header-title">Lab 06: Bad-Agent Recovery — Catching and Correcting Drift</div>
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlab05.html">← Lab 05</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelab05.html">← Lab 05</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab07.html">Lab 07 →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab07.html">Lab 07 →</a>
       </nav>
     </header>
     <main class="doc-content">
-<section id="lab-06-delegated-review--fresh-context-beats-self-review"
+<section id="lab-06-bad-agent-recovery--catching-and-correcting-drift"
 class="level1">
-<h1>Lab 06: Delegated Review — Fresh Context Beats Self-Review</h1>
+<h1>Lab 06: Bad-Agent Recovery — Catching and Correcting Drift</h1>
 <p><strong>Duration:</strong> 60 minutes</p>
 <section id="learning-objective" class="level2">
 <h2>Learning Objective</h2>
-<p>You will compare a same-session self-review with a fresh-context
-delegated review. The goal is to see why a separate reviewer catches
-more issues than the session that just wrote the code.</p>
+<p>You will read a Claude Code session that goes off-track, learn to
+recognize the moments drift starts, then practice the moves that catch
+drift early, redirect surgically, and salvage usable work without
+throwing the whole run away. By the end you should know when to
+interrupt, what to interrupt with, and when a clean restart is cheaper
+than a rescue.</p>
 <hr />
 </section>
 <section id="the-key-concept" class="level2">
 <h2>The Key Concept</h2>
-<p>Delegated review works because the reviewer:</p>
-<ul>
-<li>did not write the code</li>
-<li>starts with a cleaner context window</li>
-<li>can be given a narrower, more critical brief</li>
-</ul>
-<p>In this repo, the durable lesson matters more than the exact product
-surface. If your Codex client supports reusable project agents, you can
-store reviewer and builder instructions under
-<code>.codex/agents/</code>. If it does not, use a fresh Codex session
-with the same instructions pasted in. The fresh-context pattern is the
-point of the lab.</p>
+<p>A "bad agent run" is rarely one big mistake. It is a chain of small
+drifts: an invented layer, a hallucinated table, a file read "for
+context" that pollutes the next decision, a redirect prompt that was too
+vague to land. Each drift is cheap to fix at the moment it happens and
+expensive to fix later.</p>
+<p><strong>The four recovery moves:</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Move</th>
+<th>Use When</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Spot early</strong></td>
+<td>Reading the agent's plan or first tool calls — drift in plan output
+is the cheapest moment to intervene</td>
+</tr>
+<tr class="even">
+<td><strong>Redirect surgically</strong></td>
+<td>One localized invention, session is otherwise on-task, context still
+clean</td>
+</tr>
+<tr class="odd">
+<td><strong>Restart cleanly</strong></td>
+<td>Context is polluted, session contradicts itself, drift has spread
+across files</td>
+</tr>
+<tr class="even">
+<td><strong>Salvage selectively</strong></td>
+<td>Bad run produced some correct fragments worth re-deriving from a
+clean prompt</td>
+</tr>
+</tbody>
+</table>
+<p>Lab 04 taught you that context degrades. This lab teaches you what to
+do when degradation has already produced bad output. Lab 05 hooks are
+structural prevention; recovery is the human-in-the-loop complement.</p>
 <hr />
 </section>
 <section id="setup" class="level2">
 <h2>Setup</h2>
-<p>Ask Codex to check the current component surface:</p>
-<pre class="text"><code>Check the current frontend component workspace state.
-Read `frontend/src/components/` and tell me which component areas already exist.</code></pre>
+<p>This lab uses a pre-baked simulated transcript instead of a live
+drift run, because a 60-minute live session cannot reliably reproduce
+the specific drift moments the lesson depends on.</p>
+<p>The transcript lives at:</p>
+<ul>
+<li><code>lab-materials/docs/lab06-bad-agent-transcript.md</code></li>
+</ul>
+<p>Open it in a separate window now. You will reference it throughout
+the lab. Do <strong>not</strong> read the annotated answer key at
+<code>reference/lab06/transcript-annotated.md</code> until you have
+finished Exercise 1 on your own.</p>
+<p>If you need rescue help during this lab, the
+<code>reference/lab06/</code> escape hatch contains the answer keys for
+Exercises 1 and 4. Do not consult it ahead of time — the point of the
+lab is to develop your own eye for drift.</p>
+<p>You should have a working <code>CLAUDE.md</code> from Labs 01–05. If
+not, restore it from <code>reference/lab01/CLAUDE.md</code> first.</p>
 <hr />
 </section>
-<section id="exercise-1-same-session-self-review-15-min" class="level2">
-<h2>Exercise 1: Same-Session Self-Review (15 min)</h2>
+<section id="exercise-1-watch-the-bad-run-15-min" class="level2">
+<h2>Exercise 1: Watch the Bad Run (15 min)</h2>
 <section id="goal" class="level3">
 <h3>Goal</h3>
-<p>Build a component and then ask the same session to review it.</p>
+<p>Read the simulated transcript end-to-end and mark the moments drift
+starts. Score what went wrong before you learn what to do about it.</p>
 </section>
 <section id="instructions" class="level3">
 <h3>Instructions</h3>
 <ol type="1">
-<li><p>Ask Codex to build a component:</p>
-<pre class="text"><code>Create `frontend/src/components/hr/HrEmployeeCard.tsx`.
-
-It should display:
-- employee avatar with initials fallback
-- employee name and job title
-- department and location
-- employment status badge using the existing status-badge pattern
-- hire date
-- click handler for navigation to the detail page
-
-Follow the existing HR component patterns and the current Vertex Agentics /
-Modern visual direction already present in the repo.</code></pre></li>
-<li><p>In the same session, ask for a review:</p>
-<pre class="text"><code>Review the `HrEmployeeCard` component you just created.
-Check accessibility, error states, edge cases, performance, and consistency
-with sibling components.</code></pre></li>
-<li><p>Record how many useful findings the same-session review surfaced:
-_____</p></li>
+<li><p>Open
+<code>lab-materials/docs/lab06-bad-agent-transcript.md</code>. The
+transcript shows a Claude Code session asked to scaffold a read-only
+<code>Region</code> lookup endpoint — the same task Lab 01 used. The
+agent has no fresh CLAUDE.md guardrails active for this
+exercise.</p></li>
+<li><p>Read the transcript straight through once, without notes. Notice
+how the work feels reasonable in the moment but produces a final state
+that does not match what was asked for.</p></li>
+<li><p><strong>Now read it again, slowly.</strong> As you go, mark every
+moment the agent drifted. For each drift, capture three things in your
+own notes:</p>
+<ul>
+<li><strong>What drifted</strong> — invented architecture, hallucinated
+schema, scope creep, context fill, contradiction, something else</li>
+<li><strong>Earliest visible signal</strong> — the first sentence in the
+transcript where you could have caught it</li>
+<li><strong>What you would have done</strong> — interrupt with a
+redirect, restart, ignore</li>
+</ul>
+<p>Use a simple table:</p>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Drift type</th>
+<th>Earliest signal (transcript line)</th>
+<th>Your move</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table></li>
+<li><p><strong>Score yourself.</strong> A complete Drift Inventory
+should capture <strong>at least 4 distinct drift moments</strong> out of
+the five planted in the transcript. If you only found one or two, read
+again — the transcript is dense on purpose.</p></li>
+<li><p><strong>Do not consult the answer key yet.</strong> Exercises 2–4
+will sharpen your eye further; the answer key is a comparison check at
+the end.</p></li>
 </ol>
+</section>
+<section id="what-you-should-see" class="level3">
+<h3>What You Should See</h3>
+<p>The transcript contains five planted drift moments:</p>
+<ul>
+<li>an invented <code>RegionService</code> layer the repo does not
+use</li>
+<li>a hallucinated <code>AIHR_REGIONS_V2</code> table that does not
+exist in <code>database/hrschema.sql</code></li>
+<li>scope creep into <code>HrJobResource.java</code> for
+"consistency"</li>
+<li>context-fill thrashing — three large files read for no immediate
+reason</li>
+<li>a self-contradiction late in the session, after context has
+filled</li>
+</ul>
+<p>You do not need to find all five on this pass. You need to find the
+<strong>pattern</strong> — drift starts small, signals appear in the
+agent's plan output before they appear in the diff, and "looks
+reasonable in the moment" is the trap.</p>
+<blockquote>
+<p><strong>This is the teaching moment.</strong> Drift is hard to catch
+only because we are reading the output for content rather than for
+signals. Once you know the signals, drift is loud.</p>
+</blockquote>
 <hr />
 </section>
 </section>
-<section id="exercise-2-create-reviewer-and-builder-instructions-15-min"
-class="level2">
-<h2>Exercise 2: Create Reviewer And Builder Instructions (15 min)</h2>
+<section id="exercise-2-spot-drift-early-10-min" class="level2">
+<h2>Exercise 2: Spot Drift Early (10 min)</h2>
 <section id="goal-1" class="level3">
 <h3>Goal</h3>
-<p>Create two reusable instruction sets: one for building, one for
-review.</p>
+<p>Catch drift in the agent's plan output before it produces code.</p>
 </section>
 <section id="instructions-1" class="level3">
 <h3>Instructions</h3>
 <ol type="1">
-<li><p>If your client supports project-scoped custom agents, ask Codex
-to create:</p>
-<ul>
-<li><code>.codex/agents/component-builder.toml</code></li>
-<li><code>.codex/agents/component-reviewer.toml</code></li>
+<li><p>Open a fresh Claude Code session from your workspace
+root.</p></li>
+<li><p>Give it the same prompt the bad transcript started with, but this
+time ask for a <strong>plan first</strong>:</p>
+<pre class="text"><code>This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use `reference/` unless this chapter explicitly allows it or you need rescue help.
+
+I want a plan first, not code.
+
+Design a read-only Region scaffold for the HR app:
+- GET /app/hr/api/v1/regions
+- response DTO + JDBC repository + Jersey resource only
+- no request DTOs, no write endpoints, no service layer
+- target the existing AIHR_REGIONS table
+
+Show me the plan: which files will be created, which will be touched,
+what the data flow looks like, and what verification you will run.
+Do not implement yet.</code></pre></li>
+<li><p><strong>Read the plan with a drift-signal checklist in
+hand.</strong> Mark anything that looks like:</p>
+<ul class="task-list">
+<li><label><input type="checkbox" />An invented layer not in the prompt
+(controller, service, manager, helper, factory)</label></li>
+<li><label><input type="checkbox" />A schema name not in
+<code>database/hrschema.sql</code></label></li>
+<li><label><input type="checkbox" />A file in the "files to touch" list
+that the prompt did not name</label></li>
+<li><label><input type="checkbox" />A side-trip ("I'll also clean up X"
+/ "while I'm here, let me also Y")</label></li>
+<li><label><input type="checkbox" />A research step ("I'll read these
+five large files first")</label></li>
+<li><label><input type="checkbox" />An action verb the prompt forbade
+(write, mutate, register, modify wiring)</label></li>
 </ul></li>
-<li><p>If your client does not support that surface cleanly, ask Codex
-to draft the two instruction sets in markdown so you can reuse them in
-fresh sessions.</p></li>
-<li><p>The builder instructions should require:</p>
-<ul>
-<li>existing repo patterns first</li>
-<li>TypeScript prop safety</li>
-<li>accessible states</li>
-<li>no invented design system</li>
-<li>AGENTS.md compliance</li>
-</ul></li>
-<li><p>The reviewer instructions should require:</p>
-<ul>
-<li>findings first, no fluff</li>
-<li>accessibility review</li>
-<li>loading/empty/error-state review</li>
-<li>long-string/null/edge-case review</li>
-<li>contract mismatch review</li>
-<li>consistency with the current Vertex Agentics / Modern UI
-direction</li>
-</ul></li>
+<li><p>If any signal fires, <strong>redirect in the plan, not in the
+code.</strong> Iterate the plan until the checklist is clean.</p></li>
+<li><p>Save your drift-signal checklist as a personal artifact — it is
+the cheapest reusable tool from this lab.</p></li>
 </ol>
-<p>Recommended prompt:</p>
-<pre class="text"><code>Create reusable builder and reviewer instructions for this repo.
-
-Builder scope:
-- React + TypeScript HR components
-- existing repo patterns first
-- AGENTS.md compliance
-- accessible states and sane defaults
-
-Reviewer scope:
-- findings-first review
-- accessibility
-- edge cases
-- error and loading states
-- contract mismatches
-- consistency with sibling components and the current Vertex Agentics / Modern UI direction
-
-If the repo/client supports `.codex/agents/`, create the files there.
-Otherwise draft the exact instruction text in markdown for later reuse.</code></pre>
+</section>
+<section id="what-you-should-see-1" class="level3">
+<h3>What You Should See</h3>
+<p>In a clean session with explicit constraints, the plan usually lands
+on the first or second pass. If it doesn't, you have learned something
+more important: <strong>drift signals appear in plan text long before
+they appear in code.</strong> Catching them in the plan costs one
+redirect prompt; catching them in the code costs a restart.</p>
 <hr />
 </section>
 </section>
-<section id="exercise-3-fresh-context-review-20-min" class="level2">
-<h2>Exercise 3: Fresh-Context Review (20 min)</h2>
+<section id="exercise-3-surgical-correction-vs-full-restart-15-min"
+class="level2">
+<h2>Exercise 3: Surgical Correction vs. Full Restart (15 min)</h2>
 <section id="goal-2" class="level3">
 <h3>Goal</h3>
-<p>Run the same component through a separate reviewer context.</p>
+<p>Decide when a redirect prompt is enough and when a fresh session is
+cheaper.</p>
 </section>
 <section id="instructions-2" class="level3">
 <h3>Instructions</h3>
 <ol type="1">
-<li><p>Start a fresh Codex session from your workspace root, or invoke
-the reviewer through your client’s delegated-agent surface if
-available.</p></li>
-<li><p>Ask the reviewer to inspect only the component:</p>
-<pre class="text"><code>Review `frontend/src/components/hr/HrEmployeeCard.tsx`.
-Focus on accessibility, error states, long-string handling, null safety, and
-consistency with existing HR components.
-Return findings only.</code></pre></li>
-<li><p>Record how many useful findings the fresh-context review
-surfaced: _____</p></li>
-<li><p>Compare:</p>
+<li><p>Two short scenarios, both drawn from the transcript. For each,
+<strong>decide redirect or restart</strong> and write the prompt you
+would use:</p>
+<p><strong>Scenario A — context already polluted.</strong> The session
+has read three large files, has been running for an hour, and just
+produced output that contradicts something it said earlier. You only
+wanted a Region scaffold.</p>
+<p><strong>Scenario B — one localized invention.</strong> The session is
+otherwise on-task. The plan looks fine except it added a
+<code>RegionService</code> layer the prompt forbade. Nothing has been
+written to disk yet.</p>
+<p>Write your decision and your prompt for each, in your own notes:</p>
+<pre><code>Scenario A: redirect / restart  (circle one)
+My prompt: ...
+
+Scenario B: redirect / restart  (circle one)
+My prompt: ...</code></pre></li>
+<li><p>Now actually run both. Open two fresh Claude Code sessions:</p>
 <ul>
-<li>same-session review: _____ findings</li>
-<li>fresh-context review: _____ findings</li>
+<li>In session 1, simulate Scenario A: ask Claude Code to read three
+unrelated large files (<code>database/hrschema.sql</code>,
+<code>lab-materials/docs/requirement.md</code>,
+<code>lab-materials/docs/technical-design-jersey-rewrite.md</code>),
+then ask for the Region plan, then <strong>try to redirect</strong> with
+whatever prompt you wrote.</li>
+<li>In session 2, simulate Scenario B: ask for the plan and gently nudge
+it to include a <code>RegionService</code> ("first plan it, then add a
+service layer for clarity"), then <strong>try to redirect</strong> away
+from the service layer with whatever prompt you wrote.</li>
 </ul></li>
-<li><p>Apply the reviewer feedback in the original implementation
-session or in a separate builder session.</p></li>
-<li><p>Re-run the review once after fixes if you want to confirm the
-issues are actually resolved.</p></li>
+<li><p>Compare the outcomes. Which redirect actually landed? Which
+session would have been cheaper to restart?</p></li>
+</ol>
+</section>
+<section id="what-you-should-see-2" class="level3">
+<h3>What You Should See</h3>
+<p>Restart usually wins when context is already polluted. The Lab 04
+lesson reapplies: a thrashed session keeps thrashing, and a redirect
+prompt that has to compete with three large files in context rarely
+wins. Redirect usually wins when the drift is one localized invention
+before any code has been written.</p>
+<blockquote>
+<p><strong>The cost lens.</strong> A fresh session is free. A redirect
+prompt is cheap. Debugging an output that drifted after you tried to
+redirect a thrashed session is expensive. Pick the cheap move first.</p>
+</blockquote>
+<p>Capture a two-row decision card in your own notes:</p>
+<pre class="text"><code>Redirect when: ...
+Restart when: ...</code></pre>
+<hr />
+</section>
+</section>
+<section id="exercise-4-writing-redirect-prompts-that-work-10-min"
+class="level2">
+<h2>Exercise 4: Writing Redirect Prompts That Work (10 min)</h2>
+<section id="goal-3" class="level3">
+<h3>Goal</h3>
+<p>Practice the two-part redirect: stop the wrong path explicitly,
+restate the correct constraints concretely.</p>
+</section>
+<section id="instructions-3" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Three weak redirect prompts are below. Each one tries to redirect
+the same drift — the agent has just proposed adding a
+<code>RegionService</code> layer. Rewrite each into a strong redirect
+prompt.</p>
+<p><strong>Weak A:</strong></p>
+<pre><code>no don&#39;t do that</code></pre>
+<p><strong>Weak B:</strong></p>
+<pre><code>go back, that&#39;s not what i asked for</code></pre>
+<p><strong>Weak C:</strong></p>
+<pre><code>please be more careful and follow the conventions</code></pre></li>
+<li><p>A strong redirect prompt usually has four parts:</p>
+<ul>
+<li>explicit stop ("do not add a service layer")</li>
+<li>restate the only files in scope ("the only files to create are:
+...")</li>
+<li>restate the original contract ("the endpoint is GET
+/app/hr/api/v1/regions returning
+HrApiResponse&lt;List<HrRegionDTO>&gt;")</li>
+<li>confirm before acting ("show me the revised plan first")</li>
+</ul></li>
+<li><p>Rewrite all three weak prompts, in your own notes. Then test one
+of them in a real Claude Code session by reproducing the drift (ask for
+a Region plan that includes a service layer) and applying your
+strong-redirect rewrite. Confirm the next plan no longer contains the
+service layer.</p></li>
+<li><p>Save your strongest rewrite as a redirect-prompt template you can
+paste into future sessions.</p></li>
+</ol>
+</section>
+<section id="what-you-should-see-3" class="level3">
+<h3>What You Should See</h3>
+<p>Vague redirects often re-trigger the same drift. The agent reads "no
+don't do that" against three previous turns of context, infers what
+"that" might mean, and frequently picks the wrong target. Specific
+redirects with named files and explicit forbids usually land on the
+first try.</p>
+<blockquote>
+<p><strong>The pattern.</strong> "Stop X. Do only Y. The contract is Z.
+Show me the plan before you act." Four sentences. Memorize the
+shape.</p>
+</blockquote>
+<hr />
+</section>
+</section>
+<section id="exercise-5-salvaging-good-work-8-min" class="level2">
+<h2>Exercise 5: Salvaging Good Work (8 min)</h2>
+<section id="goal-4" class="level3">
+<h3>Goal</h3>
+<p>Decide what to keep from a bad run and how to extract it cleanly.</p>
+</section>
+<section id="instructions-4" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Open the transcript again with your Drift Inventory from Exercise
+1 in hand. Walk the diffs the bad session produced and label each
+one:</p>
+<ul>
+<li><strong>keep</strong> — the agent got this right; you would
+re-derive it the same way</li>
+<li><strong>discard</strong> — drift output, no salvage value</li>
+<li><strong>re-derive</strong> — the answer is probably right but
+anchored on bad context; cheaper to ask a clean session for it again
+than to copy-paste</li>
+</ul></li>
+<li><p>The honest answer is usually that <strong>most "salvage"
+temptation is anchoring bias.</strong> Re-deriving from a clean prompt
+is cheaper than cherry-picking lines from a bad run, because the bad
+run's context shaped every line — including the lines that look
+fine.</p></li>
+<li><p>Open a fresh Claude Code session and ask it to do only the
+keepers, <strong>without pasting the bad transcript itself</strong>:</p>
+<pre class="text"><code>This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use `reference/` unless this chapter explicitly allows it or you need rescue help.
+
+Scaffold a read-only Region module for the HR app:
+- response DTO `HrRegionDTO` with fields: regionId, regionName
+- JDBC repository `HrRegionJdbcRepository` reading from AIHR_REGIONS
+- Jersey resource `HrRegionResource` exposing GET /app/hr/api/v1/regions, returning HrApiResponse&lt;List&lt;HrRegionDTO&gt;&gt;
+
+Do not add request DTOs, write endpoints, services, or runtime registration.
+Use HrLogHelper for error logging only.
+Show me the plan first.</code></pre></li>
+<li><p>Compare the clean-restart output to what the transcript produced.
+The clean output should match the Lab 01 conventions on the first
+try.</p></li>
+</ol>
+</section>
+<section id="what-you-should-see-4" class="level3">
+<h3>What You Should See</h3>
+<p>A clean restart usually produces a smaller, more correct slice than
+the bad run did. The "keepers" you thought you had often turn out to be
+the same lines the clean session produces anyway — which is the lesson.
+Anchoring bias makes us overvalue work in front of us; the cheap move is
+to derive again from clean context.</p>
+<blockquote>
+<p><strong>The rule.</strong> Salvage by re-deriving from a clean
+prompt, not by cherry-picking lines from the bad run. Reuse the file
+paths and contract decisions from the bad run; do not reuse its
+code.</p>
+</blockquote>
+<hr />
+</section>
+</section>
+<section id="exercise-6-capture-the-rule-2-min" class="level2">
+<h2>Exercise 6: Capture the Rule (2 min)</h2>
+<section id="goal-5" class="level3">
+<h3>Goal</h3>
+<p>Encode recovery discipline as a durable <code>CLAUDE.md</code>
+rule.</p>
+</section>
+<section id="instructions-5" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Claude Code to update <code>CLAUDE.md</code>:</p>
+<pre><code>Update CLAUDE.md by adding this section. Do not modify any other section.
+
+## Recovery Discipline
+- Read the agent&#39;s plan before it implements; drift is cheaper to catch in plan output than in code
+- Restart fresh when the session is thrashed; redirect only when the drift is one localized invention before any code is written
+- Redirect prompts must be specific: name what to stop, name the only files in scope, restate the contract, confirm before acting
+- Salvage by re-deriving from a clean prompt, not by cherry-picking lines from the bad run</code></pre></li>
+<li><p>Exit Claude Code and reopen the project so the updated rule is
+loaded for later labs.</p></li>
 </ol>
 <hr />
 </section>
 </section>
-<section id="exercise-4-capture-the-rule-10-min" class="level2">
-<h2>Exercise 4: Capture The Rule (10 min)</h2>
-<ol type="1">
-<li><p>Add a short rule block to <code>AGENTS.md</code>:</p>
-<div class="sourceCode" id="cb6"><pre
-class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Delegated Review</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>For meaningful UI or workflow changes, prefer a fresh-context review over same-session self-review</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Reviewer instructions should be findings-first and read-only in spirit</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Reusable reviewer/builder prompts or agent files belong in repo-local config, not in AGENTS.md</span></code></pre></div></li>
-<li><p>Reflect:</p>
+<section id="common-mistakes--fixes" class="level2">
+<h2>Common Mistakes &amp; Fixes</h2>
 <ul>
-<li>What did the fresh-context reviewer catch that the writer
-missed?</li>
-<li>Which reviewer specializations would matter most in your real
-codebase: accessibility, API contract, security, performance, or release
-readiness?</li>
-</ul></li>
-</ol>
+<li>Mistake: trying to redirect a thrashed session with a single short
+prompt. Fix: a thrashed session needs a fresh start, not a stronger
+redirect.</li>
+<li>Mistake: pasting the entire bad transcript into a fresh session as
+"context for the recovery." Fix: that re-imports the bad context.
+Restate the original contract from your own understanding instead.</li>
+<li>Mistake: assuming drift means the agent is broken. Fix: drift
+usually means the prompt was under-constrained or context was
+overloaded. Both are recoverable.</li>
+<li>Mistake: catching drift only at the diff stage. Fix: read the plan
+first; drift is loud in plan text and quiet in code.</li>
+</ul>
 <hr />
 </section>
 <section id="success-criteria" class="level2">
 <h2>Success Criteria</h2>
 <ul class="task-list">
-<li><label><input type="checkbox" /><code>HrEmployeeCard</code> exists
-and follows current repo patterns</label></li>
-<li><label><input type="checkbox" />Reusable reviewer and builder
-instructions were created</label></li>
-<li><label><input type="checkbox" />Fresh-context review found more or
-better issues than self-review</label></li>
-<li><label><input type="checkbox" />Reviewer feedback was
-applied</label></li>
-<li><label><input type="checkbox" /><code>AGENTS.md</code> now captures
-the delegated-review rule</label></li>
+<li><label><input type="checkbox" />Drift Inventory captured at least 4
+distinct drift moments from the transcript with earliest-intervention
+notes</label></li>
+<li><label><input type="checkbox" />You can articulate the
+redirect-vs-restart decision in one sentence</label></li>
+<li><label><input type="checkbox" />At least one strong-redirect prompt
+rewrite produced and tested in a fresh session</label></li>
+<li><label><input type="checkbox" />One clean-restart attempt produced a
+convention-compliant Region slice (matches Lab 01 Exercise 3
+checklist)</label></li>
+<li><label><input type="checkbox" /><code>CLAUDE.md</code> updated with
+Recovery Discipline section</label></li>
 </ul>
 <hr />
 </section>
 <section id="key-takeaways" class="level2">
 <h2>Key Takeaways</h2>
 <ol type="1">
-<li>Same-session self-review is weak because the session is biased
-toward its own work.</li>
-<li>Fresh context usually improves review quality immediately.</li>
-<li>Reusable reviewer instructions compound just like
-<code>AGENTS.md</code> rules do.</li>
-<li>The exact custom-agent feature surface can vary; the fresh-context
-review pattern is the durable lesson.</li>
+<li><strong>Drift is loud in plans, quiet in code.</strong> Reading plan
+output is the cheapest place to intervene.</li>
+<li><strong>A fresh session is free; a redirect on a thrashed session is
+expensive.</strong> Restart is usually the right move once context has
+filled.</li>
+<li><strong>Strong redirect prompts have four parts.</strong> Stop X. Do
+only Y. The contract is Z. Show me the plan before you act.</li>
+<li><strong>Salvage is mostly anchoring bias.</strong> Re-derive from a
+clean prompt; reuse the contract decisions, not the code.</li>
+<li><strong>Recovery discipline is durable.</strong> Encode it in
+<code>CLAUDE.md</code> so the next session starts with the rule, not the
+regret.</li>
 </ol>
+<hr />
+<details>
+<summary><strong>Recovery Path</strong> — Use this if you get stuck for more than 5 minutes</summary>
+
+<p>Stay inside the current lab. Do not scan ahead or use other
+<code>reference/</code> material unless this recovery path explicitly
+tells you to.</p>
+<p>If your Drift Inventory in Exercise 1 came up nearly empty and
+reading the transcript again is not helping, you may consult the answer
+key:</p>
+<ul>
+<li><code>reference/lab06/transcript-annotated.md</code> — the same
+transcript with the five drift moments labelled inline</li>
+</ul>
+<p>Read the annotated transcript, then <strong>return to your own
+notes</strong> and add the moments you missed with a short
+why-I-missed-it line. The point is to update your eye, not to copy the
+answer key.</p>
+<p>For Exercise 4, if your strong-redirect rewrites still feel weak
+after one try, consult:</p>
+<ul>
+<li><code>reference/lab06/redirect-prompts.md</code> — strong-redirect
+rewrites of the three weak prompts</li>
+</ul>
+<p>Then rewrite your version one more time without looking at the answer
+key.</p>
+<p>After consulting either answer key, exit Claude Code and reopen the
+project so the next lab starts cleanly.</p>
+</details>
+
 </section>
 </section>
     </main>
     <footer class="doc-footer">
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlab05.html">← Lab 05</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelab05.html">← Lab 05</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab07.html">Lab 07 →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab07.html">Lab 07 →</a>
       </nav>
     </footer>
   </div>

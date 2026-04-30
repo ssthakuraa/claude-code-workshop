@@ -3,261 +3,254 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Lab 08: Verification Loops — The Quality Multiplier</title>
+  <title>Lab 08: Parallel Sessions &amp; Isolated Workspaces</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="doc-shell">
     <header class="doc-header">
       <div class="doc-header-meta">
-        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-kicker">Claude Code HR Labs</span>
         <span class="doc-divider"></span>
         <span class="doc-page-label">Lab 08</span>
       </div>
-      <div class="doc-header-title">Lab 08: Verification Loops — The Quality Multiplier</div>
+      <div class="doc-header-title">Lab 08: Parallel Sessions & Isolated Workspaces</div>
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlab07.html">← Lab 07</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelab07.html">← Lab 07</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab09.html">Lab 09 →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab09.html">Lab 09 →</a>
       </nav>
     </header>
     <main class="doc-content">
-<section id="lab-08-verification-loops--the-quality-multiplier"
+<section id="lab-08-parallel-sessions--isolated-workspaces"
 class="level1">
-<h1>Lab 08: Verification Loops — The Quality Multiplier</h1>
+<h1>Lab 08: Parallel Sessions &amp; Isolated Workspaces</h1>
 <p><strong>Duration:</strong> 60 minutes</p>
 <blockquote>
-<p>Recommended Day 2 order: <strong>Lab 09 -&gt; Lab 08 -&gt; Lab 07
--&gt; Lab 10 -&gt; Lab 11 -&gt; optional Lab 12</strong>.</p>
+<p>Recommended Day 2 order: <strong>Lab 10 -&gt; Lab 09 -&gt; Lab 08
+-&gt; Lab 11 -&gt; Lab 12 -&gt; optional Lab 13</strong>.</p>
 </blockquote>
 <section id="learning-objective" class="level2">
 <h2>Learning Objective</h2>
-<p>You will use a verification-driven workflow: define the expected
-behavior, implement to that expectation, then verify in tests and in the
-browser. The lab uses the current learner repo surface: Jersey backend,
-PostgreSQL data, and the repo’s current frontend/browser workflow.</p>
+<p>You will run multiple Claude Code sessions at once, each in its own
+isolated <code>git worktree</code>. The goal is to see how parallel work
+compresses multi-slice delivery time without causing file
+collisions.</p>
 <hr />
 </section>
 <section id="the-key-concept" class="level2">
 <h2>The Key Concept</h2>
-<p>Without verification, Codex often gets you to "looks right." With
-verification, you can get to "proved correct."</p>
-<p>Use three kinds of checks:</p>
-<table>
-<thead>
-<tr>
-<th>Strategy</th>
-<th>How</th>
-<th>Best For</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Test-driven</td>
-<td>Write or tighten a backend test first</td>
-<td>business logic and API rules</td>
-</tr>
-<tr>
-<td>Visual</td>
-<td>Compare browser output to a concrete UI expectation</td>
-<td>components and page behavior</td>
-</tr>
-<tr>
-<td>Data-driven</td>
-<td>Verify the stored result in PostgreSQL</td>
-<td>writes and state changes</td>
-</tr>
-</tbody>
-</table>
-<p>The repeatable loop is:</p>
-<ol type="1">
-<li>define expected behavior</li>
-<li>implement</li>
-<li>verify</li>
-<li>fix</li>
-<li>verify again</li>
-</ol>
+<p>One session can usually make progress on one main slice at a time.
+Multiple independent slices go faster when each session gets its own
+isolated working directory.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /absolute/path/to/claude-workshop</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ../claude-workshop-parallel</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> ../claude-workshop-parallel/workspace-a ../claude-workshop-parallel/workspace-b ../claude-workshop-parallel/workspace-c</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree add ../claude-workshop-parallel/workspace-a</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree add ../claude-workshop-parallel/workspace-b</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree add ../claude-workshop-parallel/workspace-c</span></code></pre></div>
+<p>Each worktree carries the same <code>CLAUDE.md</code>, docs, and
+code, but the edits stay isolated until you choose what to bring
+back.</p>
+<p>If your current learner workspace came from a GitHub zip instead of
+<code>git clone</code>, make a normal Git clone of the repo before this
+lab. <code>git worktree</code> needs a real Git repository.</p>
 <hr />
 </section>
-<section id="setup" class="level2">
-<h2>Setup</h2>
-<p>Ask Codex to run a backend preflight check:</p>
-<pre class="text"><code>Run `cd backend &amp;&amp; ./build-jersey-service.sh test` as a backend preflight check.
-Tell me whether it passes before we start the exercise.</code></pre>
-<p>If you later need the live app for a visual loop, use the repo-local
-ports:</p>
-<ul>
-<li>backend <code>18082</code></li>
-<li>frontend <code>5182</code></li>
-</ul>
-<p>If those ports are already busy, treat stale repo-owned processes as
-the first suspect before calling it a feature defect. For backend
-cleanup, use
-<code>cd backend &amp;&amp; ./stop-jersey-service.sh</code>. Keep any
-local port overrides in <code>backend/.env.local</code> and
-<code>frontend/.env.local</code>.</p>
-<hr />
-</section>
-<section id="exercise-1-test-driven-backend-slice-25-min"
+<section id="exercise-1-create-isolated-workspaces-10-min"
 class="level2">
-<h2>Exercise 1: Test-Driven Backend Slice (25 min)</h2>
+<h2>Exercise 1: Create Isolated Workspaces (10 min)</h2>
 <section id="goal" class="level3">
 <h3>Goal</h3>
-<p>Write or tighten backend tests before touching the
-implementation.</p>
+<p>Set up two or three parallel working directories.</p>
 </section>
 <section id="instructions" class="level3">
 <h3>Instructions</h3>
-<ol type="1">
-<li><p>Ask Codex to write tests for the promote flow:</p>
-<pre class="text"><code>This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use `reference/` unless this chapter explicitly allows it or you need rescue help.
-
-Write backend tests for the current promote flow implementation.
-Cover:
-1. duplicate idempotency key -&gt; conflict
-2. employee not found
-3. salary above the new job&#39;s maximum
-4. happy path -&gt; employee update plus job-history write
-
-Use the current backend testing patterns.
-Do not implement the feature changes yet.</code></pre></li>
-<li><p>Run the tests:</p>
-<pre class="text"><code>Run `cd backend &amp;&amp; ./build-jersey-service.sh test`.
-Summarize the failure briefly if the intended starter gap is still present.</code></pre></li>
-<li><p>Ask Codex to implement to the test:</p>
-<pre class="text"><code>Implement the promote-flow behavior so the tests pass.
-Re-run `cd backend &amp;&amp; ./build-jersey-service.sh test` after each meaningful change.</code></pre></li>
-<li><p>Keep iterating until the backend test result is green.</p></li>
+<ol start="0" type="1">
+<li><p><strong>Commit any pending CLAUDE.md changes before creating
+worktrees.</strong> Worktrees branch from the current HEAD commit, so
+any uncommitted changes to <code>CLAUDE.md</code> will not be visible in
+them. If you have updated <code>CLAUDE.md</code> during earlier labs
+without committing, do this first:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add CLAUDE.md <span class="kw">&amp;&amp;</span> <span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;Update CLAUDE.md rules from labs 01-06&quot;</span></span></code></pre></div>
+<p>Then create the worktrees.</p></li>
+<li><p>Confirm the worktrees exist:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> ../claude-workshop-parallel/workspace-a</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> ../claude-workshop-parallel/workspace-b</span></code></pre></div></li>
+<li><p>Verify they started from the same root guidance:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span> <span class="at">-q</span> CLAUDE.md ../claude-workshop-parallel/workspace-a/CLAUDE.md</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span> <span class="at">-q</span> CLAUDE.md ../claude-workshop-parallel/workspace-b/CLAUDE.md</span></code></pre></div></li>
+<li><p>Open separate terminals:</p>
+<ul>
+<li>Terminal A -&gt;
+<code>../claude-workshop-parallel/workspace-a</code></li>
+<li>Terminal B -&gt;
+<code>../claude-workshop-parallel/workspace-b</code></li>
+<li>optional Terminal C -&gt;
+<code>../claude-workshop-parallel/workspace-c</code></li>
+</ul></li>
+<li><p>Start a Claude Code session in each workspace.</p></li>
 </ol>
 <hr />
 </section>
 </section>
-<section id="exercise-2-visual-verification-20-min" class="level2">
-<h2>Exercise 2: Visual Verification (20 min)</h2>
+<section id="exercise-2-run-two-independent-slices-in-parallel-30-min"
+class="level2">
+<h2>Exercise 2: Run Two Independent Slices In Parallel (30 min)</h2>
 <section id="goal-1" class="level3">
 <h3>Goal</h3>
-<p>Verify a UI slice against an explicit expectation instead of trusting
-the first implementation.</p>
+<p>Give each workspace a bounded, independent task.</p>
 </section>
 <section id="instructions-1" class="level3">
 <h3>Instructions</h3>
-<ol type="1">
-<li><p>Use a concrete UI target:</p>
-<pre class="text"><code>Build or refine `frontend/src/components/hr/HrEmployeeCard.tsx` so it shows:
-- avatar with initials fallback
-- employee name and job title
-- department and location
-- hire date
-- status badge
-- click-through to detail page
+<p><strong>Workspace A: Departments page</strong></p>
+<pre class="text"><code>This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use `reference/` unless this chapter explicitly allows it or you need rescue help.
 
-Keep the implementation consistent with the current Vertex Agentics / Modern UI direction already present in the repo.</code></pre></li>
-<li><p>Bring up the app if needed on:</p>
-<ul>
-<li>backend <code>18082</code></li>
-<li>frontend <code>5182</code></li>
-</ul></li>
-<li><p>Run a browser verification loop:</p>
-<pre class="text"><code>Open the page that renders `HrEmployeeCard`.
-Compare what you see against the expected structure.
-Tell me what is missing or visibly wrong.</code></pre></li>
-<li><p>Feed the differences back into Codex and verify again.</p></li>
-</ol>
+Build the Departments page for the HR app.
+
+Requirements:
+- create `frontend/src/pages/organization/DepartmentsPage.tsx`
+- follow existing list/detail layout patterns already present in the repo
+- left side: department tree
+- right side: selected department details
+- admin and HR specialist actions only where existing role patterns support them
+- use the live `/app/hr/api/v1/departments` contract</code></pre>
+<p><strong>Workspace B: Jobs page</strong></p>
+<pre class="text"><code>This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use `reference/` unless this chapter explicitly allows it or you need rescue help.
+
+Build the Jobs page for the HR app.
+
+Requirements:
+- create `frontend/src/pages/organization/JobsPage.tsx`
+- follow existing list/table/filter page patterns already present in the repo
+- show job id, title, minimum salary, and maximum salary
+- support create/edit validation for min &lt; max
+- use the live `/app/hr/api/v1/jobs` contract</code></pre>
+<p>Switch between the sessions while they work. The point is not to
+babysit one session to completion before the other starts.</p>
 <hr />
 </section>
 </section>
-<section id="exercise-3-combine-the-loop-10-min" class="level2">
-<h2>Exercise 3: Combine The Loop (10 min)</h2>
+<section id="exercise-3-validate-and-copy-back-15-min" class="level2">
+<h2>Exercise 3: Validate And Copy Back (15 min)</h2>
 <section id="goal-2" class="level3">
 <h3>Goal</h3>
-<p>Connect test-driven backend work with browser verification and
-database truth.</p>
+<p>Verify each isolated workspace, then copy back only the intended
+files.</p>
 </section>
 <section id="instructions-2" class="level3">
 <h3>Instructions</h3>
-<p>Ask Codex to summarize the correct feature loop for this repo:</p>
-<pre class="text"><code>Summarize the best verification loop for this repo when a feature changes
-backend behavior, frontend rendering, and stored data.
-Keep it to one short numbered list.</code></pre>
-<p>The expected answer should look roughly like:</p>
 <ol type="1">
-<li>tighten backend tests</li>
-<li>implement until tests pass</li>
-<li>verify the UI in the browser</li>
-<li>verify stored data with PostgreSQL queries when writes are
-involved</li>
-<li>only then mark the task done</li>
+<li><p>Ask each workspace to verify its own frontend slice:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../claude-workshop-parallel/workspace-a/frontend <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> run build</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../claude-workshop-parallel/workspace-b/frontend <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> run build</span></code></pre></div></li>
+<li><p>Compare each worktree with the main workspace:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span> <span class="at">-rq</span> . ../claude-workshop-parallel/workspace-a <span class="kw">|</span> <span class="fu">head</span> <span class="at">-50</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span> <span class="at">-rq</span> . ../claude-workshop-parallel/workspace-b <span class="kw">|</span> <span class="fu">head</span> <span class="at">-50</span></span></code></pre></div></li>
+<li><p>Before copying back, <strong>identify shared integration
+files</strong> — files that both workspaces may have changed
+independently:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span> ../claude-workshop-parallel/workspace-a/frontend/src/routes/router.tsx <span class="dt">\</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>     ../claude-workshop-parallel/workspace-b/frontend/src/routes/router.tsx</span></code></pre></div>
+<p><code>router.tsx</code> (and sometimes <code>HrSidebar.tsx</code>) is
+touched by every new page — both workspaces likely added their own
+route. If they differ, you must <strong>merge both changes</strong>, not
+copy one file over the other. Ask Claude Code to apply both workspace's
+route additions to the main workspace router rather than replacing it
+wholesale.</p></li>
+<li><p>Copy back only the intended feature files with an exact Claude
+Code prompt:</p>
+<pre class="text"><code>Compare the completed frontend changes in:
+- `../claude-workshop-parallel/workspace-a`
+- `../claude-workshop-parallel/workspace-b`
+
+Restore only the intended Lab 08 feature files into my main workspace.
+Inspect only these candidate paths before copying anything:
+- `frontend/src/pages/organization/DepartmentsPage.tsx`
+- `frontend/src/pages/organization/JobsPage.tsx`
+- `frontend/src/routes/router.tsx`
+- `frontend/src/components/hr/layout/HrSidebar.tsx`
+- `frontend/src/components/hr/layout/HrCommandPalette.tsx`
+- `frontend/src/utils/hrWorkspaceChrome.ts`
+- `frontend/src/utils/hrGlobalSearch.ts`
+
+IMPORTANT: both workspaces may have edited router.tsx independently.
+For any file edited by both workspaces, merge both sets of changes into
+the main workspace — do not copy one workspace&#39;s version over the other.
+Copy-paste new page files directly; merge shared wiring files surgically.
+Then tell me exactly which files were copied or merged.</code></pre></li>
+<li><p>Rebuild in the main workspace:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> frontend <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> run build</span></code></pre></div></li>
+<li><p>Clean up the temporary worktrees when finished:</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree remove ../claude-workshop-parallel/workspace-a</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree remove ../claude-workshop-parallel/workspace-b</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree remove ../claude-workshop-parallel/workspace-c</span></code></pre></div></li>
 </ol>
 <hr />
 </section>
 </section>
 <section id="exercise-4-capture-the-rule-5-min" class="level2">
 <h2>Exercise 4: Capture The Rule (5 min)</h2>
-<p>Ask Codex to update <code>AGENTS.md</code> with a short rule
-block:</p>
-<div class="sourceCode" id="cb8"><pre
-class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Verification</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Backend changes: prefer tests first, then implement to green</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>UI changes: verify in the browser, not only in code review</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Write paths: verify stored PostgreSQL data when behavior depends on persistence</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Do not mark work complete without verification evidence</span></code></pre></div>
-<p>Then restart or resume Codex if you want the updated rules loaded in
-a fresh session.</p>
+<ol type="1">
+<li><p>Add a short rule block to <code>CLAUDE.md</code>:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Parallel Development</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>For independent slices, use isolated <span class="in">`git worktree`</span> workspaces instead of sharing one working tree</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Validate each worktree before bringing files back to the main workspace</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Merge back only the intended files, not the whole temporary workspace</span></code></pre></div></li>
+<li><p>Reflect:</p>
+<ul>
+<li>Which backlog items in your real project could be split safely into
+isolated workspace copies?</li>
+<li>What made these two slices safe to parallelize?</li>
+</ul></li>
+</ol>
 <hr />
 </section>
 <section id="success-criteria" class="level2">
 <h2>Success Criteria</h2>
 <ul class="task-list">
-<li><label><input type="checkbox" />Backend tests were written or
-tightened before implementation</label></li>
-<li><label><input
-type="checkbox" /><code>./build-jersey-service.sh test</code> passed
-after the backend fix</label></li>
-<li><label><input type="checkbox" />A browser verification loop was run
-for the UI slice</label></li>
-<li><label><input type="checkbox" />The repo-specific verification order
-is now clear</label></li>
-<li><label><input type="checkbox" /><code>AGENTS.md</code> captures the
-verification rule</label></li>
+<li><label><input type="checkbox" />At least two isolated worktrees were
+created</label></li>
+<li><label><input type="checkbox" />Two Claude Code sessions ran against
+different worktrees</label></li>
+<li><label><input type="checkbox" />Each worktree was validated before
+merge-back</label></li>
+<li><label><input type="checkbox" />Only the intended files were copied
+into the main workspace</label></li>
+<li><label><input type="checkbox" />The main frontend still built after
+the copy-back</label></li>
 </ul>
 <hr />
 </section>
 <section id="key-takeaways" class="level2">
 <h2>Key Takeaways</h2>
 <ol type="1">
-<li>Tests are executable specifications.</li>
-<li>Browser verification catches issues code review alone will
-miss.</li>
-<li>PostgreSQL verification closes the loop for write-heavy
-behavior.</li>
-<li>Verification is what turns an okay first draft into a reliable
-change.</li>
+<li>Parallel sessions need isolated worktrees, not shared edits in one
+tree.</li>
+<li>Validation belongs in each temporary worktree before
+merge-back.</li>
+<li>Merge back only the finished files you actually want.</li>
+<li>Parallelism helps most when the slices are independent and
+bounded.</li>
 </ol>
-<hr />
-<details>
-<summary><strong>Recovery Path</strong> — Use this if the promote test loop gets stuck</summary>
-
-<p>Use this only after you have tried the student path first.</p>
-<p>For this recovery step only, review
-<code>reference/lab08/README.md</code>. That rescue path restores only
-the completed <code>promoteEmployee()</code> method snippet for
-<code>HrEmployeeCommandJdbcRepository.java</code>.</p>
-<p>Do not replace the whole repository file. Earlier and later labs
-share that file, so a full-file copy would overwrite unrelated learner
-work.</p>
-<p>After applying the rescue snippet, rerun:</p>
-<pre class="text"><code>cd backend &amp;&amp; ./build-jersey-service.sh test</code></pre>
-<p>Then continue the normal verification loop from this chapter.</p>
-</details>
-
 </section>
 </section>
     </main>
     <footer class="doc-footer">
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlab07.html">← Lab 07</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelab07.html">← Lab 07</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab09.html">Lab 09 →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab09.html">Lab 09 →</a>
       </nav>
     </footer>
   </div>

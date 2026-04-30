@@ -1,340 +1,247 @@
-# Lab 12: Release-Style Feature Slice
+# Lab 12: Enterprise Governance — Rollout Readiness, Safety Posture & Evidence
 
-**Duration:** 120-150 minutes
+**Duration:** 75 minutes
 
-## Goal
-
-Build one real release-style feature end to end:
+> Recommended Day 2 order: **Lab 10 → Lab 09 → Lab 08 → Lab 11 → Lab 12 → optional Lab 13**.
+> This file is the fifth stop in that sequence, after you already have browser,
+> API, and database verification evidence to govern.
 
-- Feature: HR Assessments Directory
-- Audience: HR specialist / manager as reviewer workflow
-- Route: `/hr/assessments`
-- Scope: new backend list API + new frontend directory page + verification + review artifacts
-- Non-goal: do not rebuild or extend the existing employee self-service `My Assessments` flow unless explicitly required
+## Learning Objective
 
-This lab is intentionally about one clean vertical slice, not about making the assessments area bigger in every direction.
+You will translate individual Claude Code success into something a team, architect group, or enablement owner could trust at scale. The focus is not just building artifacts. The focus is evidence, review roles, bounded safety posture, and rollout discipline.
 
-## Starter State
-
-The starter should **not** already contain the Lab 12 solution.
+## The Key Concepts
 
-The student is expected to build:
+### Rollout Readiness
 
-- backend endpoint
-- backend repository/query
-- backend DTO
-- backend test
-- frontend API hook/module
-- frontend page
-- route wiring
-- navigation wiring
-- verification artifacts
+Enterprise adoption usually fails from weak operating discipline, not lack of model capability. A team-ready workflow needs:
 
-If you need rescue help, use the Lab 12 escape hatch in `reference/lab12/`.
-Do not pull in unrelated files or replace whole app areas.
+- safety posture
+- review roles
+- evidence quality
+- expansion criteria
 
-## Why This Feature
+### Repo Safety Posture
 
-- It is a clean vertical slice.
-- It requires both backend and frontend work.
-- It stays in the assessment domain.
-- It avoids the current `My Assessments` entanglement.
-- It is easy to verify in API, browser, and database.
+In Claude Code, the repo-level safety configuration lives in `.claude/settings.json`:
 
-## Feature Scope
+- `permissions.allow` — tools or operations explicitly permitted without prompting
+- `permissions.deny` — tools or operations explicitly blocked
+- `mcpServers` — project-scoped MCP integrations
 
-The first slice is read-only.
+There is no `config.toml` or `approval_policy`/`sandbox_mode` key in Claude Code. The equivalent of a bounded-pilot posture is a `permissions.deny` list that restricts write operations outside the workspace. This lab should not try to recreate an old command-allowlist story. The modern repo-level safety model is a deny-first permissions block and explicit evidence.
 
-### Page requirements
+### Enterprise Governance = Safety Posture + Review Roles + Expansion Gates
 
-- Page title: `Assessments`
-- Route: `/hr/assessments`
-- Filters:
-  - employee name search
-  - review cycle
-- Table columns:
-  - employee
-  - department
-  - review cycle
-  - status
-  - reviewer
-  - goal completion
-  - competency score
-  - updated at
+Together, these create a governance layer:
 
-### Backend requirements
+```text
+Config: approval and sandbox posture for the repo
+Evidence + review: determine whether the workflow is safe to expand
+```
 
-- New assessments directory endpoint under `/app/hr/api/v1/assessments`
-- Read-only DTO for directory rows
-- JDBC repository query against `AIHR_EMPLOYEE_ASSESSMENTS` and related tables
-- Access rules:
-  - `HR_SPECIALIST` can view all assessment records
-  - `MANAGER` can view assessment records only for employees in their reporting hierarchy
-- Access control must be enforced in the backend resource/query layer, not only hidden in the UI
+---
 
-### Frontend requirements
+## Setup
 
-- New page component
-- New API client/hook
-- Route wiring
-- Sidebar entry
-- Command palette entry
-- i18n strings
-- Follow existing shell/page/table/filter patterns
+Ask Claude Code to run these compile/build checks for you:
 
-## Target Files
+```
+This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use `reference/` unless this chapter explicitly allows it or you need rescue help.
 
-The lab is easier when the student starts with the real target files instead of repo-wide discovery.
-
-### Backend files
-
-- `backend/hrapp-service/src/main/java/com/company/hr/resource/HrAssessmentResource.java`
-- `backend/hrapp-service/src/main/java/com/company/hr/repository/HrAssessmentDirectoryJdbcRepository.java`
-- `backend/hrapp-service/src/main/java/com/company/hr/dto/response/HrAssessmentDirectoryRowDTO.java`
-- `backend/hrapp-service/src/test/java/com/company/hr/resource/HrAssessmentResourceTest.java`
-- `backend/hrapp-service/src/main/java/com/company/hr/HrApplicationConfig.java`
-
-### Frontend files
-
-- `frontend/src/api/assessments.ts`
-- `frontend/src/pages/assessments/AssessmentsPage.tsx`
-- `frontend/src/routes/router.tsx`
-- `frontend/src/components/hr/layout/HrSidebar.tsx`
-- `frontend/src/components/hr/layout/HrCommandPalette.tsx`
-- `frontend/src/i18n/locales/*/assessments.json`
-- `frontend/src/i18n/locales/en-US/navigation.json`
-
-## Required Planning Artifacts
-
-The student must create these before implementation is considered complete:
-
-- `lab-materials/docs/lab12-technical-design.md`
-- `lab-materials/docs/lab12-worklist.md`
-- `lab-materials/docs/lab12-resume-prompt.md`
-- `lab-materials/docs/lab12-backend-review-assist.md`
-- `lab-materials/docs/lab12-frontend-review-assist.md`
-- `lab-materials/docs/lab12-performance-audit.md`
-- `lab-materials/docs/lab12-handoff-summary.md`
-
-Optional:
-
-- `lab-materials/docs/lab12-figma-assessments-ui-spec.md`
-
-## Lab Flow
-
-Claude Code should create a detailed phased worklist first and then follow those exact phase names consistently.
-
-Claude Code should not assume it may proceed automatically from one major phase to the next.
-After each named phase, it should hand results to the learner / engineer for review and wait for explicit approval to proceed.
-
-### Phase 1: PM Brief To Design
-
-The student gives Claude Code a PM-style requirement plus UI spec.
-Claude Code must produce:
-
-- clarified brief
-- technical design
-- detailed worklist covering implementation, reviews, audits, verification, and engineer checkpoints
-- resume prompt
-- risks and open questions
-
-No code yet.
-
-The worklist should include these named phases:
-
-- Backend Contract
-- Backend Access Control
-- Frontend Data Hook
-- Frontend Page Shell
-- Route And Navigation Wiring
-- Verification
-- Final Audit
-
-### Phase 2: Backend Contract
-
-Claude Code executes only the approved backend contract phase:
-
-- backend DTO
-- resource contract
-- repository shape
-- tests first
-- coding-agent review of backend changes
-- backend review-assist summary
-
-Then:
-
-- run `cd backend && ./build-jersey-service.sh test`
-- summarize results
-- fix obvious review findings before handoff
-- stop for learner / engineer review
-
-### Phase 3: Backend Access Control
-
-Claude Code executes only the approved backend access-control phase:
-
-- enforce `HR_SPECIALIST` all-record access
-- enforce `MANAGER` reporting-hierarchy-only access
-- keep enforcement in backend resource/query behavior
-- extend tests to cover allowed and denied cases
-
-Then:
-
-- rerun `cd backend && ./build-jersey-service.sh test`
-- summarize results
-- stop for learner / engineer review
-
-### Phase 4: Frontend Data Hook
-
-Claude Code executes only the approved frontend data-hook phase:
-
-- API module / hook
-- wire query parameters to the backend contract
-- keep frontend behavior aligned to the read-only slice
-
-Then:
-
-- run `cd frontend && npm run build`
-- summarize results
-- stop for learner / engineer review
-
-### Phase 5: Frontend Page Shell
-
-Claude Code executes only the approved page phase:
-
-- page shell
-- employee-name search
-- cycle filter
-- table columns
-- loading and empty states
-- export or saved-view behavior if included in the approved plan
-- frontend code review
-- frontend review-assist summary
-
-Then:
-
-- run `cd frontend && npm run build`
-- run browser verification
-- summarize results
-- stop for learner / engineer review
-
-### Phase 6: Route And Navigation Wiring
-
-Claude Code executes only the approved route/navigation phase:
-
-- route protection
-- sidebar entry
-- command palette entry
-- i18n labels
-
-Then:
-
-- rerun `cd frontend && npm run build`
-- rerun browser verification
-- summarize results
-- stop for learner / engineer review
-
-### Phase 7: Final Audit
-
-Claude Code executes only the approved final audit phase:
-
-- final coding-agent code review across the full feature
-- PM requirement audit
-- UX review
-- production-quality manual browser check
-- JFR analysis
-- HAR / network analysis
-- findings and recommendations documented for engineer review
-- final handoff summary
-
-## Prompt Guidance
-
-### Phase 1 prompt
-
-Ask Claude Code to:
-
-- improve the PM brief
-- produce the technical design
-- produce a detailed phased worklist
-- produce a resume prompt
-- explicitly include backend build, backend review checkpoint, frontend build, frontend review checkpoint, PM audit, UX audit, JFR/HAR review, final verification, and final handoff
-- not implement yet
-
-### Backend implementation prompt
-
-Ask Claude Code to:
-
-- execute only the approved backend phase
-- write tests first
-- run `cd backend && ./build-jersey-service.sh test`
-- generate `lab12-backend-review-assist.md`
-- stop and ask whether backend review is complete and whether to proceed to the next named phase
-
-### Frontend implementation prompt
-
-Ask Claude Code to:
-
-- execute only the approved frontend phase
-- run `cd frontend && npm run build`
-- run browser verification
-- generate `lab12-frontend-review-assist.md`
-- stop and ask whether frontend review is complete and whether to proceed to the next named phase
-
-### Final audit prompt
-
-Ask Claude Code to:
-
-- execute only the approved final audit / final verification phase
-- perform final review
-- perform final verification
-- produce the final handoff summary
-
-## Verification Requirements
-
-### Backend
-
-- automated tests
-- endpoint contract verification
-- explicit access-control verification for HR specialist and manager paths
-
-### Frontend
-
+Run these verification checks and tell me whether both succeed:
+- `cd backend && ./build-jersey-service.sh compile`
 - `cd frontend && npm run build`
-- browser verification of search, cycle filter, table rendering, and navigation
+```
 
-### Database
+Client capability notes:
 
-- verify returned assessment rows match `AIHR_*` data
-- verify manager scoping aligns with the seeded reporting hierarchy
-- verify filter behavior corresponds to real database values
+- `.claude/settings.json` changes are loaded at session start, not always hot-reloaded into an already-running Claude Code session
+- for this lab, expect to save the config, then start a fresh Claude Code session from the repo root before you judge whether the safety posture is active
+- `.claude/` can be edited directly by Claude Code if permissions allow; if not, ask Claude Code to draft the exact content and then apply it yourself
+- acceptable proof in a constrained client is: file state, smoke-helper output, and fresh-context verification where possible; do not pretend a missing live prompt means the repo config is absent
 
-## Out Of Scope
+---
 
-- editing assessment entries
-- submission workflow
-- employee self-service create/edit flow
-- major schema redesign
-- extending the old `My Assessments` page instead of building the reviewer directory slice
+## Exercise 1: Write the Rollout Recommendation (15 min)
+
+### Goal
+Create a concise rollout recommendation for a skeptical enterprise audience.
+
+### Instructions
+
+1. Ask Claude Code to generate a short rollout recommendation:
+   ```
+   This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use `reference/` unless this chapter explicitly allows it or you need rescue help.
+
+   Write a rollout recommendation for introducing Claude Code into this HR repo.
+   It must answer:
+   1. who should use it first
+   2. what repo safety posture is safe enough for the first wave
+   3. what review roles are mandatory
+   4. what evidence is required before expansion
+   5. what stop conditions should pause the rollout
+   ```
+
+2. **Review the recommendation.** It should be practical, slightly conservative, and tied to real observed workflow risks from the course.
+
+---
+
+## Exercise 2: Define the Evidence Package (20 min)
+
+### Goal
+Define the evidence package a team lead would need before approving broader use.
+
+### Instructions
+
+1. Ask Claude Code to produce an evidence checklist:
+   ```
+   Create an enterprise evidence checklist for this repo.
+   Include:
+   - implementation evidence
+   - test evidence
+   - browser verification evidence
+   - data verification evidence
+   - code-review evidence
+   - rollback or stop-condition evidence
+   ```
+
+2. **Review the checklist.** Ask whether each evidence item reduces a real failure mode or just adds ceremony.
+
+3. Ask Claude Code one more question:
+   ```
+   Which pieces of this evidence package are mandatory before expansion,
+   and which are optional for a first bounded pilot?
+   ```
+
+---
+
+## Exercise 3: Define the Review Model (15 min)
+
+### Goal
+Define the review model and bounded pilot criteria.
+
+### Instructions
+
+1. Ask Claude Code to define the review model:
+   ```
+   Define the review model for a bounded Claude Code pilot in this repo.
+   Name:
+   - learner/self-review responsibilities
+   - peer or senior colleague review responsibilities
+   - tech lead / architect review responsibilities
+   - the conditions required before expanding the pilot
+   ```
+
+2. **Review the model.** Ask whether any role is overloaded or whether any important sign-off is missing.
+
+3. **Discussion:** What reviewer roles already exist in your organization, and which of them would actually need evidence from this workflow?
+
+---
+
+## Exercise 4: Define the Repo Safety Posture (20 min)
+
+### Goal
+Configure a bounded-pilot safety posture using the current Claude Code repo config surface.
+
+### Instructions
+
+1. Ask Claude Code about the current repo safety posture:
+   ```
+   Read `.claude/settings.json` if it exists and summarize the current repo safety posture.
+   Tell me:
+   - what permissions.allow entries are present
+   - what permissions.deny entries are present
+   - whether Playwright MCP is configured under mcpServers
+   ```
+
+2. Ask Claude Code to draft or apply a bounded-pilot config:
+   ```
+   Update `.claude/settings.json` for a bounded pilot.
+   Preserve any existing sections already present (especially mcpServers if
+   Lab 10 already created it).
+   Do not invent unrelated keys unless they already exist in the file.
+
+   Add or confirm a permissions block that:
+   - denies write operations outside the workspace (equivalent of sandbox-write posture)
+   - allows in-repo build and test commands
+
+   Explain what those settings mean in practice for this repo.
+
+   If my client cannot edit `.claude/` directly, draft the exact JSON content for
+   me and tell me where to place it.
+   ```
+
+   The important point is not an old-style command allowlist. The important point is that the repo now has an explicit bounded-pilot permissions posture.
+
+3. **Reload Claude Code so the repo settings are active.** This is a manual learner action in the client:
+   ```
+   Exit the current Claude Code session.
+   Restart Claude Code from the repo root (there is no resume command — re-open the project).
+   Ask Claude Code to read `.claude/settings.json` and summarize the active
+   permissions and MCP settings before you run the checks below.
+   ```
+
+4. **Test the posture with Claude Code:**
+   ```
+   From the repo root, run these checks and tell me which ones prompted,
+   which ones ran, and which ones were blocked:
+
+   cd backend && ./build-jersey-service.sh test
+   rm -rf /tmp/some-test-folder
+   cp CLAUDE.md /tmp/lab11-agents-copy.md
+   ```
+
+   Expected direction:
+
+   - the in-repo build command should usually run inside the bounded pilot posture
+   - destructive or out-of-repo operations should usually prompt or be blocked by the client posture
+
+   If your environment still does not show prompts after the restart:
+
+   - read `.claude/settings.json` and confirm the permissions posture is present
+   - record that live prompt enforcement was not observable in this client
+   - continue the lab using the configured repo safety posture as the governance artifact
+
+## Exercise 5: Final Reflection (5 min)
+
+1. Add to `CLAUDE.md`:
+   ```markdown
+   ## Enterprise Rollout
+   - Start with a bounded pilot, not broad rollout
+   - Require explicit evidence before expanding
+   - Name review roles and stop conditions
+
+   ## Claude Code Safety Posture
+   - Use `.claude/settings.json` permissions block for repo safety posture
+   - Keep a deny-first bounded pilot until the evidence is stronger
+   - Re-verify the repo posture from a fresh session before you trust it
+   ```
+
+2. **Reflect:** The three governance layers are now in place:
+
+   - **Repo safety posture** (this lab): deny-first permissions block in `.claude/settings.json`
+   - **Evidence + review** (this lab): bounded rollout discipline
+   - **Verification stack** (Labs 08-10): tests, browser checks, and data checks
+
+---
 
 ## Success Criteria
 
-- technical design exists before coding
-- worklist and resume prompt exist
-- backend tests pass
-- frontend build passes
-- directory page works in browser
-- sidebar and command palette links work
-- API, browser, and database results align
-- final handoff summary exists
+- [ ] A bounded rollout recommendation exists
+- [ ] An evidence checklist exists
+- [ ] A named review model exists
+- [ ] `.claude/settings.json` expresses a bounded-pilot permissions posture without destroying any existing config sections, especially MCP config already added earlier
+- [ ] Live enforcement was either observed after restart or recorded as a client limitation
+- [ ] You can explain approval posture, sandbox posture, review roles, evidence, and stop conditions
 
-## Recommendation
+---
 
-This lab should stay a read-only first slice.
+## Key Takeaways
 
-That keeps Lab 12:
+1. Enterprise rollout needs bounded scope; start with a conservative pilot, not a broad mandate.
+2. Current Claude Code repo safety is expressed through `permissions.allow` / `permissions.deny` in `.claude/settings.json` and explicit verification, not an old command-allowlist story.
+3. Stop conditions matter; if you cannot say what pauses expansion, the rollout is not ready.
+4. Governance is architecture work, not admin overhead added after the fact.
 
-- realistic
-- bounded
-- finishable
-- easy to verify
-
-The strongest solutions are the ones that keep the reviewer workflow clearly separate from the employee self-service assessment flow.
+---

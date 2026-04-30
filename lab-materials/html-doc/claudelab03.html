@@ -10,15 +10,15 @@
   <div class="doc-shell">
     <header class="doc-header">
       <div class="doc-header-meta">
-        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-kicker">Claude Code HR Labs</span>
         <span class="doc-divider"></span>
         <span class="doc-page-label">Lab 03</span>
       </div>
       <div class="doc-header-title">Lab 03: Skills & Reusable Workflows — Repo Skills</div>
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlab02.html">← Lab 02</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelab02.html">← Lab 02</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab04.html">Lab 04 →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab04.html">Lab 04 →</a>
       </nav>
     </header>
     <main class="doc-content">
@@ -40,12 +40,12 @@ why encoding patterns is the #1 productivity multiplier.</p>
 <section id="skills" class="level3">
 <h3>Skills</h3>
 <ul>
-<li>Skills are reusable, scoped instruction packs for Codex.</li>
-<li>Unlike AGENTS.md (loaded every session), skills are selective and
+<li>Skills are reusable, scoped instruction packs for Claude Code.</li>
+<li>Unlike CLAUDE.md (loaded every session), skills are selective and
 task-specific — keeping context lean.</li>
 <li>They can include templates, scripts, and reference files.</li>
 <li>For this lab, repo-scoped skills live under
-<code>.agents/skills/</code>.</li>
+<code>.claude/commands/</code>.</li>
 <li><code>SKILL.md</code> is required. Optional metadata can live under
 <code>agents/openai.yaml</code>.</li>
 </ul>
@@ -53,7 +53,7 @@ task-specific — keeping context lean.</li>
 <section id="reusable-workflow-artifacts" class="level3">
 <h3>Reusable Workflow Artifacts</h3>
 <ul>
-<li>In Codex, a skill is the cleanest repo-native way to package a
+<li>In Claude Code, a skill is the cleanest repo-native way to package a
 repeated workflow.</li>
 <li>That means this lab uses a second skill for verification instead of
 a loose markdown command note.</li>
@@ -64,10 +64,10 @@ it.</li>
 <section id="the-agent-concept" class="level3">
 <h3>The Agent Concept</h3>
 <ul>
-<li>Before Lab 06 introduces delegated reviewer/builder agents, treat
-your main Codex session as the primary agent.</li>
+<li>Before Lab 07 introduces delegated reviewer/builder agents, treat
+your main Claude Code session as the primary agent.</li>
 <li>Skills help that agent stay consistent without bloating
-AGENTS.md.</li>
+CLAUDE.md.</li>
 </ul>
 </section>
 <section id="the-rule" class="level3">
@@ -89,7 +89,8 @@ pain of re-explaining patterns.</p>
 <section id="instructions" class="level3">
 <h3>Instructions</h3>
 <ol type="1">
-<li><p>Ask Codex to scaffold the Country backend module manually:</p>
+<li><p>Ask Claude Code to scaffold the Country backend module
+manually:</p>
 <pre><code>First inspect the current HrDepartment/HrJob repository and resource files so the generated read shape matches the starter tree.
 Then inspect the promote or transfer flow in HrEmployeeResource and
 HrEmployeeCommandJdbcRepository so the generated write-path conventions match
@@ -100,7 +101,7 @@ Scaffold the Country reference module for the HR app.
 - HrCountryJdbcRepository following existing JDBC patterns
 - HrCountryResource at /app/hr/api/v1/countries
 - CRUD operations aligned to the current Jersey/JDBC backend
-Follow AGENTS.md conventions: Hr prefix, HrLogHelper, HrApiResponse envelope,
+Follow CLAUDE.md conventions: Hr prefix, HrLogHelper, HrApiResponse envelope,
 PostgreSQL + AIHR_* runtime assumptions, and current backend architecture.</code></pre></li>
 <li><p><strong>Count the prompt length.</strong> You had to
 re-specify:</p>
@@ -111,7 +112,7 @@ repository, Jersey resource, and any wiring)</li>
 PostgreSQL/Jersey runtime shape)</li>
 <li>The table mapping and field details</li>
 </ul></li>
-<li><p>If Codex missed anything, you'll need <strong>follow-up
+<li><p>If Claude Code missed anything, you'll need <strong>follow-up
 prompts</strong> to fix it. Count those too.</p></li>
 <li><p><strong>Total prompt count:</strong> _____ (likely 2–4 prompts to
 get it right)</p></li>
@@ -132,18 +133,19 @@ mostly-repeated instructions.</p>
 <section id="instructions-1" class="level3">
 <h3>Instructions</h3>
 <ol type="1">
-<li><p>Ask Codex to create a draft skill directory in the workspace:</p>
-<pre><code>Create the directory `.agents/skills/scaffold-reference-module`.</code></pre></li>
-<li><p>Ask Codex to create the skill based on the Region + Country
+<li><p>Ask Claude Code to create a draft skill directory in the
+workspace:</p>
+<pre><code>Create the directory `.claude/commands/scaffold-reference-module`.</code></pre></li>
+<li><p>Ask Claude Code to create the skill based on the Region + Country
 patterns:</p>
-<pre><code>Create a skill at .agents/skills/scaffold-reference-module/SKILL.md
+<pre><code>Create a skill at .claude/commands/scaffold-reference-module/SKILL.md
 that encodes our backend reference-module scaffolding pattern.
 The skill should:
 
 1. Accept parameters: module name, endpoint path, table/query shape, key fields
 2. Generate the current layers we use here:
    DTO/request objects, JDBC repository, Jersey resource, and needed wiring
-3. Follow all AGENTS.md conventions automatically
+3. Follow all CLAUDE.md conventions automatically
 4. Include an out-of-scope section so it does not overreach
 
 Base it on the Region slice you already have plus the Country slice you just built,
@@ -153,7 +155,7 @@ naming, and logging expectations).</code></pre></li>
 <li><p><strong>Review the generated SKILL.md.</strong> From another
 terminal, you can inspect it with:</p>
 <div class="sourceCode" id="cb4"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> /absolute/path/to/codex-workshop/.agents/skills/scaffold-reference-module/SKILL.md</span></code></pre></div>
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> /absolute/path/to/claude-workshop/.claude/commands/scaffold-reference-module/SKILL.md</span></code></pre></div>
 <p>It should start with a metadata block like:
 <code>name: scaffold-reference-module</code> and
 <code>description: Scaffold an HR reference module following the current Jersey/JDBC project conventions</code>,
@@ -179,8 +181,8 @@ corrections.</p>
 <section id="instructions-2" class="level3">
 <h3>Instructions</h3>
 <ol type="1">
-<li><p><strong>Start a fresh context</strong> by opening a new Codex
-session or resetting the current one if your client supports
+<li><p><strong>Start a fresh context</strong> by opening a new Claude
+Code session or resetting the current one if your client supports
 that.</p></li>
 <li><p>Use the skill to scaffold Location:</p>
 <pre><code>Use the scaffold-reference-module skill to scaffold the Location reference module.
@@ -196,10 +198,10 @@ Core fields:
 <ul>
 <li>Prompts needed in Exercise 1: _____ (2–4)</li>
 <li>Prompts needed with skill: <strong>1</strong></li>
-<li>Did Codex follow all conventions? (Hr prefix, logging, response
-envelope, etc.)</li>
+<li>Did Claude Code follow all conventions? (Hr prefix, logging,
+response envelope, etc.)</li>
 </ul></li>
-<li><p>To verify, ask Codex:</p>
+<li><p>To verify, ask Claude Code:</p>
 <pre><code>Run `cd backend &amp;&amp; ./build-jersey-service.sh compile` and tell me whether the
 Location module compiles cleanly.
 Use the backend wrapper, not raw `mvn`.</code></pre></li>
@@ -223,10 +225,10 @@ class="level2">
 <section id="instructions-3" class="level3">
 <h3>Instructions</h3>
 <ol type="1">
-<li><p>Ask Codex to create the second skill directory:</p>
-<pre><code>Create the directory `.agents/skills/run-tests`.</code></pre></li>
-<li><p>Ask Codex to create the verification skill:</p>
-<pre><code>Create .agents/skills/run-tests/SKILL.md that standardizes how we ask Codex
+<li><p>Ask Claude Code to create the second skill directory:</p>
+<pre><code>Create the directory `.claude/commands/run-tests`.</code></pre></li>
+<li><p>Ask Claude Code to create the verification skill:</p>
+<pre><code>Create .claude/commands/run-tests/SKILL.md that standardizes how we ask Claude Code
 to run and summarize verification in this repo.
 The skill should:
 1. Run backend unit tests via `cd backend &amp;&amp; ./build-jersey-service.sh test`
@@ -245,14 +247,14 @@ The skill should:
 <section id="exercise-5-capture-the-rule-5-min" class="level2">
 <h2>Exercise 5: Capture the Rule (5 min)</h2>
 <ol type="1">
-<li><p>Ask Codex to update <code>AGENTS.md</code> in the project root of
-your local workspace by adding:</p>
+<li><p>Ask Claude Code to update <code>CLAUDE.md</code> in the project
+root of your local workspace by adding:</p>
 <pre><code>## Skills &amp; Commands
-- Repeated backend scaffolding belongs in a repo skill under `.agents/skills/`, not in AGENTS.md
+- Repeated backend scaffolding belongs in a repo skill under `.claude/commands/`, not in CLAUDE.md
 - Repeated verification belongs in a reusable skill such as `run-tests`</code></pre></li>
-<li><p>After Codex updates <code>AGENTS.md</code>, exit Codex and use
-the printed resume command so the updated rules are loaded in the next
-session.</p></li>
+<li><p>After Claude Code updates <code>CLAUDE.md</code>, exit Claude
+Code and use the printed resume command so the updated rules are loaded
+in the next session.</p></li>
 <li><p>Reflect: <em>What other patterns in your real codebase could
 become skills?</em></p></li>
 </ol>
@@ -262,14 +264,14 @@ become skills?</em></p></li>
 <h2>Success Criteria</h2>
 <ul class="task-list">
 <li><label><input type="checkbox" />The scaffold skill exists in
-<code>.agents/skills/scaffold-reference-module/SKILL.md</code></label></li>
+<code>.claude/commands/scaffold-reference-module/SKILL.md</code></label></li>
 <li><label><input type="checkbox" />Location module scaffolded with one
 prompt, zero corrections</label></li>
 <li><label><input type="checkbox" />A reusable run-tests skill exists
 and is usable</label></li>
 <li><label><input type="checkbox" />Manual scaffolding (Exercise 1)
 required 2+ prompts; skill required 1</label></li>
-<li><label><input type="checkbox" />AGENTS.md updated with skill/command
+<li><label><input type="checkbox" />CLAUDE.md updated with skill/command
 references</label></li>
 </ul>
 <hr />
@@ -279,8 +281,8 @@ references</label></li>
 <ol type="1">
 <li><strong>Skills compound engineering</strong> — define the pattern
 once, reuse it N times without context drift</li>
-<li><strong>Skills are on-demand, AGENTS.md is always-on</strong> — use
-skills for large patterns that would bloat AGENTS.md</li>
+<li><strong>Skills are on-demand, CLAUDE.md is always-on</strong> — use
+skills for large patterns that would bloat CLAUDE.md</li>
 <li><strong>Reusable workflows belong in skills</strong> — if you do it
 more than once a day, package it as a repo skill</li>
 <li><strong>Team-shared in the repo</strong> — checked-in skill sources
@@ -295,18 +297,18 @@ let the whole team benefit.</li>
 to.</p>
 <p>If the skill draft wanders, reset to the smallest safe request:</p>
 <pre class="text"><code>Read only these current files first:
-- `AGENTS.md`
-- `lab-materials/codexlab03.md`
+- `CLAUDE.md`
+- `lab-materials/claudelab03.md`
 - the existing `HrDepartment*` and `HrJob*` backend files you need for examples
 
 Then create:
-- `.agents/skills/scaffold-reference-module/SKILL.md`
-- `.agents/skills/run-tests/SKILL.md`
+- `.claude/commands/scaffold-reference-module/SKILL.md`
+- `.claude/commands/run-tests/SKILL.md`
 
 Do not edit unrelated files.
 Keep the skill instructions short, concrete, and repo-specific.</code></pre>
 <p>Once the skill files exist, rerun Exercise 5 and add the rule block
-to <code>AGENTS.md</code>.</p>
+to <code>CLAUDE.md</code>.</p>
 </details>
 
 </section>
@@ -314,9 +316,9 @@ to <code>AGENTS.md</code>.</p>
     </main>
     <footer class="doc-footer">
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlab02.html">← Lab 02</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelab02.html">← Lab 02</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab04.html">Lab 04 →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab04.html">Lab 04 →</a>
       </nav>
     </footer>
   </div>

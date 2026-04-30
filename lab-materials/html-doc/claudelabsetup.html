@@ -10,7 +10,7 @@
   <div class="doc-shell">
     <header class="doc-header">
       <div class="doc-header-meta">
-        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-kicker">Claude Code HR Labs</span>
         <span class="doc-divider"></span>
         <span class="doc-page-label">Setup</span>
       </div>
@@ -18,7 +18,7 @@
       <nav class="doc-nav" aria-label="Lab navigation">
   <a class="doc-nav-link doc-nav-prev" href="student-workspace-guide.html">← Start Here</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab01.html">Lab 01 →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab01.html">Lab 01 →</a>
       </nav>
     </header>
     <main class="doc-content">
@@ -29,441 +29,164 @@ class="level1">
 <hr />
 <section id="what-you-will-achieve" class="level2">
 <h2>What You Will Achieve</h2>
-<p>This chapter gets your learner machine and your local repo workspace
-ready before Lab 01. You will verify local prerequisites, confirm the
-current PostgreSQL details, and prove that the application can build,
-run, and open successfully with the repo's current command surface.</p>
-<p>Most steps are things you will ask Codex to do and then review. A few
-steps are intentionally manual, such as checking your machine details,
-confirming database values, and restarting Codex when a later chapter
-requires it.</p>
-<p>Before you begin:</p>
-<ul>
-<li>read <a href="./student-workspace-guide.html">Start Here: Learner
-Workspace Guide</a></li>
-<li>stay on the current repo commands and reserved lab ports</li>
-<li>treat this lab as bring-up only, not feature work</li>
-</ul>
+<p>By the end of this chapter your machine will have all required tools
+installed, the application database loaded, and the backend and frontend
+running. You will confirm everything with a single verification command
+that prints a setup receipt.</p>
+<p>The setup is done by Claude Code — not by a long manual checklist.
+This is intentional: watching Claude Code diagnose and configure a real
+environment is itself the first lesson of this workshop.</p>
+<hr />
 </section>
-<section id="choose-your-workspace-root" class="level2">
-<h2>Choose Your Workspace Root</h2>
-<p>You can start from either:</p>
-<ul>
-<li>a normal Git clone of the repo</li>
-<li>a GitHub zip that you extract locally</li>
-</ul>
-<p>Use any directory that works on your machine, for example:</p>
+<section id="before-you-begin" class="level2">
+<h2>Before You Begin</h2>
+<p>Read <a href="./student-workspace-guide.html">Start Here: Learner
+Workspace Guide</a> first. It explains the workspace layout and the
+rules that apply across all labs.</p>
+<hr />
+</section>
+<section id="step-1--install-claude-code" class="level2">
+<h2>Step 1 — Install Claude Code</h2>
+<p>Claude Code is the only thing you need to install manually.
+Everything else is handled by the setup prompt in Step 3.</p>
 <div class="sourceCode" id="cb1"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="st">&quot;</span><span class="va">$HOME</span><span class="st">/projects&quot;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$HOME</span><span class="st">/projects&quot;</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Option A: Git clone</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="op">&lt;</span>repo-url<span class="op">&gt;</span> codex-workshop</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> codex-workshop</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Option B: GitHub zip</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the zip somewhere local, then cd into the extracted repo root</span></span></code></pre></div>
-<p>From this point on, "workspace root" means your actual local repo
-path, for example:</p>
-<ul>
-<li><code>/home/yourname/projects/codex-workshop</code></li>
-<li><code>/scratch/training/codex-workshop</code></li>
-</ul>
-<p>The only requirement is that your workspace root contains:</p>
-<ul>
-<li><code>AGENTS.md</code></li>
-<li><code>backend/</code></li>
-<li><code>frontend/</code></li>
-<li><code>database/</code></li>
-<li><code>lab-materials/</code></li>
-<li><code>lab-materials/docs/</code> within it</li>
-</ul>
-</section>
-<section id="setup-checklist" class="level2">
-<h2>Setup Checklist</h2>
-<p>These are mostly manual learner checks before the main Codex bring-up
-prompts begin.</p>
-<ul class="task-list">
-<li><label><input type="checkbox" />Open a terminal in the workspace
-root</label>
-<ul>
-<li>Now change into that workspace before running the commands
-below:</li>
-</ul>
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install <span class="at">-g</span> @anthropic-ai/claude-code</span></code></pre></div>
+<p>Or download the desktop app from <strong>claude.ai/code</strong>.</p>
+<p>Verify it is installed:</p>
 <div class="sourceCode" id="cb2"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /absolute/path/to/codex-workshop</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">pwd</span></span></code></pre></div></li>
-<li><label><input type="checkbox" />If you used a Git clone, confirm Git
-is available:</label>
-<div class="sourceCode" id="cb3"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">--version</span></span></code></pre></div>
-Expected result:
-<ul>
-<li>a recent Git version prints successfully</li>
-</ul></li>
-<li><label><input type="checkbox" />Confirm Codex launches:</label>
-<div class="sourceCode" id="cb4"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">codex</span> <span class="at">--help</span></span></code></pre></div>
-Expected result:
-<ul>
-<li>help text prints successfully; you are not starting the interactive
-Codex session yet</li>
-</ul></li>
-<li><label><input type="checkbox" />Confirm the machine name:</label>
-<div class="sourceCode" id="cb5"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hostname</span></span></code></pre></div>
-Expected result:
-<ul>
-<li>a single machine name</li>
-</ul></li>
-<li><label><input type="checkbox" />Confirm the network identity that
-other machines may need:</label>
-<div class="sourceCode" id="cb6"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hostname</span> <span class="at">-f</span> <span class="kw">||</span> <span class="fu">hostname</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hostname</span> <span class="at">-I</span> <span class="kw">||</span> <span class="ex">ip</span> addr <span class="kw">||</span> <span class="ex">ifconfig</span></span></code></pre></div>
-Any one successful command is enough for this checklist step. This step
-is optional if you will only review the app inside the Linux VM. It
-matters when you want Codex to adjust frontend host settings so
-<code>hostname:port</code> works from another machine.</li>
-<li><label><input type="checkbox" />Confirm JDK 21 is available for
-backend work:</label>
-<div class="sourceCode" id="cb7"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="va">JAVA_HOME</span><span class="op">=</span>/usr/lib/jvm/java-21-openjdk <span class="va">PATH</span><span class="op">=</span>/usr/lib/jvm/java-21-openjdk/bin:<span class="va">$PATH</span> <span class="ex">java</span> <span class="at">-version</span></span></code></pre></div>
-Expected result:
-<ul>
-<li>Java 21 prints successfully</li>
-</ul></li>
-<li><label><input type="checkbox" />Confirm Maven is available:</label>
-<div class="sourceCode" id="cb8"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">mvn</span> <span class="at">-version</span></span></code></pre></div>
-Expected result:
-<ul>
-<li>Maven prints successfully</li>
-</ul></li>
-<li><label><input type="checkbox" />Confirm Node and npm are available
-for the frontend:</label>
-<div class="sourceCode" id="cb9"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">node</span> <span class="at">--version</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> <span class="at">--version</span></span></code></pre></div>
-Expected result:
-<ul>
-<li>both commands print successfully</li>
-</ul></li>
-<li><label><input type="checkbox" />Confirm <code>psql</code> is
-available for the active PostgreSQL workflow:</label>
-<div class="sourceCode" id="cb10"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">psql</span> <span class="at">--version</span></span></code></pre></div>
-Expected result:
-<ul>
-<li>PostgreSQL client version prints successfully</li>
-</ul></li>
-<li><label><input type="checkbox" />Confirm the repo control-plane
-directory can exist for later labs:</label>
-<div class="sourceCode" id="cb11"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">test</span> <span class="at">-f</span> .codex <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">&quot;.codex is a file and must be corrected before continuing&quot;</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> .codex</span></code></pre></div>
-Expected result:
-<ul>
-<li><code>.codex/</code> exists as a directory in the workspace
-root</li>
-</ul></li>
-<li><label><input type="checkbox" />Review the current non-secret
-database values:</label>
-<div class="sourceCode" id="cb12"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-n</span> <span class="st">&#39;/^AIHR_DB_/p&#39;</span> dbdetails.md <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;/PASSWORD/d&#39;</span></span></code></pre></div>
-Expected result:
-<ul>
-<li>host, port, database, and user are visible</li>
-<li>password is not echoed</li>
-</ul></li>
-</ul>
-<p>If any required tool is missing, install it before continuing. For a
-public GitHub workflow, this is normal bring-up work, not a lab
-defect.</p>
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> <span class="at">--help</span></span></code></pre></div>
+<p>Expected result: help text prints. You are not starting an
+interactive session yet.</p>
+<hr />
 </section>
-<section id="postgresql-server-preparation" class="level2">
-<h2>PostgreSQL Server Preparation</h2>
-<p>Before you run the local bootstrap script or ask Codex to load schema
-or demo data, make sure your local PostgreSQL server exists and the
-learner database values from <code>dbdetails.md</code> already work.</p>
-<p>Use this order and do not skip ahead:</p>
-<ol type="1">
-<li>install PostgreSQL server on your machine if it is not installed
-yet</li>
-<li>start the PostgreSQL service</li>
-<li>create the learner DB user and database from
-<code>dbdetails.md</code></li>
-<li>only after that, load <code>database/hrschema.sql</code></li>
-<li>then load <code>database/hrdemo.sql</code></li>
-</ol>
-<p>For the current learner values in this repo, that means:</p>
-<ul>
-<li>database: <code>hrdb</code></li>
-<li>user: <code>hrapp</code></li>
-<li>PostgreSQL port: <code>5432</code></li>
-</ul>
-<p>For a normal local PostgreSQL install, <code>5432</code> is the usual
-default port. If your machine already has PostgreSQL running on a
-different port, update <code>dbdetails.md</code> first so the learner
-docs and later <code>psql</code> commands match your real local
-environment.</p>
-<p>One simple local setup example is:</p>
-<div class="sourceCode" id="cb13"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> <span class="at">-u</span> postgres psql <span class="at">-c</span> <span class="st">&quot;CREATE USER hrapp WITH PASSWORD &#39;hrapp&#39;;&quot;</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> <span class="at">-u</span> postgres psql <span class="at">-c</span> <span class="st">&quot;CREATE DATABASE hrdb OWNER hrapp;&quot;</span></span></code></pre></div>
-<p>If the role or database already exists, PostgreSQL will tell you. In
-that case, inspect the current state and continue with the matching
-local values instead of creating duplicates.</p>
-<p>Before loading schema or demo data, verify the connection works:</p>
-<div class="sourceCode" id="cb14"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="va">PGPASSWORD</span><span class="op">=</span>hrapp <span class="ex">psql</span> <span class="at">-h</span> localhost <span class="at">-U</span> hrapp <span class="at">-d</span> hrdb <span class="at">-c</span> <span class="st">&quot;select current_user, current_database();&quot;</span></span></code></pre></div>
-<p>Expected result:</p>
-<ul>
-<li>current user is <code>hrapp</code></li>
-<li>current database is <code>hrdb</code></li>
-</ul>
-<p>If that command does not work, stop there and finish your local
-PostgreSQL setup first. Read the PostgreSQL setup instructions for your
-machine and keep working until command-line access works with the
-learner app user and database.</p>
-<p>Do not continue to schema or demo-data loading until this kind of
-command works cleanly:</p>
-<div class="sourceCode" id="cb15"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="va">PGPASSWORD</span><span class="op">=</span>hrapp <span class="ex">psql</span> <span class="at">-h</span> localhost <span class="at">-U</span> hrapp <span class="at">-d</span> hrdb <span class="at">-c</span> <span class="st">&quot;select current_user, current_database();&quot;</span></span></code></pre></div>
-</section>
-<section id="required-local-bootstrap" class="level2">
-<h2>Required Local Bootstrap</h2>
-<p>After PostgreSQL is installed, running, and reachable from
-<code>psql</code>, run this before you start Codex, before you start the
-backend or frontend, and before you change any local port values:</p>
-<div class="sourceCode" id="cb16"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./lab-materials/setup-local-config.sh</span></span></code></pre></div>
-<p>Expected result:</p>
-<ul>
-<li>required tools are found</li>
-<li><code>backend/.env.local</code> exists</li>
-<li><code>frontend/.env.local</code> exists</li>
-<li>the script prints the effective local config values it will use</li>
-</ul>
-<p>If the script reports a missing required tool, install that tool
-first and then run the script again.</p>
-</section>
-<section id="the-first-codex-bring-up-prompt" class="level2">
-<h2>The First Codex Bring-Up Prompt</h2>
-<p>In this repo, <code>dbdetails.md</code> already carries the active
-local PostgreSQL connection values. The first learner task is not to
-convert legacy connection placeholders. It is to make Codex inspect the
-current workspace conservatively and prove that the current baseline is
-ready.</p>
-<p>Before you ask Codex to do database work:</p>
-<ol type="1">
-<li>verify the workspace root is your actual local repo path</li>
-<li>verify the <code>dbdetails.md</code> values match your intended
-local environment</li>
-<li>verify PostgreSQL server is installed and the DB user/database
-already exist for those values</li>
-<li>make sure the app-user <code>psql -h ... -U ... -d ...</code>
-connection check already works before you continue</li>
-<li>do not ask Codex to rewrite unrelated docs or code during setup</li>
-<li>use <code>psql</code> plus <code>database/hrschema.sql</code> and
-<code>database/hrdemo.sql</code> as the setup path</li>
-<li>run the database steps sequentially: connection check, schema, demo
-data, then verification query</li>
-<li>do not assume repo-bundled tooling exists under
-<code>runtime/</code></li>
-</ol>
-</section>
-<section id="default-lab-ports" class="level2">
-<h2>Default Lab Ports</h2>
-<p>Default lab ports are backend <code>18082</code> and frontend
-<code>5182</code>. These defaults are reserved to reduce conflicts
-during lab preparation and validation.</p>
-<p>If these defaults work on your machine, do not change anything.
-Continue to the next step.</p>
-<p>If you need different ports, change only your local config files. Do
-not edit application source code.</p>
-<p>Backend local config example in <code>backend/.env.local</code>:</p>
-<div class="sourceCode" id="cb17"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="va">JAVA_HOME</span><span class="op">=</span>/usr/lib/jvm/java-21-openjdk</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="va">HR_APP_PORT</span><span class="op">=</span>18082</span></code></pre></div>
-<p>If you want a different backend port, update that file. For
-example:</p>
-<div class="sourceCode" id="cb18"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="va">JAVA_HOME</span><span class="op">=</span>/usr/lib/jvm/java-21-openjdk</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="va">HR_APP_PORT</span><span class="op">=</span>19082</span></code></pre></div>
-<p>Frontend local config example in
-<code>frontend/.env.local</code>:</p>
-<pre class="env"><code>HR_DEV_SERVER_PORT=5182
-HR_API_PROXY_TARGET=http://127.0.0.1:18082</code></pre>
-<p>If you want different ports, update that file. For example:</p>
-<pre class="env"><code>HR_DEV_SERVER_PORT=5192
-HR_API_PROXY_TARGET=http://127.0.0.1:19082</code></pre>
-<p>If you change the backend port, update
-<code>HR_API_PROXY_TARGET</code> in <code>frontend/.env.local</code> to
-match it.</p>
-<p>Do not skip the bootstrap step above.
-<code>./lab-materials/setup-local-config.sh</code> is the required path
-that creates and aligns these local files before the rest of Setup.</p>
-<p>Before you send the prompts below, start an interactive Codex session
-from the workspace root:</p>
-<div class="sourceCode" id="cb21"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /absolute/path/to/codex-workshop</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="ex">codex</span></span></code></pre></div>
-</section>
-<section id="workspace-configuration-prompt" class="level2">
-<h2>Workspace Configuration Prompt</h2>
-<p>Use this first in your Codex session so Codex anchors itself to your
-actual local path:</p>
-<pre class="text"><code>Treat this as workspace setup only.
-
-My workspace root is: /absolute/path/to/my/local/repo
-
-Read `lab-materials/student-workspace-guide.md`, `AGENTS.md`, and `dbdetails.md` first.
-
-Tasks:
-1. confirm that this path looks like the repo workspace root by checking that it contains `AGENTS.md`, `backend/`, `frontend/`, `database/`, `lab-materials/`, and `lab-materials/docs/`
-2. tell me the exact workspace root you will use for all subsequent commands in this session
-3. do not rewrite code or docs in this step
-4. if anything about the workspace root is wrong, stop at the smallest real blocker</code></pre>
-</section>
-<section id="verify-lab-01-readiness" class="level2">
-<h2>Verify Lab 01 Readiness</h2>
-<p>Now that the learner-specific database details are aligned, run these
-prompts in order.</p>
-<ol type="1">
-<li><strong>Baseline database readiness prompt</strong></li>
-</ol>
-<pre class="text"><code>Read `lab-materials/student-workspace-guide.md`, `AGENTS.md`, `dbdetails.md`, and `backend/OFFLINE-JERSEY-BUILD.md` first.
-
-Treat this as Setup environment preparation only.
-Do not scan ahead in the labs and do not modify application code.
-
-Tasks:
-1. show me the current non-secret database details from `dbdetails.md` and ask me to inspect them before you apply any schema or demo-data script
-2. verify first that PostgreSQL is reachable with those values and that the current user/database match
-3. apply `database/hrschema.sql`
-4. then apply `database/hrdemo.sql`
-5. then verify the baseline with a read-only employee count query through `psql`
-6. if schema or demo-data application fails, show me the current host, port, database name, and username you used, then stop at the smallest real blocker
-7. tell me exactly what you ran and whether the environment is now ready for Lab 01
-
-Important:
-- use `psql` plus the active schema/demo scripts for the current PostgreSQL workflow
-- treat `database/hrschema.sql` and `database/hrdemo.sql` as the active learner database setup
-- do the database work in this order only: connection check, schema, demo data, verification query
-- run the schema script first and wait for it to finish before you run the demo-data script
-- treat this setup path as a fresh sequential reload for the learner workspace
-- use the values from `dbdetails.md` when building `psql` commands
-- never print the database password back to me
-- use my actual current workspace root instead of assuming a hardcoded path
-- if a schema or demo-data command may take a while, tell me to wait for the final result before moving to the next step</code></pre>
-<p>Expected result:</p>
-<ul>
-<li>Codex applies the schema/demo scripts successfully in sequence and
-then proves the employee count query works</li>
-</ul>
-<ol start="2" type="1">
-<li><strong>Runtime smoke prompt</strong></li>
-</ol>
-<pre class="text"><code>Read `lab-materials/student-workspace-guide.md`, `AGENTS.md`, `frontend/README.md`, and `backend/OFFLINE-JERSEY-BUILD.md` first.
-
-Treat this as a Setup smoke test only.
-Do not scan ahead in the labs and do not rewrite application code unless a real prerequisite defect blocks bring-up.
-
-Tasks:
-1. prove a clean backend validation path with `cd backend &amp;&amp; JAVA_HOME=/usr/lib/jvm/java-21-openjdk PATH=/usr/lib/jvm/java-21-openjdk/bin:$PATH ./build-jersey-service.sh clean test`
-2. if this is a fresh Git clone or extracted zip and frontend dependencies are not installed yet, install them first with `cd frontend &amp;&amp; npm ci`
-3. then prove a clean frontend validation path by removing generated frontend build artifacts first, then running `cd frontend &amp;&amp; npm run build`
-4. start the backend on port `18082`
-5. start the frontend on port `5182` with API proxy target `http://127.0.0.1:18082`
-6. verify `http://127.0.0.1:18082/app/hr/api/v1/health`
-7. run the setup browser smoke check with `cd frontend &amp;&amp; HR_UI_BASE_URL=http://127.0.0.1:5182 HR_UI_HEADLESS=true npm run test:e2e:ui-check`; do not invent a bundled browser under `runtime/`
-8. log in with username `steven.king` and password `password123`, and confirm the dashboard loads
-9. show me the exact commands you used, what passed, and any blocker that must be fixed before Lab 01
-
-Important:
-- for backend build validation, use the backend helper script, not a direct `mvn` command
-- explicitly set JDK 21 for backend commands; do not trust the shell-default Java
-- for persistent backend startup settings, prefer `backend/.env.local`; `backend/run-jersey-service.sh` reads it automatically
-- for persistent frontend startup settings, prefer `frontend/.env.local`
-- for frontend validation and dev-server commands, use the checked-in `package.json` scripts
-- on a fresh Git clone or extracted zip, expect frontend dependency installation to be part of setup
-- for frontend validation, remove generated artifacts such as `dist` before the build so the smoke test proves a clean build path
-- do not download alternate runtime tooling for this smoke test
-- if `18082` or `5182` are already in use, stop only stale repo-owned processes and then restart cleanly on the reserved ports
-- for repo-owned backend cleanup, use `cd backend &amp;&amp; ./stop-jersey-service.sh`
-- for setup browser verification, prefer `npm run test:e2e:ui-check`; broader scripts such as `manual-qa` or `live-pages` belong to later labs that explicitly ask for them
-- if browser automation is unavailable in the current Codex surface, say so clearly and give me the exact login URL for a manual check instead of inventing a packaged browser path
-- use my actual current workspace root instead of assuming a hardcoded path
-- after each build, test, or startup command, wait for the final result or ready signal before issuing the next command
-
-If something fails, stop at the smallest real blocker and explain it clearly instead of scanning the whole codebase.</code></pre>
-<p>Expected result:</p>
-<ul>
-<li>backend wrapper test passes</li>
-<li>frontend build passes</li>
-<li>the health endpoint returns success on the reserved lab ports</li>
-<li>dashboard login is confirmed either through the current browser tool
-path or a clear manual-check handoff</li>
-</ul>
-<p>If browser verification is blocked by the current execution surface,
-capture the concrete error and keep that separate from repo defects. The
-right next step is to retry the same current repo/browser path or
-perform a manual browser check, not to switch to a made-up bundled
-runtime.</p>
-</section>
-<section id="optional-cross-machine-browser-access-prompt"
+<section id="step-2--clone-the-repo-and-open-your-workspace"
 class="level2">
-<h2>Optional Cross-Machine Browser Access Prompt</h2>
-<p>This step is optional. Only do it if you want to open the frontend
-URL from another machine while the app is running on the learner VM.</p>
-<p>If you are opening the app in a browser inside the learner VM itself,
-skip this step.</p>
-<p>Use the sample below only as a formatting example:</p>
-<pre class="text"><code>I want to access the HR frontend from another machine while it runs on this learner VM.
+<h2>Step 2 — Clone the repo and open your workspace</h2>
+<p>Clone to any directory on your machine:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="op">&lt;</span>repo-url<span class="op">&gt;</span> claude-workshop</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> claude-workshop</span></code></pre></div>
+<p>The folder name <code>claude-workshop</code> is used in examples
+throughout the labs, but you can name it whatever you like. After the
+<code>cd</code>, confirm you are inside the right directory:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">pwd</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> CLAUDE.md backend frontend database lab-materials</span></code></pre></div>
+<p>All five items should be present. This directory is your
+<strong>workspace root</strong> for the entire workshop. Keep a terminal
+here.</p>
+<hr />
+</section>
+<section id="step-3--run-the-claude-code-setup-prompt" class="level2">
+<h2>Step 3 — Run the Claude Code setup prompt</h2>
+<p>Start Claude Code from your workspace root:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span></span></code></pre></div>
+<p>Open <code>lab-materials/envsetup-prompt.md</code>, copy the prompt
+inside the box, and paste it into your Claude Code session.</p>
+<p>Claude Code will:</p>
+<ol type="1">
+<li>Check that all required tools are installed and meet the minimum
+versions</li>
+<li>Tell you if anything is missing and give you the exact install
+command for your operating system — run those commands in a separate
+terminal, then tell Claude Code when you are done</li>
+<li>Detect your actual tool paths and write the correct environment
+config files</li>
+<li>Set up the PostgreSQL database — it will ask you to run two commands
+that need <code>sudo</code> access, then continue automatically</li>
+<li>Build and test the backend</li>
+<li>Install and build the frontend</li>
+<li>Start both services</li>
+<li>Run a smoke test confirming the app is live and the database is
+loaded</li>
+</ol>
+<p>Follow Claude Code's instructions. The only things you need to do
+yourself are any commands it flags as requiring <code>sudo</code>.</p>
+<hr />
+</section>
+<section id="step-4--confirm-your-setup-receipt" class="level2">
+<h2>Step 4 — Confirm your setup receipt</h2>
+<p>Once Claude Code says setup is complete, open a <strong>new
+terminal</strong> in your workspace root and run:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> lab-materials/verify-setup.sh</span></code></pre></div>
+<p>You will see a printout of every component that was configured — tool
+versions, environment files, database state, and service health. All
+items should show ✓.</p>
+<p>Example output:</p>
+<pre><code>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          Claude Code Workshop — Setup Receipt
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Update only the minimal frontend host/access settings needed for cross-machine browser access.
-Do not change database settings.
+Workspace
+  ✓  Workspace root looks correct
 
-Use these inputs exactly as provided for my environment:
-- machine name / hostname: learner-vm-01
-- VM host for cross-machine browser access: learner-vm-01.example.internal</code></pre>
-<p>When you prepare your real optional prompt for Codex, use your own
-values in the same structure, then issue that prompt to Codex.</p>
-<p>After Codex makes the optional frontend-host changes, verify:</p>
-<ul>
-<li>the app still works inside the learner VM browser</li>
-<li>if Codex created or updated <code>frontend/.env</code>, the values
-look reasonable for this repo</li>
-<li>the expected frontend host variables are described in
-<code>frontend/README.md</code></li>
-<li>if the URL still does not work from another machine, first check the
-frontend host settings, then check VM firewall, network security rules,
-proxy, or other network exposure outside the app</li>
-</ul>
+Tool Versions
+  ✓  git          git version 2.51.0
+  ✓  Java         openjdk version &quot;21.0.6&quot;  (JAVA_HOME: /usr/lib/jvm/...)
+  ✓  Maven        Apache Maven 3.9.9
+  ✓  Node.js      v24.14.0
+  ✓  npm          v11.9.0
+  ✓  psql         psql (PostgreSQL) 18.3
+
+Environment Config
+  ✓  backend/.env.local exists
+  ✓  frontend/.env.local exists
+  ✓  JAVA_HOME path is valid
+
+Database
+  ✓  PostgreSQL connection  hrapp@localhost/hrdb
+  ✓  aihr_employees  121 rows
+  ✓  AIHR_* tables   14 found
+
+Backend Service
+  ✓  Backend health endpoint  UP on port 18082
+
+Frontend Service
+  ✓  Frontend dev server  UP on port 5182
+
+Build Artefacts
+  ✓  Backend JAR  built
+  ✓  Frontend dist  built
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ✓  All checks passed — you are ready for Lab 01
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</code></pre>
+<p>If any item shows ✗, read Claude Code's earlier output for that step,
+fix the issue, and re-run <code>verify-setup.sh</code>.</p>
+<hr />
+</section>
+<section id="optional--access-from-another-machine" class="level2">
+<h2>Optional — Access from another machine</h2>
+<p>If you want to open the frontend from a browser on a different
+machine while the app runs on this one, paste this prompt into Claude
+Code:</p>
+<pre class="text"><code>I want to access the HR frontend from another machine on the same network.
+
+Update only the minimal frontend host settings needed for cross-machine access.
+Do not change database settings or backend config.
+
+My machine hostname or IP for cross-machine access is: &lt;your-hostname-or-ip&gt;</code></pre>
+<p>Verify the app still loads in a local browser after Claude Code makes
+the change.</p>
+<hr />
 </section>
 <section id="success-criteria" class="level2">
 <h2>Success Criteria</h2>
 <ul class="task-list">
-<li><label><input type="checkbox" />Learner VM identity is
-known</label></li>
-<li><label><input type="checkbox" />Codex is available from the
-workspace root</label></li>
-<li><label><input type="checkbox" />JDK 21, Maven, Node/npm, and
-<code>psql</code> are available</label></li>
-<li><label><input type="checkbox" />Current non-secret PostgreSQL
-details were reviewed from <code>dbdetails.md</code></label></li>
-<li><label><input type="checkbox" />PostgreSQL server is installed
-locally and the learner DB user/database already exist for the
-<code>dbdetails.md</code> values</label></li>
-<li><label><input type="checkbox" />Codex has been prompted once to
-verify or prepare the baseline PostgreSQL schema and demo
-data</label></li>
-<li><label><input type="checkbox" />Codex has been prompted once to
-prove backend build, frontend build, runtime startup, and dashboard
-login</label></li>
-<li><label><input type="checkbox" />The learner can state what to verify
-before starting Lab 01</label></li>
+<li><label><input type="checkbox" />Claude Code is installed and
+<code>claude --help</code> works</label></li>
+<li><label><input type="checkbox" />Workspace root contains
+<code>CLAUDE.md</code>, <code>backend/</code>, <code>frontend/</code>,
+<code>database/</code>, <code>lab-materials/</code></label></li>
+<li><label><input type="checkbox" />Setup prompt was pasted and Claude
+Code completed all phases</label></li>
+<li><label><input
+type="checkbox" /><code>bash lab-materials/verify-setup.sh</code> shows
+all ✓</label></li>
+<li><label><input type="checkbox" />You can state what to verify before
+starting Lab 01</label></li>
 </ul>
 </section>
 </section>
@@ -472,7 +195,7 @@ before starting Lab 01</label></li>
       <nav class="doc-nav" aria-label="Lab navigation">
   <a class="doc-nav-link doc-nav-prev" href="student-workspace-guide.html">← Start Here</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab01.html">Lab 01 →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab01.html">Lab 01 →</a>
       </nav>
     </footer>
   </div>

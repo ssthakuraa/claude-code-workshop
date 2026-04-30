@@ -3,68 +3,165 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Lab 05: Hooks — Truthful Guardrails</title>
+  <title>Lab 05: Hooks — Structural Guardrails</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="doc-shell">
     <header class="doc-header">
       <div class="doc-header-meta">
-        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-kicker">Claude Code HR Labs</span>
         <span class="doc-divider"></span>
         <span class="doc-page-label">Lab 05</span>
       </div>
-      <div class="doc-header-title">Lab 05: Hooks — Truthful Guardrails</div>
+      <div class="doc-header-title">Lab 05: Hooks — Structural Guardrails</div>
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlab04.html">← Lab 04</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelab04.html">← Lab 04</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab06.html">Lab 06 →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab06.html">Lab 06 →</a>
       </nav>
     </header>
     <main class="doc-content">
-<section id="lab-05-hooks--truthful-guardrails" class="level1">
-<h1>Lab 05: Hooks — Truthful Guardrails</h1>
-<p><strong>Duration:</strong> 25 minutes</p>
+<section id="lab-05-hooks--structural-guardrails" class="level1">
+<h1>Lab 05: Hooks — Structural Guardrails</h1>
+<p><strong>Duration:</strong> 75 minutes</p>
 <section id="learning-objective" class="level2">
 <h2>Learning Objective</h2>
 <p>You will see the difference between <strong>advisory rules</strong>
-(<code>AGENTS.md</code>) and <strong>structural guardrails</strong>
-(hooks). By the end, you should understand one truthful hook example,
-the current runtime limitation, and why this course does not keep live
-hooks active after the demo.</p>
+(<code>CLAUDE.md</code>) and <strong>structural guardrails</strong>
+(hooks). By the end you should know each Claude Code hook event by name,
+when each one is the right tool, when a hook is the wrong tool, and how
+to layer hooks without producing noise. The lab keeps the existing
+one-hook demo as its foundation, then walks the rest of the hook surface
+one event at a time.</p>
 <hr />
 </section>
 <section id="the-key-concept" class="level2">
 <h2>The Key Concept</h2>
-<p>Repo-managed Codex hooks have two parts:</p>
+<p>Repo-managed Claude Code hooks live in a single file:</p>
 <ul>
-<li><code>.codex/config.toml</code>
+<li><code>.claude/settings.json</code>
 <ul>
-<li>enables hooks for this repo</li>
-</ul></li>
-<li><code>.codex/hooks.json</code>
-<ul>
-<li>defines the hook events, matchers, and commands</li>
+<li>contains a <code>"hooks"</code> key that defines hook events,
+matchers, and commands</li>
+<li>no separate <code>config.toml</code> or <code>hooks.json</code> —
+Claude Code uses one unified config file</li>
 </ul></li>
 </ul>
-<p>In the current training environment, repo-managed hooks should be
-treated as an evolving Codex feature, not as a fully mature production
-capability. This lab therefore stays intentionally light: <strong>one
-small <code>PreToolUse</code> example</strong> that teaches you how to
-configure and reason about a hook without pretending Codex is already
-ready for a broad hook policy.</p>
-<p>The goal is practical understanding, not over-promising maturity.
-Once a future Codex release makes this feature stable enough for wider
-use, confirm that in official OpenAI Codex release notes before you
-expand from this demo to a larger, repo-relevant hook set.</p>
-<p><strong>The key insight:</strong> <code>AGENTS.md</code> states the
+<p>Hooks are evaluated by the Claude Code runtime around tool calls and
+session events. They give the runtime a chance to inspect, block,
+augment, or react to what the agent is doing. Unlike
+<code>CLAUDE.md</code> rules — which are advisory and depend on the
+model honoring them — hooks run shell commands, read structured payloads
+on stdin, and signal the runtime through exit codes.</p>
+<p><strong>The six hook events you will exercise in this
+lab:</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Event</th>
+<th>Fires</th>
+<th>Typical use</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>PreToolUse</code></td>
+<td>Before a tool call runs</td>
+<td>Block dangerous commands, enforce naming, gate by file path</td>
+</tr>
+<tr class="even">
+<td><code>PostToolUse</code></td>
+<td>After a tool call succeeds</td>
+<td>Run linter/formatter, compile-check, log diffs</td>
+</tr>
+<tr class="odd">
+<td><code>UserPromptSubmit</code></td>
+<td>When the learner submits a prompt</td>
+<td>Inject narrow repo facts</td>
+</tr>
+<tr class="even">
+<td><code>Stop</code></td>
+<td>When the main session ends</td>
+<td>Warn on uncommitted work, archive logs</td>
+</tr>
+<tr class="odd">
+<td><code>SubagentStop</code></td>
+<td>When a delegated subagent returns</td>
+<td>Summarize subagent output</td>
+</tr>
+<tr class="even">
+<td><code>Notification</code></td>
+<td>When the client surfaces a system notification</td>
+<td>Audit prompts, log permissions events</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exit code semantics:</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Exit code</th>
+<th>Effect on Claude Code</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>0</code></td>
+<td>Hook ran cleanly. Tool call proceeds (PreToolUse), or post-step is
+logged (PostToolUse).</td>
+</tr>
+<tr class="even">
+<td><code>2</code></td>
+<td>Hook signals a hard block. PreToolUse hooks with exit 2 are the only
+reliable way to stop a tool call before it runs.</td>
+</tr>
+<tr class="odd">
+<td>Other non-zero</td>
+<td>Treated as a warning by most clients. Behavior is client-specific
+and may be informational only.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The key insight:</strong> <code>CLAUDE.md</code> states the
 rules. Hooks enforce the subset of rules that the runtime can actually
 intercept.</p>
+<blockquote>
+<p><strong>A note on maturity.</strong> Hooks are an evolving Claude
+Code feature. Some clients render hook output as inline status lines,
+some as stderr-only warnings, and some clients still let the underlying
+tool call proceed even after a non-zero exit. Each exercise below tells
+you what to do if your client's behavior deviates from what the lab
+expects. The point of the lab is to know which hook does what, not to
+assume every client enforces every signal identically.</p>
+</blockquote>
 <hr />
 </section>
-<section id="exercise-1-protect-java-backend-naming-10-min"
+<section id="setup" class="level2">
+<h2>Setup</h2>
+<p>Before the first exercise, confirm:</p>
+<ol type="1">
+<li><code>.claude/settings.json</code> exists in your workspace root. If
+not, ask Claude Code to create an empty one with
+<code>{"hooks": {}}</code> as a starting shape.</li>
+<li><code>jq</code> is available on your shell
+(<code>command -v jq</code>). Several exercises parse JSON payloads from
+stdin with <code>jq</code>. If <code>jq</code> is missing, install it
+before continuing — <code>apt install jq</code> or the equivalent for
+your platform.</li>
+<li>You have a clean git working tree, or at least know what is
+uncommitted. The Stop-hook exercise warns on uncommitted work, and you
+want a clean baseline to test against.</li>
+</ol>
+<p>This lab adds and removes hooks as it goes. Exercises 2–7 each leave
+a working hook in <code>.claude/settings.json</code>. Exercise 8 cleans
+them all up so the rest of the curriculum is not noisy. Do not skip
+Exercise 8.</p>
+<hr />
+</section>
+<section id="exercise-1-pretooluse--protect-java-backend-naming-10-min"
 class="level2">
-<h2>Exercise 1: Protect Java Backend Naming (10 min)</h2>
+<h2>Exercise 1: PreToolUse — Protect Java Backend Naming (10 min)</h2>
 <section id="goal" class="level3">
 <h3>Goal</h3>
 <p>Create a <code>PreToolUse</code> Bash hook that warns when a backend
@@ -81,9 +178,9 @@ violated.</p>
 <section id="instructions" class="level3">
 <h3>Instructions</h3>
 <ol type="1">
-<li><p>Ask Codex to add the hook:</p>
-<pre><code>Add a PreToolUse Bash hook in `.codex/hooks.json` that blocks Bash commands
-targeting backend Java files under
+<li><p>Ask Claude Code to add the hook:</p>
+<pre><code>Add a PreToolUse Bash hook under the &quot;hooks&quot; key in `.claude/settings.json`
+that blocks Bash commands targeting backend Java files under
 `backend/hrapp-service/src/main/java/com/company/hr/`
 when the file name does not start with `Hr`.
 
@@ -92,12 +189,13 @@ The hook should:
 - inspect any matching Java file paths mentioned in the command
 - print a clear BLOCKED message naming the offending file
 - exit non-zero</code></pre></li>
-<li><p><strong>Restart Codex before the live demo.</strong> This is a
-manual learner action. Exit the current Codex session, restart Codex
-from the learner workspace root, and if Codex prints a
-<code>codex resume ...</code> command when it exits, use that.</p></li>
-<li><p><strong>Test it live.</strong> In the fresh session, ask
-Codex:</p>
+<li><p><strong>Restart Claude Code before the live demo.</strong> This
+is a manual learner action. Close the current Claude Code session and
+reopen the project from the learner workspace root. There is no
+<code>claude resume</code> command — re-opening the project is the
+correct restart path.</p></li>
+<li><p><strong>Test it live.</strong> In the fresh session, ask Claude
+Code:</p>
 <pre><code>Create backend/hrapp-service/src/main/java/com/company/hr/EmployeeRatingResource.java</code></pre></li>
 <li><p><strong>What you should see:</strong></p>
 <ul>
@@ -110,45 +208,637 @@ command may still run</li>
 <li>If the file is created anyway, treat that as a runtime limitation,
 not as proof that your hook logic is wrong</li>
 </ul></li>
-<li><p><strong>Clean up the intentionally bad file.</strong> Ask
-Codex:</p>
+<li><p><strong>Clean up the intentionally bad file.</strong> Ask Claude
+Code:</p>
 <pre><code>Remove backend/hrapp-service/src/main/java/com/company/hr/EmployeeRatingResource.java</code></pre></li>
-<li><p><strong>Return the workspace to a quiet state.</strong> Ask
-Codex:</p>
-<pre><code>Replace `.codex/hooks.json` with the empty starter file:
+<li><p><strong>Keep the hook in
+<code>.claude/settings.json</code>.</strong> Unlike the older
+one-exercise version of this lab, you will leave this hook in place and
+layer additional hooks alongside it. Final cleanup happens in Exercise
+8.</p></li>
+</ol>
+<blockquote>
+<p><strong>Foundation hook.</strong> This is the example you will
+compare every other hook type against. Keep it open in another window
+while you work through Exercises 2–7.</p>
+</blockquote>
+<hr />
+</section>
+</section>
+<section id="exercise-2-pretooluse--block-dangerous-bash-12-min"
+class="level2">
+<h2>Exercise 2: PreToolUse — Block Dangerous Bash (12 min)</h2>
+<section id="goal-1" class="level3">
+<h3>Goal</h3>
+<p>Use a <code>PreToolUse</code> Bash hook to stop destructive shell
+commands before Claude Code runs them.</p>
+</section>
+<section id="why-this-matters-1" class="level3">
+<h3>Why This Matters</h3>
+<p>The Java-naming hook in Exercise 1 enforces a convention. This one
+enforces safety. It is the canonical use case for
+<code>PreToolUse</code> with exit code 2: a hard block on commands that,
+if they ran, would do real damage.</p>
+</section>
+<section id="instructions-1" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Claude Code to add a second <code>PreToolUse</code> hook
+entry in <code>.claude/settings.json</code>. Keep the Exercise 1 hook
+intact and append the new one alongside it:</p>
+<pre><code>Add a second PreToolUse Bash hook under the &quot;hooks&quot; key in `.claude/settings.json`.
+Keep the existing Java naming hook intact.
 
-{
-  &quot;hooks&quot;: {}
-}</code></pre></li>
-<li><p><strong>Restart Codex once the hook file is empty.</strong> This
-clears the warning flow before you continue to later labs. Exit the
-current Codex session, restart Codex from the learner workspace root,
-and if Codex prints a <code>codex resume ...</code> command when it
-exits, use that.</p></li>
+The new hook should:
+- parse the Bash command from stdin with jq
+- block the command if it matches any of these deny patterns:
+  - `rm -rf /` or `rm -rf ~` or `rm -rf $HOME`
+  - `git push --force` or `git push -f` to a non-feature branch
+  - `DROP TABLE` or `DROP DATABASE`
+  - `chmod -R 777`
+- print a structured BLOCKED message to stderr that names the matched pattern
+- exit with code 2 (hard block)
+
+Use a clear statusMessage like &quot;Checking for dangerous bash commands...&quot;</code></pre></li>
+<li><p><strong>Restart Claude Code</strong> so the new hook is
+loaded.</p></li>
+<li><p><strong>Test the block.</strong> Ask Claude Code:</p>
+<pre><code>Run `rm -rf /tmp/lab05-cleanup` to remove a sandboxed test directory.</code></pre>
+<p>This should pass — <code>/tmp/lab05-cleanup</code> does not match any
+deny pattern.</p></li>
+<li><p>Now ask:</p>
+<pre><code>Run `rm -rf /` to clean the root.</code></pre>
+<p>The hook should fire with exit code 2. The tool call should be
+blocked, not just warned.</p></li>
+<li><p><strong>Inspect the matcher tightness.</strong> Ask Claude
+Code:</p>
+<pre><code>Run `git push --force origin feature/my-branch`</code></pre>
+<p>This is a feature-branch force push. Whether it should be blocked is
+a policy choice. Decide for yourself whether your hook's matcher is
+tight enough or too loose, and adjust if the behavior surprised
+you.</p></li>
+<li><p><strong>What you should see:</strong></p>
+<ul>
+<li>Safe commands run normally (no false positives on
+<code>/tmp/lab05-cleanup</code>)</li>
+<li>Destructive commands return a non-zero exit and a structured BLOCKED
+message</li>
+<li>Loose matchers either let bad commands through or block legitimate
+ones; this is the trade-off you tune</li>
+</ul></li>
+</ol>
+<blockquote>
+<p><strong>The lesson:</strong> PreToolUse with exit 2 is the only
+reliable hard block in the current hook surface. Use it for
+must-stop-before conditions. Use it sparingly — every false positive
+trains you to ignore the warning.</p>
+</blockquote>
+<hr />
+</section>
+</section>
+<section id="exercise-3-posttooluse--lint-after-frontend-edits-13-min"
+class="level2">
+<h2>Exercise 3: PostToolUse — Lint After Frontend Edits (13 min)</h2>
+<section id="goal-2" class="level3">
+<h3>Goal</h3>
+<p>Use a <code>PostToolUse</code> hook to run a linter automatically
+after Claude Code edits frontend code.</p>
+</section>
+<section id="why-this-matters-2" class="level3">
+<h3>Why This Matters</h3>
+<p>PostToolUse is for <strong>should-clean-up</strong> cleanup, not
+must-block enforcement. Failures from a PostToolUse hook usually surface
+as warnings, not blocks — Claude Code already finished the action. The
+right pattern is to run formatters or quick validators that produce
+useful feedback the next turn can act on.</p>
+<p>This repo has <code>npm run lint</code> wired (eslint) and no
+separate <code>format</code> script. The exercise uses
+<code>npx eslint --fix</code> so the hook can both report and
+auto-correct simple issues. The same hook shape works for backend
+<code>./build-jersey-service.sh compile</code> if you want a
+compile-check on Java edits — that is the optional extension at the
+end.</p>
+</section>
+<section id="instructions-2" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Claude Code to add a <code>PostToolUse</code> hook:</p>
+<pre><code>Add a PostToolUse hook in `.claude/settings.json` that runs after Edit and
+Write tools succeed.
+
+The hook should:
+- parse the tool name and file path from stdin with jq
+- only act when the tool was Edit or Write AND the path matches frontend/src/**/*.{ts,tsx}
+- run `cd frontend &amp;&amp; npx eslint --fix &lt;relative-path&gt;` on the changed file
+- print a one-line summary of the eslint result to stderr
+- exit 0 either way (PostToolUse is advisory; do not block)
+
+Keep all existing hooks intact.</code></pre></li>
+<li><p><strong>Restart Claude Code</strong> so the new hook is
+loaded.</p></li>
+<li><p><strong>Test it.</strong> Ask Claude Code to make a small
+frontend edit:</p>
+<pre><code>Open frontend/src/components/hr/HrEmployeeCard.tsx and add a const named
+`LAB05_DEMO_VALUE` with the value 42 just below the imports.
+Then save the file.</code></pre></li>
+<li><p><strong>Observe the hook output.</strong> You should see:</p>
+<ul>
+<li>The Edit tool reports success</li>
+<li>The PostToolUse hook fires and runs eslint on
+<code>HrEmployeeCard.tsx</code></li>
+<li>eslint prints either "no issues" or a fix summary</li>
+<li>Claude Code's next turn sees the file in its eslint-fixed shape, not
+the shape it just wrote</li>
+</ul></li>
+<li><p><strong>Notice the loop.</strong> Ask Claude Code:</p>
+<pre><code>Show me the diff of HrEmployeeCard.tsx since my last manual save.</code></pre>
+<p>The diff may include eslint-applied changes that Claude Code did not
+write directly. This is the "PostToolUse changed the file behind the
+agent's back" effect — it is fine when the formatter is deterministic,
+surprising when the formatter is opinionated. Lesson: choose PostToolUse
+targets that are deterministic.</p></li>
+<li><p><strong>Roll back the demo edit.</strong> Ask Claude Code:</p>
+<pre><code>Remove the LAB05_DEMO_VALUE const from HrEmployeeCard.tsx.</code></pre></li>
+<li><p><strong>Optional — backend compile-check variant.</strong> If you
+want to extend this to Java files, the same hook shape with
+<code>command: cd backend &amp;&amp; ./build-jersey-service.sh compile</code>
+and a path match on <code>backend/**/*.java</code> runs a real
+validation pipeline after every Java edit. It is slower (Maven
+invocations are expensive) so most teams gate it to specific paths or
+run it manually. You do not need to wire this for Lab 05; the eslint
+version exercises the pattern.</p></li>
 </ol>
 </section>
+<section id="what-you-should-see" class="level3">
+<h3>What You Should See</h3>
+<p>PostToolUse fires after the tool call. Failures are advisory, not
+blocking. The hook is most useful when the post-action is deterministic
+(formatters, linters with <code>--fix</code>) and least useful when the
+post-action is slow or opinionated.</p>
+<blockquote>
+<p><strong>The lesson:</strong> PreToolUse for must-block; PostToolUse
+for should-clean-up. Choosing the wrong event for the wrong purpose is
+the most common hook mistake.</p>
+</blockquote>
+<hr />
+</section>
+</section>
+<section id="exercise-4-userpromptsubmit--inject-project-context-10-min"
+class="level2">
+<h2>Exercise 4: UserPromptSubmit — Inject Project Context (10 min)</h2>
+<section id="goal-3" class="level3">
+<h3>Goal</h3>
+<p>Use a <code>UserPromptSubmit</code> hook to prepend a small repo-fact
+reminder to every prompt, then deliberately overuse it to feel the
+failure mode.</p>
+</section>
+<section id="why-this-matters-3" class="level3">
+<h3>Why This Matters</h3>
+<p><code>UserPromptSubmit</code> runs before Claude Code reads the
+learner's prompt. Whatever the hook prints to stdout is injected into
+the agent's context as additional input. It is a powerful and
+easy-to-misuse event. The right use is <strong>narrow facts that are
+easy to forget</strong>: the active port, the active database engine,
+the current branch policy. The wrong use is prose context,
+multi-paragraph reminders, or anything the model would read as a
+competing instruction stream.</p>
+</section>
+<section id="instructions-3" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Claude Code to add the hook:</p>
+<pre><code>Add a UserPromptSubmit hook in `.claude/settings.json`.
+
+The hook should print a short one-line repo-fact reminder, then exit 0:
+  &quot;Active runtime: PostgreSQL on backend port 18082, frontend port 5182.
+   Use `cd backend &amp;&amp; ./build-jersey-service.sh test` for backend tests.&quot;
+
+Keep all existing hooks intact.</code></pre></li>
+<li><p><strong>Restart Claude Code.</strong></p></li>
+<li><p><strong>Test it.</strong> Ask Claude Code:</p>
+<pre><code>What backend port should I use for local testing?</code></pre>
+<p>The answer should reflect the injected fact (<code>18082</code>).
+Without the hook, the agent could only answer from
+<code>CLAUDE.md</code> or by reading config files.</p></li>
+<li><p><strong>Now deliberately overreach.</strong> Ask Claude Code to
+expand the hook payload:</p>
+<pre><code>Update the UserPromptSubmit hook to also inject a 5-paragraph summary of the
+project history, the team conventions, and a friendly greeting at the start.</code></pre>
+<p>Restart Claude Code. Ask any small question.</p></li>
+<li><p><strong>Observe the failure mode.</strong> With a
+paragraph-length injection, the agent's responses often:</p>
+<ul>
+<li>adopt a different tone (the friendly greeting bleeds in)</li>
+<li>re-summarize the injected context unnecessarily</li>
+<li>mix the injected prose with their actual answer</li>
+<li>sometimes contradict CLAUDE.md if the injected prose drifts from
+it</li>
+</ul></li>
+<li><p><strong>Revert the overreach.</strong> Ask Claude Code to restore
+the hook to its one-line fact form.</p></li>
+</ol>
+</section>
+<section id="what-you-should-see-1" class="level3">
+<h3>What You Should See</h3>
+<p>UserPromptSubmit is best used for tight repo facts, not for prose
+context. Prose injection pollutes the agent's response style and
+competes with CLAUDE.md. The lesson is to keep these injections to one
+line and to write them like a status bar, not like documentation.</p>
+<blockquote>
+<p><strong>The rule:</strong> UserPromptSubmit injects facts, not
+vibes.</p>
+</blockquote>
+<hr />
+</section>
+</section>
+<section
+id="exercise-5-stop-and-subagentstop--dont-let-work-walk-away-10-min"
+class="level2">
+<h2>Exercise 5: Stop and SubagentStop — Don't Let Work Walk Away (10
+min)</h2>
+<section id="goal-4" class="level3">
+<h3>Goal</h3>
+<p>Use <code>Stop</code> to catch end-of-session conditions; observe
+what <code>SubagentStop</code> sees so you recognize the event when Lab
+07 starts using it.</p>
+</section>
+<section id="why-this-matters-4" class="level3">
+<h3>Why This Matters</h3>
+<p><code>Stop</code> fires when the main session ends. It is the right
+place for end-of-session checks: uncommitted work warning, summary
+generation, log archival. <code>SubagentStop</code> fires when a
+delegated subagent returns; it is most useful once a workflow actually
+uses subagents (Lab 07 is when this lab's curriculum starts depending on
+them).</p>
+</section>
+<section id="instructions-4" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Claude Code to add a <code>Stop</code> hook:</p>
+<pre><code>Add a Stop hook in `.claude/settings.json`.
+
+The hook should:
+- run `git status --porcelain` from the workspace root
+- if the output is non-empty, print a warning to stderr that lists the
+  uncommitted paths, then exit 0 (warn, do not block — Stop already happened)
+- if the output is empty, print a one-line &quot;clean working tree&quot; confirmation
+
+Keep all existing hooks intact.</code></pre></li>
+<li><p>Ask Claude Code to also add a <code>SubagentStop</code> hook:</p>
+<pre><code>Add a SubagentStop hook in `.claude/settings.json`.
+
+The hook should print a one-line summary line containing the subagent&#39;s name
+(parse from stdin with jq) and exit 0. The point is to confirm the event
+fires; you do not need to do anything with the payload yet.
+
+Keep all existing hooks intact.</code></pre></li>
+<li><p><strong>Restart Claude Code.</strong></p></li>
+<li><p><strong>Test the Stop hook.</strong> Make any small uncommitted
+edit (add a comment somewhere harmless). Then exit Claude Code. The Stop
+hook should fire on session end and print the uncommitted-work warning.
+If your client suppresses Stop hook output, check
+<code>.claude/settings.json</code> and confirm the hook is wired
+correctly — the lesson is the same even if the output is not
+visible.</p></li>
+<li><p><strong>Test the SubagentStop hook only if your client supports
+subagents.</strong> If not, leave the hook wired and note that Lab 07
+will exercise it. The hook itself is correct even if it has not fired
+yet.</p></li>
+<li><p><strong>Roll back the test edit.</strong> Use
+<code>git checkout</code> or ask Claude Code to revert the demo
+edit.</p></li>
+</ol>
+</section>
+<section id="what-you-should-see-2" class="level3">
+<h3>What You Should See</h3>
+<p>Stop is reliable. SubagentStop's usefulness depends on whether your
+workflow actually delegates to subagents. Both events are quiet by
+default — they do not fire on every tool call — so they are good places
+for end-of-something checks without noise.</p>
+<blockquote>
+<p><strong>The lesson:</strong> Stop is for closure. Use it for the
+checks you would otherwise forget at the end of the session.</p>
+</blockquote>
+<hr />
+</section>
+</section>
+<section id="exercise-6-notification--optional-awareness-5-min"
+class="level2">
+<h2>Exercise 6: Notification — Optional Awareness (5 min)</h2>
+<section id="goal-5" class="level3">
+<h3>Goal</h3>
+<p>Add a <code>Notification</code> hook so you know what the event
+carries.</p>
+</section>
+<section id="why-this-matters-5" class="level3">
+<h3>Why This Matters</h3>
+<p><code>Notification</code> fires when Claude Code shows the learner a
+system notification — most often a permissions prompt or a long-running
+tool warning. The event is mostly useful for audit logging or for wiring
+desktop notifications to a longer-running session. It is the
+lowest-impact hook in the surface; you will not use it heavily.</p>
+</section>
+<section id="instructions-5" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Claude Code to add a <code>Notification</code> hook:</p>
+<pre><code>Add a Notification hook in `.claude/settings.json`.
+
+The hook should:
+- read the notification payload from stdin
+- append a single line to `.claude/notification-log.local` containing
+  the timestamp and the payload&#39;s `message` field (parse with jq)
+- exit 0
+
+Add `.claude/notification-log.local` to `.gitignore` if it is not already
+covered by an existing pattern. Keep all existing hooks intact.</code></pre></li>
+<li><p><strong>Restart Claude Code.</strong></p></li>
+<li><p><strong>Trigger a notification.</strong> Ask Claude Code to do
+something that requires a permissions prompt — for example, ask it to
+read a file outside the workspace (<code>/etc/hosts</code>) or run a
+command your settings restrict. The Notification event should
+fire.</p></li>
+<li><p><strong>Check the log.</strong> Open
+<code>.claude/notification-log.local</code> and confirm an entry was
+appended.</p></li>
+</ol>
+</section>
+<section id="what-you-should-see-3" class="level3">
+<h3>What You Should See</h3>
+<p>Notification is observability, not control. The hook gives you a
+record of when the client surfaced something to the learner — useful for
+debugging surprising prompts, less useful for blocking the agent.</p>
+<blockquote>
+<p><strong>The lesson:</strong> Notification logs help post-hoc; they do
+not change the run.</p>
+</blockquote>
+<hr />
+</section>
+</section>
+<section id="exercise-7-hook-composition-and-anti-patterns-10-min"
+class="level2">
+<h2>Exercise 7: Hook Composition and Anti-Patterns (10 min)</h2>
+<section id="goal-6" class="level3">
+<h3>Goal</h3>
+<p>Layer the hooks you have built so far, observe the order and noise,
+then mark a list of hook ideas as appropriate or anti-pattern.</p>
+</section>
+<section id="why-this-matters-6" class="level3">
+<h3>Why This Matters</h3>
+<p>Hooks compose by event. Multiple hooks under the same event run in
+the order they appear in <code>.claude/settings.json</code>. If you
+wired Exercises 1, 2, and 3, your <code>PreToolUse</code> array now has
+two entries (Java naming + dangerous bash) and your
+<code>PostToolUse</code> array has one. This exercise confirms the order
+is what you expect, then asks you to recognize when <strong>not</strong>
+to add a hook at all.</p>
+</section>
+<section id="instructions-6" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Claude Code to summarize the current hook surface:</p>
+<pre><code>Read `.claude/settings.json` and list:
+- every hook event currently configured
+- for each event, the order the hooks will run
+- for each hook, a one-line description of what it does
+
+Print this as a markdown table. Do not modify the file.</code></pre></li>
+<li><p><strong>Confirm the order matches your intent.</strong> Java
+naming should run before dangerous-bash if you added them in that order.
+If both fire on the same Bash command, both messages should appear. This
+is fine — composition is additive.</p></li>
+<li><p><strong>Now an anti-pattern audit.</strong> For each idea below,
+decide: would you implement this as a hook, or is a hook the wrong tool?
+Write your answer and a one-line rationale in your own notes.</p>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Hook idea</th>
+<th>Hook or not? Why?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>a</td>
+<td>Block any Bash command that contains <code>sudo</code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>b</td>
+<td>Enforce that all React components use functional syntax (no class
+components)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>c</td>
+<td>Auto-format Java files with a 4-space indent on every Edit</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>d</td>
+<td>Inject the full contents of <code>CLAUDE.md</code> into every
+UserPromptSubmit</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>e</td>
+<td>Silently rewrite any prompt containing the word "yolo" to
+"carefully"</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>f</td>
+<td>Warn when a <code>git commit</code> would include a
+<code>.env</code> file</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>g</td>
+<td>On Stop, post a Slack message summarizing the session</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>h</td>
+<td>On every PreToolUse, run a 30-second test suite to validate the
+agent's "intent"</td>
+<td></td>
+</tr>
+</tbody>
+</table></li>
+<li><p><strong>Compare your answers</strong> to this rubric:</p>
+<ul>
+<li><strong>(a) Hook is fine</strong> — narrow, deterministic,
+safety-shaped. Same family as Exercise 2.</li>
+<li><strong>(b) Hook is overreach</strong> — taste, not safety. Belongs
+in <code>CLAUDE.md</code> or a skill, not a structural guardrail.</li>
+<li><strong>(c) Hook is fine</strong> when the formatter is
+deterministic — same family as Exercise 3. Watch for opinionated
+formatters.</li>
+<li><strong>(d) Anti-pattern</strong> — <code>CLAUDE.md</code> is
+already loaded at session start. Re-injecting it on every prompt is
+duplicate context that pollutes responses (Exercise 4 lesson).</li>
+<li><strong>(e) Anti-pattern</strong> — silently rewriting prompts is
+the worst use of <code>UserPromptSubmit</code>. The learner cannot see
+the modification. Hooks should be visible and honest.</li>
+<li><strong>(f) Hook is fine</strong> as a <code>PreToolUse</code> on
+Bash with a <code>git commit</code> matcher and a <code>.env</code>
+content check. Safety-shaped, narrow, easy to test.</li>
+<li><strong>(g) Hook is fine</strong> as a <code>Stop</code> hook, given
+network policy allows it. Same family as Exercise 5.</li>
+<li><strong>(h) Anti-pattern</strong> — running a 30-second test on
+every tool call destroys the loop. Hooks should be cheap; expensive
+checks belong in CI, not in <code>PreToolUse</code>.</li>
+</ul></li>
+</ol>
+</section>
+<section id="what-you-should-see-4" class="level3">
+<h3>What You Should See</h3>
+<p>Hooks compose cleanly when they are narrow and ordered intentionally.
+Anti-patterns share a shape: they encode taste rather than safety, hide
+modifications from the learner, duplicate <code>CLAUDE.md</code>, or are
+too expensive to run on every event.</p>
+<blockquote>
+<p><strong>The rule:</strong> Hook for safety and determinism. Skill or
+rule for taste. Skip the hook entirely if it would surprise the learner
+or slow the loop.</p>
+</blockquote>
+<hr />
+</section>
+</section>
+<section id="exercise-8-cleanup-and-capture-the-rule-5-min"
+class="level2">
+<h2>Exercise 8: Cleanup and Capture the Rule (5 min)</h2>
+<section id="goal-7" class="level3">
+<h3>Goal</h3>
+<p>Restore the workspace to a quiet state and encode the lesson.</p>
+</section>
+<section id="instructions-7" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p><strong>Remove the live hooks.</strong> Ask Claude Code:</p>
+<pre><code>Remove the &quot;hooks&quot; key from `.claude/settings.json` so the file returns
+to its baseline state with no active hooks.
+Also remove `.claude/notification-log.local` if it exists.</code></pre></li>
+<li><p><strong>Restart Claude Code</strong> so the rest of the
+curriculum runs without hook noise.</p></li>
+<li><p><strong>Add the cumulative rule to
+<code>CLAUDE.md</code>:</strong></p>
+<pre><code>Update CLAUDE.md by adding this section. Do not modify any other section.
+
+## Hooks (Structural Guardrails)
+- Hooks live in `.claude/settings.json` under the &quot;hooks&quot; key
+- PreToolUse with exit 2 is the only reliable hard block; treat PostToolUse as advisory
+- UserPromptSubmit injects narrow facts only; never paragraph-length context
+- Hooks compose by event, in file order; keep each hook narrow and ordered intentionally
+- Use hooks for safety and determinism, not for taste; CLAUDE.md and skills cover the rest
+- Remove demo hooks before continuing to later labs so the workspace stays quiet</code></pre></li>
+<li><p><strong>Exit Claude Code</strong> and reopen the project so the
+new rule is loaded for later labs.</p></li>
+</ol>
+</section>
+<section id="what-you-should-see-5" class="level3">
+<h3>What You Should See</h3>
+<p><code>.claude/settings.json</code> is back to its baseline with no
+<code>"hooks"</code> key. <code>CLAUDE.md</code> now carries a Hooks
+section that summarizes the lesson without re-listing every
+exercise.</p>
+<hr />
+</section>
+</section>
+<section id="common-mistakes--fixes" class="level2">
+<h2>Common Mistakes &amp; Fixes</h2>
+<ul>
+<li>Mistake: using <code>PostToolUse</code> for a hard block. Fix:
+PostToolUse is advisory; the action already happened. Use
+<code>PreToolUse</code> with exit 2.</li>
+<li>Mistake: paragraph-length <code>UserPromptSubmit</code> injections.
+Fix: one-line facts only. Anything longer belongs in
+<code>CLAUDE.md</code> or a skill.</li>
+<li>Mistake: encoding taste as a hook. Fix: if the rule is "I prefer X
+style," that is <code>CLAUDE.md</code> or a reviewer skill, not a
+hook.</li>
+<li>Mistake: leaving demo hooks active across labs. Fix: Exercise 8
+cleanup is mandatory; later labs assume a quiet hook surface.</li>
+<li>Mistake: trusting that every client enforces every hook signal
+identically. Fix: read your client's release notes and confirm with
+<code>maintainer-tools/claude-hook-smoke-test.sh</code> if
+available.</li>
+</ul>
+<hr />
+</section>
+<section id="success-criteria" class="level2">
+<h2>Success Criteria</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />Each hook category (PreToolUse,
+PostToolUse, UserPromptSubmit, Stop, SubagentStop, Notification) was
+wired and observed at least once</label></li>
+<li><label><input type="checkbox" />You can articulate when to choose
+PreToolUse vs PostToolUse in one sentence</label></li>
+<li><label><input type="checkbox" />You produced an anti-pattern
+rationale for at least three of the eight ideas in Exercise
+7</label></li>
+<li><label><input type="checkbox" /><code>.claude/settings.json</code>
+was returned to its baseline state in Exercise 8</label></li>
+<li><label><input type="checkbox" /><code>CLAUDE.md</code> updated with
+the Hooks (Structural Guardrails) section</label></li>
+</ul>
+<hr />
 </section>
 <section id="key-takeaways" class="level2">
 <h2>Key Takeaways</h2>
 <ol type="1">
-<li>The Hooks feature is evolving and experimental.</li>
-<li>Hooks use two repo files: <code>.codex/config.toml</code> enables
-them and <code>.codex/hooks.json</code> defines them.</li>
-<li>In this learner path, the hook lesson is one small Bash-governance
-demo, not a broad live-enforcement system.</li>
-<li><code>PreToolUse</code> plus a non-zero exit gives you a real
-signal, but not always a guaranteed live block in every client.</li>
-<li>One visible demo is enough to understand the feature without making
-the rest of the course noisy.</li>
+<li>Hooks live in <code>.claude/settings.json</code> under the
+<code>"hooks"</code> key — one file, one schema.</li>
+<li>PreToolUse with exit 2 is the only reliable hard block; everything
+else is advisory.</li>
+<li>PostToolUse is for should-clean-up actions like formatters and
+linters; it is not a gate.</li>
+<li>UserPromptSubmit injects facts, not vibes — keep it to one
+line.</li>
+<li>Stop is for end-of-session closure; SubagentStop becomes useful once
+Lab 07 brings subagents into the picture.</li>
+<li>Notification is observability, not control.</li>
+<li>Hooks compose by event in file order; anti-patterns share a shape —
+taste, secrecy, duplication, or cost.</li>
+<li>The lesson lives in <code>CLAUDE.md</code>. The demo hooks do
+not.</li>
 </ol>
+<hr />
+<details>
+<summary><strong>Recovery Path</strong> — Use this if `.claude/settings.json` becomes unworkable mid-lab</summary>
+
+<p>Stay inside the current lab. Do not scan ahead or use other
+<code>reference/</code> material unless this recovery path explicitly
+tells you to.</p>
+<p>If the layered hook surface gets tangled — duplicate entries,
+malformed JSON, hooks firing in surprising order — restore a known-good
+layered config from <code>reference/lab05/settings-final.json</code>.
+That file contains a complete <code>.claude/settings.json</code> with
+all six exercises' hooks wired correctly.</p>
+<p>After applying the rescue:</p>
+<ol type="1">
+<li>exit Claude Code</li>
+<li>reopen the project</li>
+<li>continue from the exercise where you got stuck</li>
+<li>when you reach Exercise 8, the cleanup step is the same regardless
+of whether you were on the rescue config or your own</li>
+</ol>
+<p>The maintainer-side smoke test at
+<code>maintainer-tools/claude-hook-smoke-test.sh</code> covers every
+hook category in this lab. If you are debugging a stuck hook and want a
+deterministic check, ask the maintainer to run the relevant mode for
+you.</p>
+</details>
+
 </section>
 </section>
     </main>
     <footer class="doc-footer">
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlab04.html">← Lab 04</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelab04.html">← Lab 04</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab06.html">Lab 06 →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab06.html">Lab 06 →</a>
       </nav>
     </footer>
   </div>

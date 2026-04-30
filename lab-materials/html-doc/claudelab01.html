@@ -3,47 +3,47 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Lab 01: AGENTS.md — Your Enterprise Constitution</title>
+  <title>Lab 01: CLAUDE.md — Your Enterprise Constitution</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="doc-shell">
     <header class="doc-header">
       <div class="doc-header-meta">
-        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-kicker">Claude Code HR Labs</span>
         <span class="doc-divider"></span>
         <span class="doc-page-label">Lab 01</span>
       </div>
-      <div class="doc-header-title">Lab 01: AGENTS.md — Your Enterprise Constitution</div>
+      <div class="doc-header-title">Lab 01: CLAUDE.md — Your Enterprise Constitution</div>
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlabsetup.html">← Setup</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelabsetup.html">← Setup</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab02.html">Lab 02 →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab02.html">Lab 02 →</a>
       </nav>
     </header>
     <main class="doc-content">
-<section id="lab-01-agentsmd--your-enterprise-constitution"
+<section id="lab-01-claudemd--your-enterprise-constitution"
 class="level1">
-<h1>Lab 01: AGENTS.md — Your Enterprise Constitution</h1>
+<h1>Lab 01: CLAUDE.md — Your Enterprise Constitution</h1>
 <p><strong>Duration:</strong> 60 minutes</p>
 <section id="learning-objective" class="level2">
 <h2>Learning Objective</h2>
-<p>You will experience how Codex behaves <strong>without</strong>
+<p>You will experience how Claude Code behaves <strong>without</strong>
 project conventions, observe it make predictable mistakes, and then fix
-those mistakes by writing AGENTS.md rules. By the end, you'll understand
-why AGENTS.md is the single most important file in any Codex
+those mistakes by writing CLAUDE.md rules. By the end, you'll understand
+why CLAUDE.md is the single most important file in any Claude Code
 project.</p>
 <hr />
 </section>
 <section id="the-key-concept" class="level2">
 <h2>The Key Concept</h2>
-<p>AGENTS.md is a markdown file in the project root of your local repo
-workspace that Codex reads automatically at the start of every session.
-It acts as a permanent instruction manual: your team's conventions,
-standards, and hard-won lessons.</p>
+<p>CLAUDE.md is a markdown file in the project root of your local repo
+workspace that Claude Code reads automatically at the start of every
+session. It acts as a permanent instruction manual: your team's
+conventions, standards, and hard-won lessons.</p>
 <p><strong>What makes it powerful:</strong></p>
 <ul>
-<li>Loaded every session — Codex never "forgets" what's in it</li>
+<li>Loaded every session — Claude Code never "forgets" what's in it</li>
 <li>Checked into the shared repo/workspace bundle — the team shares and
 improves it together</li>
 <li>Compounding — every correction you add prevents future mistakes</li>
@@ -53,29 +53,29 @@ place.</li>
 <p><strong>What to include vs exclude:</strong></p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>Include</th>
 <th>Exclude</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>Build/test/lint commands</td>
-<td>Things Codex figures out by reading code</td>
+<td>Things Claude Code figures out by reading code</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Conventions that differ from defaults</td>
 <td>Standard language conventions</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Architectural decisions specific to your project</td>
 <td>Long tutorials or API docs</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Common gotchas and anti-patterns</td>
 <td>Information that changes frequently</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Environment quirks</td>
 <td>File-by-file codebase descriptions</td>
 </tr>
@@ -87,18 +87,18 @@ place.</li>
 <h2>Exercise 1: Observe the Failure (15 min)</h2>
 <section id="goal" class="level3">
 <h3>Goal</h3>
-<p>Ask Codex to scaffold a backend module <strong>without</strong> the
-missing AGENTS.md rules. Observe what goes wrong.</p>
+<p>Ask Claude Code to scaffold a backend module <strong>without</strong>
+the missing CLAUDE.md rules. Observe what goes wrong.</p>
 </section>
 <section id="instructions" class="level3">
 <h3>Instructions</h3>
 <ol type="1">
-<li><p>Open a Codex session in the project root:</p>
+<li><p>Open a Claude Code session in the project root:</p>
 <div class="sourceCode" id="cb1"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /absolute/path/to/codex-workshop</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">codex</span></span></code></pre></div></li>
-<li><p>For this exercise, if Codex needs repo comparison points, keep it
-limited to these current files only:</p>
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /absolute/path/to/claude-workshop</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span></span></code></pre></div></li>
+<li><p>For this exercise, if Claude Code needs repo comparison points,
+keep it limited to these current files only:</p>
 <ul>
 <li><code>backend/hrapp-service/src/main/java/com/company/hr/resource/HrDepartmentResource.java</code></li>
 <li><code>backend/hrapp-service/src/main/java/com/company/hr/resource/HrJobResource.java</code></li>
@@ -107,8 +107,8 @@ limited to these current files only:</p>
 <li><code>backend/hrapp-common/src/main/java/com/company/hr/common/response/HrApiResponse.java</code></li>
 <li><code>backend/hrapp-common/src/main/java/com/company/hr/common/log/HrLogHelper.java</code></li>
 </ul></li>
-<li><p>Ask Codex to scaffold the <code>Region</code> backend slice using
-the current Jersey/JDBC architecture:</p>
+<li><p>Ask Claude Code to scaffold the <code>Region</code> backend slice
+using the current Jersey/JDBC architecture:</p>
 <pre><code>This is a student exercise.
 Stay inside the current lab. Do not scan ahead or use `reference/` unless this chapter explicitly allows it or I ask for rescue help.
 Strictly perform only what this prompt asks.
@@ -120,14 +120,15 @@ Do not add POST, PUT, PATCH, or DELETE endpoints.
 Do not add extra layers, helpers, services, or patterns not explicitly requested.
 Do not modify application registration or runtime wiring in this exercise.</code></pre>
 <p>Keep the prompt narrow. The point is to see whether the starter rules
-are enough to keep Codex inside the intended lab boundary.</p></li>
+are enough to keep Claude Code inside the intended lab
+boundary.</p></li>
 <li><p><strong>Observe the output carefully.</strong> Because the
-starter <code>AGENTS.md</code> is intentionally incomplete, you should
-expect Codex to produce code with gaps, missing conventions, or
+starter <code>CLAUDE.md</code> is intentionally incomplete, you should
+expect Claude Code to produce code with gaps, missing conventions, or
 incorrect repo assumptions. Use this checklist to identify what is
 incomplete, misaligned, or invented:</p>
 <ul class="task-list">
-<li><label><input type="checkbox" />Did Codex create a Jersey
+<li><label><input type="checkbox" />Did Claude Code create a Jersey
 <code>*Resource</code> and JDBC <code>*JdbcRepository</code>, or did it
 drift into a controller/service/JPA stack that this repo does not
 use?</label></li>
@@ -141,17 +142,17 @@ current <code>HrLogHelper</code> usage?</label></li>
 <li><label><input type="checkbox" />Did the backend code target the
 current PostgreSQL / <code>AIHR_*</code> runtime assumptions instead of
 inventing different persistence/runtime assumptions?</label></li>
-<li><label><input type="checkbox" />Did Codex keep the exercise
+<li><label><input type="checkbox" />Did Claude Code keep the exercise
 read-only, or did it invent request DTOs, write endpoints, or runtime
 wiring?</label></li>
-<li><label><input type="checkbox" />Did Codex explain what guidance it
-followed, or does the output look like it came from broad inference
-rather than explicit current-lab rules?</label></li>
+<li><label><input type="checkbox" />Did Claude Code explain what
+guidance it followed, or does the output look like it came from broad
+inference rather than explicit current-lab rules?</label></li>
 </ul></li>
 <li><p><strong>Write down every mistake you find.</strong> If the
 scaffold looks cleaner than expected, also write down any important
-convention that Codex handled only by inference or luck because
-AGENTS.md did not guarantee it. You'll fix those gaps in Exercise 2.
+convention that Claude Code handled only by inference or luck because
+CLAUDE.md did not guarantee it. You'll fix those gaps in Exercise 2.
 Treat "correct by inference" as a real finding, not as a pass. Your
 Exercise 1 notes should capture at least one visible drift or one
 governance-gap finding.</p></li>
@@ -159,7 +160,7 @@ governance-gap finding.</p></li>
 </section>
 <section id="what-you-should-see" class="level3">
 <h3>What You Should See</h3>
-<p>Codex often makes 2–4 of these mistakes because it has no
+<p>Claude Code often makes 2–4 of these mistakes because it has no
 project-specific guidance. Common ones:</p>
 <ul>
 <li>Falls back to an outdated persistence style that does not match the
@@ -171,10 +172,10 @@ repo</li>
 </ul>
 <p>If your first pass is cleaner than expected, do <strong>not</strong>
 pretend it failed. Treat that as a hidden-governance signal instead:
-Codex inferred conventions that AGENTS.md still does not guarantee. In
-that case, your Exercise 1 output should be a list of missing rules you
-would not want to rely on luck for in a new session, on a larger
-feature, or with a different model.</p>
+Claude Code inferred conventions that CLAUDE.md still does not
+guarantee. In that case, your Exercise 1 output should be a list of
+missing rules you would not want to rely on luck for in a new session,
+on a larger feature, or with a different model.</p>
 <p>If you are unsure whether something was a mistake, compare it against
 the current repo shape:</p>
 <ul>
@@ -189,8 +190,8 @@ endpoints, and runtime registration are out of scope</li>
 assumptions, and naming drift, not just compile errors</li>
 </ul>
 <blockquote>
-<p><strong>This is the teaching moment.</strong> Codex is capable but
-ignorant of YOUR conventions. Without AGENTS.md, every session is a
+<p><strong>This is the teaching moment.</strong> Claude Code is capable
+but ignorant of YOUR conventions. Without CLAUDE.md, every session is a
 blank slate.</p>
 </blockquote>
 <hr />
@@ -200,7 +201,7 @@ blank slate.</p>
 <h2>Exercise 2: Write the Rules (20 min)</h2>
 <section id="goal-1" class="level3">
 <h3>Goal</h3>
-<p>Update AGENTS.md with rules that prevent every mistake you observed
+<p>Update CLAUDE.md with rules that prevent every mistake you observed
 in Exercise 1.</p>
 </section>
 <section id="instructions-1" class="level3">
@@ -209,13 +210,13 @@ in Exercise 1.</p>
 <li><p>Review the mistakes from Exercise 1 and expect to add or
 strengthen rules in these areas:</p>
 <ul>
-<li><strong>Golden rule:</strong> keeps Codex inside the current lab,
-forbids scanning ahead or unauthorized <code>reference/</code> use, and
-keeps it acting like a student partner. If the starter already contains
-a weak version of this rule, strengthen it instead of deleting it. This
-rule matters because the exercise is testing whether Codex follows
-<code>AGENTS.md</code> closely enough to stay inside the intended
-learner path.</li>
+<li><strong>Golden rule:</strong> keeps Claude Code inside the current
+lab, forbids scanning ahead or unauthorized <code>reference/</code> use,
+and keeps it acting like a student partner. If the starter already
+contains a weak version of this rule, strengthen it instead of deleting
+it. This rule matters because the exercise is testing whether Claude
+Code follows <code>CLAUDE.md</code> closely enough to stay inside the
+intended learner path.</li>
 <li><strong>Naming:</strong> require <code>Hr*</code> class names and
 the current <code>*Resource</code>, <code>*JdbcRepository</code>,
 request DTO, and response DTO patterns.</li>
@@ -228,8 +229,8 @@ noisy entry/exit logging, and never log PII.</li>
 Jersey/JAX-RS with explicit JDBC repositories and
 <code>HrApiResponse&lt;T&gt;</code> on all endpoints.</li>
 </ul></li>
-<li><p>You can issue the following prompt to Codex:</p>
-<pre><code>Read AGENTS.md and update it based on the mistakes from the Region scaffolding exercise.
+<li><p>You can issue the following prompt to Claude Code:</p>
+<pre><code>Read CLAUDE.md and update it based on the mistakes from the Region scaffolding exercise.
 
 Add concise, explicit rules in these areas if they are missing or too weak:
 - Golden Rule: stay inside the current lab; do not scan ahead or use `reference/` unless the current chapter allows it or the learner asks for rescue help; act like a student partner and do not use expert shortcuts or hidden fixes unless asked.
@@ -239,8 +240,8 @@ Add concise, explicit rules in these areas if they are missing or too weak:
 - Logging Pattern: use HrLogHelper; avoid noisy entry/exit logging on every method; never log PII such as email, phone, or salary.
 - Backend Architecture: active backend is Jersey/JAX-RS with explicit JDBC repositories; all endpoints return HrApiResponse&lt;T&gt;; never return raw objects.
 
-Keep AGENTS.md concise. Every rule should prevent a specific mistake from the exercise.
-Paste the concrete AGENTS.md edits directly into the file.</code></pre></li>
+Keep CLAUDE.md concise. Every rule should prevent a specific mistake from the exercise.
+Paste the concrete CLAUDE.md edits directly into the file.</code></pre></li>
 </ol>
 <hr />
 </section>
@@ -249,20 +250,22 @@ Paste the concrete AGENTS.md edits directly into the file.</code></pre></li>
 <h2>Exercise 3: Verify the Rules Work (15 min)</h2>
 <section id="goal-2" class="level3">
 <h3>Goal</h3>
-<p>Redo the same scaffolding task and confirm Codex now follows your
-rules.</p>
+<p>Redo the same scaffolding task and confirm Claude Code now follows
+your rules.</p>
 </section>
 <section id="instructions-2" class="level3">
 <h3>Instructions</h3>
 <ol type="1">
-<li><p><strong>Exit Codex and resume</strong> — this is critical because
-<code>AGENTS.md</code> is read at session start. Exit the current Codex
-session from your workspace root. When Codex exits, it may print a
-resume command such as <code>codex resume &lt;session-id&gt;</code>. If
-it does, use that command instead of improvising your own restart
-flow.</p></li>
-<li><p>Ask Codex the <strong>exact same prompt</strong> as Exercise
-1:</p>
+<li><p><strong>Exit Claude Code and resume</strong> — this is critical
+because <code>CLAUDE.md</code> is read at session start. Exit the
+current Claude Code session from your workspace root.</p>
+<blockquote>
+<p><strong>Note:</strong> Claude Code does not print a resume command on
+exit. Close and re-open the project in Claude Code, or use
+<code>/continue</code> to resume the conversation.</p>
+</blockquote></li>
+<li><p>Ask Claude Code the <strong>exact same prompt</strong> as
+Exercise 1:</p>
 <pre><code>This is a student exercise.
 Stay inside the current lab. Do not scan ahead or use `reference/` unless this chapter explicitly allows it or I ask for rescue help.
 Strictly perform only what this prompt asks.
@@ -287,14 +290,14 @@ on all resource endpoints?</label></li>
 <li><label><input type="checkbox" />Runtime assumptions match the
 PostgreSQL / <code>AIHR_*</code> backend?</label></li>
 </ul></li>
-<li><p>If any mistakes remain, add another rule to AGENTS.md and
+<li><p>If any mistakes remain, add another rule to CLAUDE.md and
 repeat.</p></li>
 </ol>
 </section>
 <section id="what-you-should-see-1" class="level3">
 <h3>What You Should See</h3>
-<p>Codex should now produce convention-compliant code on the
-<strong>first try</strong> — no corrections needed. The AGENTS.md rules
+<p>Claude Code should now produce convention-compliant code on the
+<strong>first try</strong> — no corrections needed. The CLAUDE.md rules
 prevented every mistake from Exercise 1, and the golden rule should keep
 the next fresh session from skipping the learning steps.</p>
 <hr />
@@ -310,29 +313,29 @@ lab.</p>
 <section id="instructions-3" class="level3">
 <h3>Instructions</h3>
 <ol type="1">
-<li><p>Review your AGENTS.md. Ask yourself:</p>
+<li><p>Review your CLAUDE.md. Ask yourself:</p>
 <ul>
 <li>Is every rule specific and actionable? (Not vague like "write clean
 code")</li>
-<li>Is any rule something Codex already does correctly without being
-told? (Delete it)</li>
-<li>Is any rule too long? (Shorten it — Codex reads better with terse
-rules)</li>
+<li>Is any rule something Claude Code already does correctly without
+being told? (Delete it)</li>
+<li>Is any rule too long? (Shorten it — Claude Code reads better with
+terse rules)</li>
 </ul></li>
-<li><p>Ask Codex to critique its own AGENTS.md:</p>
-<pre><code>Read AGENTS.md and identify any rules that are:
+<li><p>Ask Claude Code to critique its own CLAUDE.md:</p>
+<pre><code>Read CLAUDE.md and identify any rules that are:
 1. Too vague to be actionable
 2. Redundant with what you&#39;d do by default
 3. Missing — based on common Jersey/JAX-RS + JDBC + React mistakes
 Suggest improvements.</code></pre></li>
-<li><p>Apply Codex's suggestions if they're good. Reject if they're
-not.</p></li>
+<li><p>Apply Claude Code's suggestions if they're good. Reject if
+they're not.</p></li>
 </ol>
 <blockquote>
 <p><strong>This is the compounding loop:</strong> mistake → rule →
 verify → refine. By the end of this self-paced lab sequence, your
-AGENTS.md will be a living document that makes Codex dramatically better
-at your specific project.</p>
+CLAUDE.md will be a living document that makes Claude Code dramatically
+better at your specific project.</p>
 </blockquote>
 <hr />
 </section>
@@ -340,30 +343,30 @@ at your specific project.</p>
 <section id="success-criteria" class="level2">
 <h2>Success Criteria</h2>
 <ul class="task-list">
-<li><label><input type="checkbox" />AGENTS.md contains at least 5
+<li><label><input type="checkbox" />CLAUDE.md contains at least 5
 project-specific rules</label></li>
 <li><label><input type="checkbox" />Exercise 1 surfaces at least 2 real
-convention gaps: visible violations, hidden assumptions, or rules Codex
-followed only by inference</label></li>
+convention gaps: visible violations, hidden assumptions, or rules Claude
+Code followed only by inference</label></li>
 <li><label><input type="checkbox" />Exercise 3 produces 0 convention
 violations (same prompt, rules in place)</label></li>
 <li><label><input type="checkbox" />You can explain the difference
-between AGENTS.md (always loaded) and Skills (on-demand)</label></li>
+between CLAUDE.md (always loaded) and Skills (on-demand)</label></li>
 </ul>
 <hr />
 </section>
 <section id="key-takeaways" class="level2">
 <h2>Key Takeaways</h2>
 <ol type="1">
-<li><strong>AGENTS.md is production infrastructure</strong> — iterate on
+<li><strong>CLAUDE.md is production infrastructure</strong> — iterate on
 it like prompts, not like documentation</li>
 <li><strong>Every correction should become a rule</strong> — if you
-corrected Codex, encode it so it never repeats</li>
-<li><strong>Concise &gt; comprehensive</strong> — ~200 lines max. Codex
-ignores bloated files.</li>
+corrected Claude Code, encode it so it never repeats</li>
+<li><strong>Concise &gt; comprehensive</strong> — ~200 lines max. Claude
+Code ignores bloated files.</li>
 <li><strong>Team-shared in the repo</strong> — the whole team
-contributes. Review AGENTS.md changes like code.</li>
-<li><strong>The golden learner rule belongs in AGENTS.md</strong> — if
+contributes. Review CLAUDE.md changes like code.</li>
+<li><strong>The golden learner rule belongs in CLAUDE.md</strong> — if
 you want fresh sessions to stay inside the exercise, make that behavior
 durable there.</li>
 </ol>
@@ -374,20 +377,21 @@ durable there.</li>
 <p>Stay inside the current lab. Do not scan ahead or use
 <code>reference/</code> unless this recovery path explicitly tells you
 to.</p>
-<p>If the exercise gets noisy or Codex wanders off the point, reset the
-exercise to the smallest useful state:</p>
+<p>If the exercise gets noisy or Claude Code wanders off the point,
+reset the exercise to the smallest useful state:</p>
 <div class="sourceCode" id="cb6"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /absolute/path/to/codex-workshop</span></code></pre></div>
-<p>Then ask Codex to do only this:</p>
-<pre class="text"><code>Read AGENTS.md, AGENTS.md only. Do not scan the codebase.
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /absolute/path/to/claude-workshop</span></code></pre></div>
+<p>Then ask Claude Code to do only this:</p>
+<pre class="text"><code>Read CLAUDE.md, CLAUDE.md only. Do not scan the codebase.
 Summarize the exact missing rule categories exposed by the Region scaffolding exercise.
-Then update AGENTS.md with only those missing rules.
+Then update CLAUDE.md with only those missing rules.
 Do not edit any Java or frontend files in this step.</code></pre>
 <p>After that update:</p>
 <ol type="1">
-<li>exit Codex</li>
-<li>use the printed resume command or
-<code>codex resume --last</code></li>
+<li>exit Claude Code</li>
+<li>re-open the project in Claude Code (there is no <code>resume</code>
+command; use <code>/continue</code> or reopen the same project
+window)</li>
 <li>rerun the original Region scaffolding prompt from Exercise 1</li>
 </ol>
 </details>
@@ -397,9 +401,9 @@ Do not edit any Java or frontend files in this step.</code></pre>
     </main>
     <footer class="doc-footer">
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlabsetup.html">← Setup</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelabsetup.html">← Setup</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab02.html">Lab 02 →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab02.html">Lab 02 →</a>
       </nav>
     </footer>
   </div>

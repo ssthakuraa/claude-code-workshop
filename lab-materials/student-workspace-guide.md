@@ -36,14 +36,15 @@ The training focuses on three themes that make collaboration with AI coding agen
 | [Planning Discipline — Think Before You Build](./claudelab02.md) | Teaches the habit of planning before implementation so Claude Code work starts from a repo-grounded design instead of jumping straight into code. |
 | [Skills & Reusable Workflows — Repo Skills](./claudelab03.md) | Demonstrates how to capture repeatable patterns as skills so you stop restating the same scaffolding and verification instructions by hand. |
 | [Context Management — The #1 Performance Lever](./claudelab04.md) | Teaches how context quality drives output quality and how to keep Claude Code focused by choosing the right files, summaries, and session boundaries. |
-| [Hooks — Truthful Guardrails](./claudelab05.md) | Explains the difference between advisory instructions and repo-managed guardrails by showing one visible hook warning, its current runtime limit, and the cleanup path that keeps later labs quiet. |
-| [Subagents — Isolated Specialist Workers](./claudelab06.md) | Introduces delegated builder and reviewer agents so you can compare same-context work with fresh-context review. |
-| [Parallel Sessions & Isolated Workspaces](./claudelab07.md) | Shows how to run multiple workstreams safely in parallel by separating workspace copies, responsibilities, and verification. |
-| [Verification Loops — The Quality Multiplier](./claudelab08.md) | Teaches the habit of proving work through tests, runtime checks, and visual verification instead of stopping at “the code looks done.” |
-| [MCP Servers — Playwright & Browser Verification](./claudelab09.md) | Shows how to extend Claude Code with browser tooling so it can inspect the running app and verify behavior visually, not just through static code review. |
-| [Data Verification — Runtime Data Checks](./claudelab10.md) | Connects UI and API behavior back to the database so you can confirm that application actions produced the expected runtime data changes. |
-| [Enterprise Governance — Rollout Readiness, Safety Posture & Evidence](./claudelab11.md) | Focuses on bounded rollout, safety posture, and evidence gathering so agentic work is ready for enterprise review and controlled adoption. |
-| [Optional Capstone — End-to-End Feature Build](./claudelab12.md) | Combines the full workflow into one feature exercise so you can practice planning, context, implementation, review, and verification together. |
+| [Hooks — Structural Guardrails](./claudelab05.md) | Walks the full Claude Code hook surface — PreToolUse, PostToolUse, UserPromptSubmit, Stop, SubagentStop, Notification — so you know which hook is the right tool, when a hook is the wrong tool, and how to layer them without producing noise. |
+| [Bad-Agent Recovery — Catching and Correcting Drift](./claudelab06.md) | Teaches the moves that catch drift early, redirect surgically, and salvage usable work when an agent run goes off-track, using a pre-baked simulated transcript so the practice is concrete. |
+| [Delegated Review — Fresh Context Beats Self-Review](./claudelab07.md) | Introduces delegated builder and reviewer agents so you can compare same-context work with fresh-context review. |
+| [Parallel Sessions & Isolated Workspaces](./claudelab08.md) | Shows how to run multiple workstreams safely in parallel by separating workspace copies, responsibilities, and verification. |
+| [Verification Loops — The Quality Multiplier](./claudelab09.md) | Teaches the habit of proving work through tests, runtime checks, and visual verification instead of stopping at “the code looks done.” |
+| [MCP Servers — Playwright & Browser Verification](./claudelab10.md) | Shows how to extend Claude Code with browser tooling so it can inspect the running app and verify behavior visually, not just through static code review. |
+| [Data Verification — Runtime Data Checks](./claudelab11.md) | Connects UI and API behavior back to the database so you can confirm that application actions produced the expected runtime data changes. |
+| [Enterprise Governance — Rollout Readiness, Safety Posture & Evidence](./claudelab12.md) | Focuses on bounded rollout, safety posture, and evidence gathering so agentic work is ready for enterprise review and controlled adoption. |
+| [Optional Capstone — End-to-End Feature Build](./claudelab13.md) | Combines the full workflow into one feature exercise so you can practice planning, context, implementation, review, and verification together. |
 | [Claude Code Lab Reference Card — Best Practices Summary](./claudelab-reference.md) | Condenses the full training into a short operating card you can reuse later without rereading the whole course. |
 
 ---

@@ -10,15 +10,15 @@
   <div class="doc-shell">
     <header class="doc-header">
       <div class="doc-header-meta">
-        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-kicker">Claude Code HR Labs</span>
         <span class="doc-divider"></span>
         <span class="doc-page-label">Lab 02</span>
       </div>
       <div class="doc-header-title">Lab 02: Planning Discipline — Think Before You Build</div>
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlab01.html">← Lab 01</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelab01.html">← Lab 01</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab03.html">Lab 03 →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab03.html">Lab 03 →</a>
       </nav>
     </header>
     <main class="doc-content">
@@ -38,27 +38,27 @@ planning — and why it costs more time than it saves.</p>
 <h2>Key Terms</h2>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>Term</th>
 <th>Meaning in this lab</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td><code>agent</code></td>
-<td>The Codex session doing the work in your repo</td>
+<td>The Claude Code session doing the work in your repo</td>
 </tr>
-<tr>
+<tr class="even">
 <td><code>plan</code></td>
 <td>A repo-grounded implementation approach produced before code is
 written</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><code>verify</code></td>
 <td>Compile, test, or otherwise prove the implementation matches the
 plan</td>
 </tr>
-<tr>
+<tr class="even">
 <td><code>worklist</code></td>
 <td>A durable checklist for multi-step or multi-session work</td>
 </tr>
@@ -67,11 +67,11 @@ plan</td>
 </section>
 <section id="the-key-concept" class="level2">
 <h2>The Key Concept</h2>
-<p>In Codex, the important habit is not a specific UI mode. The
+<p>In Claude Code, the important habit is not a specific UI mode. The
 important habit is to ask for a repo-grounded plan
 <strong>before</strong> implementation when the task is non-trivial. You
-iterate on that plan until it is solid, then you ask Codex to implement
-against it.</p>
+iterate on that plan until it is solid, then you ask Claude Code to
+implement against it.</p>
 <p><strong>The 4-Phase Workflow:</strong></p>
 <pre><code>Explore → Plan → Implement → Verify</code></pre>
 <p><strong>When to plan first:</strong></p>
@@ -90,9 +90,9 @@ against it.</p>
 </section>
 <section id="setup" class="level2">
 <h2>Setup</h2>
-<p>You should have a working AGENTS.md from Lab 01. If not, ask Codex to
-restore it for you with this exact prompt:</p>
-<pre class="text"><code>Restore `AGENTS.md` from `reference/lab01/AGENTS.md`.
+<p>You should have a working CLAUDE.md from Lab 01. If not, ask Claude
+Code to restore it for you with this exact prompt:</p>
+<pre class="text"><code>Restore `CLAUDE.md` from `reference/lab01/CLAUDE.md`.
 Only replace that file.
 Do not inspect or modify anything else.
 Then tell me the restore is complete.</code></pre>
@@ -106,26 +106,38 @@ implementation target.</p>
 <hr />
 </section>
 </section>
-<section id="exercise-1-the-bad-path--skip-the-plan-15-min"
+<section id="exercise-1-the-bad-path--no-plan-observe-the-gaps-15-min"
 class="level2">
-<h2>Exercise 1: The Bad Path — Skip the Plan (15 min)</h2>
+<h2>Exercise 1: The Bad Path — No Plan, Observe the Gaps (15 min)</h2>
 <section id="goal" class="level3">
 <h3>Goal</h3>
-<p>Implement the hire flow WITHOUT planning. Observe what's missing.</p>
+<p>Audit the existing hire flow WITHOUT planning — observe what the
+starter code is missing.</p>
+<blockquote>
+<p><strong>Note:</strong> The starter workspace already has a partial
+<code>hireEmployee()</code> implementation — it compiles and returns a
+hired employee, but it is intentionally incomplete. Your job is to
+<strong>observe and document the gaps</strong>, not to implement from
+scratch.</p>
+</blockquote>
 </section>
 <section id="instructions" class="level3">
 <h3>Instructions</h3>
 <ol type="1">
-<li><p>Ask Codex to implement directly (do NOT ask for a plan
-first):</p>
-<pre><code>Implement the backend hire flow for the HR app.
-Update the current Jersey/JDBC stack so a hire request:
-- creates a new employee record
-- returns the employee detail response
-- follows the existing employee resource and command-repository patterns
+<li><p>Ask Claude Code to audit the existing hire flow (do NOT ask for a
+plan first):</p>
+<pre><code>Audit the existing backend hire flow for the HR app.
+Read the current hireEmployee() method in HrEmployeeCommandJdbcRepository
+and the hire() endpoint in HrEmployeeResource.
+Do not modify any files yet.
+Report which of these requirements are currently missing from the implementation:
+- writes a job_history record (every hire = first job history entry)
+- checks idempotency (duplicate POST should not create two employees)
+- validates salary against the job&#39;s min/max range
+- creates an AIHR_USERS record for the new employee
+- masks PII in the response based on the caller&#39;s role
 This is the bad path on purpose.
-Do not stop to plan first.
-Do not add hidden business rules, side effects, or compensating logic unless they are explicitly requested here.</code></pre></li>
+Do not add or fix anything yet.</code></pre></li>
 <li><p><strong>Review the output.</strong> Check:</p>
 <ul class="task-list">
 <li><label><input type="checkbox" />Does it write a
@@ -140,25 +152,28 @@ job's min/max range?</label></li>
 <li><label><input type="checkbox" />Does it mask PII in the response
 based on the caller's role?</label></li>
 </ul></li>
-<li><p><strong>Count the missing requirements.</strong> You'll likely
-find 2–4 gaps.</p></li>
+<li><p><strong>Count the missing requirements.</strong> You should find
+at least 2–4 gaps.</p></li>
 </ol>
 <blockquote>
-<p><strong>This is intentional.</strong> The learner prompt was
-deliberately too weak. If Codex still over-completes by inventing audit
-trail, idempotency, salary validation, user creation, or other implicit
-requirements, treat that as drift to record, not as success.</p>
+<p><strong>This is intentional.</strong> The starter
+<code>hireEmployee()</code> is deliberately incomplete. If Claude Code
+identifies requirements not listed above (audit trail, email uniqueness,
+etc.), treat those as good findings too — write them down. If the audit
+comes up empty, push harder: ask Claude Code to compare against
+<code>terminateEmployee()</code> or <code>transferEmployee()</code> as
+reference implementations of a complete lifecycle flow.</p>
 </blockquote>
 <ol start="4" type="1">
 <li><p><strong>Preserve the first attempt before undoing it.</strong>
-Ask Codex to capture a short note you can compare later:</p>
+Ask Claude Code to capture a short note you can compare later:</p>
 <pre><code>Summarize the first attempt before we undo it.
 Show:
 1. which files changed
 2. which important requirements are still missing
 3. a short bullet list named &quot;bad path snapshot&quot; that I can reuse in Exercise 3
 Do not fix anything yet.</code></pre></li>
-<li><p>Ask Codex to restore the learner workspace to the
+<li><p>Ask Claude Code to restore the learner workspace to the
 pre-implementation state. For this training bundle, keep the learner
 recovery path on the checked-in <code>reference/</code> escape hatches
 and the repo starter state. Use a prompt like:</p>
@@ -185,7 +200,7 @@ implement.</p>
 <section id="instructions-1" class="level3">
 <h3>Instructions</h3>
 <ol type="1">
-<li><p>Ask Codex for a plan first:</p>
+<li><p>Ask Claude Code for a plan first:</p>
 <pre><code>Design the backend hire flow for the current HR app.
 
 Requirements:
@@ -223,11 +238,12 @@ salary out of range)?</li>
 <pre><code>The plan is missing error handling for when the manager ID doesn&#39;t exist.
 Also, what happens if the username derived from email is already taken?
 Update the plan.</code></pre></li>
-<li><p>When the plan is solid, ask Codex to implement against it:</p>
+<li><p>When the plan is solid, ask Claude Code to implement against
+it:</p>
 <pre><code>Implement hireEmployee() exactly as designed in the plan above.
 For backend verification, use `cd backend &amp;&amp; ./build-jersey-service.sh test`
 rather than a direct `mvn` command.</code></pre></li>
-<li><p><strong>Verify:</strong> Ask Codex:</p>
+<li><p><strong>Verify:</strong> Ask Claude Code:</p>
 <pre><code>Run `cd backend &amp;&amp; ./build-jersey-service.sh test` to compile and validate
 the current implementation.
 Then compare the implementation against the plan and tell me whether anything
@@ -261,24 +277,24 @@ if the bad path drifted or over-completed. Do not rewrite the story into
 an idealized textbook bad path. Write down which requirements were
 missed, invented, or handled incorrectly in the first attempt, and how
 the planned version fixed them.</p></li>
-<li><p><strong>Add a rule to AGENTS.md:</strong></p>
-<pre><code>Update AGENTS.md by adding these rules:
+<li><p><strong>Add a rule to CLAUDE.md:</strong></p>
+<pre><code>Update CLAUDE.md by adding these rules:
 
 ## Employee Lifecycle Rules
 - Every hire/promote/transfer/terminate MUST write a job_history record
 - Hire endpoint requires idempotency key; request validation happens in the resource layer and duplicate-request enforcement happens in the command repository
 - findById masks salary/PII based on HrSecurityUtil.canViewSalary()/canViewPii()</code></pre>
-<p>After Codex updates <code>AGENTS.md</code>, exit Codex and use the
-printed resume command so the updated rules are loaded in the next
-session.</p></li>
-<li><p>Ask Codex to self-critique:</p>
+<p>After Claude Code updates <code>CLAUDE.md</code>, exit Claude Code
+and use the printed resume command so the updated rules are loaded in
+the next session.</p></li>
+<li><p>Ask Claude Code to self-critique:</p>
 <pre><code>Is there anything in the current hireEmployee() implementation
-that doesn&#39;t follow AGENTS.md conventions? Check logging, response format,
+that doesn&#39;t follow CLAUDE.md conventions? Check logging, response format,
 security annotations, and error handling.</code></pre></li>
-<li><p>Ask Codex:</p>
+<li><p>Ask Claude Code:</p>
 <pre><code>Fix any good issues you identified in the current hireEmployee()
 implementation.
-Keep the changes aligned to AGENTS.md and rerun the backend wrapper-based
+Keep the changes aligned to CLAUDE.md and rerun the backend wrapper-based
 verification if needed.</code></pre></li>
 <li><p>Add an explicit verification step to your own workflow notes:</p>
 <ul>
@@ -293,7 +309,7 @@ verification if needed.</code></pre></li>
 <section id="common-mistakes--fixes" class="level2">
 <h2>Common Mistakes &amp; Fixes</h2>
 <ul>
-<li>Mistake: asking Codex to "just implement it" on a multi-file
+<li>Mistake: asking Claude Code to "just implement it" on a multi-file
 workflow. Fix: ask for affected files, data flow, transaction boundary,
 and verification first.</li>
 <li>Mistake: treating the first plan as final. Fix: iterate on missing
@@ -311,11 +327,11 @@ requirements (job_history, idempotency, etc.)</label></li>
 <li><label><input type="checkbox" />Exercise 2 plan includes all 7 steps
 before implementation starts</label></li>
 <li><label><input type="checkbox" />Final <code>hireEmployee()</code>
-compiles and follows all AGENTS.md conventions</label></li>
-<li><label><input type="checkbox" />AGENTS.md now contains Employee
+compiles and follows all CLAUDE.md conventions</label></li>
+<li><label><input type="checkbox" />CLAUDE.md now contains Employee
 Lifecycle Rules</label></li>
-<li><label><input type="checkbox" />You can explain when to ask Codex
-for an explicit plan vs when to skip it</label></li>
+<li><label><input type="checkbox" />You can explain when to ask Claude
+Code for an explicit plan vs when to skip it</label></li>
 </ul>
 <hr />
 </section>
@@ -327,7 +343,7 @@ idempotency, and masking need explicit mention — or a plan that surfaces
 them.</li>
 <li><strong>Planning is cheaper than debugging.</strong> 5 minutes of
 planning saved 20 minutes of rework.</li>
-<li><strong>The plan output feeds AGENTS.md.</strong> Don't discard the
+<li><strong>The plan output feeds CLAUDE.md.</strong> Don't discard the
 plan — extract rules from it.</li>
 <li><strong>Iterate the plan, not the code.</strong> It's much cheaper
 to rewrite a plan bullet than refactor 50 lines of Java.</li>
@@ -337,9 +353,9 @@ to rewrite a plan bullet than refactor 50 lines of Java.</li>
     </main>
     <footer class="doc-footer">
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlab01.html">← Lab 01</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelab01.html">← Lab 01</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab03.html">Lab 03 →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab03.html">Lab 03 →</a>
       </nav>
     </footer>
   </div>

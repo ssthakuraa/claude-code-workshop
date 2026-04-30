@@ -3,439 +3,333 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Lab 12: Release-Style Feature Slice</title>
+  <title>Lab 12: Enterprise Governance — Rollout Readiness, Safety
+Posture &amp; Evidence</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="doc-shell">
     <header class="doc-header">
       <div class="doc-header-meta">
-        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-kicker">Claude Code HR Labs</span>
         <span class="doc-divider"></span>
         <span class="doc-page-label">Lab 12</span>
       </div>
-      <div class="doc-header-title">Lab 12: Release-Style Feature Slice</div>
+      <div class="doc-header-title">Lab 12: Enterprise Governance — Rollout Readiness, Safety Posture & Evidence</div>
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlab11.html">← Lab 11</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelab11.html">← Lab 11</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab-reference.html">Reference Card →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab13.html">Lab 13 →</a>
       </nav>
     </header>
     <main class="doc-content">
-<section id="lab-12-release-style-feature-slice" class="level1">
-<h1>Lab 12: Release-Style Feature Slice</h1>
-<p><strong>Duration:</strong> 120-150 minutes</p>
-<section id="goal" class="level2">
-<h2>Goal</h2>
-<p>Build one real release-style feature end to end:</p>
-<ul>
-<li>Feature: HR Assessments Directory</li>
-<li>Audience: HR specialist / manager as reviewer workflow</li>
-<li>Route: <code>/hr/assessments</code></li>
-<li>Scope: new backend list API + new frontend directory page +
-verification + review artifacts</li>
-<li>Non-goal: do not rebuild or extend the existing employee
-self-service <code>My Assessments</code> flow unless explicitly
-required</li>
-</ul>
-<p>This lab is intentionally about one clean vertical slice, not about
-making the assessments area bigger in every direction.</p>
+<section
+id="lab-12-enterprise-governance--rollout-readiness-safety-posture--evidence"
+class="level1">
+<h1>Lab 12: Enterprise Governance — Rollout Readiness, Safety Posture
+&amp; Evidence</h1>
+<p><strong>Duration:</strong> 75 minutes</p>
+<blockquote>
+<p>Recommended Day 2 order: <strong>Lab 10 → Lab 09 → Lab 08 → Lab 11 →
+Lab 12 → optional Lab 13</strong>. This file is the fifth stop in that
+sequence, after you already have browser, API, and database verification
+evidence to govern.</p>
+</blockquote>
+<section id="learning-objective" class="level2">
+<h2>Learning Objective</h2>
+<p>You will translate individual Claude Code success into something a
+team, architect group, or enablement owner could trust at scale. The
+focus is not just building artifacts. The focus is evidence, review
+roles, bounded safety posture, and rollout discipline.</p>
 </section>
-<section id="starter-state" class="level2">
-<h2>Starter State</h2>
-<p>The starter should <strong>not</strong> already contain the Lab 12
-solution.</p>
-<p>The student is expected to build:</p>
+<section id="the-key-concepts" class="level2">
+<h2>The Key Concepts</h2>
+<section id="rollout-readiness" class="level3">
+<h3>Rollout Readiness</h3>
+<p>Enterprise adoption usually fails from weak operating discipline, not
+lack of model capability. A team-ready workflow needs:</p>
 <ul>
-<li>backend endpoint</li>
-<li>backend repository/query</li>
-<li>backend DTO</li>
-<li>backend test</li>
-<li>frontend API hook/module</li>
-<li>frontend page</li>
-<li>route wiring</li>
-<li>navigation wiring</li>
-<li>verification artifacts</li>
-</ul>
-<p>If you need rescue help, use the Lab 12 escape hatch in
-<code>reference/lab12/</code>. Do not pull in unrelated files or replace
-whole app areas.</p>
-</section>
-<section id="why-this-feature" class="level2">
-<h2>Why This Feature</h2>
-<ul>
-<li>It is a clean vertical slice.</li>
-<li>It requires both backend and frontend work.</li>
-<li>It stays in the assessment domain.</li>
-<li>It avoids the current <code>My Assessments</code> entanglement.</li>
-<li>It is easy to verify in API, browser, and database.</li>
+<li>safety posture</li>
+<li>review roles</li>
+<li>evidence quality</li>
+<li>expansion criteria</li>
 </ul>
 </section>
-<section id="feature-scope" class="level2">
-<h2>Feature Scope</h2>
-<p>The first slice is read-only.</p>
-<section id="page-requirements" class="level3">
-<h3>Page requirements</h3>
+<section id="repo-safety-posture" class="level3">
+<h3>Repo Safety Posture</h3>
+<p>In Claude Code, the repo-level safety configuration lives in
+<code>.claude/settings.json</code>:</p>
 <ul>
-<li>Page title: <code>Assessments</code></li>
-<li>Route: <code>/hr/assessments</code></li>
-<li>Filters:
+<li><code>permissions.allow</code> — tools or operations explicitly
+permitted without prompting</li>
+<li><code>permissions.deny</code> — tools or operations explicitly
+blocked</li>
+<li><code>mcpServers</code> — project-scoped MCP integrations</li>
+</ul>
+<p>There is no <code>config.toml</code> or
+<code>approval_policy</code>/<code>sandbox_mode</code> key in Claude
+Code. The equivalent of a bounded-pilot posture is a
+<code>permissions.deny</code> list that restricts write operations
+outside the workspace. This lab should not try to recreate an old
+command-allowlist story. The modern repo-level safety model is a
+deny-first permissions block and explicit evidence.</p>
+</section>
+<section
+id="enterprise-governance--safety-posture--review-roles--expansion-gates"
+class="level3">
+<h3>Enterprise Governance = Safety Posture + Review Roles + Expansion
+Gates</h3>
+<p>Together, these create a governance layer:</p>
+<pre class="text"><code>Config: approval and sandbox posture for the repo
+Evidence + review: determine whether the workflow is safe to expand</code></pre>
+<hr />
+</section>
+</section>
+<section id="setup" class="level2">
+<h2>Setup</h2>
+<p>Ask Claude Code to run these compile/build checks for you:</p>
+<pre><code>This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use `reference/` unless this chapter explicitly allows it or you need rescue help.
+
+Run these verification checks and tell me whether both succeed:
+- `cd backend &amp;&amp; ./build-jersey-service.sh compile`
+- `cd frontend &amp;&amp; npm run build`</code></pre>
+<p>Client capability notes:</p>
 <ul>
-<li>employee name search</li>
-<li>review cycle</li>
+<li><code>.claude/settings.json</code> changes are loaded at session
+start, not always hot-reloaded into an already-running Claude Code
+session</li>
+<li>for this lab, expect to save the config, then start a fresh Claude
+Code session from the repo root before you judge whether the safety
+posture is active</li>
+<li><code>.claude/</code> can be edited directly by Claude Code if
+permissions allow; if not, ask Claude Code to draft the exact content
+and then apply it yourself</li>
+<li>acceptable proof in a constrained client is: file state,
+smoke-helper output, and fresh-context verification where possible; do
+not pretend a missing live prompt means the repo config is absent</li>
+</ul>
+<hr />
+</section>
+<section id="exercise-1-write-the-rollout-recommendation-15-min"
+class="level2">
+<h2>Exercise 1: Write the Rollout Recommendation (15 min)</h2>
+<section id="goal" class="level3">
+<h3>Goal</h3>
+<p>Create a concise rollout recommendation for a skeptical enterprise
+audience.</p>
+</section>
+<section id="instructions" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Claude Code to generate a short rollout recommendation:</p>
+<pre><code>This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use `reference/` unless this chapter explicitly allows it or you need rescue help.
+
+Write a rollout recommendation for introducing Claude Code into this HR repo.
+It must answer:
+1. who should use it first
+2. what repo safety posture is safe enough for the first wave
+3. what review roles are mandatory
+4. what evidence is required before expansion
+5. what stop conditions should pause the rollout</code></pre></li>
+<li><p><strong>Review the recommendation.</strong> It should be
+practical, slightly conservative, and tied to real observed workflow
+risks from the course.</p></li>
+</ol>
+<hr />
+</section>
+</section>
+<section id="exercise-2-define-the-evidence-package-20-min"
+class="level2">
+<h2>Exercise 2: Define the Evidence Package (20 min)</h2>
+<section id="goal-1" class="level3">
+<h3>Goal</h3>
+<p>Define the evidence package a team lead would need before approving
+broader use.</p>
+</section>
+<section id="instructions-1" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Claude Code to produce an evidence checklist:</p>
+<pre><code>Create an enterprise evidence checklist for this repo.
+Include:
+- implementation evidence
+- test evidence
+- browser verification evidence
+- data verification evidence
+- code-review evidence
+- rollback or stop-condition evidence</code></pre></li>
+<li><p><strong>Review the checklist.</strong> Ask whether each evidence
+item reduces a real failure mode or just adds ceremony.</p></li>
+<li><p>Ask Claude Code one more question:</p>
+<pre><code>Which pieces of this evidence package are mandatory before expansion,
+and which are optional for a first bounded pilot?</code></pre></li>
+</ol>
+<hr />
+</section>
+</section>
+<section id="exercise-3-define-the-review-model-15-min" class="level2">
+<h2>Exercise 3: Define the Review Model (15 min)</h2>
+<section id="goal-2" class="level3">
+<h3>Goal</h3>
+<p>Define the review model and bounded pilot criteria.</p>
+</section>
+<section id="instructions-2" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Claude Code to define the review model:</p>
+<pre><code>Define the review model for a bounded Claude Code pilot in this repo.
+Name:
+- learner/self-review responsibilities
+- peer or senior colleague review responsibilities
+- tech lead / architect review responsibilities
+- the conditions required before expanding the pilot</code></pre></li>
+<li><p><strong>Review the model.</strong> Ask whether any role is
+overloaded or whether any important sign-off is missing.</p></li>
+<li><p><strong>Discussion:</strong> What reviewer roles already exist in
+your organization, and which of them would actually need evidence from
+this workflow?</p></li>
+</ol>
+<hr />
+</section>
+</section>
+<section id="exercise-4-define-the-repo-safety-posture-20-min"
+class="level2">
+<h2>Exercise 4: Define the Repo Safety Posture (20 min)</h2>
+<section id="goal-3" class="level3">
+<h3>Goal</h3>
+<p>Configure a bounded-pilot safety posture using the current Claude
+Code repo config surface.</p>
+</section>
+<section id="instructions-3" class="level3">
+<h3>Instructions</h3>
+<ol type="1">
+<li><p>Ask Claude Code about the current repo safety posture:</p>
+<pre><code>Read `.claude/settings.json` if it exists and summarize the current repo safety posture.
+Tell me:
+- what permissions.allow entries are present
+- what permissions.deny entries are present
+- whether Playwright MCP is configured under mcpServers</code></pre></li>
+<li><p>Ask Claude Code to draft or apply a bounded-pilot config:</p>
+<pre><code>Update `.claude/settings.json` for a bounded pilot.
+Preserve any existing sections already present (especially mcpServers if
+Lab 10 already created it).
+Do not invent unrelated keys unless they already exist in the file.
+
+Add or confirm a permissions block that:
+- denies write operations outside the workspace (equivalent of sandbox-write posture)
+- allows in-repo build and test commands
+
+Explain what those settings mean in practice for this repo.
+
+If my client cannot edit `.claude/` directly, draft the exact JSON content for
+me and tell me where to place it.</code></pre>
+<p>The important point is not an old-style command allowlist. The
+important point is that the repo now has an explicit bounded-pilot
+permissions posture.</p></li>
+<li><p><strong>Reload Claude Code so the repo settings are
+active.</strong> This is a manual learner action in the client:</p>
+<pre><code>Exit the current Claude Code session.
+Restart Claude Code from the repo root (there is no resume command — re-open the project).
+Ask Claude Code to read `.claude/settings.json` and summarize the active
+permissions and MCP settings before you run the checks below.</code></pre></li>
+<li><p><strong>Test the posture with Claude Code:</strong></p>
+<pre><code>From the repo root, run these checks and tell me which ones prompted,
+which ones ran, and which ones were blocked:
+
+cd backend &amp;&amp; ./build-jersey-service.sh test
+rm -rf /tmp/some-test-folder
+cp CLAUDE.md /tmp/lab11-agents-copy.md</code></pre>
+<p>Expected direction:</p>
+<ul>
+<li>the in-repo build command should usually run inside the bounded
+pilot posture</li>
+<li>destructive or out-of-repo operations should usually prompt or be
+blocked by the client posture</li>
+</ul>
+<p>If your environment still does not show prompts after the
+restart:</p>
+<ul>
+<li>read <code>.claude/settings.json</code> and confirm the permissions
+posture is present</li>
+<li>record that live prompt enforcement was not observable in this
+client</li>
+<li>continue the lab using the configured repo safety posture as the
+governance artifact</li>
 </ul></li>
-<li>Table columns:
+</ol>
+</section>
+</section>
+<section id="exercise-5-final-reflection-5-min" class="level2">
+<h2>Exercise 5: Final Reflection (5 min)</h2>
+<ol type="1">
+<li><p>Add to <code>CLAUDE.md</code>:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Enterprise Rollout</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Start with a bounded pilot, not broad rollout</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Require explicit evidence before expanding</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Name review roles and stop conditions</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">## Claude Code Safety Posture</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Use <span class="in">`.claude/settings.json`</span> permissions block for repo safety posture</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Keep a deny-first bounded pilot until the evidence is stronger</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Re-verify the repo posture from a fresh session before you trust it</span></code></pre></div></li>
+<li><p><strong>Reflect:</strong> The three governance layers are now in
+place:</p>
 <ul>
-<li>employee</li>
-<li>department</li>
-<li>review cycle</li>
-<li>status</li>
-<li>reviewer</li>
-<li>goal completion</li>
-<li>competency score</li>
-<li>updated at</li>
+<li><strong>Repo safety posture</strong> (this lab): deny-first
+permissions block in <code>.claude/settings.json</code></li>
+<li><strong>Evidence + review</strong> (this lab): bounded rollout
+discipline</li>
+<li><strong>Verification stack</strong> (Labs 08-10): tests, browser
+checks, and data checks</li>
 </ul></li>
-</ul>
-</section>
-<section id="backend-requirements" class="level3">
-<h3>Backend requirements</h3>
-<ul>
-<li>New assessments directory endpoint under
-<code>/app/hr/api/v1/assessments</code></li>
-<li>Read-only DTO for directory rows</li>
-<li>JDBC repository query against <code>AIHR_EMPLOYEE_ASSESSMENTS</code>
-and related tables</li>
-<li>Access rules:
-<ul>
-<li><code>HR_SPECIALIST</code> can view all assessment records</li>
-<li><code>MANAGER</code> can view assessment records only for employees
-in their reporting hierarchy</li>
-</ul></li>
-<li>Access control must be enforced in the backend resource/query layer,
-not only hidden in the UI</li>
-</ul>
-</section>
-<section id="frontend-requirements" class="level3">
-<h3>Frontend requirements</h3>
-<ul>
-<li>New page component</li>
-<li>New API client/hook</li>
-<li>Route wiring</li>
-<li>Sidebar entry</li>
-<li>Command palette entry</li>
-<li>i18n strings</li>
-<li>Follow existing shell/page/table/filter patterns</li>
-</ul>
-</section>
-</section>
-<section id="target-files" class="level2">
-<h2>Target Files</h2>
-<p>The lab is easier when the student starts with the real target files
-instead of repo-wide discovery.</p>
-<section id="backend-files" class="level3">
-<h3>Backend files</h3>
-<ul>
-<li><code>backend/hrapp-service/src/main/java/com/company/hr/resource/HrAssessmentResource.java</code></li>
-<li><code>backend/hrapp-service/src/main/java/com/company/hr/repository/HrAssessmentDirectoryJdbcRepository.java</code></li>
-<li><code>backend/hrapp-service/src/main/java/com/company/hr/dto/response/HrAssessmentDirectoryRowDTO.java</code></li>
-<li><code>backend/hrapp-service/src/test/java/com/company/hr/resource/HrAssessmentResourceTest.java</code></li>
-<li><code>backend/hrapp-service/src/main/java/com/company/hr/HrApplicationConfig.java</code></li>
-</ul>
-</section>
-<section id="frontend-files" class="level3">
-<h3>Frontend files</h3>
-<ul>
-<li><code>frontend/src/api/assessments.ts</code></li>
-<li><code>frontend/src/pages/assessments/AssessmentsPage.tsx</code></li>
-<li><code>frontend/src/routes/router.tsx</code></li>
-<li><code>frontend/src/components/hr/layout/HrSidebar.tsx</code></li>
-<li><code>frontend/src/components/hr/layout/HrCommandPalette.tsx</code></li>
-<li><code>frontend/src/i18n/locales/*/assessments.json</code></li>
-<li><code>frontend/src/i18n/locales/en-US/navigation.json</code></li>
-</ul>
-</section>
-</section>
-<section id="required-planning-artifacts" class="level2">
-<h2>Required Planning Artifacts</h2>
-<p>The student must create these before implementation is considered
-complete:</p>
-<ul>
-<li><code>lab-materials/docs/lab12-technical-design.md</code></li>
-<li><code>lab-materials/docs/lab12-worklist.md</code></li>
-<li><code>lab-materials/docs/lab12-resume-prompt.md</code></li>
-<li><code>lab-materials/docs/lab12-backend-review-assist.md</code></li>
-<li><code>lab-materials/docs/lab12-frontend-review-assist.md</code></li>
-<li><code>lab-materials/docs/lab12-performance-audit.md</code></li>
-<li><code>lab-materials/docs/lab12-handoff-summary.md</code></li>
-</ul>
-<p>Optional:</p>
-<ul>
-<li><code>lab-materials/docs/lab12-figma-assessments-ui-spec.md</code></li>
-</ul>
-</section>
-<section id="lab-flow" class="level2">
-<h2>Lab Flow</h2>
-<p>Codex should create a detailed phased worklist first and then follow
-those exact phase names consistently.</p>
-<p>Codex should not assume it may proceed automatically from one major
-phase to the next. After each named phase, it should hand results to the
-learner / engineer for review and wait for explicit approval to
-proceed.</p>
-<section id="phase-1-pm-brief-to-design" class="level3">
-<h3>Phase 1: PM Brief To Design</h3>
-<p>The student gives Codex a PM-style requirement plus UI spec. Codex
-must produce:</p>
-<ul>
-<li>clarified brief</li>
-<li>technical design</li>
-<li>detailed worklist covering implementation, reviews, audits,
-verification, and engineer checkpoints</li>
-<li>resume prompt</li>
-<li>risks and open questions</li>
-</ul>
-<p>No code yet.</p>
-<p>The worklist should include these named phases:</p>
-<ul>
-<li>Backend Contract</li>
-<li>Backend Access Control</li>
-<li>Frontend Data Hook</li>
-<li>Frontend Page Shell</li>
-<li>Route And Navigation Wiring</li>
-<li>Verification</li>
-<li>Final Audit</li>
-</ul>
-</section>
-<section id="phase-2-backend-contract" class="level3">
-<h3>Phase 2: Backend Contract</h3>
-<p>Codex executes only the approved backend contract phase:</p>
-<ul>
-<li>backend DTO</li>
-<li>resource contract</li>
-<li>repository shape</li>
-<li>tests first</li>
-<li>coding-agent review of backend changes</li>
-<li>backend review-assist summary</li>
-</ul>
-<p>Then:</p>
-<ul>
-<li>run
-<code>cd backend &amp;&amp; ./build-jersey-service.sh test</code></li>
-<li>summarize results</li>
-<li>fix obvious review findings before handoff</li>
-<li>stop for learner / engineer review</li>
-</ul>
-</section>
-<section id="phase-3-backend-access-control" class="level3">
-<h3>Phase 3: Backend Access Control</h3>
-<p>Codex executes only the approved backend access-control phase:</p>
-<ul>
-<li>enforce <code>HR_SPECIALIST</code> all-record access</li>
-<li>enforce <code>MANAGER</code> reporting-hierarchy-only access</li>
-<li>keep enforcement in backend resource/query behavior</li>
-<li>extend tests to cover allowed and denied cases</li>
-</ul>
-<p>Then:</p>
-<ul>
-<li>rerun
-<code>cd backend &amp;&amp; ./build-jersey-service.sh test</code></li>
-<li>summarize results</li>
-<li>stop for learner / engineer review</li>
-</ul>
-</section>
-<section id="phase-4-frontend-data-hook" class="level3">
-<h3>Phase 4: Frontend Data Hook</h3>
-<p>Codex executes only the approved frontend data-hook phase:</p>
-<ul>
-<li>API module / hook</li>
-<li>wire query parameters to the backend contract</li>
-<li>keep frontend behavior aligned to the read-only slice</li>
-</ul>
-<p>Then:</p>
-<ul>
-<li>run <code>cd frontend &amp;&amp; npm run build</code></li>
-<li>summarize results</li>
-<li>stop for learner / engineer review</li>
-</ul>
-</section>
-<section id="phase-5-frontend-page-shell" class="level3">
-<h3>Phase 5: Frontend Page Shell</h3>
-<p>Codex executes only the approved page phase:</p>
-<ul>
-<li>page shell</li>
-<li>employee-name search</li>
-<li>cycle filter</li>
-<li>table columns</li>
-<li>loading and empty states</li>
-<li>export or saved-view behavior if included in the approved plan</li>
-<li>frontend code review</li>
-<li>frontend review-assist summary</li>
-</ul>
-<p>Then:</p>
-<ul>
-<li>run <code>cd frontend &amp;&amp; npm run build</code></li>
-<li>run browser verification</li>
-<li>summarize results</li>
-<li>stop for learner / engineer review</li>
-</ul>
-</section>
-<section id="phase-6-route-and-navigation-wiring" class="level3">
-<h3>Phase 6: Route And Navigation Wiring</h3>
-<p>Codex executes only the approved route/navigation phase:</p>
-<ul>
-<li>route protection</li>
-<li>sidebar entry</li>
-<li>command palette entry</li>
-<li>i18n labels</li>
-</ul>
-<p>Then:</p>
-<ul>
-<li>rerun <code>cd frontend &amp;&amp; npm run build</code></li>
-<li>rerun browser verification</li>
-<li>summarize results</li>
-<li>stop for learner / engineer review</li>
-</ul>
-</section>
-<section id="phase-7-final-audit" class="level3">
-<h3>Phase 7: Final Audit</h3>
-<p>Codex executes only the approved final audit phase:</p>
-<ul>
-<li>final coding-agent code review across the full feature</li>
-<li>PM requirement audit</li>
-<li>UX review</li>
-<li>production-quality manual browser check</li>
-<li>JFR analysis</li>
-<li>HAR / network analysis</li>
-<li>findings and recommendations documented for engineer review</li>
-<li>final handoff summary</li>
-</ul>
-</section>
-</section>
-<section id="prompt-guidance" class="level2">
-<h2>Prompt Guidance</h2>
-<section id="phase-1-prompt" class="level3">
-<h3>Phase 1 prompt</h3>
-<p>Ask Codex to:</p>
-<ul>
-<li>improve the PM brief</li>
-<li>produce the technical design</li>
-<li>produce a detailed phased worklist</li>
-<li>produce a resume prompt</li>
-<li>explicitly include backend build, backend review checkpoint,
-frontend build, frontend review checkpoint, PM audit, UX audit, JFR/HAR
-review, final verification, and final handoff</li>
-<li>not implement yet</li>
-</ul>
-</section>
-<section id="backend-implementation-prompt" class="level3">
-<h3>Backend implementation prompt</h3>
-<p>Ask Codex to:</p>
-<ul>
-<li>execute only the approved backend phase</li>
-<li>write tests first</li>
-<li>run
-<code>cd backend &amp;&amp; ./build-jersey-service.sh test</code></li>
-<li>generate <code>lab12-backend-review-assist.md</code></li>
-<li>stop and ask whether backend review is complete and whether to
-proceed to the next named phase</li>
-</ul>
-</section>
-<section id="frontend-implementation-prompt" class="level3">
-<h3>Frontend implementation prompt</h3>
-<p>Ask Codex to:</p>
-<ul>
-<li>execute only the approved frontend phase</li>
-<li>run <code>cd frontend &amp;&amp; npm run build</code></li>
-<li>run browser verification</li>
-<li>generate <code>lab12-frontend-review-assist.md</code></li>
-<li>stop and ask whether frontend review is complete and whether to
-proceed to the next named phase</li>
-</ul>
-</section>
-<section id="final-audit-prompt" class="level3">
-<h3>Final audit prompt</h3>
-<p>Ask Codex to:</p>
-<ul>
-<li>execute only the approved final audit / final verification
-phase</li>
-<li>perform final review</li>
-<li>perform final verification</li>
-<li>produce the final handoff summary</li>
-</ul>
-</section>
-</section>
-<section id="verification-requirements" class="level2">
-<h2>Verification Requirements</h2>
-<section id="backend" class="level3">
-<h3>Backend</h3>
-<ul>
-<li>automated tests</li>
-<li>endpoint contract verification</li>
-<li>explicit access-control verification for HR specialist and manager
-paths</li>
-</ul>
-</section>
-<section id="frontend" class="level3">
-<h3>Frontend</h3>
-<ul>
-<li><code>cd frontend &amp;&amp; npm run build</code></li>
-<li>browser verification of search, cycle filter, table rendering, and
-navigation</li>
-</ul>
-</section>
-<section id="database" class="level3">
-<h3>Database</h3>
-<ul>
-<li>verify returned assessment rows match <code>AIHR_*</code> data</li>
-<li>verify manager scoping aligns with the seeded reporting
-hierarchy</li>
-<li>verify filter behavior corresponds to real database values</li>
-</ul>
-</section>
-</section>
-<section id="out-of-scope" class="level2">
-<h2>Out Of Scope</h2>
-<ul>
-<li>editing assessment entries</li>
-<li>submission workflow</li>
-<li>employee self-service create/edit flow</li>
-<li>major schema redesign</li>
-<li>extending the old <code>My Assessments</code> page instead of
-building the reviewer directory slice</li>
-</ul>
+</ol>
+<hr />
 </section>
 <section id="success-criteria" class="level2">
 <h2>Success Criteria</h2>
-<ul>
-<li>technical design exists before coding</li>
-<li>worklist and resume prompt exist</li>
-<li>backend tests pass</li>
-<li>frontend build passes</li>
-<li>directory page works in browser</li>
-<li>sidebar and command palette links work</li>
-<li>API, browser, and database results align</li>
-<li>final handoff summary exists</li>
+<ul class="task-list">
+<li><label><input type="checkbox" />A bounded rollout recommendation
+exists</label></li>
+<li><label><input type="checkbox" />An evidence checklist
+exists</label></li>
+<li><label><input type="checkbox" />A named review model
+exists</label></li>
+<li><label><input type="checkbox" /><code>.claude/settings.json</code>
+expresses a bounded-pilot permissions posture without destroying any
+existing config sections, especially MCP config already added
+earlier</label></li>
+<li><label><input type="checkbox" />Live enforcement was either observed
+after restart or recorded as a client limitation</label></li>
+<li><label><input type="checkbox" />You can explain approval posture,
+sandbox posture, review roles, evidence, and stop
+conditions</label></li>
 </ul>
+<hr />
 </section>
-<section id="recommendation" class="level2">
-<h2>Recommendation</h2>
-<p>This lab should stay a read-only first slice.</p>
-<p>That keeps Lab 12:</p>
-<ul>
-<li>realistic</li>
-<li>bounded</li>
-<li>finishable</li>
-<li>easy to verify</li>
-</ul>
-<p>The strongest solutions are the ones that keep the reviewer workflow
-clearly separate from the employee self-service assessment flow.</p>
+<section id="key-takeaways" class="level2">
+<h2>Key Takeaways</h2>
+<ol type="1">
+<li>Enterprise rollout needs bounded scope; start with a conservative
+pilot, not a broad mandate.</li>
+<li>Current Claude Code repo safety is expressed through
+<code>permissions.allow</code> / <code>permissions.deny</code> in
+<code>.claude/settings.json</code> and explicit verification, not an old
+command-allowlist story.</li>
+<li>Stop conditions matter; if you cannot say what pauses expansion, the
+rollout is not ready.</li>
+<li>Governance is architecture work, not admin overhead added after the
+fact.</li>
+</ol>
+<hr />
 </section>
 </section>
     </main>
     <footer class="doc-footer">
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlab11.html">← Lab 11</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelab11.html">← Lab 11</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab-reference.html">Reference Card →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab13.html">Lab 13 →</a>
       </nav>
     </footer>
   </div>

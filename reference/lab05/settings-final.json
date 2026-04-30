@@ -1,0 +1,77 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "statusMessage": "Checking Java backend naming...",
+            "command": "set -e; payload=\"$(cat)\"; cmd=\"$(printf '%s' \"$payload\" | jq -r '.tool_input.command // empty')\"; if [ -z \"$cmd\" ]; then exit 0; fi; offenders=\"$(printf '%s' \"$cmd\" | grep -oE 'backend/hrapp-service/src/main/java/com/company/hr/[A-Za-z0-9_/-]+\\.java' | awk -F/ '{print $NF\" \"$0}' | awk '$1 !~ /^Hr/ {print $2}')\"; if [ -n \"$offenders\" ]; then printf 'BLOCKED: backend Java class names must start with Hr. Offending paths:\\n%s\\n' \"$offenders\" 1>&2; exit 2; fi; exit 0"
+          },
+          {
+            "type": "command",
+            "statusMessage": "Checking for dangerous bash commands...",
+            "command": "set -e; payload=\"$(cat)\"; cmd=\"$(printf '%s' \"$payload\" | jq -r '.tool_input.command // empty')\"; if [ -z \"$cmd\" ]; then exit 0; fi; if printf '%s' \"$cmd\" | grep -qE '(^|[[:space:]])rm[[:space:]]+-rf[[:space:]]+(/|~|\\$HOME)([[:space:]]|$)'; then printf 'BLOCKED: dangerous rm -rf detected.\\n' 1>&2; exit 2; fi; if printf '%s' \"$cmd\" | grep -qE 'git[[:space:]]+push[[:space:]]+(--force|-f)([[:space:]]+(origin[[:space:]]+)?(main|master|release/[A-Za-z0-9._-]+))'; then printf 'BLOCKED: force push to a protected branch.\\n' 1>&2; exit 2; fi; if printf '%s' \"$cmd\" | grep -qiE '(DROP[[:space:]]+(TABLE|DATABASE))'; then printf 'BLOCKED: destructive SQL detected.\\n' 1>&2; exit 2; fi; if printf '%s' \"$cmd\" | grep -qE 'chmod[[:space:]]+-R[[:space:]]+777'; then printf 'BLOCKED: chmod -R 777 detected.\\n' 1>&2; exit 2; fi; exit 0"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "statusMessage": "Linting frontend changes...",
+            "command": "set -e; payload=\"$(cat)\"; tool=\"$(printf '%s' \"$payload\" | jq -r '.tool_name // empty')\"; path=\"$(printf '%s' \"$payload\" | jq -r '.tool_input.file_path // .tool_input.path // empty')\"; case \"$tool\" in Edit|Write) ;; *) exit 0 ;; esac; case \"$path\" in frontend/src/*.ts|frontend/src/*.tsx|frontend/src/**/*.ts|frontend/src/**/*.tsx) ;; *) exit 0 ;; esac; rel=\"${path#frontend/}\"; (cd frontend && npx --no-install eslint --fix \"$rel\") 1>&2 || printf 'eslint reported issues for %s\\n' \"$rel\" 1>&2; exit 0"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "statusMessage": "Injecting repo facts...",
+            "command": "printf 'Active runtime: PostgreSQL on backend port 18082, frontend port 5182. Use `cd backend && ./build-jersey-service.sh test` for backend tests.\\n'"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "statusMessage": "Checking for uncommitted work...",
+            "command": "set -e; status=\"$(git status --porcelain 2>/dev/null || true)\"; if [ -n \"$status\" ]; then printf 'WARNING: uncommitted changes at session end:\\n%s\\n' \"$status\" 1>&2; else printf 'Working tree clean.\\n' 1>&2; fi; exit 0"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "statusMessage": "Recording subagent completion...",
+            "command": "set -e; payload=\"$(cat)\"; name=\"$(printf '%s' \"$payload\" | jq -r '.subagent_name // .agent // \"unknown\"')\"; printf 'Subagent finished: %s\\n' \"$name\" 1>&2; exit 0"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "statusMessage": "Logging notification...",
+            "command": "set -e; payload=\"$(cat)\"; msg=\"$(printf '%s' \"$payload\" | jq -r '.message // .notification // \"\"')\"; mkdir -p .claude; printf '%s\\t%s\\n' \"$(date -Iseconds)\" \"$msg\" >> .claude/notification-log.local; exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}

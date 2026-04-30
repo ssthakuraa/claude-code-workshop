@@ -23,7 +23,7 @@ You will create a custom skill that encodes a repeatable pattern, then use it to
 - The durable lesson is still the same: if a workflow repeats, package it.
 
 ### The Agent Concept
-- Before Lab 06 introduces delegated reviewer/builder agents, treat your main Claude Code session as the primary agent.
+- Before Lab 07 introduces delegated reviewer/builder agents, treat your main Claude Code session as the primary agent.
 - Skills help that agent stay consistent without bloating CLAUDE.md.
 
 ### The Rule

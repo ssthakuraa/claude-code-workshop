@@ -3,28 +3,28 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Codex Lab Reference Card — Best Practices Summary</title>
+  <title>Claude Code Lab Reference Card — Best Practices Summary</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="doc-shell">
     <header class="doc-header">
       <div class="doc-header-meta">
-        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-kicker">Claude Code HR Labs</span>
         <span class="doc-divider"></span>
         <span class="doc-page-label">Reference Card</span>
       </div>
-      <div class="doc-header-title">Codex Lab Reference Card — Best Practices Summary</div>
+      <div class="doc-header-title">Claude Code Lab Reference Card — Best Practices Summary</div>
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlab12.html">← Lab 12</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelab13.html">← Lab 13</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
   <span class="doc-nav-link is-disabled doc-nav-next">Next →</span>
       </nav>
     </header>
     <main class="doc-content">
-<section id="codex-lab-reference-card--best-practices-summary"
+<section id="claude-code-lab-reference-card--best-practices-summary"
 class="level1">
-<h1>Codex Lab Reference Card — Best Practices Summary</h1>
+<h1>Claude Code Lab Reference Card — Best Practices Summary</h1>
 <p><strong>Duration:</strong> 10 to 15 minutes</p>
 <p>This final reference is intentionally compact. It should feel like a
 durable operating card, not leftover notes. The goal is to leave the
@@ -59,104 +59,120 @@ the meaning stays intact.</p>
 <h2>Best Practices Reference Card</h2>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>Do</th>
 <th>Don't</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>Start with the prerequisite bring-up lab and align the workspace to
 the learner VM and database.</td>
 <td>Treat every learner machine as if it has identical host, browser,
 and database setup.</td>
 </tr>
-<tr>
-<td>Read <code>AGENTS.md</code>, the learner workspace guide, and the
+<tr class="even">
+<td>Read <code>CLAUDE.md</code>, the learner workspace guide, and the
 relevant docs before coding.</td>
-<td>Start by asking Codex to build a large feature from memory.</td>
+<td>Start by asking Claude Code to build a large feature from
+memory.</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Ask for a repo-grounded plan before multi-file or high-risk
 work.</td>
 <td>Skip directly to implementation when scope or constraints are still
 fuzzy.</td>
 </tr>
-<tr>
-<td>Improve the task brief before asking Codex to solve it.</td>
+<tr class="even">
+<td>Improve the task brief before asking Claude Code to solve it.</td>
 <td>Accept a vague feature request as implementation-ready.</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Read examples before generation and docs before code.</td>
 <td>Invent patterns without checking how the repo already works.</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Keep the learner starter substantial and only remove surgical
 exercise-specific slices.</td>
 <td>Turn the starter workspace into a thin scaffold that no longer feels
 real.</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Promote repeated corrections into the right mechanism:
-<code>AGENTS.md</code>, skills, workflows, repo config, or reference
+<code>CLAUDE.md</code>, skills, workflows, repo config, or reference
 material.</td>
 <td>Keep fixing the same mistake manually in every new
 conversation.</td>
 </tr>
-<tr>
-<td>Keep <code>AGENTS.md</code> lean, durable, and repo-specific.</td>
-<td>Turn <code>AGENTS.md</code> into a giant procedural dump.</td>
+<tr class="even">
+<td>Keep <code>CLAUDE.md</code> lean, durable, and repo-specific.</td>
+<td>Turn <code>CLAUDE.md</code> into a giant procedural dump.</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Use skills and reusable workflow artifacts for repeatable middle
 sections of work.</td>
 <td>Put every repeated process directly into
-<code>AGENTS.md</code>.</td>
+<code>CLAUDE.md</code>.</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Use browser, API, and database verification when a change spans
 layers.</td>
 <td>Stop after the UI "looks right" in one view.</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Treat PostgreSQL as the active local runtime direction in this
 workspace.</td>
 <td>Reintroduce legacy vendor-specific, MySQL-only, or other stale
 runtime assumptions.</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Use the repo's current browser-verification path and repo rules;
 record fallbacks explicitly when the host cannot launch the preferred
 browser.</td>
 <td>Invent bundled browser runtimes or switch browser/tooling
 assumptions silently.</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Start fresh sessions between unrelated tasks and summarize before
 continuing long ones.</td>
-<td>Let stale context accumulate until Codex starts guessing.</td>
+<td>Let stale context accumulate until Claude Code starts guessing.</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Use worklists and resume prompts for tasks that may span sessions or
 days.</td>
 <td>Trust memory to carry long-running work forward cleanly.</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Require at least one explicit self-review before marking work
 complete.</td>
 <td>Treat the first workable output as finished.</td>
 </tr>
-<tr>
+<tr class="even">
 <td>For high-stakes work, do a second review pass focused on learner
 impact and clarity.</td>
 <td>Assume technical correctness alone makes training material
 ready.</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Use a bounded pilot with named review roles and evidence before
 broader rollout.</td>
 <td>Announce broad adoption without stop conditions or evidence
 gates.</td>
+</tr>
+<tr class="even">
+<td>Read the agent's plan before it implements; restart fresh when the
+session is thrashed and redirect only when the drift is one localized
+invention.</td>
+<td>Try to redirect a session whose context has already filled, or
+salvage by cherry-picking lines from a bad run.</td>
+</tr>
+<tr class="odd">
+<td>Use hooks for narrow, deterministic safety checks; keep
+<code>PreToolUse</code> for must-block, <code>PostToolUse</code> for
+should-clean-up.</td>
+<td>Encode taste as a hook, inject paragraph-length context via
+<code>UserPromptSubmit</code>, or leave demo hooks active across
+labs.</td>
 </tr>
 </tbody>
 </table>
@@ -173,12 +189,13 @@ tighten it until you would.</p>
 <ul>
 <li>the learner workspace guide in
 <code>lab-materials/student-workspace-guide.md</code></li>
-<li>the Codex lab markdown set in <code>lab-materials/</code></li>
+<li>the Claude Code lab markdown set in <code>lab-materials/</code></li>
 </ul>
 </section>
 <section id="final-check" class="level2">
 <h2>Final Check</h2>
-<p>Before starting meaningful Codex-assisted work in this repo, ask:</p>
+<p>Before starting meaningful Claude Code-assisted work in this repo,
+ask:</p>
 <ol type="1">
 <li>Do I understand the real runtime direction and repo
 conventions?</li>
@@ -193,7 +210,7 @@ work?</li>
     </main>
     <footer class="doc-footer">
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlab12.html">← Lab 12</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelab13.html">← Lab 13</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
   <span class="doc-nav-link is-disabled doc-nav-next">Next →</span>
       </nav>

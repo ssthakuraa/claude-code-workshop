@@ -3,386 +3,337 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Lab 10: Data Verification — Runtime Data Checks</title>
+  <title>Lab 10: MCP Servers — Playwright &amp; Browser
+Verification</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="doc-shell">
     <header class="doc-header">
       <div class="doc-header-meta">
-        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-kicker">Claude Code HR Labs</span>
         <span class="doc-divider"></span>
         <span class="doc-page-label">Lab 10</span>
       </div>
-      <div class="doc-header-title">Lab 10: Data Verification — Runtime Data Checks</div>
+      <div class="doc-header-title">Lab 10: MCP Servers — Playwright & Browser Verification</div>
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlab09.html">← Lab 09</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelab09.html">← Lab 09</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab11.html">Lab 11 →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab11.html">Lab 11 →</a>
       </nav>
     </header>
     <main class="doc-content">
-<section id="lab-10-data-verification--runtime-data-checks"
+<section id="lab-10-mcp-servers--playwright--browser-verification"
 class="level1">
-<h1>Lab 10: Data Verification — Runtime Data Checks</h1>
+<h1>Lab 10: MCP Servers — Playwright &amp; Browser Verification</h1>
 <p><strong>Duration:</strong> 75 minutes</p>
 <blockquote>
-<p>Recommended Day 2 order: <strong>Lab 09 → Lab 08 → Lab 07 → Lab 10 →
-Lab 11 → optional Lab 12</strong>. This file is the fourth stop in that
-sequence, after browser verification and the earlier implementation
-loops are already in place.</p>
+<p>Recommended Day 2 order: <strong>Lab 10 → Lab 09 → Lab 08 → Lab 11 →
+Lab 12 → optional Lab 13</strong>. Start Day 2 here. Once browser
+verification is in place, the later verification and parallel-work
+chapters become much more realistic and valuable.</p>
 </blockquote>
 <section id="learning-objective" class="level2">
 <h2>Learning Objective</h2>
-<p>You will use Codex with the repo's current PostgreSQL workflow to
-verify that backend operations write correct data. Combined with browser
-verification, this creates a full verification loop: browser → API →
-database.</p>
+<p>You will connect Claude Code to a real browser through the repo's
+current Playwright MCP path. Claude Code will navigate the running HR
+app, inspect page state, take screenshots, and verify that the UI
+matches expectations from the terminal.</p>
 </section>
 <section id="the-key-concept" class="level2">
 <h2>The Key Concept</h2>
-<p>The point of this lab is simple: Codex should be able to inspect real
-database state in a read-oriented way so you can verify that the UI,
-API, and stored data all agree.</p>
-<p>Database verification lets Codex:</p>
+<p><strong>MCP (Model Context Protocol)</strong> is the standardized way
+to connect Claude Code to external tools and data sources.</p>
+<p><strong>Playwright MCP</strong> gives Claude Code browser tools such
+as:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Tool</th>
+<th>What It Does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>browser_navigate</code></td>
+<td>Go to a URL</td>
+</tr>
+<tr class="even">
+<td><code>browser_snapshot</code></td>
+<td>Get page accessibility tree</td>
+</tr>
+<tr class="odd">
+<td><code>browser_take_screenshot</code></td>
+<td>Capture a visual screenshot</td>
+</tr>
+<tr class="even">
+<td><code>browser_click</code></td>
+<td>Click an element</td>
+</tr>
+<tr class="odd">
+<td><code>browser_fill_form</code></td>
+<td>Fill in form fields</td>
+</tr>
+<tr class="even">
+<td><code>browser_console_messages</code></td>
+<td>Read browser console output</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why this matters for enterprise work:</strong></p>
 <ul>
-<li>verify that an API operation wrote correct data</li>
-<li>investigate bugs by checking actual database state</li>
-<li>generate reports from live data</li>
-<li>validate data integrity across tables</li>
+<li>visual regression testing without a separate tool handoff</li>
+<li>Claude Code can verify its own frontend changes against a running
+app</li>
+<li>end-to-end verification: write code, run app, verify in browser,
+iterate</li>
 </ul>
-<p><strong>Security:</strong> Verification access should remain
-read-oriented. The learner should use the current PostgreSQL connection
-metadata and <code>psql</code>, not ad hoc mutation scripts or legacy
-SQLcl helpers. Verification should never become an excuse for direct
-production-style writes.</p>
-<p><strong>The full verification loop:</strong> browser sees UI state,
-API calls see the live response, and <code>psql</code> sees actual
-stored data. Compare all three: any mismatch = bug.</p>
+<p><strong>Configuration note:</strong> In Claude Code, MCP config lives
+in <code>.claude/settings.json</code> under the <code>mcpServers</code>
+key, or in <code>~/.claude/settings.json</code> for user-level config.
+There is no <code>.mcp.json</code> file in Claude Code. In this
+workspace, do not guess. Inspect the repo rules first. If a project
+<code>.claude/settings.json</code> already exists, extend the
+<code>mcpServers</code> section within it. If the active client uses
+another surface, draft the exact content for that surface instead of
+inventing <code>runtime/</code> assets or home-directory paths.</p>
+<p>Fresh-session validation still matters. Edit the project config,
+restart Claude Code if required by your client, then prove that the
+tools are actually visible.</p>
 <hr />
 </section>
 <section id="setup" class="level2">
 <h2>Setup</h2>
-<p>Ask Codex to do the repo reads and runtime checks in this section
-unless you need to inspect a value yourself.</p>
+<p>Ask Claude Code to bring up the backend and frontend for you before
+you configure MCP:</p>
 <pre class="text"><code>This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use hidden completed examples or old conversion notes.
 
-Read `dbdetails.md` and summarize the current non-secret database connection
-metadata for this learner workspace.
-Then confirm whether the backend and frontend are already running on the lab
-ports:
-- backend `18082`
-- frontend `5182`</code></pre>
-<p>Keep the database verification path strict for this lab:</p>
+Start the backend and frontend for this workspace using the current repo
+commands from CLAUDE.md and the active docs.
+
+Requirements:
+- backend on port 18082
+- frontend on port 5182
+- frontend API proxy target http://127.0.0.1:18082
+- verify the backend health endpoint
+- verify the frontend responds
+- create repo-local browser state directories if needed under `.playwright-mcp/`
+
+If port 18082 or 5182 is already in use, treat a stale repo-owned process as
+the first suspect and restart cleanly on the reserved ports.
+For backend cleanup, use `cd backend &amp;&amp; ./stop-jersey-service.sh`.
+Keep any local port overrides in `backend/.env.local` and `frontend/.env.local`.
+
+Tell me when both services are ready and when I should wait before moving to
+the next step.</code></pre>
+<p>Wait for Claude Code to confirm that both services are ready before
+moving on. Later in this chapter, after project MCP config changes,
+close and reopen the project in Claude Code if your client requires a
+fresh session for MCP changes to take effect. There is no
+<code>claude resume</code> command — re-opening the project is the
+correct restart path.</p>
+<p>Important control-plane note:</p>
 <ul>
-<li>use <code>psql</code> with the values from <code>dbdetails.md</code>
-for read-oriented database work</li>
-<li>keep the learner path on direct <code>psql</code> verification plus
-the live API write flow</li>
-<li>do not assume repo-bundled SQL tooling under
-<code>runtime/</code></li>
-<li>do not download or install alternate SQL tools during the lab</li>
-<li>if <code>18082</code> or <code>5182</code> are already in use when
-you verify the app state, treat stale repo-owned backend/frontend
-processes as the first suspect and restart them cleanly on the reserved
-ports</li>
-<li>for backend cleanup, use
-<code>cd backend &amp;&amp; ./stop-jersey-service.sh</code></li>
-<li>keep any local port overrides in <code>backend/.env.local</code> and
-<code>frontend/.env.local</code></li>
+<li>inspect <code>CLAUDE.md</code> first for repo MCP rules</li>
+<li>if a repo MCP file already exists, preserve it</li>
+<li>do not use <code>runtime/</code>-bundled browser, Node, or MCP
+assets</li>
+<li>keep browser user-data and output directories repo-local under
+<code>.playwright-mcp/</code></li>
+<li>avoid absolute paths into your home directory when repo-local or
+installed-tool paths are available</li>
+<li>if <code>CLAUDE.md</code> does not yet define a browser preference,
+use Chrome/Chromium-first and record any fallback explicitly</li>
 </ul>
 <hr />
 </section>
-<section
-id="exercise-1-prepare-the-database-verification-workflow-15-min"
-class="level2">
-<h2>Exercise 1: Prepare The Database Verification Workflow (15 min)</h2>
+<section id="exercise-1-configure-playwright-mcp-15-min" class="level2">
+<h2>Exercise 1: Configure Playwright MCP (15 min)</h2>
 <section id="goal" class="level3">
 <h3>Goal</h3>
-<p>Prepare a repeatable database verification workflow using the repo's
-active PostgreSQL path.</p>
+<p>Add a Playwright MCP server using the current repo/client config
+surface.</p>
 </section>
 <section id="instructions" class="level3">
 <h3>Instructions</h3>
 <ol type="1">
-<li><p>Ask Codex to explain the current database verification path:</p>
+<li><p>Ask Claude Code to inspect the active config surface before
+editing anything:</p>
 <pre class="text"><code>This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use hidden completed examples or old conversion notes.
 
-Read `dbdetails.md`, `backend/OFFLINE-JERSEY-BUILD.md`, and `AGENTS.md`.
-Explain the intended database verification workflow for this repo.
-Then give me the safest repeatable way to run read-only verification queries
-against the HR dataset in this learner workspace.</code></pre></li>
-<li><p><strong>Smoke test:</strong></p>
-<pre class="text"><code>Run read-only verification queries and tell me:
-- how many rows exist in AIHR_EMPLOYEES
-- how many rows exist in AIHR_DEPARTMENTS
-- how many rows exist in AIHR_JOBS</code></pre></li>
+Read `CLAUDE.md` first.
+Then inspect `.claude/settings.json` if it exists, to see whether an
+`mcpServers` section is already present.
+
+Tell me the current state of the project MCP config before you make any edits.</code></pre></li>
+<li><p>Ask Claude Code to draft or apply the MCP configuration:</p>
+<pre class="text"><code>Update the active project MCP config for this repo.
+Preserve any existing sections already present.
+
+Requirements:
+- use repo-local or installed-tool paths only
+- do not use `runtime/`
+- do not use paths from my home directory unless there is no repo-local alternative
+- store browser profile and output under:
+  - `.playwright-mcp/profile`
+  - `.playwright-mcp/output`
+- prefer the repo browser policy from `CLAUDE.md`; if it is not defined yet, use Chrome/Chromium-first and record any fallback explicitly
+- if the preferred browser cannot be launched on this host, record the fallback explicitly instead of guessing
+
+If my client cannot edit the active config file directly, draft the exact
+content for me and tell me where it belongs.</code></pre></li>
+<li><p><strong>Verify the configuration.</strong> Open the active config
+file and confirm it:</p>
+<ul>
+<li>contains a Playwright MCP entry for this project</li>
+<li>preserves any earlier project config sections</li>
+<li>uses repo-local profile/output paths under
+<code>.playwright-mcp/</code></li>
+<li>does not reference <code>runtime/</code></li>
+<li>does not rely on stale <code>/scratch/training/...</code> paths</li>
+</ul></li>
+<li><p><strong>Restart Claude Code if needed</strong> to load the
+project-scoped MCP server.</p>
+<p>Exit the current Claude Code session and restart it from the repo
+root after editing the project config if your client requires that for
+MCP discovery. There is no <code>claude resume</code> command —
+re-opening the project is the correct restart path.</p></li>
+<li><p><strong>Ask Claude Code to verify that MCP is working.</strong>
+In the fresh Claude Code session, ask:</p>
+<pre class="text"><code>Before you navigate anywhere, tell me which Playwright/browser MCP tools you can see.
+Then navigate to the HR dashboard and take a screenshot.
+Describe what you see.</code></pre></li>
+<li><p><strong>If MCP Playwright is not working:</strong> Keep this as a
+browser-verification lab, not an argument about config surfaces. Record
+the environment limitation explicitly and continue with the fallback
+helper or manual browser path below.</p></li>
 </ol>
 </section>
-<section id="what-you-should-see" class="level3">
-<h3>What You Should See</h3>
-<p>Codex helps run read-oriented <code>psql</code> queries and returns
-the results directly in the conversation.</p>
+</section>
+<section id="troubleshooting-path" class="level2">
+<h2>Troubleshooting Path</h2>
+<p>Use this section only if you want to debug MCP itself instead of
+moving on with the fallback browser verification path.</p>
+<p>Ask Claude Code:</p>
+<pre class="text"><code>The Playwright MCP configuration is present but the tools are still unavailable.
+Inspect the active project config file, then walk me through the smallest next
+debug steps one at a time.
+First tell me whether the issue looks like:
+1. wrong config surface
+2. wrong executable path
+3. browser launch problem
+4. client restart/trust issue</code></pre>
+<p>Treat this as a debugging path, not as the main learner path for the
+chapter.</p>
 <hr />
 </section>
-</section>
-<section id="exercise-2-data-exploration-15-min" class="level2">
-<h2>Exercise 2: Data Exploration (15 min)</h2>
+<section id="exercise-2-dashboard-verification-5-min" class="level2">
+<h2>Exercise 2: Dashboard Verification (5 min)</h2>
 <section id="goal-1" class="level3">
 <h3>Goal</h3>
-<p>Use database verification queries to understand the data landscape
-before verification.</p>
+<p>Use Playwright MCP to verify the dashboard page renders
+correctly.</p>
 </section>
 <section id="instructions-1" class="level3">
 <h3>Instructions</h3>
 <ol type="1">
-<li><p><strong>Explore the schema:</strong></p>
-<pre class="text"><code>Show me the main AIHR tables with their row counts.
-Then show the columns and types for the AIHR employees table.</code></pre></li>
-<li><p><strong>Run business queries:</strong></p>
-<pre class="text"><code>Show me:
-1. Employee count by department
-2. Average salary by job title
-3. Employees hired in the last 30 days
-4. The management hierarchy for the top 3 levels</code></pre></li>
-<li><p><strong>Check data integrity:</strong></p>
-<pre class="text"><code>Are there any data integrity issues?
-- Employees without a job assignment?
-- Departments without a manager?
-- Job history records without matching employees?
-- Orphaned records in any table?</code></pre></li>
+<li><p><strong>Navigate and log in</strong> if auth is required:</p>
+<pre class="text"><code>Navigate to http://127.0.0.1:5182/hr/login.
+Log in with username &quot;steven.king&quot; and password &quot;password123&quot;.
+Then navigate to the dashboard page.
+Take a screenshot and describe which KPI cards are showing.</code></pre></li>
+<li><p><strong>Verify KPI data against the page state:</strong></p>
+<pre class="text"><code>The dashboard should show:
+- total employees
+- active vs terminated breakdown
+- departments count
+- average salary
+
+Take a snapshot of the page and check if these KPI cards exist.
+Are they showing data or are they empty?</code></pre></li>
+<li><p><strong>Find and report issues:</strong></p>
+<pre class="text"><code>Check the dashboard for:
+1. are all charts rendering, not just empty boxes?
+2. is the main navigation present?
+3. are there any console errors?
+Report what you find.</code></pre></li>
+<li><p><strong>If issues are found, fix and verify in a
+loop:</strong></p>
+<pre class="text"><code>Fix the issue you just identified, then take another screenshot
+to verify the fix is visible in the browser.</code></pre></li>
 </ol>
 </section>
-<section id="what-you-should-see-1" class="level3">
-<h3>What You Should See</h3>
-<p>Codex runs precise SQL queries and reports findings. This is how you
-would investigate a real data issue: Codex as a SQL copilot, not as a
-guesser.</p>
-<hr />
 </section>
-</section>
-<section id="exercise-3-operation-verification-30-min" class="level2">
-<h2>Exercise 3: Operation Verification (30 min)</h2>
-<section id="goal-2" class="level3">
-<h3>Goal</h3>
-<p>Verify that a backend operation writes correct data across the
-relevant tables.</p>
-</section>
-<section id="instructions-2" class="level3">
-<h3>Instructions</h3>
-<ol type="1">
-<li><p><strong>Before the operation — capture baseline:</strong></p>
-<pre class="text"><code>Query the database and tell me:
-1. current AIHR_EMPLOYEES row count
-2. current AIHR_USERS row count
-3. current AIHR_JOB_HISTORY row count
-Save these numbers so we can compare after the hire.</code></pre></li>
-<li><p><strong>Obtain a real access token through the live API.</strong>
-You may run this yourself or ask Codex to prepare and execute it:</p>
-<div class="sourceCode" id="cb8"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-sS</span> <span class="at">-X</span> POST http://127.0.0.1:18082/app/hr/api/v1/auth/login <span class="dt">\</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;Content-Type: application/json&quot;</span> <span class="dt">\</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-d</span> <span class="st">&#39;{</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;username&quot;: &quot;steven.king&quot;,</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;password&quot;: &quot;password123&quot;</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="st">  }&#39;</span></span></code></pre></div>
-<p>Save the returned access token. Do not paste a refresh token into
-later commands by accident.</p></li>
-<li><p><strong>Perform a hire operation via the API:</strong></p>
-<div class="sourceCode" id="cb9"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="va">RUN_TAG</span><span class="op">=</span><span class="st">&quot;sv001&quot;</span>  <span class="co"># Example only. Replace with your own short unique tag.</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="va">HIRE_EMAIL</span><span class="op">=</span><span class="st">&quot;lab.testhire.</span><span class="va">${RUN_TAG}</span><span class="st">@example.com&quot;</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="va">HIRE_LAST_NAME</span><span class="op">=</span><span class="st">&quot;TestHire</span><span class="va">${RUN_TAG}</span><span class="st">&quot;</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="va">ACCESS_TOKEN</span><span class="op">=</span><span class="st">&quot;YOUR_REAL_ACCESS_TOKEN_HERE&quot;</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-sS</span> <span class="at">-X</span> POST http://127.0.0.1:18082/app/hr/api/v1/employees <span class="dt">\</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;Content-Type: application/json&quot;</span> <span class="dt">\</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;Authorization: Bearer </span><span class="va">${ACCESS_TOKEN}</span><span class="st">&quot;</span> <span class="dt">\</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">-d</span> <span class="st">&quot;{</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="dt">\&quot;</span><span class="st">idempotencyKey</span><span class="dt">\&quot;</span><span class="st">: </span><span class="dt">\&quot;</span><span class="st">lab10-</span><span class="va">${RUN_TAG}</span><span class="dt">\&quot;</span><span class="st">,</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="dt">\&quot;</span><span class="st">firstName</span><span class="dt">\&quot;</span><span class="st">: </span><span class="dt">\&quot;</span><span class="st">Lab</span><span class="dt">\&quot;</span><span class="st">,</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="dt">\&quot;</span><span class="st">lastName</span><span class="dt">\&quot;</span><span class="st">: </span><span class="dt">\&quot;</span><span class="va">${HIRE_LAST_NAME}</span><span class="dt">\&quot;</span><span class="st">,</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="dt">\&quot;</span><span class="st">email</span><span class="dt">\&quot;</span><span class="st">: </span><span class="dt">\&quot;</span><span class="va">${HIRE_EMAIL}</span><span class="dt">\&quot;</span><span class="st">,</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="dt">\&quot;</span><span class="st">jobId</span><span class="dt">\&quot;</span><span class="st">: </span><span class="dt">\&quot;</span><span class="st">IT_PROG</span><span class="dt">\&quot;</span><span class="st">,</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="dt">\&quot;</span><span class="st">salary</span><span class="dt">\&quot;</span><span class="st">: 80000,</span></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="dt">\&quot;</span><span class="st">hireDate</span><span class="dt">\&quot;</span><span class="st">: </span><span class="dt">\&quot;</span><span class="st">2026-03-31</span><span class="dt">\&quot;</span><span class="st">,</span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="dt">\&quot;</span><span class="st">departmentId</span><span class="dt">\&quot;</span><span class="st">: 60,</span></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="dt">\&quot;</span><span class="st">initialPassword</span><span class="dt">\&quot;</span><span class="st">: </span><span class="dt">\&quot;</span><span class="st">password123</span><span class="dt">\&quot;</span><span class="st">,</span></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="dt">\&quot;</span><span class="st">username</span><span class="dt">\&quot;</span><span class="st">: </span><span class="dt">\&quot;</span><span class="st">lab.</span><span class="va">${RUN_TAG}</span><span class="dt">\&quot;</span></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="st">  }&quot;</span></span></code></pre></div>
-<p>Use a unique <code>RUN_TAG</code> every time you rerun this lab. That
-keeps the <code>idempotencyKey</code>, last name, email, and username
-unique in a shared training database.</p>
-<p>Preferred write path for this lab:</p>
+<section id="fallback-path" class="level2">
+<h2>Fallback Path</h2>
+<p>If MCP tools are unavailable in your current client, use one of these
+fallback paths and record which one you used:</p>
 <ul>
-<li>use the documented API hire request above</li>
-<li>if auth is complex, ask Codex to help you obtain or apply the real
-token and then run the same API hire request</li>
-<li>if you need the app login flow, use it only to help complete the API
-write step</li>
-<li>do not substitute a generic UI helper or unrelated end-to-end script
-for this API write step</li>
-</ul></li>
-<li><p><strong>After the operation — verify the current runtime
-behavior:</strong></p>
-<pre class="text"><code>Use the exact values from the hire request I just ran.
-HIRE_EMAIL = &lt;paste exact value&gt;
-
-Now verify the hire operation wrote correctly:
-1. is there a new row in AIHR_EMPLOYEES with that HIRE_EMAIL?
-2. is there a matching AIHR_USERS record?
-3. does the employee count match baseline + 1?
-4. is the salary stored correctly (80000)?
-5. is the job_id `IT_PROG`?
-Show me the actual data for each check.</code></pre></li>
-<li><p><strong>Check related-table behavior as an observation, not an
-assumption:</strong></p>
-<pre class="text"><code>Check whether AIHR_JOB_HISTORY changed for this hire.
-If there is no new row, record that as the current runtime behavior rather
-than as a lab failure.</code></pre></li>
-<li><p><strong>Cross-reference with the UI:</strong></p>
-<pre class="text"><code>Use the exact last name from the hire request I just ran.
-HIRE_LAST_NAME = &lt;paste exact value&gt;
-
-Navigate to the employee directory in the browser.
-Search for that HIRE_LAST_NAME. Does the UI show the same data
-that&#39;s in the database? Compare the salary, job title,
-and department between the UI and the database query.</code></pre>
-<p>In this chapter, browser tooling verifies the result after the write.
-It does not replace the API write step from Exercise 3.</p>
-<p>If the direct employee detail page matches the database but the
-employee directory search does not show the new hire, record that as a
-runtime discrepancy to investigate. Do not rewrite the database
-conclusion to make the UI result fit.</p></li>
-</ol>
-</section>
-<section id="what-you-should-see-2" class="level3">
-<h3>What You Should See</h3>
-<p>The full loop:</p>
-<ul>
-<li><strong>database confirms</strong> the hire wrote the expected
-runtime rows</li>
-<li><strong>browser confirms</strong> the new employee appears in the
-UI</li>
-<li><strong>any mismatch</strong> between DB and UI is a bug to
-investigate</li>
-<li><strong>related-table observation matters</strong> even when it is
-not a success gate, because it tells you whether the current
-implementation is narrower than you expected</li>
+<li>repo browser helper scripts under <code>frontend/</code></li>
+<li>another repo-supported browser tool path already available in your
+Claude Code client</li>
+<li>a manual browser check using the running app URL</li>
 </ul>
-<hr />
-</section>
-</section>
-<section id="exercise-4-final-reflection-15-min" class="level2">
-<h2>Exercise 4: Final Reflection (15 min)</h2>
-<ol type="1">
-<li><p>Add to AGENTS.md:</p>
-<div class="sourceCode" id="cb13"><pre
-class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Data Verification</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Use the repo&#39;s active PostgreSQL workflow for read-oriented verification</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Use it for data verification after operations, integrity checks, and reporting</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Never use verification access for ad hoc mutations</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Full verification loop: browser + API + database data checks</span></code></pre></div></li>
-<li><p><strong>The verification-loop concept:</strong></p>
-<pre class="text"><code>Run a full verification loop for the hire operation we just did:
-1. Browser: navigate to the employee detail page and capture evidence
-2. Database queries: inspect the AIHR_EMPLOYEES record, the AIHR_USERS row,
-   and any AIHR_JOB_HISTORY rows for that employee
-3. Compare: does the UI match the database?
-Report any discrepancies.</code></pre></li>
-<li><p><strong>MCP ecosystem awareness</strong> (optional
-extension):</p>
-<p>Other MCP servers available for enterprise use:</p>
-<table>
-<thead>
-<tr>
-<th>MCP Server</th>
-<th>What It Connects</th>
-<th>Enterprise Use Case</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Figma</td>
-<td>Design files</td>
-<td>Extract tokens, compare UI to designs</td>
-</tr>
-<tr>
-<td>Slack</td>
-<td>Team communication</td>
-<td>Read bug reports, post status updates</td>
-</tr>
-<tr>
-<td>Sentry</td>
-<td>Error monitoring</td>
-<td>Pull stack traces during debugging</td>
-</tr>
-<tr>
-<td>Jira / Linear</td>
-<td>Issue tracking</td>
-<td>Fetch ticket context for implementations</td>
-</tr>
-<tr>
-<td>BigQuery</td>
-<td>Analytics warehouse</td>
-<td>Query metrics during performance work</td>
-</tr>
-<tr>
-<td>SQL / DB runtime</td>
-<td>Database-backed systems</td>
-<td>Read-oriented verification and integrity checks</td>
-</tr>
-</tbody>
-</table>
-<p>The pattern is always the same: when an MCP server is part of your
-workflow, add it through the repo's current config surface, restart
-Codex from the repo root if needed, and then confirm the new tools are
-available.</p></li>
-</ol>
-<hr />
+<p>The fallback is acceptable for this lab. What matters is that browser
+evidence becomes part of the workflow.</p>
 </section>
 <section id="success-criteria" class="level2">
 <h2>Success Criteria</h2>
 <ul class="task-list">
-<li><label><input type="checkbox" />A repeatable database verification
-workflow is documented and usable</label></li>
-<li><label><input type="checkbox" />Codex can run the required
-read-oriented PostgreSQL verification queries</label></li>
-<li><label><input type="checkbox" />Hire operation verified across the
-tables the current runtime actually writes for this flow
-(<code>AIHR_EMPLOYEES</code> and <code>AIHR_USERS</code>)</label></li>
-<li><label><input type="checkbox" /><code>AIHR_JOB_HISTORY</code>
-behavior was checked and recorded as an observation</label></li>
-<li><label><input type="checkbox" />UI data matches database
-data</label></li>
-<li><label><input type="checkbox" />AGENTS.md updated with
-database-verification patterns and the verification loop</label></li>
+<li><label><input type="checkbox" />The active project config contains a
+Playwright/browser MCP entry or a clearly documented
+equivalent</label></li>
+<li><label><input type="checkbox" />Any prior project config already in
+that file was preserved</label></li>
+<li><label><input type="checkbox" />A fresh Claude Code session either
+named or successfully used the browser MCP tools</label></li>
+<li><label><input type="checkbox" />Claude Code completed at least one
+real browser screenshot step through MCP, or the environment limitation
+was recorded explicitly</label></li>
+<li><label><input type="checkbox" />Dashboard verification was completed
+through MCP or a documented fallback path</label></li>
 </ul>
 <hr />
 </section>
 <section id="key-takeaways" class="level2">
 <h2>Key Takeaways</h2>
 <ol type="1">
-<li><strong>Read-oriented database access for safety</strong> —
-verification should never mutate data directly</li>
-<li><strong>The full verification loop</strong> — browser + API +
-database = complete confidence</li>
-<li><strong>Cross-table verification catches expectation gaps</strong> —
-sometimes the runtime writes fewer related rows than you assumed, and
-the lab should reflect that reality</li>
-<li><strong>Use the repo's real runtime tooling</strong> — verify
-against actual stored data, not assumptions</li>
-<li><strong>The pattern transfers</strong> — database checks here,
-analytics or observability data sources tomorrow</li>
+<li>Browser tooling must follow the repo's current config surface, not a
+copied old recipe</li>
+<li>Fresh-session validation matters; do not assume MCP loaded just
+because the file exists</li>
+<li>Repo-local profile/output state keeps browser work isolated from
+other repos</li>
+<li>Fallback browser helpers are useful, but they are not proof that MCP
+itself is wired in</li>
 </ol>
+<hr />
+<details>
+<summary><strong>Recovery Path</strong> — Use this if config work gets noisy</summary>
+
+<p>Stay inside the current lab. Do not scan ahead or use
+<code>reference/</code> unless this recovery path explicitly tells you
+to.</p>
+<p>If the config surface becomes confusing, reset to the smallest safe
+task:</p>
+<pre class="text"><code>Read `CLAUDE.md` and inspect only the existing project MCP/config files in the
+repo root.
+Tell me which file is authoritative for browser/MCP setup in this workspace.
+Do not edit anything yet.
+Then draft the smallest valid Playwright/browser entry for that file using
+repo-local browser state under `.playwright-mcp/`.</code></pre>
+<p>Review the draft before applying it, then restart Claude Code if your
+client requires that for project MCP discovery.</p>
+</details>
+
 </section>
 </section>
     </main>
     <footer class="doc-footer">
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlab09.html">← Lab 09</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelab09.html">← Lab 09</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab11.html">Lab 11 →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab11.html">Lab 11 →</a>
       </nav>
     </footer>
   </div>

@@ -1,247 +1,317 @@
-# Lab 11: Enterprise Governance — Rollout Readiness, Safety Posture & Evidence
+# Lab 11: Data Verification — Runtime Data Checks
 
 **Duration:** 75 minutes
 
-> Recommended Day 2 order: **Lab 09 → Lab 08 → Lab 07 → Lab 10 → Lab 11 → optional Lab 12**.
-> This file is the fifth stop in that sequence, after you already have browser,
-> API, and database verification evidence to govern.
+> Recommended Day 2 order: **Lab 10 → Lab 09 → Lab 08 → Lab 11 → Lab 12 → optional Lab 13**.
+> This file is the fourth stop in that sequence, after browser verification and
+> the earlier implementation loops are already in place.
 
 ## Learning Objective
 
-You will translate individual Claude Code success into something a team, architect group, or enablement owner could trust at scale. The focus is not just building artifacts. The focus is evidence, review roles, bounded safety posture, and rollout discipline.
+You will use Claude Code with the repo's current PostgreSQL workflow to verify that
+backend operations write correct data. Combined with browser verification, this
+creates a full verification loop: browser → API → database.
 
-## The Key Concepts
+## The Key Concept
 
-### Rollout Readiness
+The point of this lab is simple: Claude Code should be able to inspect real database
+state in a read-oriented way so you can verify that the UI, API, and stored
+data all agree.
 
-Enterprise adoption usually fails from weak operating discipline, not lack of model capability. A team-ready workflow needs:
+Database verification lets Claude Code:
 
-- safety posture
-- review roles
-- evidence quality
-- expansion criteria
+- verify that an API operation wrote correct data
+- investigate bugs by checking actual database state
+- generate reports from live data
+- validate data integrity across tables
 
-### Repo Safety Posture
+**Security:** Verification access should remain read-oriented. The learner
+should use the current PostgreSQL connection metadata and `psql`, not ad hoc
+mutation scripts or legacy SQLcl helpers. Verification should never become an
+excuse for direct production-style writes.
 
-In Claude Code, the repo-level safety configuration lives in `.claude/settings.json`:
-
-- `permissions.allow` — tools or operations explicitly permitted without prompting
-- `permissions.deny` — tools or operations explicitly blocked
-- `mcpServers` — project-scoped MCP integrations
-
-There is no `config.toml` or `approval_policy`/`sandbox_mode` key in Claude Code. The equivalent of a bounded-pilot posture is a `permissions.deny` list that restricts write operations outside the workspace. This lab should not try to recreate an old command-allowlist story. The modern repo-level safety model is a deny-first permissions block and explicit evidence.
-
-### Enterprise Governance = Safety Posture + Review Roles + Expansion Gates
-
-Together, these create a governance layer:
-
-```text
-Config: approval and sandbox posture for the repo
-Evidence + review: determine whether the workflow is safe to expand
-```
+**The full verification loop:** browser sees UI state, API calls see the live
+response, and `psql` sees actual stored data. Compare all three: any mismatch
+= bug.
 
 ---
 
 ## Setup
 
-Ask Claude Code to run these compile/build checks for you:
+Ask Claude Code to do the repo reads and runtime checks in this section unless you
+need to inspect a value yourself.
 
+```text
+This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use hidden completed examples or old conversion notes.
+
+Read `dbdetails.md` and summarize the current non-secret database connection
+metadata for this learner workspace.
+Then confirm whether the backend and frontend are already running on the lab
+ports:
+- backend `18082`
+- frontend `5182`
 ```
-This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use `reference/` unless this chapter explicitly allows it or you need rescue help.
 
-Run these verification checks and tell me whether both succeed:
-- `cd backend && ./build-jersey-service.sh compile`
-- `cd frontend && npm run build`
-```
+Keep the database verification path strict for this lab:
 
-Client capability notes:
-
-- `.claude/settings.json` changes are loaded at session start, not always hot-reloaded into an already-running Claude Code session
-- for this lab, expect to save the config, then start a fresh Claude Code session from the repo root before you judge whether the safety posture is active
-- `.claude/` can be edited directly by Claude Code if permissions allow; if not, ask Claude Code to draft the exact content and then apply it yourself
-- acceptable proof in a constrained client is: file state, smoke-helper output, and fresh-context verification where possible; do not pretend a missing live prompt means the repo config is absent
+- use `psql` with the values from `dbdetails.md` for read-oriented database work
+- keep the learner path on direct `psql` verification plus the live API write flow
+- do not assume repo-bundled SQL tooling under `runtime/`
+- do not download or install alternate SQL tools during the lab
+- if `18082` or `5182` are already in use when you verify the app state, treat stale repo-owned backend/frontend processes as the first suspect and restart them cleanly on the reserved ports
+- for backend cleanup, use `cd backend && ./stop-jersey-service.sh`
+- keep any local port overrides in `backend/.env.local` and `frontend/.env.local`
 
 ---
 
-## Exercise 1: Write the Rollout Recommendation (15 min)
+## Exercise 1: Prepare The Database Verification Workflow (15 min)
 
 ### Goal
-Create a concise rollout recommendation for a skeptical enterprise audience.
+
+Prepare a repeatable database verification workflow using the repo's active
+PostgreSQL path.
 
 ### Instructions
 
-1. Ask Claude Code to generate a short rollout recommendation:
-   ```
-   This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use `reference/` unless this chapter explicitly allows it or you need rescue help.
+1. Ask Claude Code to explain the current database verification path:
+   ```text
+   This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use hidden completed examples or old conversion notes.
 
-   Write a rollout recommendation for introducing Claude Code into this HR repo.
-   It must answer:
-   1. who should use it first
-   2. what repo safety posture is safe enough for the first wave
-   3. what review roles are mandatory
-   4. what evidence is required before expansion
-   5. what stop conditions should pause the rollout
+   Read `dbdetails.md`, `backend/OFFLINE-JERSEY-BUILD.md`, and `CLAUDE.md`.
+   Explain the intended database verification workflow for this repo.
+   Then give me the safest repeatable way to run read-only verification queries
+   against the HR dataset in this learner workspace.
    ```
 
-2. **Review the recommendation.** It should be practical, slightly conservative, and tied to real observed workflow risks from the course.
+2. **Smoke test:**
+   ```text
+   Run read-only verification queries and tell me:
+   - how many rows exist in AIHR_EMPLOYEES
+   - how many rows exist in AIHR_DEPARTMENTS
+   - how many rows exist in AIHR_JOBS
+   ```
+
+### What You Should See
+
+Claude Code helps run read-oriented `psql` queries and returns the results directly
+in the conversation.
 
 ---
 
-## Exercise 2: Define the Evidence Package (20 min)
+## Exercise 2: Data Exploration (15 min)
 
 ### Goal
-Define the evidence package a team lead would need before approving broader use.
+
+Use database verification queries to understand the data landscape before
+verification.
 
 ### Instructions
 
-1. Ask Claude Code to produce an evidence checklist:
-   ```
-   Create an enterprise evidence checklist for this repo.
-   Include:
-   - implementation evidence
-   - test evidence
-   - browser verification evidence
-   - data verification evidence
-   - code-review evidence
-   - rollback or stop-condition evidence
+1. **Explore the schema:**
+   ```text
+   Show me the main AIHR tables with their row counts.
+   Then show the columns and types for the AIHR employees table.
    ```
 
-2. **Review the checklist.** Ask whether each evidence item reduces a real failure mode or just adds ceremony.
+2. **Run business queries:**
+   ```text
+   Show me:
+   1. Employee count by department
+   2. Average salary by job title
+   3. Employees hired in the last 30 days
+   4. The management hierarchy for the top 3 levels
+   ```
 
-3. Ask Claude Code one more question:
+3. **Check data integrity:**
+   ```text
+   Are there any data integrity issues?
+   - Employees without a job assignment?
+   - Departments without a manager?
+   - Job history records without matching employees?
+   - Orphaned records in any table?
    ```
-   Which pieces of this evidence package are mandatory before expansion,
-   and which are optional for a first bounded pilot?
-   ```
+
+### What You Should See
+
+Claude Code runs precise SQL queries and reports findings. This is how you would
+investigate a real data issue: Claude Code as a SQL copilot, not as a guesser.
 
 ---
 
-## Exercise 3: Define the Review Model (15 min)
+## Exercise 3: Operation Verification (30 min)
 
 ### Goal
-Define the review model and bounded pilot criteria.
+
+Verify that a backend operation writes correct data across the relevant tables.
 
 ### Instructions
 
-1. Ask Claude Code to define the review model:
-   ```
-   Define the review model for a bounded Claude Code pilot in this repo.
-   Name:
-   - learner/self-review responsibilities
-   - peer or senior colleague review responsibilities
-   - tech lead / architect review responsibilities
-   - the conditions required before expanding the pilot
+1. **Before the operation — capture baseline:**
+   ```text
+   Query the database and tell me:
+   1. current AIHR_EMPLOYEES row count
+   2. current AIHR_USERS row count
+   3. current AIHR_JOB_HISTORY row count
+   Save these numbers so we can compare after the hire.
    ```
 
-2. **Review the model.** Ask whether any role is overloaded or whether any important sign-off is missing.
+2. **Obtain a real access token through the live API.** You may run this
+   yourself or ask Claude Code to prepare and execute it:
+   ```bash
+   curl -sS -X POST http://127.0.0.1:18082/app/hr/api/v1/auth/login \
+     -H "Content-Type: application/json" \
+     -d '{
+       "username": "steven.king",
+       "password": "password123"
+     }'
+   ```
 
-3. **Discussion:** What reviewer roles already exist in your organization, and which of them would actually need evidence from this workflow?
+   Save the returned access token. Do not paste a refresh token into later
+   commands by accident.
+
+3. **Perform a hire operation via the API:**
+   ```bash
+   RUN_TAG="sv001"  # Example only. Replace with your own short unique tag.
+   HIRE_EMAIL="lab.testhire.${RUN_TAG}@example.com"
+   HIRE_LAST_NAME="TestHire${RUN_TAG}"
+   ACCESS_TOKEN="YOUR_REAL_ACCESS_TOKEN_HERE"
+
+   curl -sS -X POST http://127.0.0.1:18082/app/hr/api/v1/employees \
+     -H "Content-Type: application/json" \
+     -H "Authorization: Bearer ${ACCESS_TOKEN}" \
+     -d "{
+       \"idempotencyKey\": \"lab10-${RUN_TAG}\",
+       \"firstName\": \"Lab\",
+       \"lastName\": \"${HIRE_LAST_NAME}\",
+       \"email\": \"${HIRE_EMAIL}\",
+       \"jobId\": \"IT_PROG\",
+       \"salary\": 80000,
+       \"hireDate\": \"2026-03-31\",
+       \"departmentId\": 60,
+       \"initialPassword\": \"password123\",
+       \"username\": \"lab.${RUN_TAG}\"
+     }"
+   ```
+
+   Use a unique `RUN_TAG` every time you rerun this lab. That keeps the
+   `idempotencyKey`, last name, email, and username unique in a shared
+   training database.
+
+   Preferred write path for this lab:
+
+   - use the documented API hire request above
+   - if auth is complex, ask Claude Code to help you obtain or apply the real token and then run the same API hire request
+   - if you need the app login flow, use it only to help complete the API write step
+   - do not substitute a generic UI helper or unrelated end-to-end script for this API write step
+
+4. **After the operation — verify the current runtime behavior:**
+   ```text
+   Use the exact values from the hire request I just ran.
+   HIRE_EMAIL = <paste exact value>
+
+   Now verify the hire operation wrote correctly:
+   1. is there a new row in AIHR_EMPLOYEES with that HIRE_EMAIL?
+   2. is there a matching AIHR_USERS record?
+   3. does the employee count match baseline + 1?
+   4. is the salary stored correctly (80000)?
+   5. is the job_id `IT_PROG`?
+   Show me the actual data for each check.
+   ```
+
+5. **Check related-table behavior as an observation, not an assumption:**
+   ```text
+   Check whether AIHR_JOB_HISTORY changed for this hire.
+   If there is no new row, record that as the current runtime behavior rather
+   than as a lab failure.
+   ```
+
+6. **Cross-reference with the UI:**
+   ```text
+   Use the exact last name from the hire request I just ran.
+   HIRE_LAST_NAME = <paste exact value>
+
+   Navigate to the employee directory in the browser.
+   Search for that HIRE_LAST_NAME. Does the UI show the same data
+   that's in the database? Compare the salary, job title,
+   and department between the UI and the database query.
+   ```
+
+   In this chapter, browser tooling verifies the result after the write. It
+   does not replace the API write step from Exercise 3.
+
+   If the direct employee detail page matches the database but the employee
+   directory search does not show the new hire, record that as a runtime
+   discrepancy to investigate. Do not rewrite the database conclusion to make
+   the UI result fit.
+
+### What You Should See
+
+The full loop:
+
+- **database confirms** the hire wrote the expected runtime rows
+- **browser confirms** the new employee appears in the UI
+- **any mismatch** between DB and UI is a bug to investigate
+- **related-table observation matters** even when it is not a success gate,
+  because it tells you whether the current implementation is narrower than you
+  expected
 
 ---
 
-## Exercise 4: Define the Repo Safety Posture (20 min)
+## Exercise 4: Final Reflection (15 min)
 
-### Goal
-Configure a bounded-pilot safety posture using the current Claude Code repo config surface.
-
-### Instructions
-
-1. Ask Claude Code about the current repo safety posture:
-   ```
-   Read `.claude/settings.json` if it exists and summarize the current repo safety posture.
-   Tell me:
-   - what permissions.allow entries are present
-   - what permissions.deny entries are present
-   - whether Playwright MCP is configured under mcpServers
-   ```
-
-2. Ask Claude Code to draft or apply a bounded-pilot config:
-   ```
-   Update `.claude/settings.json` for a bounded pilot.
-   Preserve any existing sections already present (especially mcpServers if
-   Lab 09 already created it).
-   Do not invent unrelated keys unless they already exist in the file.
-
-   Add or confirm a permissions block that:
-   - denies write operations outside the workspace (equivalent of sandbox-write posture)
-   - allows in-repo build and test commands
-
-   Explain what those settings mean in practice for this repo.
-
-   If my client cannot edit `.claude/` directly, draft the exact JSON content for
-   me and tell me where to place it.
-   ```
-
-   The important point is not an old-style command allowlist. The important point is that the repo now has an explicit bounded-pilot permissions posture.
-
-3. **Reload Claude Code so the repo settings are active.** This is a manual learner action in the client:
-   ```
-   Exit the current Claude Code session.
-   Restart Claude Code from the repo root (there is no resume command — re-open the project).
-   Ask Claude Code to read `.claude/settings.json` and summarize the active
-   permissions and MCP settings before you run the checks below.
-   ```
-
-4. **Test the posture with Claude Code:**
-   ```
-   From the repo root, run these checks and tell me which ones prompted,
-   which ones ran, and which ones were blocked:
-
-   cd backend && ./build-jersey-service.sh test
-   rm -rf /tmp/some-test-folder
-   cp CLAUDE.md /tmp/lab11-agents-copy.md
-   ```
-
-   Expected direction:
-
-   - the in-repo build command should usually run inside the bounded pilot posture
-   - destructive or out-of-repo operations should usually prompt or be blocked by the client posture
-
-   If your environment still does not show prompts after the restart:
-
-   - read `.claude/settings.json` and confirm the permissions posture is present
-   - record that live prompt enforcement was not observable in this client
-   - continue the lab using the configured repo safety posture as the governance artifact
-
-## Exercise 5: Final Reflection (5 min)
-
-1. Add to `CLAUDE.md`:
+1. Add to CLAUDE.md:
    ```markdown
-   ## Enterprise Rollout
-   - Start with a bounded pilot, not broad rollout
-   - Require explicit evidence before expanding
-   - Name review roles and stop conditions
-
-   ## Claude Code Safety Posture
-   - Use `.claude/settings.json` permissions block for repo safety posture
-   - Keep a deny-first bounded pilot until the evidence is stronger
-   - Re-verify the repo posture from a fresh session before you trust it
+   ## Data Verification
+   - Use the repo's active PostgreSQL workflow for read-oriented verification
+   - Use it for data verification after operations, integrity checks, and reporting
+   - Never use verification access for ad hoc mutations
+   - Full verification loop: browser + API + database data checks
    ```
 
-2. **Reflect:** The three governance layers are now in place:
+2. **The verification-loop concept:**
+   ```text
+   Run a full verification loop for the hire operation we just did:
+   1. Browser: navigate to the employee detail page and capture evidence
+   2. Database queries: inspect the AIHR_EMPLOYEES record, the AIHR_USERS row,
+      and any AIHR_JOB_HISTORY rows for that employee
+   3. Compare: does the UI match the database?
+   Report any discrepancies.
+   ```
 
-   - **Repo safety posture** (this lab): deny-first permissions block in `.claude/settings.json`
-   - **Evidence + review** (this lab): bounded rollout discipline
-   - **Verification stack** (Labs 08-10): tests, browser checks, and data checks
+3. **MCP ecosystem awareness** (optional extension):
+
+   Other MCP servers available for enterprise use:
+
+   | MCP Server | What It Connects | Enterprise Use Case |
+   |-----------|-----------------|-------------------|
+   | Figma | Design files | Extract tokens, compare UI to designs |
+   | Slack | Team communication | Read bug reports, post status updates |
+   | Sentry | Error monitoring | Pull stack traces during debugging |
+   | Jira / Linear | Issue tracking | Fetch ticket context for implementations |
+   | BigQuery | Analytics warehouse | Query metrics during performance work |
+   | SQL / DB runtime | Database-backed systems | Read-oriented verification and integrity checks |
+
+   The pattern is always the same: when an MCP server is part of your workflow,
+   add it through the repo's current config surface, restart Claude Code from the repo
+   root if needed, and then confirm the new tools are available.
 
 ---
 
 ## Success Criteria
 
-- [ ] A bounded rollout recommendation exists
-- [ ] An evidence checklist exists
-- [ ] A named review model exists
-- [ ] `.claude/settings.json` expresses a bounded-pilot permissions posture without destroying any existing config sections, especially MCP config already added earlier
-- [ ] Live enforcement was either observed after restart or recorded as a client limitation
-- [ ] You can explain approval posture, sandbox posture, review roles, evidence, and stop conditions
+- [ ] A repeatable database verification workflow is documented and usable
+- [ ] Claude Code can run the required read-oriented PostgreSQL verification queries
+- [ ] Hire operation verified across the tables the current runtime actually writes for this flow (`AIHR_EMPLOYEES` and `AIHR_USERS`)
+- [ ] `AIHR_JOB_HISTORY` behavior was checked and recorded as an observation
+- [ ] UI data matches database data
+- [ ] CLAUDE.md updated with database-verification patterns and the verification loop
 
 ---
 
 ## Key Takeaways
 
-1. Enterprise rollout needs bounded scope; start with a conservative pilot, not a broad mandate.
-2. Current Claude Code repo safety is expressed through `permissions.allow` / `permissions.deny` in `.claude/settings.json` and explicit verification, not an old command-allowlist story.
-3. Stop conditions matter; if you cannot say what pauses expansion, the rollout is not ready.
-4. Governance is architecture work, not admin overhead added after the fact.
-
----
+1. **Read-oriented database access for safety** — verification should never mutate data directly
+2. **The full verification loop** — browser + API + database = complete confidence
+3. **Cross-table verification catches expectation gaps** — sometimes the runtime writes fewer related rows than you assumed, and the lab should reflect that reality
+4. **Use the repo's real runtime tooling** — verify against actual stored data, not assumptions
+5. **The pattern transfers** — database checks here, analytics or observability data sources tomorrow

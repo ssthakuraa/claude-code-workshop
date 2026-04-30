@@ -3,322 +3,253 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Lab 09: MCP Servers — Playwright &amp; Browser
-Verification</title>
+  <title>Lab 09: Verification Loops — The Quality Multiplier</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="doc-shell">
     <header class="doc-header">
       <div class="doc-header-meta">
-        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-kicker">Claude Code HR Labs</span>
         <span class="doc-divider"></span>
         <span class="doc-page-label">Lab 09</span>
       </div>
-      <div class="doc-header-title">Lab 09: MCP Servers — Playwright & Browser Verification</div>
+      <div class="doc-header-title">Lab 09: Verification Loops — The Quality Multiplier</div>
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlab08.html">← Lab 08</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelab08.html">← Lab 08</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab10.html">Lab 10 →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab10.html">Lab 10 →</a>
       </nav>
     </header>
     <main class="doc-content">
-<section id="lab-09-mcp-servers--playwright--browser-verification"
+<section id="lab-09-verification-loops--the-quality-multiplier"
 class="level1">
-<h1>Lab 09: MCP Servers — Playwright &amp; Browser Verification</h1>
-<p><strong>Duration:</strong> 75 minutes</p>
+<h1>Lab 09: Verification Loops — The Quality Multiplier</h1>
+<p><strong>Duration:</strong> 60 minutes</p>
 <blockquote>
-<p>Recommended Day 2 order: <strong>Lab 09 → Lab 08 → Lab 07 → Lab 10 →
-Lab 11 → optional Lab 12</strong>. Start Day 2 here. Once browser
-verification is in place, the later verification and parallel-work
-chapters become much more realistic and valuable.</p>
+<p>Recommended Day 2 order: <strong>Lab 10 -&gt; Lab 09 -&gt; Lab 08
+-&gt; Lab 11 -&gt; Lab 12 -&gt; optional Lab 13</strong>.</p>
 </blockquote>
 <section id="learning-objective" class="level2">
 <h2>Learning Objective</h2>
-<p>You will connect Codex to a real browser through the repo's current
-Playwright MCP path. Codex will navigate the running HR app, inspect
-page state, take screenshots, and verify that the UI matches
-expectations from the terminal.</p>
+<p>You will use a verification-driven workflow: define the expected
+behavior, implement to that expectation, then verify in tests and in the
+browser. The lab uses the current learner repo surface: Jersey backend,
+PostgreSQL data, and the repo’s current frontend/browser workflow.</p>
+<hr />
 </section>
 <section id="the-key-concept" class="level2">
 <h2>The Key Concept</h2>
-<p><strong>MCP (Model Context Protocol)</strong> is the standardized way
-to connect Codex to external tools and data sources.</p>
-<p><strong>Playwright MCP</strong> gives Codex browser tools such
-as:</p>
+<p>Without verification, Claude Code often gets you to "looks right."
+With verification, you can get to "proved correct."</p>
+<p>Use three kinds of checks:</p>
 <table>
 <thead>
-<tr>
-<th>Tool</th>
-<th>What It Does</th>
+<tr class="header">
+<th>Strategy</th>
+<th>How</th>
+<th>Best For</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td><code>browser_navigate</code></td>
-<td>Go to a URL</td>
+<tr class="odd">
+<td>Test-driven</td>
+<td>Write or tighten a backend test first</td>
+<td>business logic and API rules</td>
 </tr>
-<tr>
-<td><code>browser_snapshot</code></td>
-<td>Get page accessibility tree</td>
+<tr class="even">
+<td>Visual</td>
+<td>Compare browser output to a concrete UI expectation</td>
+<td>components and page behavior</td>
 </tr>
-<tr>
-<td><code>browser_take_screenshot</code></td>
-<td>Capture a visual screenshot</td>
-</tr>
-<tr>
-<td><code>browser_click</code></td>
-<td>Click an element</td>
-</tr>
-<tr>
-<td><code>browser_fill_form</code></td>
-<td>Fill in form fields</td>
-</tr>
-<tr>
-<td><code>browser_console_messages</code></td>
-<td>Read browser console output</td>
+<tr class="odd">
+<td>Data-driven</td>
+<td>Verify the stored result in PostgreSQL</td>
+<td>writes and state changes</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Why this matters for enterprise work:</strong></p>
-<ul>
-<li>visual regression testing without a separate tool handoff</li>
-<li>Codex can verify its own frontend changes against a running app</li>
-<li>end-to-end verification: write code, run app, verify in browser,
-iterate</li>
-</ul>
-<p><strong>Configuration note:</strong> MCP config surfaces can vary by
-Codex client and repo. In this workspace, do not guess. Inspect the repo
-rules first. If the repo already uses <code>.mcp.json</code>, extend
-that. If the active client uses another project config surface, draft
-the exact content for that surface instead of inventing
-<code>runtime/</code> assets or home-directory paths.</p>
-<p>Fresh-session validation still matters. Edit the project config,
-restart Codex if required by your client, then prove that the tools are
-actually visible.</p>
+<p>The repeatable loop is:</p>
+<ol type="1">
+<li>define expected behavior</li>
+<li>implement</li>
+<li>verify</li>
+<li>fix</li>
+<li>verify again</li>
+</ol>
 <hr />
 </section>
 <section id="setup" class="level2">
 <h2>Setup</h2>
-<p>Ask Codex to bring up the backend and frontend for you before you
-configure MCP:</p>
-<pre class="text"><code>This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use hidden completed examples or old conversion notes.
-
-Start the backend and frontend for this workspace using the current repo
-commands from AGENTS.md and the active docs.
-
-Requirements:
-- backend on port 18082
-- frontend on port 5182
-- frontend API proxy target http://127.0.0.1:18082
-- verify the backend health endpoint
-- verify the frontend responds
-- create repo-local browser state directories if needed under `.playwright-mcp/`
-
-If port 18082 or 5182 is already in use, treat a stale repo-owned process as
-the first suspect and restart cleanly on the reserved ports.
-For backend cleanup, use `cd backend &amp;&amp; ./stop-jersey-service.sh`.
-Keep any local port overrides in `backend/.env.local` and `frontend/.env.local`.
-
-Tell me when both services are ready and when I should wait before moving to
-the next step.</code></pre>
-<p>Wait for Codex to confirm that both services are ready before moving
-on. Later in this chapter, after project MCP config changes, exit Codex
-and use the printed resume command if your client requires a fresh
-session for MCP changes to take effect.</p>
-<p>Important control-plane note:</p>
+<p>Ask Claude Code to run a backend preflight check:</p>
+<pre class="text"><code>Run `cd backend &amp;&amp; ./build-jersey-service.sh test` as a backend preflight check.
+Tell me whether it passes before we start the exercise.</code></pre>
+<p>If you later need the live app for a visual loop, use the repo-local
+ports:</p>
 <ul>
-<li>inspect <code>AGENTS.md</code> first for repo MCP rules</li>
-<li>if a repo MCP file already exists, preserve it</li>
-<li>do not use <code>runtime/</code>-bundled browser, Node, or MCP
-assets</li>
-<li>keep browser user-data and output directories repo-local under
-<code>.playwright-mcp/</code></li>
-<li>avoid absolute paths into your home directory when repo-local or
-installed-tool paths are available</li>
-<li>if <code>AGENTS.md</code> does not yet define a browser preference,
-use Chrome/Chromium-first and record any fallback explicitly</li>
+<li>backend <code>18082</code></li>
+<li>frontend <code>5182</code></li>
 </ul>
+<p>If those ports are already busy, treat stale repo-owned processes as
+the first suspect before calling it a feature defect. For backend
+cleanup, use
+<code>cd backend &amp;&amp; ./stop-jersey-service.sh</code>. Keep any
+local port overrides in <code>backend/.env.local</code> and
+<code>frontend/.env.local</code>.</p>
 <hr />
 </section>
-<section id="exercise-1-configure-playwright-mcp-15-min" class="level2">
-<h2>Exercise 1: Configure Playwright MCP (15 min)</h2>
+<section id="exercise-1-test-driven-backend-slice-25-min"
+class="level2">
+<h2>Exercise 1: Test-Driven Backend Slice (25 min)</h2>
 <section id="goal" class="level3">
 <h3>Goal</h3>
-<p>Add a Playwright MCP server using the current repo/client config
-surface.</p>
+<p>Write or tighten backend tests before touching the
+implementation.</p>
 </section>
 <section id="instructions" class="level3">
 <h3>Instructions</h3>
 <ol type="1">
-<li><p>Ask Codex to inspect the active config surface before editing
-anything:</p>
-<pre class="text"><code>This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use hidden completed examples or old conversion notes.
+<li><p>Ask Claude Code to write tests for the promote flow:</p>
+<pre class="text"><code>This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use `reference/` unless this chapter explicitly allows it or you need rescue help.
 
-Read `AGENTS.md` first.
-Then inspect any existing project MCP/config files that already exist in the
-repo root, including `.mcp.json` or `.codex/` config if present.
+Write backend tests for the current promote flow implementation.
+Cover:
+1. duplicate idempotency key -&gt; conflict
+2. employee not found
+3. salary above the new job&#39;s maximum
+4. happy path -&gt; employee update plus job-history write
 
-Tell me which file is the active project MCP/config surface for this
-workspace before you make any edits.</code></pre></li>
-<li><p>Ask Codex to draft or apply the MCP configuration:</p>
-<pre class="text"><code>Update the active project MCP config for this repo.
-Preserve any existing sections already present.
-
-Requirements:
-- use repo-local or installed-tool paths only
-- do not use `runtime/`
-- do not use paths from my home directory unless there is no repo-local alternative
-- store browser profile and output under:
-  - `.playwright-mcp/profile`
-  - `.playwright-mcp/output`
-- prefer the repo browser policy from `AGENTS.md`; if it is not defined yet, use Chrome/Chromium-first and record any fallback explicitly
-- if the preferred browser cannot be launched on this host, record the fallback explicitly instead of guessing
-
-If my client cannot edit the active config file directly, draft the exact
-content for me and tell me where it belongs.</code></pre></li>
-<li><p><strong>Verify the configuration.</strong> Open the active config
-file and confirm it:</p>
-<ul>
-<li>contains a Playwright MCP entry for this project</li>
-<li>preserves any earlier project config sections</li>
-<li>uses repo-local profile/output paths under
-<code>.playwright-mcp/</code></li>
-<li>does not reference <code>runtime/</code></li>
-<li>does not rely on stale <code>/scratch/training/...</code> paths</li>
-</ul></li>
-<li><p><strong>Restart Codex if needed</strong> to load the
-project-scoped MCP server.</p>
-<p>Exit the current Codex session and restart it from the repo root
-after editing the project config if your client requires that for MCP
-discovery. If Codex prints a <code>codex resume ...</code> command when
-it exits, use that exact command.</p></li>
-<li><p><strong>Ask Codex to verify that MCP is working.</strong> In the
-fresh Codex session, ask:</p>
-<pre class="text"><code>Before you navigate anywhere, tell me which Playwright/browser MCP tools you can see.
-Then navigate to the HR dashboard and take a screenshot.
-Describe what you see.</code></pre></li>
-<li><p><strong>If MCP Playwright is not working:</strong> Keep this as a
-browser-verification lab, not an argument about config surfaces. Record
-the environment limitation explicitly and continue with the fallback
-helper or manual browser path below.</p></li>
+Use the current backend testing patterns.
+Do not implement the feature changes yet.</code></pre></li>
+<li><p>Run the tests:</p>
+<pre class="text"><code>Run `cd backend &amp;&amp; ./build-jersey-service.sh test`.
+Summarize the failure briefly if the intended starter gap is still present.</code></pre></li>
+<li><p>Ask Claude Code to implement to the test:</p>
+<pre class="text"><code>Implement the promote-flow behavior so the tests pass.
+Re-run `cd backend &amp;&amp; ./build-jersey-service.sh test` after each meaningful change.</code></pre></li>
+<li><p>Keep iterating until the backend test result is green.</p></li>
 </ol>
-</section>
-</section>
-<section id="troubleshooting-path" class="level2">
-<h2>Troubleshooting Path</h2>
-<p>Use this section only if you want to debug MCP itself instead of
-moving on with the fallback browser verification path.</p>
-<p>Ask Codex:</p>
-<pre class="text"><code>The Playwright MCP configuration is present but the tools are still unavailable.
-Inspect the active project config file, then walk me through the smallest next
-debug steps one at a time.
-First tell me whether the issue looks like:
-1. wrong config surface
-2. wrong executable path
-3. browser launch problem
-4. client restart/trust issue</code></pre>
-<p>Treat this as a debugging path, not as the main learner path for the
-chapter.</p>
 <hr />
 </section>
-<section id="exercise-2-dashboard-verification-5-min" class="level2">
-<h2>Exercise 2: Dashboard Verification (5 min)</h2>
+</section>
+<section id="exercise-2-visual-verification-20-min" class="level2">
+<h2>Exercise 2: Visual Verification (20 min)</h2>
 <section id="goal-1" class="level3">
 <h3>Goal</h3>
-<p>Use Playwright MCP to verify the dashboard page renders
-correctly.</p>
+<p>Verify a UI slice against an explicit expectation instead of trusting
+the first implementation.</p>
 </section>
 <section id="instructions-1" class="level3">
 <h3>Instructions</h3>
 <ol type="1">
-<li><p><strong>Navigate and log in</strong> if auth is required:</p>
-<pre class="text"><code>Navigate to http://127.0.0.1:5182/hr/login.
-Log in with username &quot;steven.king&quot; and password &quot;password123&quot;.
-Then navigate to the dashboard page.
-Take a screenshot and describe which KPI cards are showing.</code></pre></li>
-<li><p><strong>Verify KPI data against the page state:</strong></p>
-<pre class="text"><code>The dashboard should show:
-- total employees
-- active vs terminated breakdown
-- departments count
-- average salary
+<li><p>Use a concrete UI target:</p>
+<pre class="text"><code>Build or refine `frontend/src/components/hr/HrEmployeeCard.tsx` so it shows:
+- avatar with initials fallback
+- employee name and job title
+- department and location
+- hire date
+- status badge
+- click-through to detail page
 
-Take a snapshot of the page and check if these KPI cards exist.
-Are they showing data or are they empty?</code></pre></li>
-<li><p><strong>Find and report issues:</strong></p>
-<pre class="text"><code>Check the dashboard for:
-1. are all charts rendering, not just empty boxes?
-2. is the main navigation present?
-3. are there any console errors?
-Report what you find.</code></pre></li>
-<li><p><strong>If issues are found, fix and verify in a
-loop:</strong></p>
-<pre class="text"><code>Fix the issue you just identified, then take another screenshot
-to verify the fix is visible in the browser.</code></pre></li>
-</ol>
-</section>
-</section>
-<section id="fallback-path" class="level2">
-<h2>Fallback Path</h2>
-<p>If MCP tools are unavailable in your current client, use one of these
-fallback paths and record which one you used:</p>
+Keep the implementation consistent with the current Vertex Agentics / Modern UI direction already present in the repo.</code></pre></li>
+<li><p>Bring up the app if needed on:</p>
 <ul>
-<li>repo browser helper scripts under <code>frontend/</code></li>
-<li>another repo-supported browser tool path already available in your
-Codex client</li>
-<li>a manual browser check using the running app URL</li>
-</ul>
-<p>The fallback is acceptable for this lab. What matters is that browser
-evidence becomes part of the workflow.</p>
+<li>backend <code>18082</code></li>
+<li>frontend <code>5182</code></li>
+</ul></li>
+<li><p>Run a browser verification loop:</p>
+<pre class="text"><code>Open the page that renders `HrEmployeeCard`.
+Compare what you see against the expected structure.
+Tell me what is missing or visibly wrong.</code></pre></li>
+<li><p>Feed the differences back into Claude Code and verify
+again.</p></li>
+</ol>
+<hr />
+</section>
+</section>
+<section id="exercise-3-combine-the-loop-10-min" class="level2">
+<h2>Exercise 3: Combine The Loop (10 min)</h2>
+<section id="goal-2" class="level3">
+<h3>Goal</h3>
+<p>Connect test-driven backend work with browser verification and
+database truth.</p>
+</section>
+<section id="instructions-2" class="level3">
+<h3>Instructions</h3>
+<p>Ask Claude Code to summarize the correct feature loop for this
+repo:</p>
+<pre class="text"><code>Summarize the best verification loop for this repo when a feature changes
+backend behavior, frontend rendering, and stored data.
+Keep it to one short numbered list.</code></pre>
+<p>The expected answer should look roughly like:</p>
+<ol type="1">
+<li>tighten backend tests</li>
+<li>implement until tests pass</li>
+<li>verify the UI in the browser</li>
+<li>verify stored data with PostgreSQL queries when writes are
+involved</li>
+<li>only then mark the task done</li>
+</ol>
+<hr />
+</section>
+</section>
+<section id="exercise-4-capture-the-rule-5-min" class="level2">
+<h2>Exercise 4: Capture The Rule (5 min)</h2>
+<p>Ask Claude Code to update <code>CLAUDE.md</code> with a short rule
+block:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Verification</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Backend changes: prefer tests first, then implement to green</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>UI changes: verify in the browser, not only in code review</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Write paths: verify stored PostgreSQL data when behavior depends on persistence</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Do not mark work complete without verification evidence</span></code></pre></div>
+<p>Then restart or resume Claude Code if you want the updated rules
+loaded in a fresh session.</p>
+<hr />
 </section>
 <section id="success-criteria" class="level2">
 <h2>Success Criteria</h2>
 <ul class="task-list">
-<li><label><input type="checkbox" />The active project config contains a
-Playwright/browser MCP entry or a clearly documented
-equivalent</label></li>
-<li><label><input type="checkbox" />Any prior project config already in
-that file was preserved</label></li>
-<li><label><input type="checkbox" />A fresh Codex session either named
-or successfully used the browser MCP tools</label></li>
-<li><label><input type="checkbox" />Codex completed at least one real
-browser screenshot step through MCP, or the environment limitation was
-recorded explicitly</label></li>
-<li><label><input type="checkbox" />Dashboard verification was completed
-through MCP or a documented fallback path</label></li>
+<li><label><input type="checkbox" />Backend tests were written or
+tightened before implementation</label></li>
+<li><label><input
+type="checkbox" /><code>./build-jersey-service.sh test</code> passed
+after the backend fix</label></li>
+<li><label><input type="checkbox" />A browser verification loop was run
+for the UI slice</label></li>
+<li><label><input type="checkbox" />The repo-specific verification order
+is now clear</label></li>
+<li><label><input type="checkbox" /><code>CLAUDE.md</code> captures the
+verification rule</label></li>
 </ul>
 <hr />
 </section>
 <section id="key-takeaways" class="level2">
 <h2>Key Takeaways</h2>
 <ol type="1">
-<li>Browser tooling must follow the repo's current config surface, not a
-copied old recipe</li>
-<li>Fresh-session validation matters; do not assume MCP loaded just
-because the file exists</li>
-<li>Repo-local profile/output state keeps browser work isolated from
-other repos</li>
-<li>Fallback browser helpers are useful, but they are not proof that MCP
-itself is wired in</li>
+<li>Tests are executable specifications.</li>
+<li>Browser verification catches issues code review alone will
+miss.</li>
+<li>PostgreSQL verification closes the loop for write-heavy
+behavior.</li>
+<li>Verification is what turns an okay first draft into a reliable
+change.</li>
 </ol>
 <hr />
 <details>
-<summary><strong>Recovery Path</strong> — Use this if config work gets noisy</summary>
+<summary><strong>Recovery Path</strong> — Use this if the promote test loop gets stuck</summary>
 
-<p>Stay inside the current lab. Do not scan ahead or use
-<code>reference/</code> unless this recovery path explicitly tells you
-to.</p>
-<p>If the config surface becomes confusing, reset to the smallest safe
-task:</p>
-<pre class="text"><code>Read `AGENTS.md` and inspect only the existing project MCP/config files in the
-repo root.
-Tell me which file is authoritative for browser/MCP setup in this workspace.
-Do not edit anything yet.
-Then draft the smallest valid Playwright/browser entry for that file using
-repo-local browser state under `.playwright-mcp/`.</code></pre>
-<p>Review the draft before applying it, then restart Codex if your
-client requires that for project MCP discovery.</p>
+<p>Use this only after you have tried the student path first.</p>
+<p>For this recovery step only, review
+<code>reference/lab09/README.md</code>. That rescue path restores only
+the completed <code>promoteEmployee()</code> method snippet for
+<code>HrEmployeeCommandJdbcRepository.java</code>.</p>
+<p>Do not replace the whole repository file. Earlier and later labs
+share that file, so a full-file copy would overwrite unrelated learner
+work.</p>
+<p>After applying the rescue snippet, rerun:</p>
+<pre class="text"><code>cd backend &amp;&amp; ./build-jersey-service.sh test</code></pre>
+<p>Then continue the normal verification loop from this chapter.</p>
 </details>
 
 </section>
@@ -326,9 +257,9 @@ client requires that for project MCP discovery.</p>
     </main>
     <footer class="doc-footer">
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlab08.html">← Lab 08</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelab08.html">← Lab 08</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab10.html">Lab 10 →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab10.html">Lab 10 →</a>
       </nav>
     </footer>
   </div>

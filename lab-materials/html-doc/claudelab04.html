@@ -10,15 +10,15 @@
   <div class="doc-shell">
     <header class="doc-header">
       <div class="doc-header-meta">
-        <span class="doc-kicker">Codex HR Labs</span>
+        <span class="doc-kicker">Claude Code HR Labs</span>
         <span class="doc-divider"></span>
         <span class="doc-page-label">Lab 04</span>
       </div>
       <div class="doc-header-title">Lab 04: Context Management — The #1 Performance Lever</div>
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlab03.html">← Lab 03</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelab03.html">← Lab 03</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab05.html">Lab 05 →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab05.html">Lab 05 →</a>
       </nav>
     </header>
     <main class="doc-content">
@@ -28,43 +28,54 @@ class="level1">
 <p><strong>Duration:</strong> 45 minutes</p>
 <section id="learning-objective" class="level2">
 <h2>Learning Objective</h2>
-<p>You will explore how overloaded context can reduce Codex quality,
-then redo the same work with better context hygiene. Modern LLM context
-windows are getting larger, so in this exercise you may not actually see
-the context fill up firsthand. The important habit is to watch context
-usage during development and notice when the agent starts to drift. As
-context fills and gets compacted, some details may be dropped, so if the
-agent starts deviating from the task or missing earlier constraints,
-treat that as a signal to steer it back in the right direction.</p>
+<p>You will explore how overloaded context can reduce Claude Code
+quality, then redo the same work with better context hygiene. Modern LLM
+context windows are getting larger, so in this exercise you may not
+actually see the context fill up firsthand. The important habit is to
+watch context usage during development and notice when the agent starts
+to drift. As context fills and gets compacted, some details may be
+dropped, so if the agent starts deviating from the task or missing
+earlier constraints, treat that as a signal to steer it back in the
+right direction.</p>
+<blockquote>
+<p><strong>This lab requires a live interactive Claude Code
+session.</strong> The degradation effect only appears when a real,
+continuous session accumulates context over many turns. Automated
+testing and scripted sub-agents always start fresh, so the contrast
+between overloaded and clean sessions is invisible to them. Run
+Exercises 1 and 2 in a single interactive session without using
+<code>/clear</code> — that is the whole point.</p>
+</blockquote>
 <hr />
 </section>
 <section id="the-key-concept" class="level2">
 <h2>The Key Concept</h2>
-<p>Codex's context window is finite. Everything — files read, command
-outputs, messages, tool results — consumes tokens.</p>
+<p>Claude Code's context window is finite. Everything — files read,
+command outputs, messages, tool results — consumes tokens.</p>
 <p><strong>The degradation curve:</strong></p>
 <ul>
-<li><strong>0–60% full:</strong> Codex is sharp, follows all rules,
-produces quality code</li>
+<li><strong>0–60% full:</strong> Claude Code is sharp, follows all
+rules, produces quality code</li>
 <li><strong>60–80% full:</strong> Subtle drift — may miss a convention,
 skip a step</li>
 <li><strong>80–90% full:</strong> Noticeable quality drop —
-hallucinations increase, AGENTS.md rules get ignored</li>
-<li><strong>90%+:</strong> Erratic — Codex may contradict itself or
-produce broken code</li>
+hallucinations increase, CLAUDE.md rules get ignored</li>
+<li><strong>90%+:</strong> Erratic — Claude Code may contradict itself
+or produce broken code</li>
 </ul>
 <p><strong>The tools and habits:</strong> | Tool | When to Use |
 |------|-------------| | Fresh session | Between different tasks —
 cheapest clean context | | Short context summary | Within a long task —
 preserve only the essentials | | Delegated research | For research-heavy
 work — keeps main context clean | | Read exemplars first | Larger
-codebases — lets Codex anchor on real patterns | | Status indicator if
-available | Check context usage when the client exposes it |</p>
+codebases — lets Claude Code anchor on real patterns | | Status
+indicator if available | Check context usage when the client exposes it
+|</p>
 <hr />
 </section>
 <section id="setup" class="level2">
 <h2>Setup</h2>
-<p>Continue from Labs 1–3. You should have AGENTS.md, Region, Country,
+<p>Continue from Labs 1–3. You should have CLAUDE.md, Region, Country,
 and Location patterns in place.</p>
 <p>Before starting, remember the large-codebase rule for this
 workspace:</p>
@@ -93,24 +104,26 @@ all of these tasks sequentially:</p>
 or API-capability list described there.</code></pre>
 <p>c. Read the schema:</p>
 <pre><code>Read database/hrschema.sql and list the key `AIHR_*` tables.</code></pre>
-<p>d. Ask Codex to draft the Department backend slice in chat only:</p>
+<p>d. Ask Claude Code to draft the Department backend slice in chat
+only:</p>
 <pre><code>Draft the Department backend slice for the current repo, but do not edit any files.
 I only want the proposed shape in chat so I can evaluate output quality.
 request/response DTOs, JDBC repository methods, and Jersey resource.
 Departments have a tree structure and the read API should support nested children.
-Follow all AGENTS.md conventions.</code></pre></li>
-<li><p><strong>If your Codex client exposes a status/context indicator,
-check it.</strong> Otherwise, simply note that you have now loaded
-multiple large files plus multi-step instructions into one
+Follow all CLAUDE.md conventions.</code></pre></li>
+<li><p><strong>If your Claude Code client exposes a status/context
+indicator, check it.</strong> Otherwise, simply note that you have now
+loaded multiple large files plus multi-step instructions into one
 session.</p></li>
-<li><p>Now ask Codex to draft the Job backend slice in chat only:</p>
+<li><p>Now ask Claude Code to draft the Job backend slice in chat
+only:</p>
 <pre><code>Draft the Job backend slice, but do not edit any files.
 I only want the proposed shape in chat so I can evaluate output quality.
 request/response DTOs, JDBC repository methods, and Jersey resource.
-Include salary range validation and follow all AGENTS.md conventions.</code></pre></li>
+Include salary range validation and follow all CLAUDE.md conventions.</code></pre></li>
 <li><p><strong>Review the Job output carefully:</strong></p>
 <ul class="task-list">
-<li><label><input type="checkbox" />Did Codex follow all AGENTS.md
+<li><label><input type="checkbox" />Did Claude Code follow all CLAUDE.md
 conventions?</label></li>
 <li><label><input type="checkbox" />Is the logging pattern
 correct?</label></li>
@@ -139,14 +152,14 @@ that wouldn't have happened in a fresh session.</p>
 <section id="instructions-1" class="level3">
 <h3>Instructions</h3>
 <ol type="1">
-<li><p><strong>Start a fresh Codex session.</strong> Exit the current
-session and start a new one for this exercise.</p></li>
+<li><p><strong>Start a fresh Claude Code session.</strong> Exit the
+current session and start a new one for this exercise.</p></li>
 <li><p>Ask for the Job backend module with the <strong>same
 prompt</strong> as Exercise 1:</p>
 <pre><code>Draft the Job backend slice, but do not edit any files.
 I only want the proposed shape in chat so I can evaluate output quality.
 request/response DTOs, JDBC repository methods, and Jersey resource.
-Include salary range validation and follow all AGENTS.md conventions.</code></pre></li>
+Include salary range validation and follow all CLAUDE.md conventions.</code></pre></li>
 <li><p><strong>Review the output.</strong> Score quality 1–5:
 _____</p></li>
 <li><p><strong>Compare:</strong></p>
@@ -190,7 +203,7 @@ remain in your working context, not the full document contents.</p></li>
 <h3>What You Should See</h3>
 <p>Your main context consumed only the summary (~50 lines), not the full
 document (~500+ lines). This is how you keep context clean during
-research-heavy work. Lab 06 will go deeper on dedicated reviewer/builder
+research-heavy work. Lab 07 will go deeper on dedicated reviewer/builder
 agents.</p>
 <hr />
 </section>
@@ -215,7 +228,7 @@ features</strong> — cheapest clean context</label></li>
 <li><label><input type="checkbox" /><strong>Check a status indicator if
 available</strong> — know your context level</label></li>
 </ul>
-<p>Add to AGENTS.md:</p>
+<p>Add to CLAUDE.md:</p>
 <div class="sourceCode" id="cb9"><pre
 class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Session Discipline</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Start fresh sessions between unrelated tasks</span>
@@ -234,7 +247,7 @@ context between tasks</label></li>
 polluting main context</label></li>
 <li><label><input type="checkbox" />Can explain the degradation curve
 (60% → 80% → 90%)</label></li>
-<li><label><input type="checkbox" />AGENTS.md updated with session
+<li><label><input type="checkbox" />CLAUDE.md updated with session
 discipline rules</label></li>
 </ul>
 <hr />
@@ -258,9 +271,9 @@ context quality matters as much as context size</li>
     </main>
     <footer class="doc-footer">
       <nav class="doc-nav" aria-label="Lab navigation">
-  <a class="doc-nav-link doc-nav-prev" href="codexlab03.html">← Lab 03</a>
+  <a class="doc-nav-link doc-nav-prev" href="claudelab03.html">← Lab 03</a>
   <a class="doc-nav-link doc-nav-index" href="index.html">All Labs</a>
-  <a class="doc-nav-link doc-nav-next" href="codexlab05.html">Lab 05 →</a>
+  <a class="doc-nav-link doc-nav-next" href="claudelab05.html">Lab 05 →</a>
       </nav>
     </footer>
   </div>

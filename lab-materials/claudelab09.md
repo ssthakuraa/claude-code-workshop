@@ -1,267 +1,216 @@
-# Lab 09: MCP Servers — Playwright & Browser Verification
+# Lab 09: Verification Loops — The Quality Multiplier
 
-**Duration:** 75 minutes
+**Duration:** 60 minutes
 
-> Recommended Day 2 order: **Lab 09 → Lab 08 → Lab 07 → Lab 10 → Lab 11 → optional Lab 12**.
-> Start Day 2 here. Once browser verification is in place, the later
-> verification and parallel-work chapters become much more realistic and
-> valuable.
+> Recommended Day 2 order: **Lab 10 -> Lab 09 -> Lab 08 -> Lab 11 -> Lab 12 -> optional Lab 13**.
 
 ## Learning Objective
 
-You will connect Claude Code to a real browser through the repo's current Playwright
-MCP path. Claude Code will navigate the running HR app, inspect page state, take
-screenshots, and verify that the UI matches expectations from the terminal.
+You will use a verification-driven workflow: define the expected behavior,
+implement to that expectation, then verify in tests and in the browser. The lab
+uses the current learner repo surface: Jersey backend, PostgreSQL data, and the
+repo’s current frontend/browser workflow.
+
+---
 
 ## The Key Concept
 
-**MCP (Model Context Protocol)** is the standardized way to connect Claude Code to
-external tools and data sources.
+Without verification, Claude Code often gets you to "looks right." With verification,
+you can get to "proved correct."
 
-**Playwright MCP** gives Claude Code browser tools such as:
+Use three kinds of checks:
 
-| Tool | What It Does |
-|------|-------------|
-| `browser_navigate` | Go to a URL |
-| `browser_snapshot` | Get page accessibility tree |
-| `browser_take_screenshot` | Capture a visual screenshot |
-| `browser_click` | Click an element |
-| `browser_fill_form` | Fill in form fields |
-| `browser_console_messages` | Read browser console output |
+| Strategy | How | Best For |
+|---|---|---|
+| Test-driven | Write or tighten a backend test first | business logic and API rules |
+| Visual | Compare browser output to a concrete UI expectation | components and page behavior |
+| Data-driven | Verify the stored result in PostgreSQL | writes and state changes |
 
-**Why this matters for enterprise work:**
+The repeatable loop is:
 
-- visual regression testing without a separate tool handoff
-- Claude Code can verify its own frontend changes against a running app
-- end-to-end verification: write code, run app, verify in browser, iterate
-
-**Configuration note:** In Claude Code, MCP config lives in `.claude/settings.json` under the `mcpServers` key, or in `~/.claude/settings.json` for user-level config. There is no `.mcp.json` file in Claude Code. In this workspace, do not guess. Inspect the repo rules first. If a project `.claude/settings.json` already exists, extend the `mcpServers` section within it. If the active client uses another surface, draft the exact content for that surface instead of inventing `runtime/` assets or home-directory paths.
-
-Fresh-session validation still matters. Edit the project config, restart Claude Code
-if required by your client, then prove that the tools are actually visible.
+1. define expected behavior
+2. implement
+3. verify
+4. fix
+5. verify again
 
 ---
 
 ## Setup
 
-Ask Claude Code to bring up the backend and frontend for you before you configure
-MCP:
+Ask Claude Code to run a backend preflight check:
 
 ```text
-This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use hidden completed examples or old conversion notes.
+Run `cd backend && ./build-jersey-service.sh test` as a backend preflight check.
+Tell me whether it passes before we start the exercise.
+```
 
-Start the backend and frontend for this workspace using the current repo
-commands from CLAUDE.md and the active docs.
+If you later need the live app for a visual loop, use the repo-local ports:
 
-Requirements:
-- backend on port 18082
-- frontend on port 5182
-- frontend API proxy target http://127.0.0.1:18082
-- verify the backend health endpoint
-- verify the frontend responds
-- create repo-local browser state directories if needed under `.playwright-mcp/`
+- backend `18082`
+- frontend `5182`
 
-If port 18082 or 5182 is already in use, treat a stale repo-owned process as
-the first suspect and restart cleanly on the reserved ports.
+If those ports are already busy, treat stale repo-owned processes as the first
+suspect before calling it a feature defect.
 For backend cleanup, use `cd backend && ./stop-jersey-service.sh`.
 Keep any local port overrides in `backend/.env.local` and `frontend/.env.local`.
 
-Tell me when both services are ready and when I should wait before moving to
-the next step.
-```
-
-Wait for Claude Code to confirm that both services are ready before moving on.
-Later in this chapter, after project MCP config changes, close and reopen the project in Claude Code if your client requires a fresh session for MCP changes to take effect. There is no `claude resume` command — re-opening the project is the correct restart path.
-
-Important control-plane note:
-
-- inspect `CLAUDE.md` first for repo MCP rules
-- if a repo MCP file already exists, preserve it
-- do not use `runtime/`-bundled browser, Node, or MCP assets
-- keep browser user-data and output directories repo-local under `.playwright-mcp/`
-- avoid absolute paths into your home directory when repo-local or installed-tool paths are available
-- if `CLAUDE.md` does not yet define a browser preference, use Chrome/Chromium-first and record any fallback explicitly
-
 ---
 
-## Exercise 1: Configure Playwright MCP (15 min)
+## Exercise 1: Test-Driven Backend Slice (25 min)
 
 ### Goal
 
-Add a Playwright MCP server using the current repo/client config surface.
+Write or tighten backend tests before touching the implementation.
 
 ### Instructions
 
-1. Ask Claude Code to inspect the active config surface before editing anything:
+1. Ask Claude Code to write tests for the promote flow:
    ```text
-   This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use hidden completed examples or old conversion notes.
+   This is a student exercise. Stay inside the named tasks, inspect only the files this chapter explicitly tells you to inspect, and do not use `reference/` unless this chapter explicitly allows it or you need rescue help.
 
-   Read `CLAUDE.md` first.
-   Then inspect `.claude/settings.json` if it exists, to see whether an
-   `mcpServers` section is already present.
+   Write backend tests for the current promote flow implementation.
+   Cover:
+   1. duplicate idempotency key -> conflict
+   2. employee not found
+   3. salary above the new job's maximum
+   4. happy path -> employee update plus job-history write
 
-   Tell me the current state of the project MCP config before you make any edits.
+   Use the current backend testing patterns.
+   Do not implement the feature changes yet.
    ```
 
-2. Ask Claude Code to draft or apply the MCP configuration:
+2. Run the tests:
    ```text
-   Update the active project MCP config for this repo.
-   Preserve any existing sections already present.
-
-   Requirements:
-   - use repo-local or installed-tool paths only
-   - do not use `runtime/`
-   - do not use paths from my home directory unless there is no repo-local alternative
-   - store browser profile and output under:
-     - `.playwright-mcp/profile`
-     - `.playwright-mcp/output`
-   - prefer the repo browser policy from `CLAUDE.md`; if it is not defined yet, use Chrome/Chromium-first and record any fallback explicitly
-   - if the preferred browser cannot be launched on this host, record the fallback explicitly instead of guessing
-
-   If my client cannot edit the active config file directly, draft the exact
-   content for me and tell me where it belongs.
+   Run `cd backend && ./build-jersey-service.sh test`.
+   Summarize the failure briefly if the intended starter gap is still present.
    ```
 
-3. **Verify the configuration.** Open the active config file and confirm it:
-
-   - contains a Playwright MCP entry for this project
-   - preserves any earlier project config sections
-   - uses repo-local profile/output paths under `.playwright-mcp/`
-   - does not reference `runtime/`
-   - does not rely on stale `/scratch/training/...` paths
-
-4. **Restart Claude Code if needed** to load the project-scoped MCP server.
-
-   Exit the current Claude Code session and restart it from the repo root after
-   editing the project config if your client requires that for MCP discovery.
-   There is no `claude resume` command — re-opening the project is the correct restart path.
-
-5. **Ask Claude Code to verify that MCP is working.**
-   In the fresh Claude Code session, ask:
+3. Ask Claude Code to implement to the test:
    ```text
-   Before you navigate anywhere, tell me which Playwright/browser MCP tools you can see.
-   Then navigate to the HR dashboard and take a screenshot.
-   Describe what you see.
+   Implement the promote-flow behavior so the tests pass.
+   Re-run `cd backend && ./build-jersey-service.sh test` after each meaningful change.
    ```
 
-6. **If MCP Playwright is not working:**
-   Keep this as a browser-verification lab, not an argument about config
-   surfaces. Record the environment limitation explicitly and continue with the
-   fallback helper or manual browser path below.
+4. Keep iterating until the backend test result is green.
 
-## Troubleshooting Path
+---
 
-Use this section only if you want to debug MCP itself instead of moving on with
-the fallback browser verification path.
+## Exercise 2: Visual Verification (20 min)
 
-Ask Claude Code:
+### Goal
+
+Verify a UI slice against an explicit expectation instead of trusting the first implementation.
+
+### Instructions
+
+1. Use a concrete UI target:
+   ```text
+   Build or refine `frontend/src/components/hr/HrEmployeeCard.tsx` so it shows:
+   - avatar with initials fallback
+   - employee name and job title
+   - department and location
+   - hire date
+   - status badge
+   - click-through to detail page
+
+   Keep the implementation consistent with the current Vertex Agentics / Modern UI direction already present in the repo.
+   ```
+
+2. Bring up the app if needed on:
+   - backend `18082`
+   - frontend `5182`
+
+3. Run a browser verification loop:
+   ```text
+   Open the page that renders `HrEmployeeCard`.
+   Compare what you see against the expected structure.
+   Tell me what is missing or visibly wrong.
+   ```
+
+4. Feed the differences back into Claude Code and verify again.
+
+---
+
+## Exercise 3: Combine The Loop (10 min)
+
+### Goal
+
+Connect test-driven backend work with browser verification and database truth.
+
+### Instructions
+
+Ask Claude Code to summarize the correct feature loop for this repo:
 
 ```text
-The Playwright MCP configuration is present but the tools are still unavailable.
-Inspect the active project config file, then walk me through the smallest next
-debug steps one at a time.
-First tell me whether the issue looks like:
-1. wrong config surface
-2. wrong executable path
-3. browser launch problem
-4. client restart/trust issue
+Summarize the best verification loop for this repo when a feature changes
+backend behavior, frontend rendering, and stored data.
+Keep it to one short numbered list.
 ```
 
-Treat this as a debugging path, not as the main learner path for the chapter.
+The expected answer should look roughly like:
+
+1. tighten backend tests
+2. implement until tests pass
+3. verify the UI in the browser
+4. verify stored data with PostgreSQL queries when writes are involved
+5. only then mark the task done
 
 ---
 
-## Exercise 2: Dashboard Verification (5 min)
+## Exercise 4: Capture The Rule (5 min)
 
-### Goal
+Ask Claude Code to update `CLAUDE.md` with a short rule block:
 
-Use Playwright MCP to verify the dashboard page renders correctly.
+```markdown
+## Verification
+- Backend changes: prefer tests first, then implement to green
+- UI changes: verify in the browser, not only in code review
+- Write paths: verify stored PostgreSQL data when behavior depends on persistence
+- Do not mark work complete without verification evidence
+```
 
-### Instructions
+Then restart or resume Claude Code if you want the updated rules loaded in a fresh
+session.
 
-1. **Navigate and log in** if auth is required:
-   ```text
-   Navigate to http://127.0.0.1:5182/hr/login.
-   Log in with username "steven.king" and password "password123".
-   Then navigate to the dashboard page.
-   Take a screenshot and describe which KPI cards are showing.
-   ```
-
-2. **Verify KPI data against the page state:**
-   ```text
-   The dashboard should show:
-   - total employees
-   - active vs terminated breakdown
-   - departments count
-   - average salary
-
-   Take a snapshot of the page and check if these KPI cards exist.
-   Are they showing data or are they empty?
-   ```
-
-3. **Find and report issues:**
-   ```text
-   Check the dashboard for:
-   1. are all charts rendering, not just empty boxes?
-   2. is the main navigation present?
-   3. are there any console errors?
-   Report what you find.
-   ```
-
-4. **If issues are found, fix and verify in a loop:**
-   ```text
-   Fix the issue you just identified, then take another screenshot
-   to verify the fix is visible in the browser.
-   ```
-
-## Fallback Path
-
-If MCP tools are unavailable in your current client, use one of these fallback
-paths and record which one you used:
-
-- repo browser helper scripts under `frontend/`
-- another repo-supported browser tool path already available in your Claude Code client
-- a manual browser check using the running app URL
-
-The fallback is acceptable for this lab. What matters is that browser evidence
-becomes part of the workflow.
+---
 
 ## Success Criteria
 
-- [ ] The active project config contains a Playwright/browser MCP entry or a clearly documented equivalent
-- [ ] Any prior project config already in that file was preserved
-- [ ] A fresh Claude Code session either named or successfully used the browser MCP tools
-- [ ] Claude Code completed at least one real browser screenshot step through MCP, or the environment limitation was recorded explicitly
-- [ ] Dashboard verification was completed through MCP or a documented fallback path
+- [ ] Backend tests were written or tightened before implementation
+- [ ] `./build-jersey-service.sh test` passed after the backend fix
+- [ ] A browser verification loop was run for the UI slice
+- [ ] The repo-specific verification order is now clear
+- [ ] `CLAUDE.md` captures the verification rule
 
 ---
 
 ## Key Takeaways
 
-1. Browser tooling must follow the repo's current config surface, not a copied old recipe
-2. Fresh-session validation matters; do not assume MCP loaded just because the file exists
-3. Repo-local profile/output state keeps browser work isolated from other repos
-4. Fallback browser helpers are useful, but they are not proof that MCP itself is wired in
+1. Tests are executable specifications.
+2. Browser verification catches issues code review alone will miss.
+3. PostgreSQL verification closes the loop for write-heavy behavior.
+4. Verification is what turns an okay first draft into a reliable change.
 
 ---
 
 <details>
-<summary><strong>Recovery Path</strong> — Use this if config work gets noisy</summary>
+<summary><strong>Recovery Path</strong> — Use this if the promote test loop gets stuck</summary>
 
-Stay inside the current lab. Do not scan ahead or use `reference/` unless this
-recovery path explicitly tells you to.
+Use this only after you have tried the student path first.
 
-If the config surface becomes confusing, reset to the smallest safe task:
+For this recovery step only, review `reference/lab09/README.md`.
+That rescue path restores only the completed `promoteEmployee()` method snippet
+for `HrEmployeeCommandJdbcRepository.java`.
+
+Do not replace the whole repository file. Earlier and later labs share that
+file, so a full-file copy would overwrite unrelated learner work.
+
+After applying the rescue snippet, rerun:
 
 ```text
-Read `CLAUDE.md` and inspect only the existing project MCP/config files in the
-repo root.
-Tell me which file is authoritative for browser/MCP setup in this workspace.
-Do not edit anything yet.
-Then draft the smallest valid Playwright/browser entry for that file using
-repo-local browser state under `.playwright-mcp/`.
+cd backend && ./build-jersey-service.sh test
 ```
 
-Review the draft before applying it, then restart Claude Code if your client requires
-that for project MCP discovery.
+Then continue the normal verification loop from this chapter.
 </details>
