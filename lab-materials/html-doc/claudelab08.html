@@ -44,12 +44,12 @@ collisions.</p>
 Multiple independent slices go faster when each session gets its own
 isolated working directory.</p>
 <div class="sourceCode" id="cb1"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /absolute/path/to/claude-workshop</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ../claude-workshop-parallel</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> ../claude-workshop-parallel/workspace-a ../claude-workshop-parallel/workspace-b ../claude-workshop-parallel/workspace-c</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree add ../claude-workshop-parallel/workspace-a</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree add ../claude-workshop-parallel/workspace-b</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree add ../claude-workshop-parallel/workspace-c</span></code></pre></div>
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /absolute/path/to/your-workshop-root</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ../workshop-parallel</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> ../workshop-parallel/workspace-a ../workshop-parallel/workspace-b ../workshop-parallel/workspace-c</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree add ../workshop-parallel/workspace-a</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree add ../workshop-parallel/workspace-b</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree add ../workshop-parallel/workspace-c</span></code></pre></div>
 <p>Each worktree carries the same <code>CLAUDE.md</code>, docs, and
 code, but the edits stay isolated until you choose what to bring
 back.</p>
@@ -78,20 +78,18 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="
 <p>Then create the worktrees.</p></li>
 <li><p>Confirm the worktrees exist:</p>
 <div class="sourceCode" id="cb3"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> ../claude-workshop-parallel/workspace-a</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> ../claude-workshop-parallel/workspace-b</span></code></pre></div></li>
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> ../workshop-parallel/workspace-a</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> ../workshop-parallel/workspace-b</span></code></pre></div></li>
 <li><p>Verify they started from the same root guidance:</p>
 <div class="sourceCode" id="cb4"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span> <span class="at">-q</span> CLAUDE.md ../claude-workshop-parallel/workspace-a/CLAUDE.md</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span> <span class="at">-q</span> CLAUDE.md ../claude-workshop-parallel/workspace-b/CLAUDE.md</span></code></pre></div></li>
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span> <span class="at">-q</span> CLAUDE.md ../workshop-parallel/workspace-a/CLAUDE.md</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span> <span class="at">-q</span> CLAUDE.md ../workshop-parallel/workspace-b/CLAUDE.md</span></code></pre></div></li>
 <li><p>Open separate terminals:</p>
 <ul>
-<li>Terminal A -&gt;
-<code>../claude-workshop-parallel/workspace-a</code></li>
-<li>Terminal B -&gt;
-<code>../claude-workshop-parallel/workspace-b</code></li>
+<li>Terminal A -&gt; <code>../workshop-parallel/workspace-a</code></li>
+<li>Terminal B -&gt; <code>../workshop-parallel/workspace-b</code></li>
 <li>optional Terminal C -&gt;
-<code>../claude-workshop-parallel/workspace-c</code></li>
+<code>../workshop-parallel/workspace-c</code></li>
 </ul></li>
 <li><p>Start a Claude Code session in each workspace.</p></li>
 </ol>
@@ -147,18 +145,18 @@ files.</p>
 <ol type="1">
 <li><p>Ask each workspace to verify its own frontend slice:</p>
 <div class="sourceCode" id="cb7"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../claude-workshop-parallel/workspace-a/frontend <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> run build</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../claude-workshop-parallel/workspace-b/frontend <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> run build</span></code></pre></div></li>
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../workshop-parallel/workspace-a/frontend <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> run build</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../workshop-parallel/workspace-b/frontend <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> run build</span></code></pre></div></li>
 <li><p>Compare each worktree with the main workspace:</p>
 <div class="sourceCode" id="cb8"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span> <span class="at">-rq</span> . ../claude-workshop-parallel/workspace-a <span class="kw">|</span> <span class="fu">head</span> <span class="at">-50</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span> <span class="at">-rq</span> . ../claude-workshop-parallel/workspace-b <span class="kw">|</span> <span class="fu">head</span> <span class="at">-50</span></span></code></pre></div></li>
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span> <span class="at">-rq</span> . ../workshop-parallel/workspace-a <span class="kw">|</span> <span class="fu">head</span> <span class="at">-50</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span> <span class="at">-rq</span> . ../workshop-parallel/workspace-b <span class="kw">|</span> <span class="fu">head</span> <span class="at">-50</span></span></code></pre></div></li>
 <li><p>Before copying back, <strong>identify shared integration
 files</strong> — files that both workspaces may have changed
 independently:</p>
 <div class="sourceCode" id="cb9"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span> ../claude-workshop-parallel/workspace-a/frontend/src/routes/router.tsx <span class="dt">\</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>     ../claude-workshop-parallel/workspace-b/frontend/src/routes/router.tsx</span></code></pre></div>
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span> ../workshop-parallel/workspace-a/frontend/src/routes/router.tsx <span class="dt">\</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>     ../workshop-parallel/workspace-b/frontend/src/routes/router.tsx</span></code></pre></div>
 <p><code>router.tsx</code> (and sometimes <code>HrSidebar.tsx</code>) is
 touched by every new page — both workspaces likely added their own
 route. If they differ, you must <strong>merge both changes</strong>, not
@@ -168,8 +166,8 @@ wholesale.</p></li>
 <li><p>Copy back only the intended feature files with an exact Claude
 Code prompt:</p>
 <pre class="text"><code>Compare the completed frontend changes in:
-- `../claude-workshop-parallel/workspace-a`
-- `../claude-workshop-parallel/workspace-b`
+- `../workshop-parallel/workspace-a`
+- `../workshop-parallel/workspace-b`
 
 Restore only the intended Lab 08 feature files into my main workspace.
 Inspect only these candidate paths before copying anything:
@@ -191,9 +189,9 @@ Then tell me exactly which files were copied or merged.</code></pre></li>
 class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> frontend <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> run build</span></code></pre></div></li>
 <li><p>Clean up the temporary worktrees when finished:</p>
 <div class="sourceCode" id="cb12"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree remove ../claude-workshop-parallel/workspace-a</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree remove ../claude-workshop-parallel/workspace-b</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree remove ../claude-workshop-parallel/workspace-c</span></code></pre></div></li>
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree remove ../workshop-parallel/workspace-a</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree remove ../workshop-parallel/workspace-b</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree remove ../workshop-parallel/workspace-c</span></code></pre></div></li>
 </ol>
 <hr />
 </section>

@@ -99,7 +99,7 @@ Package the scaffolding pattern into a reusable skill.
 
 3. **Review the generated SKILL.md.** From another terminal, you can inspect it with:
    ```bash
-   cat /absolute/path/to/claude-workshop/.claude/commands/scaffold-reference-module/SKILL.md
+   cat /absolute/path/to/your-workshop-root/.claude/commands/scaffold-reference-module/SKILL.md
    ```
    It should start with a metadata block like:
    `name: scaffold-reference-module` and `description: Scaffold an HR reference module following the current Jersey/JDBC project conventions`, followed by the pattern description, inputs, output shape, and gotchas.

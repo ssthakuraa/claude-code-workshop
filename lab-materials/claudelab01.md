@@ -42,7 +42,7 @@ Ask Claude Code to scaffold a backend module **without** the missing CLAUDE.md r
 
 1. Open a Claude Code session in the project root:
    ```bash
-   cd /absolute/path/to/claude-workshop
+   cd /absolute/path/to/your-workshop-root
    claude
    ```
 
@@ -246,7 +246,7 @@ If the exercise gets noisy or Claude Code wanders off the point, reset the exerc
 to the smallest useful state:
 
 ```bash
-cd /absolute/path/to/claude-workshop
+cd /absolute/path/to/your-workshop-root
 ```
 
 Then ask Claude Code to do only this:

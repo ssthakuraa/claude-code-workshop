@@ -338,27 +338,29 @@ Keep all existing hooks intact.</code></pre></li>
 loaded.</p></li>
 <li><p><strong>Test it.</strong> Ask Claude Code to make a small
 frontend edit:</p>
-<pre><code>Open frontend/src/components/hr/HrEmployeeCard.tsx and add a const named
-`LAB05_DEMO_VALUE` with the value 42 just below the imports.
-Then save the file.</code></pre></li>
+<pre><code>Open frontend/src/components/hr/HrStatusBadge.tsx and add a const named
+`LAB05_DEMO_VALUE` with the value `&quot;lab05demo&quot;` (double quotes) just below
+the imports. Then save the file.</code></pre></li>
 <li><p><strong>Observe the hook output.</strong> You should see:</p>
 <ul>
 <li>The Edit tool reports success</li>
 <li>The PostToolUse hook fires and runs eslint on
-<code>HrEmployeeCard.tsx</code></li>
-<li>eslint prints either "no issues" or a fix summary</li>
+<code>HrStatusBadge.tsx</code></li>
+<li>eslint auto-fixes the double-quoted string to a single-quoted
+string</li>
 <li>Claude Code's next turn sees the file in its eslint-fixed shape, not
 the shape it just wrote</li>
 </ul></li>
 <li><p><strong>Notice the loop.</strong> Ask Claude Code:</p>
-<pre><code>Show me the diff of HrEmployeeCard.tsx since my last manual save.</code></pre>
-<p>The diff may include eslint-applied changes that Claude Code did not
-write directly. This is the "PostToolUse changed the file behind the
-agent's back" effect — it is fine when the formatter is deterministic,
+<pre><code>Show me the diff of HrStatusBadge.tsx since my last manual save.</code></pre>
+<p>The diff should show <code>"lab05demo"</code> changed to
+<code>'lab05demo'</code> — a change that Claude Code did not write
+directly. This is the "PostToolUse changed the file behind the agent's
+back" effect — it is fine when the formatter is deterministic,
 surprising when the formatter is opinionated. Lesson: choose PostToolUse
 targets that are deterministic.</p></li>
 <li><p><strong>Roll back the demo edit.</strong> Ask Claude Code:</p>
-<pre><code>Remove the LAB05_DEMO_VALUE const from HrEmployeeCard.tsx.</code></pre></li>
+<pre><code>Remove the LAB05_DEMO_VALUE const from HrStatusBadge.tsx.</code></pre></li>
 <li><p><strong>Optional — backend compile-check variant.</strong> If you
 want to extend this to Java files, the same hook shape with
 <code>command: cd backend &amp;&amp; ./build-jersey-service.sh compile</code>

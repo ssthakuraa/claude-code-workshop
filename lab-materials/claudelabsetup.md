@@ -51,13 +51,11 @@ yet.
 Clone to any directory on your machine:
 
 ```bash
-git clone <repo-url> claude-workshop
-cd claude-workshop
+git clone <repo-url>
+cd claude-code-workshop
 ```
 
-The folder name `claude-workshop` is used in examples throughout the labs, but
-you can name it whatever you like. After the `cd`, confirm you are inside the
-right directory:
+The examples throughout the labs refer to the workshop root — use whatever directory name you chose when cloning. After the `cd`, confirm you are inside the right directory:
 
 ```bash
 pwd

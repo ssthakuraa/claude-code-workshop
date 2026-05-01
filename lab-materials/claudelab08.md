@@ -19,12 +19,12 @@ independent slices go faster when each session gets its own isolated working
 directory.
 
 ```bash
-cd /absolute/path/to/claude-workshop
-mkdir -p ../claude-workshop-parallel
-rm -rf ../claude-workshop-parallel/workspace-a ../claude-workshop-parallel/workspace-b ../claude-workshop-parallel/workspace-c
-git worktree add ../claude-workshop-parallel/workspace-a
-git worktree add ../claude-workshop-parallel/workspace-b
-git worktree add ../claude-workshop-parallel/workspace-c
+cd /absolute/path/to/your-workshop-root
+mkdir -p ../workshop-parallel
+rm -rf ../workshop-parallel/workspace-a ../workshop-parallel/workspace-b ../workshop-parallel/workspace-c
+git worktree add ../workshop-parallel/workspace-a
+git worktree add ../workshop-parallel/workspace-b
+git worktree add ../workshop-parallel/workspace-c
 ```
 
 Each worktree carries the same `CLAUDE.md`, docs, and code, but the edits stay
@@ -52,20 +52,20 @@ Set up two or three parallel working directories.
 
 1. Confirm the worktrees exist:
    ```bash
-   ls ../claude-workshop-parallel/workspace-a
-   ls ../claude-workshop-parallel/workspace-b
+   ls ../workshop-parallel/workspace-a
+   ls ../workshop-parallel/workspace-b
    ```
 
 2. Verify they started from the same root guidance:
    ```bash
-   diff -q CLAUDE.md ../claude-workshop-parallel/workspace-a/CLAUDE.md
-   diff -q CLAUDE.md ../claude-workshop-parallel/workspace-b/CLAUDE.md
+   diff -q CLAUDE.md ../workshop-parallel/workspace-a/CLAUDE.md
+   diff -q CLAUDE.md ../workshop-parallel/workspace-b/CLAUDE.md
    ```
 
 3. Open separate terminals:
-   - Terminal A -> `../claude-workshop-parallel/workspace-a`
-   - Terminal B -> `../claude-workshop-parallel/workspace-b`
-   - optional Terminal C -> `../claude-workshop-parallel/workspace-c`
+   - Terminal A -> `../workshop-parallel/workspace-a`
+   - Terminal B -> `../workshop-parallel/workspace-b`
+   - optional Terminal C -> `../workshop-parallel/workspace-c`
 
 4. Start a Claude Code session in each workspace.
 
@@ -125,28 +125,28 @@ Verify each isolated workspace, then copy back only the intended files.
 
 1. Ask each workspace to verify its own frontend slice:
    ```bash
-   cd ../claude-workshop-parallel/workspace-a/frontend && npm run build
-   cd ../claude-workshop-parallel/workspace-b/frontend && npm run build
+   cd ../workshop-parallel/workspace-a/frontend && npm run build
+   cd ../workshop-parallel/workspace-b/frontend && npm run build
    ```
 
 2. Compare each worktree with the main workspace:
    ```bash
-   diff -rq . ../claude-workshop-parallel/workspace-a | head -50
-   diff -rq . ../claude-workshop-parallel/workspace-b | head -50
+   diff -rq . ../workshop-parallel/workspace-a | head -50
+   diff -rq . ../workshop-parallel/workspace-b | head -50
    ```
 
 3. Before copying back, **identify shared integration files** — files that both workspaces may have changed independently:
    ```bash
-   diff ../claude-workshop-parallel/workspace-a/frontend/src/routes/router.tsx \
-        ../claude-workshop-parallel/workspace-b/frontend/src/routes/router.tsx
+   diff ../workshop-parallel/workspace-a/frontend/src/routes/router.tsx \
+        ../workshop-parallel/workspace-b/frontend/src/routes/router.tsx
    ```
    `router.tsx` (and sometimes `HrSidebar.tsx`) is touched by every new page — both workspaces likely added their own route. If they differ, you must **merge both changes**, not copy one file over the other. Ask Claude Code to apply both workspace's route additions to the main workspace router rather than replacing it wholesale.
 
 4. Copy back only the intended feature files with an exact Claude Code prompt:
    ```text
    Compare the completed frontend changes in:
-   - `../claude-workshop-parallel/workspace-a`
-   - `../claude-workshop-parallel/workspace-b`
+   - `../workshop-parallel/workspace-a`
+   - `../workshop-parallel/workspace-b`
 
    Restore only the intended Lab 08 feature files into my main workspace.
    Inspect only these candidate paths before copying anything:
@@ -172,9 +172,9 @@ Verify each isolated workspace, then copy back only the intended files.
 
 6. Clean up the temporary worktrees when finished:
    ```bash
-   git worktree remove ../claude-workshop-parallel/workspace-a
-   git worktree remove ../claude-workshop-parallel/workspace-b
-   git worktree remove ../claude-workshop-parallel/workspace-c
+   git worktree remove ../workshop-parallel/workspace-a
+   git worktree remove ../workshop-parallel/workspace-b
+   git worktree remove ../workshop-parallel/workspace-c
    ```
 
 ---

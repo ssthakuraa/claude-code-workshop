@@ -56,7 +56,7 @@ The training focuses on three themes that make collaboration with AI coding agen
 - The root workspace is intentionally incomplete in a few places so the labs have real work to do. Do not treat a missing file or disabled route as accidental drift until you check the current lab and `reference/`.
 - This is a teaching lab for Claude Code features and workflow discipline. Avoid diluting that by having Claude Code mine `frontend/` or `backend/` for example implementations unless the current lab explicitly tells it to inspect those files.
 - Read `CLAUDE.md` before treating any imported lab instruction as authoritative. If a lab chapter conflicts with `CLAUDE.md` or the current shared docs under `lab-materials/docs/`, the repo rules win.
-- When a lab says "workspace root" or "project root", use your actual local repo path, for example `/home/you/projects/claude-workshop` or `/scratch/training/claude-workshop`.
+- When a lab says "workspace root" or "project root", use your actual local repo path, for example `~/projects/claude-code-workshop` or `/scratch/training/claude-code-workshop`.
 - Use current repo commands and environment prerequisites. Do not resurrect bundled Java, Maven, Node, browser, or SQL tooling under `runtime/`.
 - For backend work on this host, explicitly use JDK 21:
   - `JAVA_HOME=/usr/lib/jvm/java-21-openjdk`
