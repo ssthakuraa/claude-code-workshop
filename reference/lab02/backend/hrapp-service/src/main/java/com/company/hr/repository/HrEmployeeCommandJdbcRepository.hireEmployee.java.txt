@@ -22,6 +22,7 @@ public Integer hireEmployee(HrEmployeeCreateRequest request) {
             Integer userId = insertUser(connection, employeeId, username, request.getInitialPassword());
             Integer roleId = loadRoleId(connection, "ROLE_EMPLOYEE");
             insertUserRole(connection, userId, roleId);
+            insertJobHistoryForHire(connection, employeeId, request);
             recordIdempotency(connection, request.getIdempotencyKey(), "POST /employees", 201);
             connection.commit();
             return employeeId;
@@ -33,5 +34,18 @@ public Integer hireEmployee(HrEmployeeCreateRequest request) {
         throw ex;
     } catch (SQLException ex) {
         throw new IllegalStateException("DB_ACCESS_ERROR", ex);
+    }
+}
+
+private void insertJobHistoryForHire(Connection connection, Integer employeeId, HrEmployeeCreateRequest request) throws SQLException {
+    String sql = "INSERT INTO " + HrTables.JOB_HISTORY + " (employee_id, start_date, end_date, job_id, department_id) VALUES (?, ?, ?, ?, ?)";
+    LocalDate hireDate = request.getHireDate() != null ? request.getHireDate() : LocalDate.now();
+    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setInt(1, employeeId);
+        stmt.setDate(2, Date.valueOf(hireDate));
+        stmt.setDate(3, Date.valueOf(hireDate.plusDays(1)));
+        stmt.setString(4, request.getJobId());
+        setInteger(stmt, 5, request.getDepartmentId());
+        stmt.executeUpdate();
     }
 }

@@ -191,26 +191,26 @@ This repo has `npm run lint` wired (eslint) and no separate `format` script. The
 
 3. **Test it.** Ask Claude Code to make a small frontend edit:
    ```
-   Open frontend/src/components/hr/HrEmployeeCard.tsx and add a const named
-   `LAB05_DEMO_VALUE` with the value 42 just below the imports.
-   Then save the file.
+   Open frontend/src/components/hr/HrStatusBadge.tsx and add a const named
+   `LAB05_DEMO_VALUE` with the value `"lab05demo"` (double quotes) just below
+   the imports. Then save the file.
    ```
 
 4. **Observe the hook output.** You should see:
    - The Edit tool reports success
-   - The PostToolUse hook fires and runs eslint on `HrEmployeeCard.tsx`
-   - eslint prints either "no issues" or a fix summary
+   - The PostToolUse hook fires and runs eslint on `HrStatusBadge.tsx`
+   - eslint auto-fixes the double-quoted string to a single-quoted string
    - Claude Code's next turn sees the file in its eslint-fixed shape, not the shape it just wrote
 
 5. **Notice the loop.** Ask Claude Code:
    ```
-   Show me the diff of HrEmployeeCard.tsx since my last manual save.
+   Show me the diff of HrStatusBadge.tsx since my last manual save.
    ```
-   The diff may include eslint-applied changes that Claude Code did not write directly. This is the "PostToolUse changed the file behind the agent's back" effect — it is fine when the formatter is deterministic, surprising when the formatter is opinionated. Lesson: choose PostToolUse targets that are deterministic.
+   The diff should show `"lab05demo"` changed to `'lab05demo'` — a change that Claude Code did not write directly. This is the "PostToolUse changed the file behind the agent's back" effect — it is fine when the formatter is deterministic, surprising when the formatter is opinionated. Lesson: choose PostToolUse targets that are deterministic.
 
 6. **Roll back the demo edit.** Ask Claude Code:
    ```
-   Remove the LAB05_DEMO_VALUE const from HrEmployeeCard.tsx.
+   Remove the LAB05_DEMO_VALUE const from HrStatusBadge.tsx.
    ```
 
 7. **Optional — backend compile-check variant.** If you want to extend this to Java files, the same hook shape with `command: cd backend && ./build-jersey-service.sh compile` and a path match on `backend/**/*.java` runs a real validation pipeline after every Java edit. It is slower (Maven invocations are expensive) so most teams gate it to specific paths or run it manually. You do not need to wire this for Lab 05; the eslint version exercises the pattern.

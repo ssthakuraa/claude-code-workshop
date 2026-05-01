@@ -13,5 +13,6 @@ Target file:
 
 - `backend/hrapp-service/src/main/java/com/company/hr/repository/HrEmployeeCommandJdbcRepository.java`
 
-Replace only the `hireEmployee()` method body/signature in the target file and
-leave the rest of the repository untouched.
+Replace the `hireEmployee()` method body/signature in the target file, and add
+the `insertJobHistoryForHire` private method immediately after it. Leave the
+rest of the repository untouched.

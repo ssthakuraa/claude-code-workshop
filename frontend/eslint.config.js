@@ -19,6 +19,9 @@ export default defineConfig([
       ecmaVersion: 2020,
       globals: globals.browser,
     },
+    rules: {
+      quotes: ['warn', 'single', { avoidEscape: true }],
+    },
   },
   {
     files: [
