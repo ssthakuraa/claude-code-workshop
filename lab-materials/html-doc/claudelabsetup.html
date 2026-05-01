@@ -157,6 +157,29 @@ Build Artefacts
 fix the issue, and re-run <code>verify-setup.sh</code>.</p>
 <hr />
 </section>
+<section id="demo-accounts" class="level2">
+<h2>Demo Accounts</h2>
+<p>Once the app is running, open the frontend in your browser:</p>
+<ul>
+<li><strong>UI:</strong>
+<code>http://127.0.0.1:5182/hr/login</code></li>
+<li><strong>API base:</strong>
+<code>http://127.0.0.1:18082/app/hr/api/v1</code></li>
+</ul>
+<p>Two demo accounts are pre-loaded by the database setup:</p>
+<ul>
+<li><code>steven.king</code> / <code>password123</code> — locale
+<code>en-US</code></li>
+<li><code>valeria.cruz</code> / <code>password123</code> — locale
+<code>es-MX</code>, role <code>HR_SPECIALIST</code>
+<ul>
+<li>UI renders in Mexican Spanish; timezone
+<code>America/Mexico_City</code>, currency <code>MXN</code></li>
+<li>Labs that cover localization use this account</li>
+</ul></li>
+</ul>
+<hr />
+</section>
 <section id="optional--access-from-another-machine" class="level2">
 <h2>Optional — Access from another machine</h2>
 <p>If you want to open the frontend from a browser on a different

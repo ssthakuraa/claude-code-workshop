@@ -157,6 +157,22 @@ issue, and re-run `verify-setup.sh`.
 
 ---
 
+## Demo Accounts
+
+Once the app is running, open the frontend in your browser:
+
+- **UI:** `http://127.0.0.1:5182/hr/login`
+- **API base:** `http://127.0.0.1:18082/app/hr/api/v1`
+
+Two demo accounts are pre-loaded by the database setup:
+
+- `steven.king` / `password123` — locale `en-US`
+- `valeria.cruz` / `password123` — locale `es-MX`, role `HR_SPECIALIST`
+  - UI renders in Mexican Spanish; timezone `America/Mexico_City`, currency `MXN`
+  - Labs that cover localization use this account
+
+---
+
 ## Optional — Access from another machine
 
 If you want to open the frontend from a browser on a different machine while
