@@ -46,7 +46,6 @@ cd claude-code-workshop
 
 - **Setup:** see `lab-materials/claudelabsetup.md`
 - **Begin with:** `lab-materials/claudelab01.md`
-- **Companion overview deck:** `talks/claude-code-workshop-overview.pptx` (if present)
 
 ---
 
